@@ -17,22 +17,7 @@
                     <div class="col-md-3">
                         <input type="hidden" name="_token" value="{{ csrf_token() }}" id="token">
                         <input type="hidden" id="id">  
-                        {!! Form::label('departamento','Departamento:',['class' => 'control-label col-xs-1'])!!}                             
-                        {!! Form::select('departamento',$departamentos,null,['id'=>'departamento','class'=>'form-control']) !!}
                         
-                         {!! Form::label('provincia','Provincia:',['class' => 'control-label col-xs-1'])!!}                             
-                        {!! Form::select ('provincia',['placeholder'=>'selecciona'],null,['id'=>'provincia','class'=>'form-control']) !!}
-                        
-                        {!! Form::label('distritos','Distrito:',['class' => 'control-label col-xs-1'])!!}  
-                        {!! Form::select ('distrito',['placeholder'=>'selecciona'],null,['id'=>'distrito','class'=>'form-control']) !!}
-                        
-                        {!! Form::label('comite_central','Comite Central:',['class' => 'control-label col-xs-3'])!!}  
-                        {!! Form::select ('comite_central',['placeholder'=>'selecciona'],null,['id'=>'comite_central','class'=>'form-control']) !!}
-                        
-                        {!! Form::label('comite_local','Comite Local:',['class' => 'control-label col-xs-3'])!!}
-                        {!! Form::text('comite_local',null,['id'=>'comite_local_1','class'=>'form-control','placeholder'=>'Provincia'])!!} 
-                        
-                        {!!link_to('#', $title='Registrar', $attributes = ['id'=>'RegLocal', 'class'=>'btn btn-primary btn-sm m-t-10'])!!}
                         {!!link_to('#', $title='Actualizar', $attributes = ['id'=>'ActLocal', 'class'=>'btn btn-primary btn-sm m-t-10'])!!}
                     </div>
                     {!! Form::close() !!} 
