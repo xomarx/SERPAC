@@ -63,7 +63,7 @@ class empleadocontroller extends Controller
             $empleado->save();            
             if($empleado)
             {                            
-                return response()->json(['succes'=>'true','message'=>'se registro correctamente']);
+                return response()->json(['succes'=>'true']);
             }
             else
             {                

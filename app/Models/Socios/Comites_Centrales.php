@@ -44,4 +44,16 @@ class Comites_Centrales extends Model
                             ,'provincias.provincia','distritos.provincias_id','departamentos.departamento','provincias.departamentos_id')
                     ->get();
         }
+        
+        public static function getlistaComites(){
+            return DB::table('comites_centrales')
+                ->join('distritos','comites_centrales.distritos_id','=','distritos.id')
+                ->join('provincias','distritos.provincias_id','=','provincias.id')
+                ->join('departamentos','provincias.departamentos_id','=','departamentos.id')
+                ->select( 'comites_centrales.id','comites_centrales.comite_central','distritos.distrito','departamentos.departamento'
+                        ,'provincias.provincia')
+                ->get();
+        }
+                
+                
 }

@@ -32,14 +32,8 @@ class comite_centralcontroller extends Controller
     public function index()
     {
         //
-        $comite_centrales = DB::table('comites_centrales')
-                ->join('distritos','comites_centrales.distritos_id','=','distritos.id')
-                ->join('provincias','distritos.provincias_id','=','provincias.id')
-                ->join('departamentos','provincias.departamentos_id','=','departamentos.id')
-                ->select( 'comites_centrales.id','comites_centrales.comite_central','distritos.distrito','departamentos.departamento'
-                        ,'provincias.provincia')
-                ->get(); 
-        $departamentos = Departamento::pluck('departamento','id')->prepend('Selleciona');
+        $comite_centrales = Comites_Centrales::getlistaComites(); 
+        $departamentos = Departamento::pluck('departamento','id');
         return view('socios.comitecentral',array('comites_centrales'=>$comite_centrales,'departamentos'=>$departamentos));
     }
 
@@ -59,7 +53,7 @@ class comite_centralcontroller extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Requests\socios\createcomite_centralrequest $request)
     {
         //
         if($request->ajax())
@@ -67,11 +61,11 @@ class comite_centralcontroller extends Controller
             $comite_centrals = Comites_Centrales::create($request->all());
             if($comite_centrals)
             {
-                return response()->json(['success','true']);
+                return response()->json(['success'=>'true','message'=>'Se Registro correctamente']);
             }
             else
             {
-                return response()->json(['success','false']);
+                return response()->json(['success'=>'false','message'=>'No se Registro ningun dato']);
             }
         }
     }
@@ -117,11 +111,11 @@ class comite_centralcontroller extends Controller
             $central->save();
             if($central)
             {
-                return response()->json(['success'=>'true']);
+                return response()->json(['success'=>'true','message'=>'Se actualizaron correctamente los datos']);
             }
             else 
             {
-                return response()->json(['success'=>'false']);
+                return response()->json(['success'=>'false','message'=>'no se actualizaron los datos']);
             }
         }
     }

@@ -60,13 +60,12 @@
             </div>
             <div class="modal-body">
                 
-                {!! Form::open(['id'=>'formempleadp']) !!}
+                {!! Form::open(['id'=>'form']) !!}
                 <input type="hidden" name="_token" value="{{ csrf_token() }}" id="token">
                 <div class="form-group-sm  col-md-12 col-md-offset-0">
                     <div class="col-xs-3">
                         {!! Form::label('codigo','Codigo: ',['class'=>'form-label']) !!}                        
                         {!! Form::text('codigo',null,['id'=>'codigo','class'=>'form-control','placeholder'=>'EMP-00000','maxlength'=>'9','minlength'=>'9'])!!}
-                        <div class="text-danger" id="error_codigoempleado"></div>
                     </div> 
                     <div class="col-xs-3">
                         {!! Form::label('dni','DNI',['class'=>'form-label']) !!}

@@ -443,8 +443,24 @@ $("#RegTecnicos").click(function() {
  
 $("#RegEmpleado").click(function(event)
     {               
-        var fields = $("#formempleadp").serialize();
-        console.log(fields);
+        var empleadiid = $("#codigo").val();
+    var dni = $("#dni").val();
+    var esdocivil = $("#esdocivil").val();
+    var estado = $("#estado").val();
+    var email = $("#email").val();
+    var profesion = $("#profesion").val();
+    var ruc = $("#ruc").val();
+    var cargo = $("#cargo").val();
+    var area = $("#area").val();
+    var paterno = $("#paterno").val();
+    var materno = $("#materno").val();
+    var nombre = $("#nombre").val();
+    var fec_nac = $("#fec_nac").val();
+    var sexo = $("#sexo").val();
+    var direccion = $("#direccion").val();
+    var referencia = $("#referencia").val();
+    var telefono = $("#telefono").val();
+    var comites_locales_id = $("#comite_local").val();
         if( $("#RegEmpleado").text() == 'Registrar' )
         {                                    
             var token = $("#token").val();
@@ -455,9 +471,26 @@ $("#RegEmpleado").click(function(event)
                 type: 'post',
                 datatype: 'json',
                 
-                data: fields
-                    
-               ,
+                data: {                    
+                    empleadoId:empleadiid,
+                    dni : dni,
+                    estadocivil: esdocivil,
+                    estado: estado,
+                    email: email,
+                    profesion: profesion,
+                    ruc : ruc,
+                    cargos_id:cargo,
+                    areas_id: area,
+                    paterno: paterno,
+                    sexo:sexo,
+                    materno: materno,
+                    nombre: nombre,
+                    fec_nac: fec_nac,
+                    distancia: direccion,
+                    referencia: referencia,
+                    telefono: telefono,                                
+                    comites_locales_id: comites_locales_id
+                },
                 success: function (data)
                 {
                     if (data.success = 'true')
@@ -1014,106 +1047,6 @@ var EliLocal = function(id,name)
       });          
     });
 };
-
-//  **************   CRUD COMITE CENTRAL
-$("#RegCentral").click(function(event)
-    {       
-            
-            var comite_central = $("#comite_central_1").val();            
-            var distrito = $("#distrito").val();
-            var token = $("#token").val();
-            var route = "/socios/comite-central";   
-            console.log(comite_central);
-            console.log(distrito);            
-          $.ajax({
-            url:route,
-            headers:{'X-CSRF-TOKEN':token},
-            type:'post',
-            datatype: 'json',
-            //async: false,
-//            data:dataSting,
-            data: {comite_central: comite_central
-                ,distritos_id:distrito
-        },            
-            success:function(data)
-            {                         
-                if(data.success = 'true')
-                {                         
-                    document.location.href= '/socios/comite-central';
-                }
-            },
-             
-          })      
-    });  
-
-var Edcentral = function(id) 
-    {
-        $('#RegCentral').hide();
-        $('#ActCentral').show();        
-        var route = "/socios/comite-central/"+id+"/edit";                
-        $.get(route, function(data){            
-        $("#departamento").val(data[0].departamentos_id);
-        $("#provincia").empty();
-        $("#provincia").append("<option value='" + data[0].provincias_id+"'>"+data[0].provincia+"</option>");
-        $("#distrito").empty();
-        $("#distrito").append("<option value='" + data[0].distritos_id+"'>"+data[0].distrito+"</option>");
-        $("#id").val(data[0].id);          
-        $("#comite_central_1").val(data[0].comite_central);        
-        
-        });
-    }
-        
-$("#ActCentral").click(function()
-{
-
-  var id = $("#id").val();
-  var comite_central = $("#comite_central_1").val();  
-  var distrito = $("#distrito").val();  
-  var route = "/socios/comite-central/"+id+"";
-  var token = $("#token").val();
-  $.ajax({
-    url: route,
-    headers: {'X-CSRF-TOKEN': token},
-    type: 'PUT',
-    dataType: 'json',
-    data: {
-            comite_central: comite_central,
-            distritos_id: distrito               
-        },
-    success: function(data){        
-     if (data.success = 'true')
-     {         
-         document.location.href= '/socios/comite-central';
-     }
-    },      
-  });
-});
-   
-var EliCentral = function(id,name)
-{ 
-     // ALERT JQUERY        
-   $.alertable.confirm("<span style='color:#000'>¿Está seguro de eliminar el registro?</span>"+"<br><strong><span style='color:#ff0000'>"+name+"</span></strong></br>").then(function() {  
-      var route = "/socios/comite-central/"+id+"";
-      var token = $("#token").val();
-      $.ajax({
-        url: route,
-        headers: {'X-CSRF-TOKEN': token},
-        type: 'DELETE',
-        dataType: 'json',
-        success: function(data){
-        if (data.success = 'true')
-        {
-          document.location.href= '/socios/comite-central';
-        }
-      }
-      });          
-    });
-};
-
-
-
-
-
 
 
 // *************************  CRUD FAUNA  ********************************************************************************************************
@@ -1879,8 +1812,7 @@ $("#RegDelegado").click(function(event){
           })      
     });  
 
-var EdDelegado = function(id) 
-    {         
+var EdDelegado = function(id){         
         $("#RegDelegado").text("Actualizar");
         var route = "/socios/basicos/delegados/"+id+"/edit";                
         $.get(route, function(data){              
@@ -2223,6 +2155,112 @@ var EliDistrito = function(id,name)
     });
 };
 
+//  **************   CRUD COMITE CENTRAL  *****************************************************************************
+$("#RegCentral").click(function(event)
+    {       
+            var fields = $("#formcomite_central").serialize();
+            
+            var token = $("#token").val();
+            var route = "/socios/comite-central"; 
+            var type = "POST";
+            if( $("#RegCentral").text() == "Actualizar" ){
+                route = "/socios/comite-central/" + $("#idcomite_central").val();
+                type="PUT";
+            }                        
+          $.ajax({
+            url:route,
+            headers:{'X-CSRF-TOKEN':token},
+            type:type,
+            datatype: 'json',    
+            data: fields,            
+            success:function(data)
+            {                         
+                if(data.success == 'true')
+                {                         
+                    var msj = "<h4>"+data.message+"</h4>";
+                   $("#succescentral").html(msj);
+                   $("#msj-infocentral").fadeIn();
+                    document.location.reload();
+                }
+            },
+             error:function(data)
+            {
+                $("#error_provincia").html(''); $("#error_departamento").html('');$("#error_distrito").html('');$("#error_central").html('');
+                var errors =  $.parseJSON(data.responseText);      
+                $.each(errors,function(index, value) {                      
+                            if(index == 'provincia')$("#error_provincia").html(value);
+                            else if(index == 'departamento')$("#error_departamento").html(value); 
+                             else if(index == 'distrito')$("#error_distrito").html(value);
+                             else if(index == 'comite_central')$("#error_central").html(value);
+                      });                                         
+            }
+             
+          })      
+    });  
+
+var Edcentral = function(id) 
+    {
+        $('#RegCentral').hide();
+        $('#ActCentral').show();        
+        var route = "/socios/comite-central/"+id+"/edit";                
+        $.get(route, function(data){            
+        $("#departamento").val(data[0].departamentos_id);
+        $("#provincia").empty();
+        $("#provincia").append("<option value='" + data[0].provincias_id+"'>"+data[0].provincia+"</option>");
+        $("#distrito").empty();
+        $("#distrito").append("<option value='" + data[0].distritos_id+"'>"+data[0].distrito+"</option>");
+        $("#id").val(data[0].id);          
+        $("#comite_central_1").val(data[0].comite_central);        
+        
+        });
+    }
+        
+$("#ActCentral").click(function()
+{
+
+  var id = $("#id").val();
+  var comite_central = $("#comite_central_1").val();  
+  var distrito = $("#distrito").val();  
+  var route = "/socios/comite-central/"+id+"";
+  var token = $("#token").val();
+  $.ajax({
+    url: route,
+    headers: {'X-CSRF-TOKEN': token},
+    type: 'PUT',
+    dataType: 'json',
+    data: {
+            comite_central: comite_central,
+            distritos_id: distrito               
+        },
+    success: function(data){        
+     if (data.success = 'true')
+     {         
+         document.location.href= '/socios/comite-central';
+     }
+    },      
+  });
+});
+   
+var EliCentral = function(id,name)
+{ 
+     // ALERT JQUERY        
+   $.alertable.confirm("<span style='color:#000'>¿Está seguro de eliminar el registro?</span>"+"<br><strong><span style='color:#ff0000'>"+name+"</span></strong></br>").then(function() {  
+      var route = "/socios/comite-central/"+id+"";
+      var token = $("#token").val();
+      $.ajax({
+        url: route,
+        headers: {'X-CSRF-TOKEN': token},
+        type: 'DELETE',
+        dataType: 'json',
+        success: function(data){
+        if (data.success = 'true')
+        {
+          document.location.href= '/socios/comite-central';
+        }
+      }
+      });          
+    });
+};
 
 
 //var cargarForm = function(idform)
