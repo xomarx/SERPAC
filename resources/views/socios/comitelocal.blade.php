@@ -3,41 +3,46 @@
     COMITES LOCALES
 @stop
 @section('main-content')
+<div class="box-body">
+    <div class="col-md-4">
+        <div class="box box-solid box-primary">
+            <div class="box-header">
+                
+            </div>
+            {!! Form::open(['id'=>'form']) !!}
+            <div class="box-body">
+                <input type="hidden" name="_token" value="{{ csrf_token() }}" id="token">
+                <input type="hidden" id="idlocal">  
+                {!! Form::label('departamento','Departamento:',['class' => 'control-label col-xs-1'])!!}                             
+                {!! Form::select('departamento',$departamentos,null,['id'=>'departamento','class'=>'form-control']) !!}
 
+                {!! Form::label('provincia','Provincia:',['class' => 'control-label col-xs-1'])!!}                             
+                {!! Form::select ('provincia',['placeholder'=>'selecciona'],null,['id'=>'provincia','class'=>'form-control']) !!}
 
-<div class="container spark-screen">
-    <div class="row">
-        <div class="col-md-11 col-md-offset-0">
-            <div class="panel panel-default">
-                {!! Form::open(['id'=>'form']) !!}
-                <div class="panel-heading">                                        
-                    <input type="reset" value="Nuevo" class="btn btn-primary btn-sm m-t-10">
-                </div>
-                <div class="panel-body"> 
-                    <div class="col-md-3">
-                        <input type="hidden" name="_token" value="{{ csrf_token() }}" id="token">
-                        <input type="hidden" id="id">  
-                        {!! Form::label('departamento','Departamento:',['class' => 'control-label col-xs-1'])!!}                             
-                        {!! Form::select('departamento',$departamentos,null,['id'=>'departamento','class'=>'form-control']) !!}
-                        
-                         {!! Form::label('provincia','Provincia:',['class' => 'control-label col-xs-1'])!!}                             
-                        {!! Form::select ('provincia',['placeholder'=>'selecciona'],null,['id'=>'provincia','class'=>'form-control']) !!}
-                        
-                        {!! Form::label('distritos','Distrito:',['class' => 'control-label col-xs-1'])!!}  
-                        {!! Form::select ('distrito',['placeholder'=>'selecciona'],null,['id'=>'distrito','class'=>'form-control']) !!}
-                        
-                        {!! Form::label('comite_central','Comite Central:',['class' => 'control-label col-xs-3'])!!}  
-                        {!! Form::select ('comite_central',['placeholder'=>'selecciona'],null,['id'=>'comite_central','class'=>'form-control']) !!}
-                        
-                        {!! Form::label('comite_local','Comite Local:',['class' => 'control-label col-xs-3'])!!}
-                        {!! Form::text('comite_local',null,['id'=>'comite_local_1','class'=>'form-control','placeholder'=>'Provincia'])!!} 
-                        
-                        {!!link_to('#', $title='Registrar', $attributes = ['id'=>'RegLocal', 'class'=>'btn btn-primary btn-sm m-t-10'])!!}
-                        {!!link_to('#', $title='Actualizar', $attributes = ['id'=>'ActLocal', 'class'=>'btn btn-primary btn-sm m-t-10'])!!}
-                    </div>
-                    {!! Form::close() !!} 
-                    <div class="col-md-9">
-                        <table class="table table-responsive" id="myTable" >
+                {!! Form::label('distritos','Distrito:',['class' => 'control-label col-xs-1'])!!}  
+                {!! Form::select ('distrito',['placeholder'=>'selecciona'],null,['id'=>'distrito','class'=>'form-control']) !!}
+
+                {!! Form::label('comite_central','Comite Central:',['class' => 'control-label col-xs-3'])!!}  
+                {!! Form::select ('comite_central',['placeholder'=>'selecciona'],null,['id'=>'comite_central','class'=>'form-control']) !!}
+
+                {!! Form::label('comite_local','Comite Local:',['class' => 'control-label col-xs-3'])!!}
+                {!! Form::text('comite_local',null,['id'=>'comite_local_1','class'=>'form-control','placeholder'=>'Provincia'])!!} 
+
+            </div>
+            <div class="box-footer">
+                <input type="reset" value="Nuevo" class="btn btn-primary btn-sm m-t-10">
+                {!!link_to('#', $title='Registrar', $attributes = ['id'=>'RegLocal', 'class'=>'btn btn-primary btn-sm m-t-10'])!!}
+            </div>
+            {!! Form::close() !!} 
+        </div>
+    </div>
+    <div class="col-md-8">
+        <div class="box box-solid box-primary">
+            <div class="box-header">
+                
+            </div>
+            <div class="box-body">
+                <table class="table table-responsive" id="myTable" >
                             <thead>                                                                                        
                             <th>COMITE LOCAL</th>
                             <th>COMITE CENTRAL</th>
@@ -63,8 +68,6 @@
                                 @endforeach
                             </tbody>
                         </table>
-                    </div>                     
-                </div>
             </div>
         </div>
     </div>
