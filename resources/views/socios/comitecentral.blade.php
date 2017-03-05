@@ -16,7 +16,7 @@
                     <strong id='succescentral'></strong>
                 </div>
                 <input type="hidden" name="_token" value="{{ csrf_token() }}" id="token">
-                <input type="hidden" id="id">  
+                <input type="hidden" id="idcentral">  
                 {!! Form::label('departamento','Departamento:',['class' => 'control-label'])!!}                             
                 {!! Form::select('departamento',$departamentos,null,['id'=>'departamento','class'=>'form-control','placeholder'=>'selecciona']) !!}
                 <div class="text-danger" id="error_departamento"></div>

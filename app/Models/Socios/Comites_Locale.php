@@ -57,5 +57,18 @@ class Comites_Locale extends Model
                         ,'distritos.provincias_id','provincias.provincia','provincias.departamentos_id','departamentos.departamento')
                 ->get();
         }
+        
+        public static function getlistaComite_Local(){
+            return DB::table('comites_locales')
+                ->join('comites_centrales','comites_locales.comites_centrales_id','=','comites_centrales.id')
+                ->join('distritos','comites_centrales.distritos_id','=','distritos.id')
+                ->join('provincias','distritos.provincias_id','=','provincias.id')
+                ->join('departamentos','provincias.departamentos_id','=','departamentos.id')
+                ->select( 'comites_locales.id','comites_locales.comite_local','comites_locales.comites_centrales_id'
+                        ,'comites_centrales.comite_central','comites_centrales.distritos_id','distritos.distrito'
+                        ,'distritos.provincias_id','provincias.provincia','provincias.departamentos_id','departamentos.departamento')
+                ->get();
+        }
+                
                 
 }

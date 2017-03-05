@@ -954,99 +954,6 @@ var EliArea = function(id,name)
 
 
 
-// ******************  CRUD DE COMITE LOCAL
-$("#RegLocal").click(function(event)
-    {       
-            
-            var comite_local = $("#comite_local_1").val();            
-            var comite_central = $("#comite_central").val();
-            var token = $("#token").val();
-            var route = "/socios/comite-local";             
-          $.ajax({
-            url:route,
-            headers:{'X-CSRF-TOKEN':token},
-            type:'post',
-            datatype: 'json',
-            //async: false,
-//            data:dataSting,
-            data: {comite_local: comite_local
-                ,comites_centrales_id:comite_central
-        },            
-            success:function(data)
-            {                         
-                if(data.success = 'true')
-                {                         
-                    document.location.href= '/socios/comite-local';
-                }
-            },
-             
-          })      
-    });  
-
-var Edlocal = function(id) 
-    {
-        $('#RegLocal').hide();
-        $('#ActLocal').show();        
-        var route = "/socios/comite-local/"+id+"/edit";                
-        $.get(route, function(data){            
-        $("#departamento").val(data[0].departamentos_id);
-        $("#provincia").empty();
-        $("#provincia").append("<option value='" + data[0].provincias_id+"'>"+data[0].provincia+"</option>");
-        $("#distrito").empty();
-        $("#distrito").append("<option value='" + data[0].distritos_id+"'>"+data[0].distrito+"</option>");
-        $("#comite_central").empty();
-        $("#comite_central").append("<option value='" + data[0].comites_centrales_id+"'>"+data[0].comite_central+"</option>");
-        $("#id").val(data[0].id);          
-        $("#comite_local_1").val(data[0].comite_local);                
-        });
-    }
-        
-$("#ActLocal").click(function()
-{
-
-  var id = $("#id").val();
-  var comite_central = $("#comite_central").val();  
-  var comite_local = $("#comite_local_1").val();  
-  var route = "/socios/comite-local/"+id+"";
-  var token = $("#token").val();
-  $.ajax({
-    url: route,
-    headers: {'X-CSRF-TOKEN': token},
-    type: 'PUT',
-    dataType: 'json',
-    data: {
-            comite_local: comite_local,
-            comites_centrales_id: comite_central               
-        },
-    success: function(data){        
-     if (data.success = 'true')
-     {         
-         document.location.href= '/socios/comite-local';
-     }
-    },      
-  });
-});
-   
-var EliLocal = function(id,name)
-{ 
-     // ALERT JQUERY        
-   $.alertable.confirm("<span style='color:#000'>¿Está seguro de eliminar el registro?</span>"+"<br><strong><span style='color:#ff0000'>"+name+"</span></strong></br>").then(function() {  
-      var route = "/socios/comite-local/"+id+"";
-      var token = $("#token").val();
-      $.ajax({
-        url: route,
-        headers: {'X-CSRF-TOKEN': token},
-        type: 'DELETE',
-        dataType: 'json',
-        success: function(data){
-        if (data.success = 'true')
-        {
-          document.location.href= '/socios/comite-local';
-        }
-      }
-      });          
-    });
-};
 
 
 // *************************  CRUD FAUNA  ********************************************************************************************************
@@ -2213,33 +2120,7 @@ var Edcentral = function(id)
         $("#comite_central_1").val(data[0].comite_central);        
         
         });
-    }
-        
-$("#ActCentral").click(function()
-{
-
-  var id = $("#id").val();
-  var comite_central = $("#comite_central_1").val();  
-  var distrito = $("#distrito").val();  
-  var route = "/socios/comite-central/"+id+"";
-  var token = $("#token").val();
-  $.ajax({
-    url: route,
-    headers: {'X-CSRF-TOKEN': token},
-    type: 'PUT',
-    dataType: 'json',
-    data: {
-            comite_central: comite_central,
-            distritos_id: distrito               
-        },
-    success: function(data){        
-     if (data.success = 'true')
-     {         
-         document.location.href= '/socios/comite-central';
-     }
-    },      
-  });
-});
+    };
    
 var EliCentral = function(id,name)
 { 
@@ -2262,6 +2143,119 @@ var EliCentral = function(id,name)
     });
 };
 
+
+
+// ******************  CRUD DE COMITE LOCAL  **********************************************************************
+$("#nuevolocal").click(function(event){$("#RegLocal").text("Registrar");$("#error_provincia").html(''); $("#error_departamento").html('');$("#error_distrito").html('');$("#error_central").html('');
+                $("#error_local").html('');});
+
+$("#RegLocal").click(function(event)
+    {       
+            
+            var fields = $("#formlocal").serialize();
+            var type = "POST";
+            var token = $("#token").val();
+            var route = "/socios/comite-local";     
+            if($("#RegLocal").text() == "Actualizar"){
+                route = "/socios/comite-local/" + $("#idlocal").val();
+                type = "PUT";
+            }
+          $.ajax({
+            url:route,
+            headers:{'X-CSRF-TOKEN':token},
+            type:'post',
+            datatype: 'json',           
+            data: fields,            
+            success:function(data)
+            {                         
+                if(data.success == 'true')
+                {                         
+                   var msj = "<h4>"+data.message+"</h4>";
+                   $("#succeslocal").html(msj);
+                   $("#msj-infolocal").fadeIn();
+                   document.location.reload();
+                }
+            },
+             error:function(data)
+            {
+                $("#error_provincia").html(''); $("#error_departamento").html('');$("#error_distrito").html('');$("#error_central").html('');
+                $("#error_local").html('');
+                var errors =  $.parseJSON(data.responseText);      
+                $.each(errors,function(index, value) {                      
+                            if(index == 'provincia')$("#error_provincia").html(value);
+                            else if(index == 'departamento')$("#error_departamento").html(value); 
+                             else if(index == 'distrito')$("#error_distrito").html(value);
+                             else if(index == 'comite_central')$("#error_central").html(value);
+                             else if(index == 'comite_local')$("#error_local").html(value);
+                });                                         
+            }             
+          })      
+    });  
+
+var Edlocal = function(id) 
+    {
+        $('#RegLocal').text("Actualizar");
+               
+        var route = "/socios/comite-local/"+id+"/edit";                
+        $.get(route, function(data){            
+        $("#departamento").val(data[0].departamentos_id);
+        $("#provincia").empty();
+        $("#provincia").append("<option value='" + data[0].provincias_id+"'>"+data[0].provincia+"</option>");
+        $("#distrito").empty();
+        $("#distrito").append("<option value='" + data[0].distritos_id+"'>"+data[0].distrito+"</option>");
+        $("#comite_central").empty();
+        $("#comite_central").append("<option value='" + data[0].comites_centrales_id+"'>"+data[0].comite_central+"</option>");
+        $("#idlocal").val(data[0].id);          
+        $("#comite_local").val(data[0].comite_local);                
+        });
+    }
+        
+$("#ActLocal").click(function()
+{
+
+  var id = $("#id").val();
+  var comite_central = $("#comite_central").val();  
+  var comite_local = $("#comite_local_1").val();  
+  var route = "/socios/comite-local/"+id+"";
+  var token = $("#token").val();
+  $.ajax({
+    url: route,
+    headers: {'X-CSRF-TOKEN': token},
+    type: 'PUT',
+    dataType: 'json',
+    data: {
+            comite_local: comite_local,
+            comites_centrales_id: comite_central               
+        },
+    success: function(data){        
+     if (data.success = 'true')
+     {         
+         document.location.href= '/socios/comite-local';
+     }
+    },      
+  });
+});
+   
+var EliLocal = function(id,name)
+{ 
+     // ALERT JQUERY        
+   $.alertable.confirm("<span style='color:#000'>¿Está seguro de eliminar el registro?</span>"+"<br><strong><span style='color:#ff0000'>"+name+"</span></strong></br>").then(function() {  
+      var route = "/socios/comite-local/"+id+"";
+      var token = $("#token").val();
+      $.ajax({
+        url: route,
+        headers: {'X-CSRF-TOKEN': token},
+        type: 'DELETE',
+        dataType: 'json',
+        success: function(data){
+        if (data.success = 'true')
+        {
+          document.location.href= '/socios/comite-local';
+        }
+      }
+      });          
+    });
+};
 
 //var cargarForm = function(idform)
 //{

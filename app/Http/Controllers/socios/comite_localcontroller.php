@@ -30,17 +30,8 @@ class comite_localcontroller extends Controller
     public function index()
     {
         //
-        $comites_locales = DB::table('comites_locales')
-                ->join('comites_centrales','comites_locales.comites_centrales_id','=','comites_centrales.id')
-                ->join('distritos','comites_centrales.distritos_id','=','distritos.id')
-                ->join('provincias','distritos.provincias_id','=','provincias.id')
-                ->join('departamentos','provincias.departamentos_id','=','departamentos.id')
-                ->select( 'comites_locales.id','comites_locales.comite_local','comites_locales.comites_centrales_id'
-                        ,'comites_centrales.comite_central','comites_centrales.distritos_id','distritos.distrito'
-                        ,'distritos.provincias_id','provincias.provincia','provincias.departamentos_id','departamentos.departamento')
-                ->get();
-        $departamentos = Departamento::pluck('departamento','id')->prepend('Selleciona');        
-//        return view('socios.distrito')->with('distritos',$distritos);
+        $comites_locales = Comites_Locale::getlistaComite_Local();
+        $departamentos = Departamento::pluck('departamento','id');        
         return view('socios.comitelocal',array('comites_locales'=>$comites_locales,'departamentos'=>$departamentos));
     }
 
@@ -60,19 +51,22 @@ class comite_localcontroller extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Requests\socios\Comite_localCreateRequet $request)
     {
         //
         if($request->ajax())
         {
-            $local = Comites_Locale::create($request->all());
+            $local = Comites_Locale::create([
+                'comite_local'=>  strtoupper($request->comite_local),
+                'comites_centrales_id'=>$request->comite_central
+            ]);
             if($local)
             {
-                return response()->json(['success'=>'true']);
+                return response()->json(['success'=>'true','message'=>'Se registro Correctamente']);
             }
             else
             {
-                return response()->json(['success'=>'false']);
+                return response()->json(['success'=>'false','message'=>'no se Registro ningun Dato']);
             }
         }
     }
@@ -108,21 +102,22 @@ class comite_localcontroller extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Requests\socios\Comite_localCreateRequet $request, $id)
     {
         //
         if($request->ajax())
         {
             $comite_local = Comites_Locale::FindOrFail($id);
-            $comite_local->fill($request->all());
+            $comite_local->comites_centrales_id = $request->comite_central;
+            $comite_local->comite_local = strtoupper($request->comite_local);
             $comite_local->save();
             if($comite_local)
             {
-                return response()->json(['success'=>'true']);
+                return response()->json(['success'=>'true','message'=>'Se actualizaron los datos']);
             }
             else
             {
-                return response()->json(['success'=>'false']);
+                return response()->json(['success'=>'false','message'=>'no se actualizo ningun registro']);
             }
         }
     }
