@@ -44,16 +44,16 @@ class tecnicoscontroller extends Controller
         //
         if($request->ajax())
         {
-            $tecnicos = Tecnico::create(['comites_locales_id'=>$request->comites_locales_id,'empleados_empleadoId'=>$request->empleados_empleadoId]);
-//            $tecnico->empleados_empleadoId = $request->empleados_empleadoId;            
-//            $tecnico->save();                        
+            $tecnicos = Tecnico::create([
+                'comites_locales_id'=>$request->comites_locales_id,
+                'empleados_empleadoId'=>$request->empleados_empleadoId]);                   
             if($tecnicos)
             {
-                return response()->json($request->empleados_empleadoId);
+                return response()->json(['success'=>'true','message'=>'Se Asignaron Correctamente los Sectores']);
             }
             else
             {
-                return response()->json(['succes'=>'false']);
+                return response()->json(['success'=>'false','message'=>'No se Registro ningun Dato']);
             }
         }
     }
@@ -66,7 +66,8 @@ class tecnicoscontroller extends Controller
      */
     public function show($id)
     {
-        //
+        $sectores = Tecnico::getComitesTecnicos($id);
+        return response()->json(['success'=>'true','sectores'=>$sectores]);
     }
 
     /**

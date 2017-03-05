@@ -20,7 +20,7 @@ class Tecnico extends Model
                 ->join('cargos','empleados.cargos_id','=','cargos.id')
                 ->join('areas','empleados.areas_id','=','areas.id')
                 ->select('tecnicos.empleados_empleadoId','empleados.personas_dni','personas.paterno','personas.materno','personas.nombre'
-                        ,'cargos.cargo','areas.area')
+                        ,'cargos.cargo','areas.area',  DB::raw("count(tecnicos.comites_locales_id) as numzonas"))
                 ->groupBy('tecnicos.empleados_empleadoId')
                 ->get();
     }
@@ -33,7 +33,12 @@ class Tecnico extends Model
                 ->where('empleados.estado','=','ACTIVO')                
                 ->pluck( DB::raw("CONCAT(personas.paterno,' ',personas.materno,' ',personas.nombre)  AS fullname")   ,'empleados.empleadoId');
     }
-        
+    
+    public static function getComitesTecnicos($idempleado){
+            return DB::table('tecnicos')
+                    ->where('empleados_empleadoId','=',$idempleado)
+                    ->get();
+        }
 }
 
 

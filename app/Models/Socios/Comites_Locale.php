@@ -69,6 +69,8 @@ class Comites_Locale extends Model
                         ,'distritos.provincias_id','provincias.provincia','provincias.departamentos_id','departamentos.departamento')
                 ->get();
         }
+        
+        
                 
                 
 }

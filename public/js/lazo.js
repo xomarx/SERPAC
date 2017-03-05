@@ -386,55 +386,6 @@ $("#RegDistribucion").click(function(){
         $('#myTable').DataTable();
     }); 
 
-//  ************************  CRUD TECNICOS  ********************************************************************************
-$("#RegTecnicos").click(function() {
-
-        //elimina
-      var codempleado = $("#tecnico").val();
-      var route = "/RRHH/Tecnicos/"+codempleado+"";
-      var token = $("#token").val();      
-      $.ajax({
-        url: route,
-        headers: {'X-CSRF-TOKEN': token},
-        type: 'DELETE',
-        dataType: 'json',
-        success: function(data){
-        if (data.success = 'true')
-        {
-            console.log("limpiando zonas");
-        }
-      }
-      });         
-        for (i=0;i < selLanguage.length;i++)
-        {
-            if(selLanguage[i].selected == true)
-            {
-                 route = "/RRHH/Tecnicos";
-            token = $("#token").val();
-            var zonas = selLanguage[i].value
-            $.ajax({
-                url: route,
-                headers: {'X-CSRF-TOKEN': token},
-                type: 'post',
-                datatype: 'json',
-                data: {
-                    comites_locales_id: zonas,
-                    empleados_empleadoId: codempleado,
-                },
-                success: function (data)
-                {
-                    if (data.success = 'true')
-                    {
-                        console.log("se registro Correctamente");
-                    }
-                },
-            });
-            }
-           
-        }
-      return false;
-    });
-
 // **************************  CRUD EMPLEADO  ********************************************************************************
 
   $("#nuevoempleado").click(function(event){     
@@ -1083,8 +1034,7 @@ var EdInmueble = function(id){
     
  $("#nuevoinmueble").click(function(event){$("#RegInmueble").text("Registrar")});
            
-var EliInmueble = function(id,name)
-{ 
+var EliInmueble = function(id,name){ 
      // ALERT JQUERY        
    $.alertable.confirm("<span style='color:#000'>¿Está seguro de eliminar el registro?</span>"+"<br><strong><span style='color:#ff0000'>"+name+"</span></strong></br>").then(function() {  
       var route = "/socios/basicos/inmuebles/"+id+"";      
@@ -1106,8 +1056,7 @@ var EliInmueble = function(id,name)
 
 // ******************************  CRUD FUNDOS  ***********************************************************************************************
    
-    var Eliminarcultivo = function(fila,idcultivo)
-    {        
+    var Eliminarcultivo = function(fila,idcultivo) {        
         var valor=document.getElementById("tablacultivos").rows[fila].cells[0].innerText;            
         document.getElementById('tablacultivos').deleteRow(fila);
         $("#flora").append("<option value="+idcultivo+" selected='selected'>"+ valor+"</option>")
@@ -1120,8 +1069,7 @@ var EliInmueble = function(id,name)
         $("#fauna").append("<option value="+idfauna+" selected='selected'>"+ valor+"</option>")
     }
        
-var Eliminarinmueble = function(fila,idinmueble)
-    {
+var Eliminarinmueble = function(fila,idinmueble){
         var valor=document.getElementById("tablainmueble").rows[fila].cells[0].innerText;            
         document.getElementById('tablainmueble').deleteRow(fila);
         $("#inmueble").append("<option value="+idinmueble+" selected='selected'>"+ valor+"</option>")
@@ -1729,8 +1677,7 @@ var EdDelegado = function(id){
         });
     }
         
-var EliDelegado = function(id,name)
-{      
+var EliDelegado = function(id,name){      
    $.alertable.confirm("<span style='color:#000'>¿Está seguro de eliminar el registro?</span>"+"<br><strong><span style='color:#ff0000'>"+name+"</span></strong></br>").then(function() {  
       var route = "/socios/basicos/delegados/"+id+"";      
       var token = $("#token").val();
@@ -1755,8 +1702,7 @@ var EliDelegado = function(id,name)
 
 $("#nuevodirectivo").click(function(event){$("#RegDirectivo").text("Registrar"); });
 
-$("#RegDirectivo").click(function(event)
-    {                   
+$("#RegDirectivo").click(function(event) {                   
             var fields = $("#formdirectivos").serialize();
             var token = $("#token").val();var type = "POST";
             var route = "/socios/basicos/directivos";  
@@ -1879,8 +1825,7 @@ $("#regdepartamento").click(function(event){
         });
     };
 
- var Eliminar = function(id,name)
- {
+ var Eliminar = function(id,name) {
      $.alertable.confirm("<span style='color:#000'>¿Está seguro de eliminar el registro?</span>"
              +"<br><strong><span style='color:#ff0000'>"+name+"</span></strong></br>")
              .then(function(){
@@ -1906,8 +1851,7 @@ $("#regdepartamento").click(function(event){
 // **************  CRUD PROVINCIAS   **************************************************************************************************************
 $("#nuevaprovincia").click(function(event){ $("#RegProvincia").text("Registrar"); $("#error_provincia").html(''); $("#error_departamento").html(''); });
 
-var EdProvincia = function(id) 
-    {        
+var EdProvincia = function(id) {        
               $("#RegProvincia").text("Actualizar"); 
         var route = "/socios/provincias/"+id+"/edit";
         $.get(route, function(data){
@@ -1918,8 +1862,7 @@ var EdProvincia = function(id)
         });
     }
     
-$("#RegProvincia").click(function(event)
-    {                               
+$("#RegProvincia").click(function(event) {                               
             var fields = $("#formprovincia").serialize();                
             var token = $("#token").val();     
             var type = "POST";
@@ -1957,8 +1900,7 @@ $("#RegProvincia").click(function(event)
           })      
     }); 
     
-var EliProvincia = function(id,name)
-{ 
+var EliProvincia = function(id,name){ 
      // ALERT JQUERY        
    $.alertable.confirm("<span style='color:#000'>¿Está seguro de eliminar el registro?</span>"+"<br><strong><span style='color:#ff0000'>"+name+"</span></strong></br>").then(function() {  
       var route = "/socios/provincias/"+id+"";
@@ -1971,7 +1913,7 @@ var EliProvincia = function(id,name)
         success: function(data){
         if (data.success = 'true')
         {
-          document.location.href= '/socios/provincias';
+          document.location.reload();
         }
       }
       });          
@@ -2023,8 +1965,7 @@ $("#RegDistrito").click(function(event){
           })      
     });  
 
-var EdDistrito = function(id) 
-    {
+var EdDistrito = function(id) {
         $("#RegDistrito").text("Actualizar");
         var route = "/socios/distritos/"+id+"/edit";
         $.get(route, function(data){        
@@ -2036,35 +1977,26 @@ var EdDistrito = function(id)
         });
     }
  
-var EliDistrito = function(id,name)
-{      
-   $.alertable.confirm("<span style='color:#000'>¿Está seguro de eliminar el registro?</span>"+"<br><strong><span style='color:#ff0000'>"+name+"</span></strong></br>")
-           .then(function() {  
+var EliDistrito = function (id, name) {
+    $.alertable.confirm("<span style='color:#000'>¿Está seguro de eliminar el registro?</span>"+"<br><strong><span style='color:#ff0000'>"+name+"</span></strong></br>").then(function() {  
       var route = "/socios/distritos/"+id+"";
       var token = $("#token").val();
-      console.log(route);
       $.ajax({
         url: route,
         headers: {'X-CSRF-TOKEN': token},
         type: 'DELETE',
         dataType: 'json',
         success: function(data){
-        if (data.success = 'true')
-        {
-            console.log('eliminado');
-          document.location.href= '/socios/distritos';
+        if (data.success == 'true'){
+          document.location.reload();
         }
       }
       });          
-    }
-    , function() {
-          
     });
 };
 
 //  **************   CRUD COMITE CENTRAL  *****************************************************************************
-$("#RegCentral").click(function(event)
-    {       
+$("#RegCentral").click(function(event)  {       
             var fields = $("#formcomite_central").serialize();
             
             var token = $("#token").val();
@@ -2105,8 +2037,7 @@ $("#RegCentral").click(function(event)
           })      
     });  
 
-var Edcentral = function(id) 
-    {
+var Edcentral = function(id) {
         $('#RegCentral').hide();
         $('#ActCentral').show();        
         var route = "/socios/comite-central/"+id+"/edit";                
@@ -2122,9 +2053,8 @@ var Edcentral = function(id)
         });
     };
    
-var EliCentral = function(id,name)
-{ 
-     // ALERT JQUERY        
+var EliCentral = function(id,name){ 
+ 
    $.alertable.confirm("<span style='color:#000'>¿Está seguro de eliminar el registro?</span>"+"<br><strong><span style='color:#ff0000'>"+name+"</span></strong></br>").then(function() {  
       var route = "/socios/comite-central/"+id+"";
       var token = $("#token").val();
@@ -2136,22 +2066,18 @@ var EliCentral = function(id,name)
         success: function(data){
         if (data.success = 'true')
         {
-          document.location.href= '/socios/comite-central';
+          document.location.reload();
         }
       }
       });          
     });
 };
 
-
-
 // ******************  CRUD DE COMITE LOCAL  **********************************************************************
 $("#nuevolocal").click(function(event){$("#RegLocal").text("Registrar");$("#error_provincia").html(''); $("#error_departamento").html('');$("#error_distrito").html('');$("#error_central").html('');
                 $("#error_local").html('');});
 
-$("#RegLocal").click(function(event)
-    {       
-            
+$("#RegLocal").click(function(event){                   
             var fields = $("#formlocal").serialize();
             var type = "POST";
             var token = $("#token").val();
@@ -2163,7 +2089,7 @@ $("#RegLocal").click(function(event)
           $.ajax({
             url:route,
             headers:{'X-CSRF-TOKEN':token},
-            type:'post',
+            type:type,
             datatype: 'json',           
             data: fields,            
             success:function(data)
@@ -2192,53 +2118,23 @@ $("#RegLocal").click(function(event)
           })      
     });  
 
-var Edlocal = function(id) 
-    {
-        $('#RegLocal').text("Actualizar");
-               
+var Edlocal = function(id) {
+        $('#RegLocal').text("Actualizar");               
         var route = "/socios/comite-local/"+id+"/edit";                
         $.get(route, function(data){            
-        $("#departamento").val(data[0].departamentos_id);
+        $("#departamento").val(data.departamentos_id);
         $("#provincia").empty();
-        $("#provincia").append("<option value='" + data[0].provincias_id+"'>"+data[0].provincia+"</option>");
+        $("#provincia").append("<option value='" + data.provincias_id+"'>"+data.provincia+"</option>");
         $("#distrito").empty();
-        $("#distrito").append("<option value='" + data[0].distritos_id+"'>"+data[0].distrito+"</option>");
+        $("#distrito").append("<option value='" + data[0].distritos_id+"'>"+data.distrito+"</option>");
         $("#comite_central").empty();
-        $("#comite_central").append("<option value='" + data[0].comites_centrales_id+"'>"+data[0].comite_central+"</option>");
-        $("#idlocal").val(data[0].id);          
-        $("#comite_local").val(data[0].comite_local);                
+        $("#comite_central").append("<option value='" + data.comites_centrales_id+"'>"+data.comite_central+"</option>");
+        $("#idlocal").val(data.id);          
+        $("#comite_local").val(data.comite_local);                
         });
     }
-        
-$("#ActLocal").click(function()
-{
-
-  var id = $("#id").val();
-  var comite_central = $("#comite_central").val();  
-  var comite_local = $("#comite_local_1").val();  
-  var route = "/socios/comite-local/"+id+"";
-  var token = $("#token").val();
-  $.ajax({
-    url: route,
-    headers: {'X-CSRF-TOKEN': token},
-    type: 'PUT',
-    dataType: 'json',
-    data: {
-            comite_local: comite_local,
-            comites_centrales_id: comite_central               
-        },
-    success: function(data){        
-     if (data.success = 'true')
-     {         
-         document.location.href= '/socios/comite-local';
-     }
-    },      
-  });
-});
-   
-var EliLocal = function(id,name)
-{ 
-     // ALERT JQUERY        
+  
+var EliLocal = function(id,name){     
    $.alertable.confirm("<span style='color:#000'>¿Está seguro de eliminar el registro?</span>"+"<br><strong><span style='color:#ff0000'>"+name+"</span></strong></br>").then(function() {  
       var route = "/socios/comite-local/"+id+"";
       var token = $("#token").val();
@@ -2250,13 +2146,56 @@ var EliLocal = function(id,name)
         success: function(data){
         if (data.success = 'true')
         {
-          document.location.href= '/socios/comite-local';
+          document.location.reload();
         }
       }
       });          
     });
 };
 
+
+//  ************************  CRUD TECNICOS  ********************************************************************************
+var RegSectores = function(idempleado){
+    var options = $("#zona_final option[value]");
+    var route = "/RRHH/Tecnicos"; var token = $("#token").val();
+      $.each(options,function( index, value ){
+          $.ajax({
+                url: route,
+                headers: {'X-CSRF-TOKEN': token},
+                type: 'post',
+                datatype: 'json',
+                data: { comites_locales_id: value.value,
+                    empleados_empleadoId:idempleado
+                },
+                success: function (data)
+                {
+                    if (data.success == 'true')
+                    {
+                        var msj = "<h4>" + data.message + "</h4>";
+                        $("#succestecnicos").html(msj);
+                        $("#msj-infotecnicos").fadeIn();
+                        document.location.reload();
+                    }
+                },
+            });          
+      });
+}
+
+$("#RegTecnicos").click(function() {
+
+        //elimina
+      var fields = $("#formtecnicos").serialize();      
+      var route = "/RRHH/Tecnicos/"+$("#tecnico").val()+"";
+      var token = $("#token").val();      
+      $.ajax({
+        url: route,
+        headers: {'X-CSRF-TOKEN': token},
+        type: 'DELETE',
+        dataType: 'json',
+        success: function(data){ }
+      });  
+      RegSectores($("#tecnico").val());
+    });
 //var cargarForm = function(idform)
 //{
 //    var cadena = "@section('contentheader_title')Parientes y Beneficiario @stop";

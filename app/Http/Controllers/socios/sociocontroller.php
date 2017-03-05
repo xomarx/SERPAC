@@ -37,8 +37,7 @@ class sociocontroller extends Controller
         return $date->format('d-m-Y');
     }    
     
-    public function autocompleteCodigoSocio(Request $request)
-    {
+    public function autocompleteCodigoSocio(Request $request)    {
         if($request->ajax()){
             $nombre = Input::get('term');
             $socios = Socio::CodigoSocioautocomplete($nombre);
@@ -50,8 +49,7 @@ class sociocontroller extends Controller
         }
     }
     
-    public function autocompleteDniSocio(Request $request)
-    {
+    public function autocompleteDniSocio(Request $request) {
         if($request->ajax()){
             $nombre = Input::get('term');
             $socios = Socio::DNISocioautocomplete($nombre);
@@ -63,8 +61,7 @@ class sociocontroller extends Controller
         }
     }
     
-    public function autocomplete (Request $request)
-    {
+    public function autocomplete (Request $request) {
         if($request->ajax()){
             $nombre = Input::get('term');
             $socios = Socio::Socioautocomplete($nombre);
@@ -85,11 +82,8 @@ class sociocontroller extends Controller
         $inmuebles = Inmueble::pluck('inmueble','id');  
         return view('socios/socios',array('socios'=>$socios,'departamentos'=>$departamentos,'floras'=>$floras,'faunas'=>$faunas,'inmuebles'=>$inmuebles));
     }
-    
-    
-
-    public function verPadronsocio($idsocio)
-    {
+        
+    public function verPadronsocio($idsocio) {
         $socio = Socio::getSocio($idsocio);
         $parientes = \App\Models\Socios\Pariente::getparientesSocio($idsocio);
         $fundos = \App\Models\Socios\Fundo::getfundosSocio($idsocio);

@@ -4,15 +4,12 @@
 @stop
 @section('main-content')
 
-<div class="container spark-screen ">
-    <div class="row">
-        <div class="col-md-11 col-md-offset-0">
-            <div class="panel panel-default panel-primary">                
-                <div class="panel-heading">                                                            
-                    <a id="nuevasucursal" data-toggle='modal' data-target='#modaldistribucion' class="btn btn-primary btn-sm m-t-10" >NUEVO  <span class="glyphicon glyphicon-file"data-toggle="tooltip" data-placement="top" title="Nueva Sucursal"></span></a>
-                </div>
-                <div class="panel-body">                                                             
-                    <table class="table table-responsive" id="myTable" >
+<div class="box box-solid box-primary">
+    <div class="box-header">
+        <a id="nuevasucursal" data-toggle='modal' data-target='#modaldistribucion' class="btn btn-facebook btn-sm m-t-10" >NUEVO  <span class="glyphicon glyphicon-plus"data-toggle="tooltip" data-placement="top" title="Nueva Distribucion"></span></a>
+    </div>
+    <div class="box-body">
+        <table class="table table-responsive" id="myTable" >
                         <thead>
                         <th>DNI</th>
                         <th>TECNICO</th> 
@@ -33,17 +30,13 @@
                                 <td>{{$distribucion->fecha}}</td>                                    
                                 <td></td>
                                 <td>
-                                    <a href="#" data-toggle="tooltip" data-placement="top" title="Imprimir" ><span class="glyphicon glyphicon-print"></span></a>                                    
-                                    <a href="#" onclick="AnulDistribucion('{{$distribucion->id}}','{{$name}}')" ><span data-toggle="tooltip" data-placement="top" title="Anular" class="glyphicon glyphicon-remove"></span></a>
+                                    <a href="{{url('tesoreria/distribucion/recibo') }}" data-toggle="tooltip" data-placement="top" title="Imprimir" ><span class="glyphicon glyphicon-print"></span></a>                                    
+                                    <a href="javascript:void(0);" onclick="AnulDistribucion('{{$distribucion->id}}','{{$name}}')" ><span data-toggle="tooltip" data-placement="top" title="Anular" class="glyphicon glyphicon-remove"></span></a>
                                 </td>                    
                             </tr>
                             @endforeach
                         </tbody>
                     </table>
-
-                </div>
-            </div>
-        </div>
     </div>
 </div>
 

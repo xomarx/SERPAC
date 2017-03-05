@@ -12,7 +12,25 @@ use Carbon\Carbon;
 
 class tesoreriacontroller extends Controller
 {
-    /**
+    
+    public function recibodistribucio()
+    {
+        $socio = Socio::getSocio($idsocio);
+        $parientes = \App\Models\Socios\Pariente::getparientesSocio($idsocio);
+        $fundos = \App\Models\Socios\Fundo::getfundosSocio($idsocio);
+        $cultivos = Flora::getcultivos($idsocio);
+        $faunas = Fauna::getfaunas($idsocio);
+        $dato = view('Reportes.socios.socio',['socio'=>$socio,'parientes'=>$parientes,
+            'fundos'=>$fundos,'cultivos'=>$cultivos,'faunas'=>$faunas])->render();
+//        return view('Reportes.socios.socio',['socio'=>$socio,'parientes'=>$parientes,
+//            'fundos'=>$fundos,'cultivos'=>$cultivos,'faunas'=>$faunas]);
+        $pdf = \Illuminate\Support\Facades\App::make('dompdf.wrapper');
+        $pdf->loadHTML($dato);                        
+//        $pdf->loadview('Acopio.formExcel');
+        return $pdf->stream();
+    }
+
+        /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response

@@ -49,7 +49,7 @@
                             <td>{{$inmueble->inmueble}}</td>                                                        
                             <td>                                          
                                 <a href="javascropt:void(0);"  OnClick='EdInmueble({{$inmueble->id}});' class="btn-sm btn-success"><span class="glyphicon glyphicon-pencil"data-toggle="tooltip" data-placement="top" title="Editars"></span></a>
-                                <a href="#" onclick="EliInmueble('{{$inmueble->id}}','{{$name}}')" class="btn-sm btn-danger"><span data-toggle="tooltip" data-placement="top" title="Eliminar" class="glyphicon glyphicon-remove"></span></a>                                                            
+                                <a href="javascropt:void(0);" onclick="EliInmueble('{{$inmueble->id}}','{{$name}}')" class="btn-sm btn-danger"><span data-toggle="tooltip" data-placement="top" title="Eliminar" class="glyphicon glyphicon-remove"></span></a>                                                            
                             </td>                    
                         </tr>
                         @endforeach

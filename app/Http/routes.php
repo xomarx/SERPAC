@@ -97,6 +97,7 @@ Route::group(['middleware' => ['web']], function () {
     route::resource('Acopio/Persona-Juridica','Tesoreria\persona_juridicacontroller');
         
     route::resource('Tesoreria/Distribucion-Fondos','Tesoreria\tesoreriacontroller');
+    route::resource('Tesoreria/Distribucion/Recibo','Tesoreria\tesoreriacontroller@recibodistribucio');//recibodistribucio
     route::resource('Tesoreria/Tipos-egresos','Tesoreria\tipo_egresoscontroller');
             
     route::resource('Creditos/Creditos-Financieros','Creditos\prestamoscontroller');
