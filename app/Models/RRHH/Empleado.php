@@ -44,7 +44,7 @@ class Empleado extends Model
                 ->select('empleados.empleadoId','empleados.estado','empleados.personas_dni','empleados.estadocivil',
                         'empleados.email','empleados.profesion','empleados.ruc','empleados.cargos_id','empleados.areas_id',
                         'personas.paterno','personas.materno','personas.nombre','personas.fec_nac','personas.sexo','personas.direccion',
-                        'personas.referencia','personas.telefono','personas.comites_locales_id',
+                        'personas.telefono','personas.comites_locales_id',
                         'comites_locales.comite_local','comites_centrales.comite_central','distritos.distrito','provincias.provincia',
                         'comites_centrales.comite_central','comites_locales.comite_local','distritos.distrito','provincias.provincia',
                         'comites_locales.comites_centrales_id','comites_centrales.distritos_id','distritos.provincias_id','provincias.departamentos_id',

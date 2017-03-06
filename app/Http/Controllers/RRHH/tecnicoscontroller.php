@@ -10,6 +10,7 @@ use App\Models\RRHH\Tecnico;
 
 class tecnicoscontroller extends Controller
 {
+    
     /**
      * Display a listing of the resource.
      *

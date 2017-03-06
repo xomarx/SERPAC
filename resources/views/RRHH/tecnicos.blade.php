@@ -30,7 +30,8 @@
                     <td>{{$tecnico->cargo}}</td>
                     <td>{{$tecnico->area}}</td>                                
                     <td>
-                        <a href="javascropt:void(0);" data-toggle="tooltip" data-placement="top"  class="btn-sm btn-success" title="Ver"><span class="glyphicon glyphicon-eye-open"></span></a>                        
+                        <a href="javascropt:void(0);" data-toggle="tooltip" data-placement="top"  class="btn-sm btn-success" title="Ver"><span class="glyphicon glyphicon-eye-open"></span></a>
+                        <a href="{{url('Tesoreria/Distribucion/ReciboAcopio') }}" data-toggle="tooltip" data-placement="top"  class="btn-sm btn-primary" title="Ver"><span class="glyphicon glyphicon-print"></span></a>
                         <a href="javascropt:void(0);"  class="btn-sm btn-danger" data-toggle="tooltip" data-placement="top" title="Eliminar"><span class="glyphicon glyphicon-remove"></span></a>
                     </td>                    
                 </tr>
@@ -59,6 +60,7 @@
                 <input type="hidden" name="_token" value="{{ csrf_token() }}" id="token">
                 {!! Form::label('tecnico','EXTENSIONISTAS',['class'=>'control-label']) !!}
                 {!! Form::select('tecnico',$tecnics,null,['id'=>'tecnico','placeholder'=>'Seleccione un Extensionista !']) !!}
+                <div class="text-danger" id="error_tecnico"></div>
             </div>    
             {!! Form::label('tecnico','ZONAS LOCALES',['class'=>'control-label col-lg-12']) !!}
                          

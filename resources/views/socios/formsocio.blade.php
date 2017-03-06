@@ -27,10 +27,10 @@
                     </div>                                                   
                     <div class=" col-sm-1">
                         <label class="radio">
-                            {!! Form::radio('sexo','M',['id'=>'sexo', 'class'=>'']) !!} Maculino
+                            <input type="radio" name="sexo" id="sexoM" value="M" /> Maculino
                         </label>   
                         <label class="radio">
-                            {!! Form::radio('sexo','F',['id'=>'sexo', 'class'=>'']) !!} Femenino
+                            <input type="radio" name="sexo" id="sexoF" value="F" /> Femenino
                         </label>
                     </div>
                     <div class=" col-sm-3">

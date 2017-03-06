@@ -55,6 +55,7 @@
 
 // complemento
 
+
 $(document).ready(function () {        
         if($('#idestado').is(':visible'))
         {            
@@ -386,179 +387,6 @@ $("#RegDistribucion").click(function(){
         $('#myTable').DataTable();
     }); 
 
-// **************************  CRUD EMPLEADO  ********************************************************************************
-
-  $("#nuevoempleado").click(function(event){     
-     $("#RegEmpleado").text('Registrar');     
- });
- 
-$("#RegEmpleado").click(function(event)
-    {               
-        var empleadiid = $("#codigo").val();
-    var dni = $("#dni").val();
-    var esdocivil = $("#esdocivil").val();
-    var estado = $("#estado").val();
-    var email = $("#email").val();
-    var profesion = $("#profesion").val();
-    var ruc = $("#ruc").val();
-    var cargo = $("#cargo").val();
-    var area = $("#area").val();
-    var paterno = $("#paterno").val();
-    var materno = $("#materno").val();
-    var nombre = $("#nombre").val();
-    var fec_nac = $("#fec_nac").val();
-    var sexo = $("#sexo").val();
-    var direccion = $("#direccion").val();
-    var referencia = $("#referencia").val();
-    var telefono = $("#telefono").val();
-    var comites_locales_id = $("#comite_local").val();
-        if( $("#RegEmpleado").text() == 'Registrar' )
-        {                                    
-            var token = $("#token").val();
-            var route = "/RRHH/empleados";            
-            $.ajax({
-                url: route,
-                headers: {'X-CSRF-TOKEN': token},
-                type: 'post',
-                datatype: 'json',
-                
-                data: {                    
-                    empleadoId:empleadiid,
-                    dni : dni,
-                    estadocivil: esdocivil,
-                    estado: estado,
-                    email: email,
-                    profesion: profesion,
-                    ruc : ruc,
-                    cargos_id:cargo,
-                    areas_id: area,
-                    paterno: paterno,
-                    sexo:sexo,
-                    materno: materno,
-                    nombre: nombre,
-                    fec_nac: fec_nac,
-                    distancia: direccion,
-                    referencia: referencia,
-                    telefono: telefono,                                
-                    comites_locales_id: comites_locales_id
-                },
-                success: function (data)
-                {
-                    if (data.success = 'true')
-                    {
-                        document.location.href = '/RRHH/empleados';
-                    }
-                },                
-            });
-        }
-        else if($("#RegEmpleado").text() == 'Actualizar')
-        {
-            var route = "/RRHH/empleados/"+empleadiid+"";
-            console.log('Actualizando');
-            var token = $("#token").val();            
-        $.ajax({
-            url: route,
-            headers: {'X-CSRF-TOKEN': token},
-            type: 'PUT',
-            dataType: 'json',
-            data: {
-                empleadoId:empleadiid,
-                    dni : dni,
-                    estadocivil: esdocivil,
-                    estado: estado,
-                    email: email,
-                    profesion: profesion,
-                    ruc : ruc,
-                    cargos_id:cargo,
-                    areas_id: area,
-                    paterno: paterno,
-                    sexo:sexo,
-                    materno: materno,
-                    nombre: nombre,
-                    fec_nac: fec_nac,
-                    distancia: direccion,
-                    referencia: referencia,
-                    telefono: telefono,                                
-                    comites_locales_id: comites_locales_id
-            },
-            success: function (data) {
-
-                if (data.success = 'true')
-                {
-                   document.location.href = '/RRHH/empleados';
-                }
-            },
-            
-        });
-        }
-                                                  
-    });
-
-var EdiEmpleado = function(id) 
-    {
-       $("#RegEmpleado").text("Actualizar");       
-        var route = "/RRHH/empleados/"+id+"/edit";          
-        $.get(route, function(data){
-            console.log(data.empleadoId);
-            $("#codigo").val(data.empleadoId);
-            $("#dni").val(data.personas_dni);
-            $("#esdocivil").val(data.estadocivil);
-            $("#estado").val(data.estado);
-            $("#email").val(data.email);
-            $("#profesion").val(data.profesion);
-            $("#ruc").val(data.ruc);
-                        
-            $("#cargo").empty();
-            $("#cargo").append("<option value='" + data.cargos_id+"'>"+data.cargo+"</option>");
-            $("#area").empty();
-            $("#area").append("<option value='" + data.areas_id+"'>"+data.area+"</option>");            
-            
-            $("#paterno").val(data.paterno);
-            $("#materno").val(data.materno);
-            $("#nombre").val(data.nombre);
-            $("#fec_nac").val(data.fec_nac);
-            $("#sexo").val(data.sexo);
-            $("#direccion").val(data.direccion);
-            $("#referencia").val(data.referencia);
-            $("#telefono").val(data.telefono);
-            $("#departamento").val(data.departamentos_id);
-        $("#provincia").empty();
-        $("#provincia").append("<option value='" + data.provincias_id+"'>"+data.provincia+"</option>");
-        $("#distrito").empty();
-        $("#distrito").append("<option value='" + data.distritos_id+"'>"+data.distrito+"</option>");
-        $("#comite_central").empty();
-        $("#comite_central").append("<option value='" + data.comites_centrales_id+"'>"+data.comite_centra+"</option>");
-            $("#comite_local").empty();
-        $("#comite_local").append("<option value='" + data.comites_locales_id+"'>"+data.comite_local+"</option>");  
-            
-           
-        });
-    }
-
-var EliEmpleado = function(id,name)
-{ 
-     // ALERT JQUERY     
-   $.alertable.confirm("<span style='color:#000'>¿Está seguro de eliminar el registro?</span>"+"<br><strong><span style='color:#ff0000'>"
-           +name+"</span></strong></br>").then(function() {  
-      var route = "/RRHH/empleados/"+id+"";
-      var token = $("#token").val();
-
-      $.ajax({
-        url: route,
-        headers: {'X-CSRF-TOKEN': token},
-        type: 'DELETE',
-        dataType: 'json',
-        success: function(data){
-        if (data.success = 'true')
-        {
-            document.location.href = '/RRHH/empleados';
-        }
-      }
-      });
-        
-  
-    });
-};
 
 // ************************   CRUD DE CENTROS DE ACOPIO ********************************************************************************
 $("#RegSucursal").click(function(event)
@@ -1435,8 +1263,7 @@ var editPariente = function(idsocio,dnipariente)
     }
 
 //  ********************  CRUD SOCIOS   ********************************************************************************************************
-$("#RegSocio").click(function(event)
-    {                  
+$("#RegSocio").click(function(event) {                  
         var fields = $("#formsocios").serialize();                                       
             var token = $("#token").val();                       
             var route = "/socios";
@@ -1491,8 +1318,7 @@ $("#RegSocio").click(function(event)
           })      
     });    
     
-   var EditSocio = function(codigo)
-{     
+   var EditSocio = function(codigo){     
     $("#RegSocio").text('Actualizar');
     $("#titulosocio").empty().append('<center>ACTUALIZAR DATO</center>');
     var route = "/socios/"+codigo+"/edit";    
@@ -1500,7 +1326,8 @@ $("#RegSocio").click(function(event)
 //            alert(id);             
         $("#codigo").val(data.codigo);
         $("#dni").val(data.dni);
-        $("#sexo").val(data.sexo);
+        if(data.sexo == 'M') $("#sexoM").prop("checked",true);
+        else if(data.sexo == 'F') $("#sexoF").prop("checked",true);        
         $("#estado").val(data.estado); 
         $("#estado_civil").val(data.estado_civil);         
         $("#paterno").val(data.paterno);
@@ -1530,7 +1357,6 @@ $("#RegSocio").click(function(event)
         $("#dni").prop( "disabled", true );
         });      
 };
-
 
 var EliSocio = function(codigo,name)
 { 
@@ -1695,8 +1521,6 @@ var EliDelegado = function(id,name){
       });          
     });
 };
-
-
 
 //  ************************  CRUD DIRECTIVO   **********************************************************************************************
 
@@ -2115,7 +1939,7 @@ $("#RegLocal").click(function(event){
                              else if(index == 'comite_local')$("#error_local").html(value);
                 });                                         
             }             
-          })      
+          });      
     });  
 
 var Edlocal = function(id) {
@@ -2181,9 +2005,10 @@ var RegSectores = function(idempleado){
       });
 }
 
-$("#RegTecnicos").click(function() {
-
-        //elimina
+$("#RegTecnicos").click(function() {       
+      if(!$("#tecnico").val())
+      {$("#error_tecnico").html("Seleccione un Tecnico o Extensionista"); return;}
+      $("#error_tecnico").html("")
       var fields = $("#formtecnicos").serialize();      
       var route = "/RRHH/Tecnicos/"+$("#tecnico").val()+"";
       var token = $("#token").val();      
@@ -2196,6 +2021,145 @@ $("#RegTecnicos").click(function() {
       });  
       RegSectores($("#tecnico").val());
     });
+    
+
+
+// **************************  CRUD EMPLEADO  ********************************************************************************
+
+  $("#nuevoempleado").click(function(event){     
+     $("#RegEmpleado").text('Registrar');   $("#titulo-empleado").html("NUEVO REGISTRO EMPLEADO")
+     $("#error_codigo").html('');$("#error_dni").html('');$("#error_ruc").html('');
+                    $("#error_estado").html('');$("#error_estado_civil").html('');$("#error_area").html('');
+                    $("#error_cargo").html('');$("#error_paterno").html(''); $("#error_materno").html('');
+                    $("#error_nombre").html('');$("#error_fec_nac").html('');$("#error_profesion").html('');
+                    $("#error_provincia").html(''); $("#error_departamento").html(''); $("#error_distrito").html('');
+                    $("#error_central").html('');$("#error_local").html('');$("#error_email").html('');$("#error_direccion").html('');
+ });
+ 
+$("#RegEmpleado").click(function(event){                       
+        var token = $("#token").val();
+        var fields = $("#formempleado").serialize();
+        
+        var route = "/RRHH/empleados";
+        var type = "POST";
+        if($("#RegEmpleado").text() == "Actualizar"){
+            route = "/RRHH/empleados/" + $("#codigo").val();
+            type="PUT"            
+        }                                                                  
+            $.ajax({
+                url: route,
+                headers: {'X-CSRF-TOKEN': token},
+                type: type,
+                datatype: 'json',                
+                data: fields,
+                success: function (data)
+                {
+                    if (data.success == 'true')
+                    {
+                        var msj = "<h4>" + data.message + "</h4>";
+                        $("#succesempleados").html(msj);
+                        $("#msj-infoempleados").fadeIn();
+                        document.location.reload();
+                    }
+                },
+                error: function (data){
+                    $("#error_codigo").html('');$("#error_dni").html('');$("#error_ruc").html('');
+                    $("#error_estado").html('');$("#error_estado_civil").html('');$("#error_area").html('');
+                    $("#error_cargo").html('');$("#error_paterno").html(''); $("#error_materno").html('');
+                    $("#error_nombre").html('');$("#error_fec_nac").html('');$("#error_profesion").html('');
+                    $("#error_provincia").html(''); $("#error_departamento").html(''); $("#error_distrito").html('');
+                    $("#error_central").html('');$("#error_local").html('');$("#error_email").html('');$("#error_direccion").html('');                    
+                    var errors = $.parseJSON(data.responseText);
+                    $.each(errors, function (index, value) {
+                        if (index == 'codigo')$("#error_codigo").html(value);
+                        else if (index == 'dni')$("#error_dni").html(value);
+                        else if (index == 'ruc')$("#error_ruc").html(value);
+                        else if (index == 'estado')$("#error_estado").html(value);
+                        else if (index == 'estado_civil')$("#error_estado_civil").html(value);                        
+                        else if (index == 'area')$("#error_area").html(value);
+                        else if (index == 'cargo')$("#error_cargo").html(value);
+                        else if (index == 'paterno')$("#error_paterno").html(value);
+                        else if (index == 'materno')$("#error_materno").html(value);                        
+                        else if (index == 'nombre')$("#error_nombre").html(value);
+                        else if (index == 'fec_nac')$("#error_fec_nac").html(value);
+                        else if (index == 'profesion')$("#error_profesion").html(value);
+                        else if (index == 'departamento') $("#error_departamento").html(value);                        
+                        else if (index == 'provincia')$("#error_provincia").html(value);
+                        else if (index == 'distrito')$("#error_distrito").html(value);
+                        else if (index == 'comite_central') $("#error_central").html(value);
+                        else if (index == 'comite_local')$("#error_local").html(value);                        
+                        else if (index == 'email')$("#error_email").html(value);
+                        else if (index == 'direccion')$("#error_direccion").html(value);                        
+                    }); 
+                }
+            });                                                          
+    });
+
+var EdiEmpleado = function(id) {
+       $("#RegEmpleado").text("Actualizar"); 
+       $("#titulo-empleado").html("ACTUALIZAR DATOS EMPLEADO")
+        var route = "/RRHH/empleados/"+id+"/edit";            
+        $.get(route, function(data){
+            console.log(data);
+            $("#codigo").val(data.empleadoId);
+            $("#codigo").prop("readonly",true);
+            $("#dni").val(data.personas_dni);
+            $("#dni").prop("readonly",true);
+            console.log(data.estadocivil);
+            $("#estado_civil").val(data.estadocivil);
+            $("#estado").val(data.estado);
+            $("#email").val(data.email);
+            $("#profesion").val(data.profesion);
+            $("#ruc").val(data.ruc);                        
+            $("#cargo").empty();
+            $("#cargo").append("<option value='" + data.cargos_id+"'>"+data.cargo+"</option>");
+            $("#area").empty();
+            $("#area").append("<option value='" + data.areas_id+"'>"+data.area+"</option>");                        
+            $("#paterno").val(data.paterno);
+            $("#materno").val(data.materno);
+            $("#nombre").val(data.nombre);
+            $("#fec_nac").val(data.fec_nac);
+            if(data.sexo == 'M') $("#sexoM").prop("checked",true);
+            else if(data.sexo == 'F') $("#sexoF").prop("checked",true);       
+            $("#direccion").val(data.direccion);
+            $("#referencia").val(data.referencia);
+            $("#telefono").val(data.telefono);
+            $("#departamento").val(data.departamentos_id);
+        $("#provincia").empty();
+        $("#provincia").append("<option value='" + data.provincias_id+"'>"+data.provincia+"</option>");
+        $("#distrito").empty();
+        $("#distrito").append("<option value='" + data.distritos_id+"'>"+data.distrito+"</option>");
+        $("#comite_central").empty();
+        $("#comite_central").append("<option value='" + data.comites_centrales_id+"'>"+data.comite_central+"</option>");
+            $("#comite_local").empty();
+        $("#comite_local").append("<option value='" + data.comites_locales_id+"'>"+data.comite_local+"</option>");                         
+        });
+    }
+
+var EliEmpleado = function(id,name){ 
+     // ALERT JQUERY     
+   $.alertable.confirm("<span style='color:#000'>¿Está seguro de eliminar el registro?</span>"+"<br><strong><span style='color:#ff0000'>"
+           +name+"</span></strong></br>").then(function() {  
+      var route = "/RRHH/empleados/"+id+"";
+      var token = $("#token").val();
+
+      $.ajax({
+        url: route,
+        headers: {'X-CSRF-TOKEN': token},
+        type: 'DELETE',
+        dataType: 'json',
+        success: function(data){
+        if (data.success == 'true')
+        {
+            document.location.reload();
+        }
+      }
+      });
+        
+  
+    });
+};
+    
 //var cargarForm = function(idform)
 //{
 //    var cadena = "@section('contentheader_title')Parientes y Beneficiario @stop";
