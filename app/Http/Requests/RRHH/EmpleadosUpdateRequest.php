@@ -4,7 +4,7 @@ namespace App\Http\Requests\RRHH;
 
 use App\Http\Requests\Request;
 
-class EmpleadosCreateRequest extends Request
+class EmpleadosUpdateRequest extends Request
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,9 +24,9 @@ class EmpleadosCreateRequest extends Request
     public function rules()
     {
         return [
-            'codigo'=>'required|unique:empleados,empleadoId',
-            'dni'=>'required|unique:empleados,personas_dni|numeric|min:8',
-            'ruc'=>'required|unique:empleados,ruc|numeric|min:11',            
+            'codigo'=>'required',
+            'dni'=>'required|numeric',
+            'ruc'=>'required|numeric|min:11',            
             'estado'=>'required',
             'estado_civil'=>'required',
             'area'=>'required',
@@ -45,13 +45,11 @@ class EmpleadosCreateRequest extends Request
             'direccion'=>'required',
         ];
     }
-    
     public function messages() {
         parent::messages();
-        return [
-            'codigo.unique'=>'El Codigo del empleado ya Existe',
-            'dni.unique'=>'El N° del D.N.I. ya se Encuentra registrado en un empleado',
-            'ruc.unique'=>'El N° de R.U.C. ya esta registrado con un Empleado',
+        
+        return [                        
+            'ruc.numeric'=>'Solo se admiten numeros',
             'estado.required'=>'Seleccione un Estado',
             'estado_civil.required'=>'Seleccione un estado civil',
             'area.required'=>'Seleccione una Area a la que pertenece',
@@ -67,7 +65,7 @@ class EmpleadosCreateRequest extends Request
             'comite_central.required'=>'Seleccione un comite central',
             'comite_local.required'=>'Seleccione un comite local',
             'email.required'=>'Ingrese su correo electronico',
-            'direccion.required'=>'Ingrese su direccion de su casa'            
+            'direccion.required'=>'Ingrese su direccion de su casa'
         ];
     }
 }

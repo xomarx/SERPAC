@@ -74,9 +74,9 @@ Route::group(['middleware' => ['web']], function () {
     
     route::resource('socios','socios\sociocontroller');
     route::get('PadronSocio/{idsocio}','socios\sociocontroller@verPadronsocio');
+                    
+    route::resource('RRHH/empleados','RRHH\empleadocontroller');    
     
-                
-    route::resource('RRHH/empleados','RRHH\empleadocontroller');
     route::resource('RRHH/Cargos','RRHH\cargoscontroller');
     route::resource('RRHH/Area','RRHH\areascontroller');    
     

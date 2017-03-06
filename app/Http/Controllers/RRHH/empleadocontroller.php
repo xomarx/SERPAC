@@ -82,7 +82,12 @@ class empleadocontroller extends Controller
      */
     public function show($id)
     {
-        //
+        $empleado = Empleado::empleado($id);
+        $dato = view('Reportes.RRHH.RegistroEmpleado',['empleado'=>$empleado])->render();
+        $pdf = \Illuminate\Support\Facades\App::make('dompdf.wrapper');
+        $pdf->loadHTML($dato);                        
+//        $pdf->loadview('Acopio.formExcel');
+        return $pdf->stream();
     }
 
     /**
@@ -91,9 +96,7 @@ class empleadocontroller extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
-    {
-        //
+    public function edit($id){        
         $empleado = Empleado::empleado($id);
         return response()->json($empleado);
     }
@@ -105,7 +108,7 @@ class empleadocontroller extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id){
+    public function update(Requests\RRHH\EmpleadosUpdateRequest $request, $id){
         //
         IF($request->ajax())
         {            
@@ -147,8 +150,7 @@ class empleadocontroller extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
+    public function destroy($id) {
         //
         $empleado = Empleado::where('empleadoId','=',$id)->delete();
         if($empleado)

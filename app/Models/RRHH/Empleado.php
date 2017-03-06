@@ -40,6 +40,7 @@ class Empleado extends Model
                 ->join('comites_centrales','comites_locales.comites_centrales_id','=','comites_centrales.id')
                 ->join('distritos','comites_centrales.distritos_id','=','distritos.id')
                 ->join('provincias','distritos.provincias_id','=','provincias.id')
+                ->join('departamentos','provincias.departamentos_id','=','departamentos.id')
                 ->where('empleados.empleadoId','=',$id)
                 ->select('empleados.empleadoId','empleados.estado','empleados.personas_dni','empleados.estadocivil',
                         'empleados.email','empleados.profesion','empleados.ruc','empleados.cargos_id','empleados.areas_id',
@@ -48,7 +49,7 @@ class Empleado extends Model
                         'comites_locales.comite_local','comites_centrales.comite_central','distritos.distrito','provincias.provincia',
                         'comites_centrales.comite_central','comites_locales.comite_local','distritos.distrito','provincias.provincia',
                         'comites_locales.comites_centrales_id','comites_centrales.distritos_id','distritos.provincias_id','provincias.departamentos_id',
-                        'cargos.cargo','areas.area')
+                        'cargos.cargo','areas.area','departamentos.departamento')
                 ->first();
     }
 }

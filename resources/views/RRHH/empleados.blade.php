@@ -31,7 +31,7 @@
                         <td>{{$empleado->area}}</td>
                         <td>{{$empleado->estado}}</td>
                         <td>      
-                            <a href="#" class="btn btn-success btn-xs"><span class="glyphicon glyphicon-eye-open"data-toggle="tooltip" data-placement="top" title="Ver"></span></a>
+                            <a href="{{url('RRHH/empleados')}}/{{$empleado->empleadoId}}" class="btn btn-success btn-xs"><span class="glyphicon glyphicon-eye-open"data-toggle="tooltip" data-placement="top" title="Ver"></span></a>
                             <a  onclick="EdiEmpleado('{{$empleado->empleadoId}}')" data-toggle='modal' data-target='#EmpleadoModal' class="btn btn-primary btn-xs"><span data-toggle="tooltip" data-placement="top" title="Editar" class="glyphicon glyphicon-pencil"></span></a>
                             <a href="#" onclick="EliEmpleado('{{$empleado->empleadoId}}','{{$name}}')" class="btn btn-danger btn-xs" ><span data-toggle="tooltip" data-placement="top" title="Eliminar" class="glyphicon glyphicon-remove"></span></a>                                                            
                         </td>                    
@@ -77,7 +77,7 @@
                     </div>
                     <div class="col-sm-2">
                         <label class="radio">
-                            <input type="radio" name="sexo" id="sexoM" value="M" />
+                            <input type="radio" name="sexo" id="sexoM" value="M" checked="true"/>
                             Maculino
                         </label>   
                         <label class="radio">
