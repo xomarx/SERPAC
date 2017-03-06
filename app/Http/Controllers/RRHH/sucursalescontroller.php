@@ -14,22 +14,27 @@ use Illuminate\Support\Facades\Input;
 
 class sucursalescontroller extends Controller
 {
+    
+    public function listaacopiadores()
+    {
+        $listaAcopaidores = Sucursal::pluck('empleados_empleadoId');
+        return response()->json($listaAcopaidores);
+    }
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
-        //
+    {        
         $sucursales = Sucursal::listaSucursales();    
-        $areas = Areas::pluck('area','id');        
-        $departamentos = \App\Models\Socios\Departamento::pluck('departamento','id')->prepend('Selleciona');     
-        return view('RRHH/sucursal', array('sucursales'=>$sucursales,'areas'=>$areas,'departamentos'=>$departamentos));
+        $areas = Areas::pluck('area','id');
+        $empleados = \App\Models\RRHH\Tecnico::tecnicos();       
+        $departamentos = \App\Models\Socios\Departamento::pluck('departamento','id');     
+        return view('RRHH/sucursal', array('sucursales'=>$sucursales,'areas'=>$areas,'departamentos'=>$departamentos,'empleados'=>$empleados));
     }
     
-    public function autocomplete(Request $request)
-    {
+    public function autocomplete(Request $request){
         if($request->ajax())
         {
             $nombre = Input::get('term');
@@ -58,19 +63,30 @@ class sucursalescontroller extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Requests\RRHH\almacenCreateRequest $request)
     {
         //
         if($request->ajax())
         {
-            $sucursal = Sucursal::create($request->all());
+            $sucursal = Sucursal::create([
+                'sucursalId'=>$request->codigoId,
+                'sucursal'=>  strtoupper($request->sucursal),
+                'telefono'=>$request->telefono,
+                'fax'=>$request->telefono,
+                'direccion'=>$request->direccion,
+                'areas_id'=>$request->area,
+                'comites_locales_id'=>$request->comite_local,
+                'users_id'=>  \Illuminate\Support\Facades\Auth::user()->id,
+                'empleados_empleadoId'=>$request->acopiador
+                    
+            ]);
             if($sucursal)
             {
-                return response()->json(['success'=>'true']);
+                return response()->json(['success'=>'true','message'=>'Se Registro Correctamente']);
             }
             else
             {
-                return response()->json(['success'=>'false']);
+                return response()->json(['success'=>'false','message'=>'No se registro ningun dato']);
             }
         }
     }
@@ -106,26 +122,28 @@ class sucursalescontroller extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Requests\RRHH\almacenUpdateRequest $request, $id)
     {        
         if($request->ajax())
         {                        
             $sucursal =  Sucursal::where('sucursalId','=',$id)
                       ->update([
-                          'sucursal'=>$request->sucursal,                                                    
+                          'sucursal'=>  strtoupper($request->sucursal),
                           'telefono' => $request->telefono,
                           'fax' => $request->fax,
-                          'comites_locales_id' => $request->comites_locales_id,
-                          'areas_id' => $request->areas_id,
-                          'direccion' => $request->direccion,                          
+                          'comites_locales_id' => $request->comite_local,
+                          'areas_id' => $request->area,
+                          'direccion' => strtoupper($request->direccion),
+                          'empleados_empleadoId'=>$request->acopiador,
+                          'users_id'=>  \Illuminate\Support\Facades\Auth::user()->id
                           ]);                          
             if($sucursal)
             {
-                return response()->json(['success'=>'true']);
+                return response()->json(['success'=>'true','message'=>'Se actualizaron correctamente los datos']);
             }
             else
             {
-                return response()->json(['success'=>'false']);
+                return response()->json(['success'=>'false','message'=>'No se actualizaron los datos']);
             }                 
         }
     }

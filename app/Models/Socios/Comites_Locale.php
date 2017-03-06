@@ -70,6 +70,13 @@ class Comites_Locale extends Model
                 ->get();
         }
         
+        public static function listaSectorTecnicos(){
+            return DB::table('comites_locales')
+                ->join('comites_centrales','comites_locales.comites_centrales_id','=','comites_centrales.id')
+                    ->pluck(DB::raw("concat(comites_centrales.comite_central,' / ' ,comites_locales.comite_local) as comite_local"),'comites_locales.id');
+            
+        }
+        
         
                 
                 

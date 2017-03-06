@@ -3,10 +3,8 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/xampp/htdocs/SERPAC/app/Http/Requests/socios/Comite_localCreateRequet.php</file>
-            <file>file:/C:/xampp/htdocs/SERPAC/app/Http/Controllers/socios/comite_localcontroller.php</file>
-            <file>file:/C:/xampp/htdocs/SERPAC/resources/views/socios/comitelocal.blade.php</file>
-            <file>file:/C:/xampp/htdocs/SERPAC/app/Models/Socios/Comites_Locale.php</file>
+            <file>file:/C:/xampp/htdocs/SERPAC/resources/views/RRHH/sucursal.blade.php</file>
+            <file>file:/C:/xampp/htdocs/SERPAC/app/Http/routes.php</file>
             <file>file:/C:/xampp/htdocs/SERPAC/public/js/lazo.js</file>
         </group>
     </open-files>

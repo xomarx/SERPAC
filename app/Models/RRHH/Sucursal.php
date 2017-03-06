@@ -13,7 +13,7 @@ class Sucursal extends Model
     protected  $primarykey = 'sucursalId';
     public  $timestamps=false;
     protected  $fillable = ['sucursalId','sucursal','telefono','fax','direccion',
-        'areas_id','comites_locales_id'];
+        'areas_id','comites_locales_id','users_id','empleados_empleadoId'];
     
     public function comites_local()
     {
@@ -37,10 +37,13 @@ class Sucursal extends Model
                 ->join('comites_locales','sucursales.comites_locales_id','=','comites_locales.id')
                 ->join('comites_centrales','comites_locales.comites_centrales_id','=','comites_centrales.id')
                 ->join('distritos','comites_centrales.distritos_id','=','distritos.id')
-                ->join('provincias','distritos.provincias_id','=','provincias.id')                
+                ->join('provincias','distritos.provincias_id','=','provincias.id')
+                ->join('empleados','sucursales.empleados_empleadoId','=','empleados.empleadoId')
+                ->join('personas','empleados.personas_dni','=','personas.dni')
                 ->select('sucursales.sucursal','sucursales.telefono','areas.area',
                         'comites_locales.comite_local','comites_centrales.comite_central',
-                        'distritos.distrito','provincias.provincia','sucursales.sucursalId')
+                        'distritos.distrito','provincias.provincia','sucursales.sucursalId'
+                        ,DB::raw("concat(personas.nombre,' ',personas.paterno,' ',personas.materno) as acopiador"))
                 ->get();
     }
     
@@ -53,13 +56,16 @@ class Sucursal extends Model
                 ->join('distritos','comites_centrales.distritos_id','=','distritos.id')
                 ->join('provincias','distritos.provincias_id','=','provincias.id')   
                 ->join('departamentos','provincias.departamentos_id','=','departamentos.id')
+                ->join('empleados','sucursales.empleados_empleadoId','=','empleados.empleadoId')
+                ->join('personas','empleados.personas_dni','=','personas.dni')
                 ->where('sucursales.sucursalId','=',$sucursalId)
                 ->select('sucursales.sucursal','sucursales.telefono','areas.area','sucursales.fax','sucursales.areas_id',
                         'comites_locales.comite_local','comites_centrales.comite_central','sucursales.direccion',
                         'distritos.distrito','provincias.provincia','sucursales.sucursalId','provincias.departamentos_id','sucursales.comites_locales_id'
-                        ,'comites_locales.comites_centrales_id','comites_centrales.distritos_id','distritos.provincias_id')
+                        ,'comites_locales.comites_centrales_id','comites_centrales.distritos_id','distritos.provincias_id','sucursales.empleados_empleadoId'
+                        ,DB::raw("concat(personas.nombre,' ',personas.paterno,' ',personas.materno) as acopiador"))
                 ->first();
     }
-    
+        
     
 }

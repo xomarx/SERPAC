@@ -387,149 +387,7 @@ $("#RegDistribucion").click(function(){
         $('#myTable').DataTable();
     }); 
 
-
-// ************************   CRUD DE CENTROS DE ACOPIO ********************************************************************************
-$("#RegSucursal").click(function(event)
-    {       
-        if( $("#RegSucursal").text() == 'Registrar' )
-        {            
-            var codigoId = $("#codigoId").val();
-            var area = $("#area").val();
-            var telefono = $("#telefono").val();
-            var direccion = $("#direccion").val();
-            var fax = $("#fax").val();
-            var sucursal = $("#sucursal").val();
-            var comites_locales_id = $("#comite_local").val();
-            var token = $("#token").val();
-            var route = "/RRHH/Sucursal";
-            $.ajax({
-                url: route,
-                headers: {'X-CSRF-TOKEN': token},
-                type: 'post',
-                datatype: 'json',
-                //async: false,
-    //            data:dataSting,
-                data: {
-                    sucursalId: codigoId,
-                    areas_id: area,
-                    telefono: telefono,
-                    direccion: direccion,
-                    fax: fax,
-                    sucursal: sucursal,
-                    comites_locales_id: comites_locales_id
-                },
-                success: function (data)
-                {
-                    if (data.success = 'true')
-                    {
-                        document.location.href = '/RRHH/Sucursal';
-                    }
-                },
-                error: function (data)
-                {
-                    $("#error").html(data.responseJSON.codigoId);
-                    if (data.status = 422) {
-                        console.clear();
-                    }
-                }
-            });
-        }
-        else if( $("#RegSucursal").text() == 'Actualizar' )
-        {                      
-            var codigoId = $("#codigoId").val();
-            var area = $("#area").val();
-            var telefono = $("#telefono").val();
-            var direccion = $("#direccion").val();
-            var fax = $("#fax").val();
-            var sucursal = $("#sucursal").val();
-            var comites_locales_id = $("#comite_local").val();
-            var departamento = $("#departamento").val();
-            var route = "/RRHH/Sucursal/" + codigoId + "";   
-            alert(comites_locales_id);
-            var token = $("#token").val();            
-            $.ajax({
-                url: route,
-                headers: {'X-CSRF-TOKEN': token},
-                type: 'PUT',
-                dataType: 'json',
-                data: {
-                    areas_id: area,
-                    telefono: telefono,
-                    direccion: direccion,
-                    fax: fax,
-                    sucursal: sucursal,
-                    comites_locales_id: comites_locales_id
-                },
-                success: function (data) {
-
-                    if (data.success = 'true')
-                    {
-                        document.location.href = '/RRHH/Sucursal';
-                    }
-                },
-                error: function (data)
-                {
-                    $("#error").html(data.responseJSON.codigoId);
-                }
-            });
-        
-        }                                          
-    });
-    
-    
-    var Editsucur = function(id) 
-    {        
-        $("#RegSucursal").text('Actualizar');
-        var route = "/RRHH/Sucursal/"+id+"/edit";
-
-        $.get(route, function(data){
-
-            $("#codigoId").val(data.sucursalId);
-            $("#area").val(data.areas_id);
-            $("#telefono").val(data.telefono);
-            $("#direccion").val(data.direccion);
-            $("#fax").val(data.fax);
-            $("#sucursal").val(data.sucursal);
-            
-            $("#departamento").val(data.departamentos_id);
-        $("#provincia").empty();
-        $("#provincia").append("<option value='" + data.provincias_id+"'>"+data.provincia+"</option>");
-        $("#distrito").empty();
-        $("#distrito").append("<option value='" + data.distritos_id+"'>"+data.distrito+"</option>");
-        $("#comite_central").empty();
-        $("#comite_central").append("<option value='" + data.comites_centrales_id+"'>"+data.comite_centra+"</option>");
-            $("#comite_local").empty();
-        $("#comite_local").append("<option value='" + data.comites_locales_id+"'>"+data.comite_local+"</option>");        
-        });
-    };
-        
-        
-    
-var EliSucursal = function(id,name)
-{ 
-     // ALERT JQUERY     
-   $.alertable.confirm("<span style='color:#000'>¿Está seguro de eliminar el registro?</span>"+"<br><strong><span style='color:#ff0000'>"+name+"</span></strong></br>").then(function() {  
-      var route = "/RRHH/Sucursal/"+id+"";
-      var token = $("#token").val();
-
-      $.ajax({
-        url: route,
-        headers: {'X-CSRF-TOKEN': token},
-        type: 'DELETE',
-        dataType: 'json',
-        success: function(data){
-        if (data.success = 'true')
-        {
-            document.location.href = '/RRHH/Sucursal';
-        }
-      }
-      });
-        
-  
-    });
-};        
-        
-        
+      
 //  ************************   CRUD CARGOS
 
 
@@ -1897,7 +1755,7 @@ var EliCentral = function(id,name){
     });
 };
 
-// ******************  CRUD DE COMITE LOCAL  **********************************************************************
+// ******************  CRUD DE COMITE LOCAL  ******************************************************************************
 $("#nuevolocal").click(function(event){$("#RegLocal").text("Registrar");$("#error_provincia").html(''); $("#error_departamento").html('');$("#error_distrito").html('');$("#error_central").html('');
                 $("#error_local").html('');});
 
@@ -1982,7 +1840,7 @@ var EliLocal = function(id,name){
 var RegSectores = function(idempleado){
     var options = $("#zona_final option[value]");
     var route = "/RRHH/Tecnicos"; var token = $("#token").val();
-      $.each(options,function( index, value ){
+      $.each(options,function( index, value ){          
           $.ajax({
                 url: route,
                 headers: {'X-CSRF-TOKEN': token},
@@ -2020,9 +1878,7 @@ $("#RegTecnicos").click(function() {
         success: function(data){ }
       });  
       RegSectores($("#tecnico").val());
-    });
-    
-
+    });    
 
 // **************************  CRUD EMPLEADO  ********************************************************************************
 
@@ -2159,6 +2015,130 @@ var EliEmpleado = function(id,name){
   
     });
 };
+
+// ************************   CRUD DE CENTROS DE ACOPIO ********************************************************************************
+ $("#nuevasucursal").click(function(event){     
+     $("#RegSucursal").text('Registrar');   $("#error_codigoId").html('');$("#error_area").html('');$("#error_telefono").html('');
+                    $("#error_sucursal").html('');$("#error_fax").html('');
+                    $("#error_provincia").html(''); $("#error_departamento").html(''); $("#error_distrito").html('');
+                    $("#error_central").html('');$("#error_local").html('');$("#error_direccion").html(''); 
+                    $("#formsucursal")[0].reset();$("#codigoId").prop("readonly",false);
+                    $("#acopiador").prop('selected',function(){
+                        return this.defaultSelected;
+                    });
+                    cargarAcopiador();
+ });
+
+var cargarAcopiador = function ()
+{
+    var route = "/RRHH/Sucursal/Acopiador";     
+     $.getJSON(route,function(data){
+         $.each(data, function( index, value ){               
+                  $("#acopiador").find('option[value="'+ value +'"]').remove();
+              });
+     });
+}
+
+$("#RegSucursal").click(function(event) {
+    var type = "POST";
+    var token = $("#token").val();
+    var route = "/RRHH/Sucursal";
+    var fields = $("#formsucursal").serialize();    
+    if( $("#RegSucursal").text() == 'Actualizar' ){   
+            type="PUT";route = "/RRHH/Sucursal/"+ $("#codigoId").val();
+    }                    
+            $.ajax({
+                url: route,
+                headers: {'X-CSRF-TOKEN': token},
+                type: type,
+                datatype: 'json',              
+                data: fields,
+                success: function (data)
+                {
+                    if (data.success == 'true')
+                    {
+                        var msj = "<h4>" + data.message + "</h4>";
+                        $("#successucursal").html(msj);
+                        $("#msj-infosucursal").fadeIn();
+                        document.location.reload();
+                    }
+                },
+                error: function (data)
+                {                    
+                    $("#error_codigoId").html('');$("#error_area").html('');$("#error_telefono").html('');
+                    $("#error_sucursal").html('');$("#error_fax").html('');$("#error_acopiador").html('');
+                    $("#error_provincia").html(''); $("#error_departamento").html(''); $("#error_distrito").html('');
+                    $("#error_central").html('');$("#error_local").html('');$("#error_direccion").html('');                    
+                    var errors = $.parseJSON(data.responseText);
+                    $.each(errors, function (index, value) {
+                        if (index == 'codigoId')$("#error_codigoId").html(value);
+                        else if (index == 'area')$("#error_area").html(value);
+                        else if (index == 'telefono')$("#error_telefono").html(value);
+                        else if (index == 'fax')$("#error_fax").html(value);
+                        else if (index == 'sucursal')$("#error_sucursal").html(value);                                                
+                        else if (index == 'departamento') $("#error_departamento").html(value);                        
+                        else if (index == 'provincia')$("#error_provincia").html(value);
+                        else if (index == 'distrito')$("#error_distrito").html(value);
+                        else if (index == 'comite_central') $("#error_central").html(value);
+                        else if (index == 'comite_local')$("#error_local").html(value);                                                
+                        else if (index == 'direccion')$("#error_direccion").html(value);
+                        else if (index == 'acopiador')$("#error_acopiador").html(value);
+                    }); 
+                    
+                }
+            });
+        
+                                                  
+    });
+        
+var Editsucur = function(id) {        
+        $("#RegSucursal").text('Actualizar');
+        cargarAcopiador();
+        var route = "/RRHH/Sucursal/"+id+"/edit";
+        $("#codigoId").prop("readonly",true);
+        $.get(route, function (data) {
+        $("#codigoId").val(id);
+        $("#area").val(data.areas_id);
+        $("#telefono").val(data.telefono);
+        $("#direccion").val(data.direccion);
+        $("#fax").val(data.fax);                
+        $("#acopiador").append("<option value='" + data.empleados_empleadoId + "'>" + data.acopiador + "</option>")         
+        $("#sucursal").val(data.sucursal);
+        $("#departamento").val(data.departamentos_id);
+        $("#provincia").empty();
+        $("#provincia").append("<option value='" + data.provincias_id + "'>" + data.provincia + "</option>");
+        $("#distrito").empty();
+        $("#distrito").append("<option value='" + data.distritos_id + "'>" + data.distrito + "</option>");
+        $("#comite_central").empty();
+        $("#comite_central").append("<option value='" + data.comites_centrales_id + "'>" + data.comite_central + "</option>");
+        $("#comite_local").empty();
+        $("#comite_local").append("<option value='" + data.comites_locales_id + "'>" + data.comite_local + "</option>");
+    });
+    };
+                    
+var EliSucursal = function(id,name){ 
+     // ALERT JQUERY     
+   $.alertable.confirm("<span style='color:#000'>¿Está seguro de eliminar el registro?</span>"+"<br><strong><span style='color:#ff0000'>"+name+"</span></strong></br>").then(function() {  
+      var route = "/RRHH/Sucursal/"+id+"";
+      var token = $("#token").val();
+
+      $.ajax({
+        url: route,
+        headers: {'X-CSRF-TOKEN': token},
+        type: 'DELETE',
+        dataType: 'json',
+        success: function(data){
+        if (data.success == 'true')
+        {
+            document.location.reload();
+        }
+      }
+      });
+        
+  
+    });
+};        
+        
     
 //var cargarForm = function(idform)
 //{

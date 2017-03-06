@@ -36,9 +36,14 @@ class Tecnico extends Model
     
     public static function getComitesTecnicos($idempleado){
             return DB::table('tecnicos')
+                     ->join('comites_locales','tecnicos.comites_locales_id','=','comites_locales.id')                                                
+                    ->join('comites_centrales','comites_locales.comites_centrales_id','=','comites_centrales.id') 
                     ->where('empleados_empleadoId','=',$idempleado)
+                    ->select(DB::raw("concat(comites_centrales.comite_central,' / ' ,comites_locales.comite_local) as comite_local"),'tecnicos.comites_locales_id')
                     ->get();
         }
+        
+        
 }
 
 

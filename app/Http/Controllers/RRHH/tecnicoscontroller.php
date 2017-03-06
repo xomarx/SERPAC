@@ -11,16 +11,20 @@ use App\Models\RRHH\Tecnico;
 class tecnicoscontroller extends Controller
 {
     
-    /**
+    public static function listaSectorAsignados(){
+        $lista = Tecnico::all();
+        return response()->json(['lista'=>$lista]);
+    }
+    
+        /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {        
+    public function index() {        
         $tecnicos = Tecnico::listaTecnicos();
         $tecnics = Tecnico::tecnicos();
-        $locales = \App\Models\Socios\Comites_Locale::pluck('comite_local','id');
+        $locales = \App\Models\Socios\Comites_Locale::listaSectorTecnicos();
         return view('RRHH/tecnicos',['tecnicos'=>$tecnicos,'tecnics'=>$tecnics,'locales'=>$locales]);
     }
 

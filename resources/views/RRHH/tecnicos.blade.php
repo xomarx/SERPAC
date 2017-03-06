@@ -91,7 +91,17 @@
 @stop
 @section('script')
 <script>
-
+    
+ $(document).ready(function () {   
+     var route = "{{url('RRHH/Tecnicos/Tecnico-Local') }}";     
+     $.getJSON(route,function(data){
+         $.each(data.lista, function( index, value ){  
+                  $("#zona_inicial ").find('option[value="'+ value.comites_locales_id +'"]').remove();
+              });
+     });
+        
+    }); 
+    
   $("#tecnico").select2({      
         allowClear: true,        
   });
@@ -99,11 +109,16 @@
   $("#tecnico").change(function(){      
       var route = '{{ url("RRHH/Tecnicos") }}/'+$("#tecnico").val();
       $.get(route,function(data){                  
-          if(data.success == 'true'){ 
-              $.each(data.sectores, function( index, value ){                  
-                  $("#zona_inicial ").find('option[value="'+ value.comites_locales_id +'"]').clone().appendTo("#zona_final");
-                  $("#zona_inicial ").find('option[value="'+ value.comites_locales_id +'"]').hide();                  
-              })              
+          if(data.success == 'true'){
+              $("#zona_final").empty();var datos;
+              $.each(data.sectores, function( index, value ){                   
+                  datos += "<option value='" + value.comites_locales_id+"'>"+ value.comite_local+"</option>";
+                  
+//                  $("#zona_final").append("<option value='" + value.id+"'>"+ value.comite_local+"</option>");
+//                  $("#zona_inicial ").find('option[value="'+ value.comites_locales_id +'"]').clone().appendTo("#zona_final");
+//                  $("#zona_inicial ").find('option[value="'+ value.comites_locales_id +'"]').hide();                  
+              });
+              $("#zona_final").html(datos);
           }
       });
   });

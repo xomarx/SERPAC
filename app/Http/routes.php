@@ -80,8 +80,12 @@ Route::group(['middleware' => ['web']], function () {
     route::resource('RRHH/Cargos','RRHH\cargoscontroller');
     route::resource('RRHH/Area','RRHH\areascontroller');    
     
+    route::resource('RRHH/Sucursal/Acopiador','RRHH\sucursalescontroller@listaacopiadores');//listaacopiadores
     route::resource('RRHH/Sucursal','RRHH\sucursalescontroller');
+    
+    route::resource('RRHH/Tecnicos/Tecnico-Local','RRHH\tecnicoscontroller@listaSectorAsignados');//listaSectorAsignados
     route::resource('RRHH/Tecnicos','RRHH\tecnicoscontroller');
+    
     
     route::resource('Acopio/Fondos-Acopio','Acopio\recepcion_fondoscontroller');
     

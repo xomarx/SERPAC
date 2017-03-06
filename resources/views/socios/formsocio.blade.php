@@ -68,7 +68,7 @@
                 <div class="col-md-12 col-md-offset-0 row form-group">
                     <div class=" col-sm-2">                                
                         {!! Form::label('fecnaci','Fec. Nacimiento',['class'=>'control-label']) !!}
-                        {!! Form::text('fec_nac',null,['id'=>'fec_nac','class'=>'form-control datepicker','required','placeholder'=>'mm/dd/año']) !!}
+                        {!! Form::text('fec_nac',null,['id'=>'fec_nac','class'=>'form-control','required','placeholder'=>'mm/dd/año']) !!}
                         <div class="text-danger" id="error_fec_nac"></div>
                     </div> 
                     <div class=" col-sm-2">
