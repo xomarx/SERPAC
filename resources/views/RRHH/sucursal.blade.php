@@ -132,7 +132,7 @@
                       {!! Form::label('acopiador','Acopiador:',['class' => 'control-label'])!!} 
                   </div>                  
                   <div class="col-sm-12">                      
-                  {!! Form::select('acopiador',$empleados,null,['id'=>'acopiador','placeholder'=>'Seleccione un Extensionista !']) !!}
+                  {!! Form::select('acopiador',$empleados,null,['id'=>'acopiador','placeholder'=>'Seleccione un Acopiador !']) !!}
                   <div class="text-danger" id="error_acopiador"></div>
                   </div>                  
               </div>

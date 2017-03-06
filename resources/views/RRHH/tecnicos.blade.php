@@ -5,8 +5,9 @@
 @section('main-content')
 
 <div class="box box-primary box-solid">
-    <div class="box-header">
-        <a id="nuevasucursal" data-toggle='modal' data-target='#tecnicosmodal' class="btn btn-primary btn-sm m-t-10" >NUEVO  <span class="glyphicon glyphicon-plus"data-toggle="tooltip" data-placement="top" title="Nueva Sucursal"></span></a>
+    <div class="box-header" style="text-align: center;">
+        <a id="nuevasucursal" data-toggle='modal' data-target='#tecnicosmodal' class="btn btn-dropbox btn-sm m-t-10" style="float: left;">NUEVO  <span class="glyphicon glyphicon-plus"data-toggle="tooltip" data-placement="top" title="Nueva Sucursal"></span></a>
+        <h3 class="box-title">LISTA DE TECNICOS</h3>
     </div>
     <div class="box-body">
         <table class="table table-responsive" id="myTable" >
@@ -29,9 +30,7 @@
                     <td align="center">{{$tecnico->numzonas}}</td>
                     <td>{{$tecnico->cargo}}</td>
                     <td>{{$tecnico->area}}</td>                                
-                    <td>
-                        <a href="javascropt:void(0);" data-toggle="tooltip" data-placement="top"  class="btn-sm btn-success" title="Ver"><span class="glyphicon glyphicon-eye-open"></span></a>
-                        <a href="{{url('Tesoreria/Distribucion/ReciboAcopio') }}" data-toggle="tooltip" data-placement="top"  class="btn-sm btn-primary" title="Ver"><span class="glyphicon glyphicon-print"></span></a>
+                    <td>                        
                         <a href="javascropt:void(0);"  class="btn-sm btn-danger" data-toggle="tooltip" data-placement="top" title="Eliminar"><span class="glyphicon glyphicon-remove"></span></a>
                     </td>                    
                 </tr>

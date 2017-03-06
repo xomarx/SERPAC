@@ -36,12 +36,10 @@ class tesoreriacontroller extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
-        //
+    {        
         $distribucions = Distribucion::listaDistribucion();
-        $tecnicos = Distribucion::tecnicos();
-        $sucursales = \App\Models\RRHH\Sucursal::pluck('sucursal','sucursalId')->prepend('Seleccione una sucursal');
-        return view('Tesoreria.distribucion',['distribucions'=>$distribucions,'sucursales'=>$sucursales,'tecnicos'=>$tecnicos]);
+        $tecnicos = Distribucion::tecnicos();        
+        return view('Tesoreria.distribucion',['distribucions'=>$distribucions,'tecnicos'=>$tecnicos]);
     }
 
     /**
@@ -61,24 +59,31 @@ class tesoreriacontroller extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Requests\Tesoreria\distribucionCreateRequest $request)
     {
         //
         if($request->ajax())
         {
-            $date = Carbon::parse($request->fecha);
-            $distribucion = Distribucion::create(['tecnicos_empleados_empleadoId'=>$request->tecnicos_empleados_empleadoId,
-                'fecha'=>$date,'monto'=>$request->monto,'sucursales_sucursalId'=>$request->sucursales_sucursalId,'estado'=>$request->estado]);
+            
+            $distribucion = Distribucion::create([
+                'tecnicos_empleados_empleadoId'=>$request->tecnico,
+                'fecha'=>Carbon::parse($request->fecha),
+                'monto'=>$request->monto,
+                'sucursales_sucursalId'=>$request->sucursal,
+                'estado'=>'Entregado',
+                'users_id'=>  \Illuminate\Support\Facades\Auth::user()->id
+                ]);
             $recepcion = Recepcion_fondo::create([
-                'monto'=>$request->monto,'fecha'=>$date,'distribucions_id'=>$distribucion->id
+                'monto'=>$request->monto,'fecha'=>Carbon::parse($request->fecha),'distribucions_id'=>$distribucion->id,
+                'users_id'=>\Illuminate\Support\Facades\Auth::user()->id
             ]);
             if($recepcion)
             {
-                return response()->json(['success'=>'true']);
+                return response()->json(['success'=>'true','message'=>'Se registro Correctamente']);
             }
             else
             {
-                return response()->json(['success'=>'false']);
+                return response()->json(['success'=>'false','message'=>'No se registro ningun dato']);
             }
         }
     }
@@ -91,7 +96,8 @@ class tesoreriacontroller extends Controller
      */
     public function show($id)
     {
-        //
+        $sucursales = Distribucion::listaSucursalTecnicos($id);
+        return response()->json($sucursales);
     }
 
     /**

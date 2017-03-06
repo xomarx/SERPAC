@@ -12,7 +12,7 @@ class Distribucion extends Model
     protected $primarykey = 'id';
     public  $timestamps=false;
     protected  $fillable = [
-        'monto','fecha','tecnicos_empleados_empleadoId','sucursales_sucursalId','estado','motivo'
+        'monto','fecha','tecnicos_empleados_empleadoId','sucursales_sucursalId','estado','motivo','users_id'
     ];
 
     public function recepcion_fondo()
@@ -39,5 +39,14 @@ class Distribucion extends Model
                 ->join('personas','empleados.personas_dni','=','personas.dni')
                 ->where('empleados.estado','=','ACTIVO')
                 ->pluck( DB::raw("CONCAT(personas.paterno,' ',personas.materno,' ',personas.nombre)  AS fullname")   ,'empleados.empleadoId');
+    }
+    
+    public static function listaSucursalTecnicos($idtecnico){
+        return DB::table('tecnicos')
+                ->join('comites_locales','tecnicos.comites_locales_id','=','comites_locales.id')
+                ->join('sucursales','comites_locales.id','=','sucursales.comites_locales_id')
+                ->where('tecnicos.empleados_empleadoId','=',$idtecnico)
+                ->pluck('sucursales.sucursal','sucursales.sucursalId');
+        
     }
 }

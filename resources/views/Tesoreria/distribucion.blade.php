@@ -5,8 +5,9 @@
 @section('main-content')
 
 <div class="box box-solid box-primary">
-    <div class="box-header">
-        <a id="nuevasucursal" data-toggle='modal' data-target='#modaldistribucion' class="btn btn-facebook btn-sm m-t-10" >NUEVO  <span class="glyphicon glyphicon-plus"data-toggle="tooltip" data-placement="top" title="Nueva Distribucion"></span></a>
+    <div class="box-header" style="text-align: center;">        
+        <a id="nuevadistribucion" style="float: left;" data-toggle='modal' data-target='#modaldistribucion' class="btn btn-dropbox btn-sm m-t-10" >NUEVO  <span class="glyphicon glyphicon-plus"data-toggle="tooltip" data-placement="top" title="Nueva Distribucion"></span></a>
+        <h3 class="box-title" >LISTA DE DISTRIBUCION DE FONDOS</h3>
     </div>
     <div class="box-body">
         <table class="table table-responsive" id="myTable" >
@@ -41,8 +42,7 @@
 </div>
 
 <div class="modal fade" id="modaldistribucion" role="dialog">
-    <div class="modal-dialog">
-
+    <div class="modal-dialog modal-primary">
         <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
@@ -50,30 +50,53 @@
                 <h4 class="modal-title">NUEVA DISTRIBUCION</h4>
             </div>
             <div class="modal-body col-md-12 form-group-sm">
-                {!! Form::open(['id'=>'form']) !!}
+                <div class="alert alert-success" id="msjdistribucion" style="display: none;">
+                    <strong id="msjtextodistribucion"></strong>
+                </div>
+                {!! Form::open(['id'=>'formfondosdistri']) !!}
                 <input type="hidden" name="_token" value="{{ csrf_token() }}" id="token">
-
-                <div class="col-xs-9 form-group-sm">
-                    {!! Form::label('texnicos','Extensionistas: ',['class'=>'control-label ']) !!}
-                    {!! Form::select ('tecnico',$tecnicos,null,['id'=>'tecnico','required','placeholder'=>'selecciona un Extensionista']) !!}
+                <div class="col-md-12">
+                    <div class="col-sm-9">
+                        {!! Form::label('texnicos','Extensionistas: ',['class'=>'control-label ']) !!}                    
+                    </div>
+                    <div class="col-md-3">
+                        {!! Form::label('fecha','Fecha:',['class' => 'control-label'])!!}                    
+                    </div>
                 </div>
-                <div class="col-md-3 form-group-sm">
-                    {!! Form::label('fecha','Fecha:',['class' => 'control-label col-xs-1'])!!} 
-                    {!! Form::text('fecha',null,['id'=>'fecha','class'=>'form-control','placeholder'=>'mes/dia/año'])!!}
-                </div> 
-                <div class="col-md-9" >
-                    {!! Form::label('sucursal','Centro de Acopio:',['class' => 'control-label'])!!}      
-                    {!! Form::select('sucursal',$sucursales,null,['id'=>'sucursal']) !!}  
+                <div class="col-md-12">
+                    <div class="col-sm-9">
+                        {!! Form::select ('tecnico',$tecnicos,null,['id'=>'tecnico','required','placeholder'=>'selecciona un Extensionista']) !!} 
+                        <div class="text-danger" id="error_tecnico"></div>
+                    </div>
+                    <div class="col-md-3">
+                        {!! Form::text('fecha',null,['id'=>'fecha','class'=>'form-control','placeholder'=>'mes/dia/año'])!!}
+                        <div class="text-danger" id="error_fecha"></div>
+                    </div>
+                </div>  
+                
+                <div class="col-md-12">
+                    <div class="col-sm-9">
+                        {!! Form::label('sucursal','Centro de Acopio:',['class' => 'control-label'])!!}                    
+                    </div>
+                    <div class="col-md-3">
+                        {!! Form::label('monto','Monto:',['class' => 'control-label'])!!}                    
+                    </div>
                 </div>
-                <div class="col-md-3 form-group-sm">
-                    {!! Form::label('monto','Monto:',['class' => 'control-label col-xs-1'])!!} 
-                    {!! Form::text('monto',null,['id'=>'monto','class'=>'form-control','placeholder'=>'S/. 0.00'])!!}
-                </div>                                                                                                                  
+                <div class="col-md-12">
+                    <div class="col-sm-9">
+                        {!! Form::select('sucursal',[],null,['id'=>'sucursal','placeholder'=>'selecciona un Centro de Acopio']) !!}
+                        <div class="text-danger" id="error_sucursal"></div>
+                    </div>
+                    <div class="col-md-3">
+                        {!! Form::text('monto',null,['id'=>'monto','class'=>'form-control','placeholder'=>'S/. 0.00'])!!}
+                        <div class="text-danger" id="error_monto"></div>
+                    </div>
+                </div>                                                                                                                                                 
                 {!! Form::close() !!}
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Imprimir</button>
-                {!!link_to('#', $title='Registrar', $attributes = ['id'=>'RegDistribucion', 'class'=>'btn btn-primary btn-sm m-t-10'])!!}
+                <button type="button" class="btn btn-dropbox btn-sm m-t-10" data-dismiss="modal">Imprimir</button>
+                {!!link_to('#', $title='Registrar', $attributes = ['id'=>'RegDistribucion', 'class'=>'btn btn-dropbox btn-sm m-t-10'])!!}
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
             </div>
         </div>
@@ -93,9 +116,21 @@ $("#sucursal").select2({
     alloClear:true
 });
 $("#tecnico").select2({
-    alloClear:true
+    alloClear:true,    
 });
 
+$("#tecnico").change(function(event){
+    var route = "{{url('Tesoreria/Distribucion-Fondos')}}/" + event.target.value;
+    console.log(route);
+    $.getJSON(route,function(data){
+//        var cad="placeholder='seleccione un centro de acopio'";$("#sucursal").html(cad);
+        $("#sucursal").empty();
+        $("#sucursal").append("<option value=''>selecciona un Centro de Acopio</option>"); 
+        $.each(data,function( index, value ){           
+           $("#sucursal").append("<option value='"+index+"'>"+value+"</option>");           
+        });        
+    });
+});
 
 </script>
 @stop

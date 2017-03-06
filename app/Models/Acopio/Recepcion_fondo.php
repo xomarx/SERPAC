@@ -13,7 +13,7 @@ class Recepcion_fondo extends Model
     public  $timestamps=false;
     protected  $fillable = [
         'monto','fecha','estado','motivo',
-        'distribucions_id'];    
+        'distribucions_id','users_id'];    
     /**
      * Devuelve el socio propietario de esta persona
      */

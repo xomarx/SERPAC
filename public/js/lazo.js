@@ -319,68 +319,6 @@ var RecepConform = function(id)
         });
     }
 
-// ****************     DISTRIBUCION DE ACOPIO ********************************************************************************
-var AnulDistribucion = function(id,name)
-{             
-    // ALERT JQUERY     
-   $.alertable.prompt('<h3>Motivo de la Anulacion ? </h3>'+"<span style='color:#ff0000'>"+name+"</span>").then(function(data){
-       console.log('Prompt submitted', data.value);
-            var motivo = data.value;
-            var route = "/Tesoreria/Distribucion-Fondos/"+id+"";            
-            var token = $("#token").val();            
-        $.ajax({
-            url: route,
-            headers: {'X-CSRF-TOKEN': token},
-            type: 'PUT',
-            dataType: 'json',
-            data: {
-                motivo:motivo
-            },
-            success: function (data) {
-
-                if (data.success = 'true')
-                {
-                   document.location.href = '/Tesoreria/Distribucion-Fondos';
-                }
-            },
-            
-        });
-   },function(){
-       console.log('Prompt canceled'); 
-   });    
-};
-    
-$("#RegDistribucion").click(function(){
-    
-      var tecnico = $("#tecnico").val();
-      var sucursal = $("#sucursal").val();
-      var monto = $("#monto").val();
-      var fecha = $("#fecha").val();
-      var estado = 'ENTREGADO';      
-   var route = "/Tesoreria/Distribucion-Fondos";
-      var token = $("#token").val();       
-      $.ajax({
-                url: route,
-                headers: {'X-CSRF-TOKEN': token},
-                type: 'post',
-                datatype: 'json',
-                
-                data: {                    
-                    monto: monto,
-                    fecha: fecha,
-                    tecnicos_empleados_empleadoId:tecnico,
-                    sucursales_sucursalId:sucursal,
-                    estado: estado
-                },
-                success: function (data)
-                {
-                    if (data.success = 'true')
-                    {
-                        $("#RegDistribucion").text('Imprimir');
-                    }
-                },               
-            });
-});
 
 // **********************  CRUD SUCURSAL
   $(document).ready(function () {        
@@ -1966,11 +1904,10 @@ var EdiEmpleado = function(id) {
             $("#estado").val(data.estado);
             $("#email").val(data.email);
             $("#profesion").val(data.profesion);
-            $("#ruc").val(data.ruc);                        
-            $("#cargo").empty();
-            $("#cargo").append("<option value='" + data.cargos_id+"'>"+data.cargo+"</option>");
-            $("#area").empty();
-            $("#area").append("<option value='" + data.areas_id+"'>"+data.area+"</option>");                        
+            $("#ruc").val(data.ruc);
+            $("#cargo").val(data.cargos_id);
+            
+            $("#area").val(data.areas_id);                        
             $("#paterno").val(data.paterno);
             $("#materno").val(data.materno);
             $("#nombre").val(data.nombre);
@@ -2139,7 +2076,76 @@ var EliSucursal = function(id,name){
     });
 };        
         
+
+// ****************     DISTRIBUCION FONDOS DE ACOPIO *********************************************************************************************************
+var AnulDistribucion = function(id,name)
+{             
+    // ALERT JQUERY     
+   $.alertable.prompt('<h3>Motivo de la Anulacion ? </h3>'+"<span style='color:#ff0000'>"+name+"</span>").then(function(data){
+       console.log('Prompt submitted', data.value);
+            var motivo = data.value;
+            var route = "/Tesoreria/Distribucion-Fondos/"+id+"";            
+            var token = $("#token").val();            
+        $.ajax({
+            url: route,
+            headers: {'X-CSRF-TOKEN': token},
+            type: 'PUT',
+            dataType: 'json',
+            data: {
+                motivo:motivo
+            },
+            success: function (data) {
+
+                if (data.success = 'true')
+                {
+                   document.location.href = '/Tesoreria/Distribucion-Fondos';
+                }
+            },
+            
+        });
+   },function(){
+       console.log('Prompt canceled'); 
+   });    
+};
     
+$("#RegDistribucion").click(function(){
+    
+      var fields = $("#formfondosdistri").serialize();
+    var route = "/Tesoreria/Distribucion-Fondos";
+      var token = $("#token").val();       
+      $.ajax({
+                url: route,
+                headers: {'X-CSRF-TOKEN': token},
+                type: 'post',
+                datatype: 'json',                
+                data: fields,
+                success: function (data)
+                {
+                    if (data.success == 'true')
+                    {
+                        var msj = "<h4>" + data.message + "</h4>";
+                        $("#msjtextodistribucion").html(msj);
+                        $("#msjdistribucion").fadeIn();
+                        document.location.reload();
+                    }
+                },
+                error: function (data)
+                {                    
+                    $("#error_tecnico").html('');$("#error_sucursal").html('');$("#error_monto").html('');
+                    $("#error_fecha").html('');                    
+                    var errors = $.parseJSON(data.responseText);
+                    $.each(errors, function (index, value) {
+                        if (index == 'tecnico')$("#error_tecnico").html(value);
+                        else if (index == 'sucursal')$("#error_sucursal").html(value);
+                        else if (index == 'fecha')$("#error_fecha").html(value);
+                        else if (index == 'monto')$("#error_monto").html(value);                        
+                    }); 
+                    
+                }            
+            });
+});
+
+
 //var cargarForm = function(idform)
 //{
 //    var cadena = "@section('contentheader_title')Parientes y Beneficiario @stop";
