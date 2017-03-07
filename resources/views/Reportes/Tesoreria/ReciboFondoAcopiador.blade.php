@@ -24,7 +24,7 @@
                     </tbody>
                     <tfoot>
                         <tr>
-                            <th colspan="3" style="font-size: 16; border: #007fff solid;" align="center">S/ 20 500.50</th>
+                            <th colspan="3" style="font-size: 16; border: #007fff solid; border-radius: 10px;" align="center">S/ 20 500.50</th>
                         </tr>
                     </tfoot>
                 </table>
@@ -48,37 +48,40 @@
     </tfoot>
 </table> 
 
-<table width='100%' border="1">
+<table width='100%'  style="border-radius: 20px; border: #007fff solid;" cellpadding="5">
     <thead>
-        <tr>
+        <tr style="border-top: hidden;">
             <th colspan="3" align="rigth">He recibido de la Cooperativa Agraria Cacaotera "ACOPAGRO" Ltda.</th>
         </tr>
     </thead>
     <tbody>
         <tr>
-            <td colspan="3"><b>Cantidad de: </b>OCHO MIL 00/100 NUEVOS SOLES</td>            
+            <td><b>Cantidad de: </b>&nbsp;&nbsp;</td>
+            <td style="border: #007fff solid; border-radius: 10px;" width="63%" colspan="2">OCHO MIL 00/100 NUEVOS SOLES</td>
         </tr>
         <tr>
             <td colspan="2"><b>Para acopiar cacao y entregar al Amacen de Acopagro</b></td>
-            <td rowspan="3" align="center" >
-                <table border='1' width='100%' height="1000px">
-                    
-                </table>
-                HUELLA
+            <td rowspan="3" align="center" width='20%' style="border: #007fff solid; border-radius: 10px;" >               
             </td>
         </tr>
         <tr>
-            <td><b>Lugar: </b></td>            
+            <td><b>Lugar: </b></td>
+            <td style="border: #007fff solid; border-radius: 10px;" width="63%"></td>
         </tr>
+        <tr>
+            <td colspan="2"><br><br><br></td>
+        </tr>   
         <tr >
-           <td align='center' style="border-top: hidden;">
-                <hr width='50%'>
-                    FIRMA DEL TITULAR
+           <td align='center' style="border-top: hidden; font-size: 7" width="25%">
+                <hr width='100%'>
+                LUZMILA DEL AGUILA CARRION
+                <br><b style="font-size: 12">Tesoreria</b>
             </td>
-            <td align='center' style=" border-left: hidden; border-top: hidden;">
-                <hr width='60%'>
-                FIRMA DEL BENEFICIARIO
+            <td align='center' style=" border-left: hidden; border-top: hidden;" width="50%">
+                <hr width='70%'>
+                FIRMA ACOPIADOR
             </td>
+            <td align="center">HUELLA</td>
         </tr>
         <tr>
             <td></td>
