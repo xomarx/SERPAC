@@ -2130,7 +2130,7 @@ $("#RegDistribucion").click(function(){
                     }
                 },
                 error: function (data)
-                {                    
+                {                               
                     $("#error_tecnico").html('');$("#error_sucursal").html('');$("#error_monto").html('');
                     $("#error_fecha").html('');                    
                     var errors = $.parseJSON(data.responseText);

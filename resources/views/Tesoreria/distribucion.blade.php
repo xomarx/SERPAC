@@ -29,10 +29,11 @@
                                 <td>{{$distribucion->sucursal}}</td>
                                 <td>{{$distribucion->monto}}</td>
                                 <td>{{$distribucion->fecha}}</td>                                    
-                                <td></td>
+                                <td>{{$distribucion->name}}</td>
                                 <td>
-                                    <a href="{{url('tesoreria/distribucion/recibo') }}" data-toggle="tooltip" data-placement="top" title="Imprimir" ><span class="glyphicon glyphicon-print"></span></a>                                    
-                                    <a href="javascript:void(0);" onclick="AnulDistribucion('{{$distribucion->id}}','{{$name}}')" ><span data-toggle="tooltip" data-placement="top" title="Anular" class="glyphicon glyphicon-remove"></span></a>
+                                    <a href="{{url('Tesoreria/Distribucion/ReciboTecnico') }}/{{$distribucion->id}}" class="btn-sm btn-success"><span class="glyphicon glyphicon-eye-open" data-toggle="tooltip" data-placement="top" title="Imprimir" ></span></a>
+                                    <a href="{{url('Tesoreria/Distribucion/ReciboAcopio') }}/{{$distribucion->id}}" class="btn-sm btn-success"  ><span data-toggle="tooltip" data-placement="top" title="Imprimir" class="glyphicon glyphicon-print"></span></a>                                    
+                                    <a href="javascript:void(0);" onclick="AnulDistribucion('{{$distribucion->id}}','{{$name}}')" class="btn-sm btn-danger" ><span data-toggle="tooltip" data-placement="top" title="Anular" class="glyphicon glyphicon-remove"></span></a>
                                 </td>                    
                             </tr>
                             @endforeach

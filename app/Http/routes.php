@@ -99,9 +99,12 @@ Route::group(['middleware' => ['web']], function () {
     route::resource('Acopio/Pdf','Acopio\planillacontroller@pdf');
     route::resource('Acopio/Gastos','Acopio\planillacontroller@pdf');
     route::resource('Acopio/Persona-Juridica','Tesoreria\persona_juridicacontroller');
-        
+     
+    route::resource('Tesoreria/Distribucion/ReciboAcopio','Tesoreria\tesoreriacontroller@recibofondoAcopiador');//recibofondoAcopiador
+    route::resource('Tesoreria/Distribucion/ReciboTecnico','Tesoreria\tesoreriacontroller@recibofondoTecnico');//recibofondoTecnicoo
     route::resource('Tesoreria/Distribucion-Fondos','Tesoreria\tesoreriacontroller');
-    route::resource('Tesoreria/Distribucion/ReciboAcopio','Tesoreria\tesoreriacontroller@recibodistribucio');//recibodistribucio
+    
+    
     route::resource('Tesoreria/Tipos-egresos','Tesoreria\tipo_egresoscontroller');
             
     route::resource('Creditos/Creditos-Financieros','Creditos\prestamoscontroller');

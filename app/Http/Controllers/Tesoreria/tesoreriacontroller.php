@@ -13,20 +13,26 @@ use Carbon\Carbon;
 class tesoreriacontroller extends Controller
 {
     
-    public function recibodistribucio()
-    {
-        $socio = Socio::getSocio($idsocio);
-        $parientes = \App\Models\Socios\Pariente::getparientesSocio($idsocio);
-        $fundos = \App\Models\Socios\Fundo::getfundosSocio($idsocio);
-        $cultivos = Flora::getcultivos($idsocio);
-        $faunas = Fauna::getfaunas($idsocio);
-        $dato = view('Reportes.socios.socio',['socio'=>$socio,'parientes'=>$parientes,
-            'fundos'=>$fundos,'cultivos'=>$cultivos,'faunas'=>$faunas])->render();
-//        return view('Reportes.socios.socio',['socio'=>$socio,'parientes'=>$parientes,
-//            'fundos'=>$fundos,'cultivos'=>$cultivos,'faunas'=>$faunas]);
+    public function recibofondoAcopiador()
+    {        
+        $dato = view('Reportes.Tesoreria.ReciboFondoAcopiador')->render();
+//        $options = new \Dompdf\Options();
+//        $options->set('defaultFont', 'Courier');
+//        $options->set('isRemoteEnabled', TRUE);
+//        $options->set('debugKeepTemp', TRUE);
+//        $options->set('isHtml5ParserEnabled', true);
+        $pdf = \Illuminate\Support\Facades\App::make('dompdf.wrapper');
+//        $pdf->setOptions($options);
+//        $pdf->output();
+        $pdf->loadHTML($dato);                        
+        return $pdf->stream();
+    }
+    
+    public function recibofondoTecnicoo()
+    {        
+        $dato = view('Reportes.socios.socio')->render();
         $pdf = \Illuminate\Support\Facades\App::make('dompdf.wrapper');
         $pdf->loadHTML($dato);                        
-//        $pdf->loadview('Acopio.formExcel');
         return $pdf->stream();
     }
 

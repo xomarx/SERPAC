@@ -22,8 +22,7 @@ class distribucionCreateRequest extends Request
      * @return array
      */
     public function rules()
-    {
-        
+    {        
         return [
             'sucursal'=>'required',
             'tecnico'=>'required',

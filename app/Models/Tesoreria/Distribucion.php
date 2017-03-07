@@ -26,9 +26,10 @@ class Distribucion extends Model
                 ->join('sucursales','distribucions.sucursales_sucursalId','=','sucursales.sucursalId')                
                 ->join('empleados','distribucions.tecnicos_empleados_empleadoId','=','empleados.empleadoId')
                 ->join('personas','empleados.personas_dni','=','personas.dni')
-                ->where('distribucions.estado','=','ENTREGADO')
+                ->join('users','distribucions.users_id','=','users.id')
+                ->where('distribucions.estado','=','Entregado')
                 ->select('empleados.personas_dni','personas.paterno','personas.materno','personas.nombre',
-                        'sucursales.sucursal','distribucions.monto','distribucions.fecha','distribucions.id')
+                        'sucursales.sucursal','distribucions.monto','distribucions.fecha','distribucions.id','users.name')
                 ->get();
     }
     
