@@ -100,7 +100,7 @@ Route::group(['middleware' => ['web']], function () {
     route::resource('Acopio/Gastos','Acopio\planillacontroller@pdf');
     route::resource('Acopio/Persona-Juridica','Tesoreria\persona_juridicacontroller');
      
-    route::resource('Tesoreria/Distribucion/ReciboAcopio','Tesoreria\tesoreriacontroller@recibofondoAcopiador');//recibofondoAcopiador
+    route::get('Tesoreria/Distribucion/ReciboAcopio/{id}','Tesoreria\tesoreriacontroller@recibofondoAcopiador');//recibofondoAcopiador
     route::resource('Tesoreria/Distribucion/ReciboTecnico','Tesoreria\tesoreriacontroller@recibofondoTecnico');//recibofondoTecnicoo
     route::resource('Tesoreria/Distribucion-Fondos','Tesoreria\tesoreriacontroller');
     

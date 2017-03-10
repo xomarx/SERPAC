@@ -4,58 +4,6 @@
  * and open the template in the editor.
  */
 
-
-//  ***************   LISTA DE UBIGEO 
-
-
-// $("#comite_central").change(function(event){     
-//     var route = "/comites_locales/"+event.target.value + "";   
-//     alert(route);
-//    $.get(route,function(response){           
-//        $("#comite_local").empty();
-//        for (var i = 0; i < response.length; i++) {            
-//            $("#comite_local").append("<option value='" + response[i].id+"'>"+response[i].comite_local+"</option>");
-//        }
-//    }); 
-// });
-// 
-// $("#distrito").change(function(event){     
-//     var route = "/comites_centrales/"+event.target.value + "";   
-//     
-//    $.get(route,function(response){           
-//        $("#comite_central").empty();
-//        for (var i = 0; i < response.length; i++) {            
-//            $("#comite_central").append("<option value='" + response[i].id+"'>"+response[i].comite_central+"</option>");
-//        }
-//    }); 
-// });
- 
- 
-// $("#provincia").change(function(event){     
-//     var route = "/distritos/"+event.target.value + "";         
-//    $.get(route,function(response){          
-//        $("#distrito").empty();
-//        for (var i = 0; i < response.length; i++) {            
-//            $("#distrito").append("<option value='" + response[i].id+"'>"+response[i].distrito+"</option>");
-//        }
-//    }); 
-// });
-// 
-// 
-// $("#departamento").change(function(event){     
-//     var route = "/provincias/"+event.target.value + "";       
-//    $.get(route,function(response){        
-//        $("#provincia").empty();
-//        for (var i = 0; i < response.length; i++) {            
-//            $("#provincia").append("<option value='" + response[i].id+"'>"+response[i].provincia+"</option>");
-//        }
-//    }); 
-// });
-// 
-
-// complemento
-
-
 $(document).ready(function () {        
         if($('#idestado').is(':visible'))
         {            
@@ -187,6 +135,7 @@ $("#RegtipoEgreso").click(function(){
 //  ************  CRUD COMPRAS  ********************************************************************************
 
    $("#RegCompras").click(function(){
+       
        var fecha = $("#fecha").val();
        var kilos = $("#kilos").val();
        var precio = $("#precio").val();

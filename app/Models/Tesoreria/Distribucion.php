@@ -50,4 +50,18 @@ class Distribucion extends Model
                 ->pluck('sucursales.sucursal','sucursales.sucursalId');
         
     }
+    
+    public static function getReciboAcopiador($iddistribcion){
+        return \Illuminate\Support\Facades\DB::table('distribucions')
+                ->join('sucursales','distribucions.sucursales_sucursalId','=','sucursales.sucursalId')                
+                ->join('comites_locales','sucursales.comites_locales_id','=','comites_locales.id')
+                ->join('empleados','sucursales.empleados_empleadoId','=','empleados.empleadoId')
+                ->join('personas','empleados.personas_dni','=','personas.dni')
+                ->where('distribucions.id','=',$iddistribcion)
+                ->select('comites_locales.comite_local','sucursales.sucursal','personas.paterno','personas.materno','personas.nombre'
+                        ,'personas.dni','distribucions.fecha','distribucions.monto')
+                ->first();
+    }
+            
+            
 }

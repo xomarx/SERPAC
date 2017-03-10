@@ -17,14 +17,14 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td style="font-size: 16; border: #007fff solid;" align="center">25</td>
+                            <td style="font-size: 16; border: #007fff solid;" align="center">{{date($distribucion->fecha)}}</td>
                             <td style="font-size: 16; border: #007fff solid;" align="center">02</td>
                             <td style="font-size: 16; border: #007fff solid;" align="center">2017</td>
                         </tr>
                     </tbody>
                     <tfoot>
                         <tr>
-                            <th colspan="3" style="font-size: 16; border: #007fff solid; border-radius: 10px;" align="center">S/ 20 500.50</th>
+                            <th colspan="3" style="font-size: 16; border: #007fff solid; border-radius: 10px;" align="center">S/ {{$distribucion->monto }}</th>
                         </tr>
                     </tfoot>
                 </table>
@@ -57,7 +57,7 @@
     <tbody>
         <tr>
             <td><b>Cantidad de: </b>&nbsp;&nbsp;</td>
-            <td style="border: #007fff solid; border-radius: 10px;" width="63%" colspan="2">OCHO MIL 00/100 NUEVOS SOLES</td>
+            <td style="border: #007fff solid; border-radius: 10px;" width="63%" colspan="2">{{$monto}}</td>
         </tr>
         <tr>
             <td colspan="2"><b>Para acopiar cacao y entregar al Amacen de Acopagro</b></td>
@@ -66,7 +66,7 @@
         </tr>
         <tr>
             <td><b>Lugar: </b></td>
-            <td style="border: #007fff solid; border-radius: 10px;" width="63%"></td>
+            <td style="border: #007fff solid; border-radius: 10px;" width="63%">{{$distribucion->sucursal}} - {{$distribucion->comite_local }}</td>
         </tr>
         <tr>
             <td colspan="2"><br><br><br></td>
@@ -85,11 +85,11 @@
         </tr>
         <tr>
             <td></td>
-            <td colspan="2"><b>NOMBRE: </b></td>
+            <td colspan="2"><b>NOMBRE: </b>{{$distribucion->paterno }} {{$distribucion->materno }} {{$distribucion->nombre }}</td>
         </tr>
         <tr>
             <td></td>
-            <td colspan="2"><b>D.N.I.: </b></td>
+            <td colspan="2"><b>D.N.I.: </b>{{$distribucion->dni }}</td>
         </tr>
     </tbody>
 </table>

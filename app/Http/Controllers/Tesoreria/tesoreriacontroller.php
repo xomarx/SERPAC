@@ -9,21 +9,19 @@ use App\Http\Controllers\Controller;
 use App\Models\Tesoreria\Distribucion;
 use App\Models\Acopio\Recepcion_fondo;
 use Carbon\Carbon;
-
+use Illuminate\Support\Facades\Input;
 class tesoreriacontroller extends Controller
 {
     
-    public function recibofondoAcopiador()
+    public function recibofondoAcopiador($idacopiorecibo)
     {        
-        $dato = view('Reportes.Tesoreria.ReciboFondoAcopiador')->render();
-//        $options = new \Dompdf\Options();
-//        $options->set('defaultFont', 'Courier');
-//        $options->set('isRemoteEnabled', TRUE);
-//        $options->set('debugKeepTemp', TRUE);
-//        $options->set('isHtml5ParserEnabled', true);
+        $monto =  new \App\Library\ConvertNumberToText();
+        $miMoneda = "PEN";
+        
+        $distribucion = Distribucion::getReciboAcopiador($idacopiorecibo);
+        $monto=$monto->to_word($distribucion->monto, $miMoneda);     
+        $dato = view('Reportes.Tesoreria.ReciboFondoAcopiador',['monto'=>$monto,'distribucion'=>$distribucion])->render();        
         $pdf = \Illuminate\Support\Facades\App::make('dompdf.wrapper');
-//        $pdf->setOptions($options);
-//        $pdf->output();
         $pdf->loadHTML($dato);                        
         return $pdf->stream();
     }
