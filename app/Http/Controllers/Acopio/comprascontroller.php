@@ -12,6 +12,19 @@ use App\Models\Acopio\Compra;
 class comprascontroller extends Controller
 {
     
+    public function autoCompleteNosocios(Request $request){
+        if($request->ajax()){
+            $nombre = \Illuminate\Support\Facades\Input::get('term');
+            $nosocios = \App\Models\Acopio\Nosocio::where('dni','like','%'.$nombre.'%')->get();
+            foreach ($nosocios as $nosocio) 
+            {
+                $result[] = ['id' => $nosocio->paterno, 'value' => $nosocio->dni,'materno'=>$nosocio->materno,'nombres'=>$nosocio->nombres];
+            }
+            return response()->json($result);
+        }
+    }
+
+
     public function  planillasemanal()
     {                
         return view('Acopio.planillasemanal');        
@@ -35,10 +48,9 @@ class comprascontroller extends Controller
     {
         //
         $compras = \App\Models\Acopio\Compra::listaCompras();
-        $condicions = Condicion::pluck('condicion','id')->prepend('Selleciona una Condicion'); 
-        $fecha = \Carbon\Carbon::now();
-        $fecha = $fecha->format('m/d/Y');
-        return view('Acopio.compras',['compras'=>$compras,'condicions'=>$condicions,'fecha'=>$fecha]);
+        $condicions = Condicion::pluck('condicion','id'); 
+        $comite = \App\Models\Socios\Comites_Locale::pluck('comite_local','id');                
+        return view('Acopio.compras',['compras'=>$compras,'condicions'=>$condicions,'comite'=>$comite]);
     }
 
     /**
@@ -57,31 +69,46 @@ class comprascontroller extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Requests\Acopio\ComprasCreateRequest $request)
     {
         //
         $date = \Carbon\Carbon::parse($request->fecha);
         if($request->ajax())
         {
-            $documento = \App\Models\Documento::create([
-                'enumeracion'=>$request->enumeracion,
+            $documento = \App\Models\Configuracion\Documento::create([
+                'enumeracion'=>$request->numero,
                 'importe'=>  round($request->precio * $request->kilos,2),
-                'tipo_documentos_id'=>'RE'
+                'tipo_documentos_cod'=>$request->codrecibo
             ]);
+            $nosocio = \App\Models\Acopio\Nosocio::where('dni', '=', $request->dni)->first();
+            if (!$nosocio) {
+                if ($request->estado == "NOSOCIO") {
+                    $nosocio = \App\Models\Acopio\Nosocio::create([
+                                'dni' => $request->dni,
+                                'paterno' => strtoupper($request->paterno),
+                                'materno' => strtoupper($request->materno),
+                                'nombres' => strtoupper($request->nombres),
+                                'comites_locales_id' => $request->comite
+                    ]);
+                }
+            }
             $compra = \App\Models\Acopio\Compra::create([
-                'fecha'=>$date,'kilos'=>$request->kilos,'precio'=>$request->precio,
-                'observacion'=>$request->observacion,'tipocacao'=>$request->tipocacao,
-                'sucursales_sucursalId'=>$request->sucursal,'condicions_id'=>$request->condicion,
+                'fecha'=>\Carbon\Carbon::parse($request->fecha),
+                'kilos'=>$request->kilos,'precio'=>$request->precio,
+                'observacion'=>$request->observacion,'tipocacao'=>$request->tipo,
+                'sucursales_sucursalId'=>$request->acopio,'condicions_id'=>$request->condicion,
                 'socios_codigo'=>$request->codigo,'estado'=>'CANCELADO'
-                ,'documentos_id'=>$documento->id
-            ]);
+                ,'documentos_id'=>$documento->id, 
+                'nosocios_dni'=>$request->dni,
+                'users_id'=>  \Illuminate\Support\Facades\Auth::user()->id
+            ]);                        
             if($compra)
             {
-                return response()->json(['success'=>'true']);
+                return response()->json(['success'=>'true','message'=>'Se realiso la Compra correctamente']);
             }
             else
             {
-                return response()->json(['success'=>'false']);
+                return response()->json(['success'=>'false','message'=>'No se realizo ninguna compra']);
             }
         }
     }

@@ -92,7 +92,10 @@ Route::group(['middleware' => ['web']], function () {
     
     route::get('Acopio/planillasemanal/{idsu?}/{fecha?}/{condicion?}','Acopio\comprascontroller@ListaplanillaSemanal');
     route::resource('Acopio/Planilla-Semanal','Acopio\comprascontroller@planillasemanal');
+    route::resource('nosocios','Acopio\comprascontroller@autoCompleteNosocios');
     route::resource('Acopio/Compra-Grano','Acopio\comprascontroller');
+    
+    
     route::resource('Acopio/Tara','Acopio\tarascontroller');
     route::resource('Acopio/Transporte','Acopio\transportecontroller');
     route::resource('Acopio/Excel','Acopio\planillacontroller@excel');
@@ -108,6 +111,11 @@ Route::group(['middleware' => ['web']], function () {
     route::resource('Tesoreria/Tipos-egresos','Tesoreria\tipo_egresoscontroller');
             
     route::resource('Creditos/Creditos-Financieros','Creditos\prestamoscontroller');
+    
+    route::resource('Configuracion','Configuracion\documentoController');
+    
+    route::get('codrecibos/{id}','Configuracion\tipo_documentoController@getnumerodocumento');
+    route::resource('codrecibos','Configuracion\tipo_documentoController@autoCompleteCodRecibo');//
     
     
 });

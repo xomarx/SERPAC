@@ -35,6 +35,7 @@
                     <li ><a href="{{ url('/Tesoreria/Distribucion-Fondos') }}">Tesoreria</a></li>
                     <li><a href="#">Contabilidad</a></li>
                     <li><a href="#">Informes</a></li>
+                    <li><a href="{{url('Configuracion') }}">Configuracion</a></li>
                 </ul> 
                 @if(Auth::guest())
                 <a onclick="estadoform({{Auth::guest()}})" id="idestado">activo</a>

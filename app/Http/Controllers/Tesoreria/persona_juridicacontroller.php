@@ -37,18 +37,23 @@ class persona_juridicacontroller extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Requests\Tesoreria\Persona_juridicaCreateRequest $request)
     {
         //
         if($request->ajax())
         {
-            $juridica = \App\Models\Tesoreria\Persona_juridicas::create($request->all());
+            $juridica = \App\Models\Tesoreria\Persona_juridicas::create([
+                'ruc'=>$request->ruc,
+                'telefono'=>$request->telefono,
+                'razon_social'=>  strtoupper($request->razon),
+                'direccion'=>  strtoupper($request->direccion)
+            ]);
             if($juridica)
             {
-                return response()->json(['success'=>'true']);
+                return response()->json(['success'=>true,'message'=>'Se registro correctamente']);
             }
             else {
-                return response()->json(['success'=>'false']);
+                return response()->json(['success'=>false,'message'=>'No se registro']);
             }
         }
     }
@@ -84,22 +89,22 @@ class persona_juridicacontroller extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Requests\Tesoreria\Persona_juridicaUpdateRequest $request, $id)
     {        
         if($request->ajax())
         {
             $persona_juridica = Persona_juridicas::FindOrFail($id);
             $persona_juridica->ruc=$request->ruc;
             $persona_juridica->telefono = $request->telefono;
-            $persona_juridica->direccion = $request->direccion;
-            $persona_juridica->razon_social = $request->razon_social;
+            $persona_juridica->direccion = strtoupper($request->direccion);
+            $persona_juridica->razon_social = strtoupper($request->razon);
             $persona_juridica->save();
             if($persona_juridica)
             {
-              return response()->json(['success'=>'true']);
+              return response()->json(['success'=>true,'message'=>'Se actualizaron los datos']);
             }
             else {
-                return response()->json(['success'=>'false']);
+                return response()->json(['success'=>false,'message'=>'No se actualizaron los datos']);
             }
             
         }
@@ -112,7 +117,9 @@ class persona_juridicacontroller extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
-    {
-        //
+    {        
+        $juridico = Persona_juridicas::FindOrFail($id)->delete();
+        if($juridico) return response ()->json (['success'=>true]);
+        else return response ()->json (['success'=>false]);
     }
 }

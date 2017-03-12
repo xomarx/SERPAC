@@ -15,7 +15,7 @@ class Compra extends Model
     protected  $fillable = [
         'kilos','fecha','precio','observacion',
         'tipocacao','sucursales_sucursalId','condicions_id',
-        'socios_codigo','documentos_id','estado','motivo'];
+        'socios_codigo','documentos_id','estado','motivo','users_id','nosocios_dni'];
     
     public function condicion()
     {
@@ -32,9 +32,15 @@ class Compra extends Model
     {
         return DB::table('compras')                
                 ->join('condicions','compras.condicions_id','=','condicions.id')
-                ->where('estado','=','CANCELADO')
+                ->join('sucursales','compras.sucursales_sucursalId','=','sucursales.sucursalId')
+                ->join('users','compras.users_id','=','users.id')
+                ->leftJoin('socios','compras.socios_codigo','=','socios.codigo')
+                ->leftJoin('nosocios','compras.nosocios_dni','=','nosocios.dni')
+                ->leftJoin('personas','socios.dni','=','personas.dni')
+                ->where('compras.estado','=','CANCELADO')
                 ->select('compras.fecha','compras.socios_codigo','condicions.condicion','compras.kilos','compras.precio'
-                        ,'compras.sucursales_sucursalId','compras.id')
+                        ,'compras.sucursales_sucursalId','compras.id','sucursales.sucursal','users.name'
+                        ,'personas.paterno','personas.materno','personas.nombre','nosocios.paterno as npaterno','nosocios.materno as nmaterno','nosocios.nombres as nnombres')
                 ->get();
     }
     

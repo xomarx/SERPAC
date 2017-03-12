@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTipoDocumentosTable extends Migration
+class CreateDocumentosTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,10 +12,7 @@ class CreateTipoDocumentosTable extends Migration
      */
     public function up()
     {
-        Schema::create('tipo_documentos', function (Blueprint $table) {
-            $table->increments('id');
-            $table->timestamps();
-        });
+        //
     }
 
     /**
@@ -25,6 +22,6 @@ class CreateTipoDocumentosTable extends Migration
      */
     public function down()
     {
-        Schema::drop('tipo_documentos');
+        //
     }
 }

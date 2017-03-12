@@ -4,6 +4,8 @@
  * and open the template in the editor.
  */
 
+//  *****************************************************  LOAD **************************************************************************************
+
 $(document).ready(function () {        
         if($('#idestado').is(':visible'))
         {            
@@ -11,9 +13,14 @@ $(document).ready(function () {
         }            
     }); 
 
+$(document).ready(function() {
+    $('#myTable').DataTable( {
+        
+    } );
+} );
 
-var cargarprovincia = function(iddepa,idselec)
-{
+
+var cargarprovincia = function(iddepa,idselec) {
     var route = '/provincias/'+iddepa;       
     $.get(route,function(response){        
         $("#"+idselec).empty();
@@ -24,8 +31,7 @@ var cargarprovincia = function(iddepa,idselec)
     });
 };
 
-var cargardistrito = function (iddist,idsele)
- {
+var cargardistrito = function (iddist,idsele) {
       var route = "/distritos/"+iddist + "";         
     $.get(route,function(response){          
         $("#"+idsele).empty();
@@ -35,10 +41,8 @@ var cargardistrito = function (iddist,idsele)
         }
     }); 
  };
-
  
-  var cargarcomite_central = function (idcomitecentral,idselec)
- {
+  var cargarcomite_central = function (idcomitecentral,idselec) {
      var route = "/comites_centrales/"+ idcomitecentral; 
      $.get(route,function(response){           
         $("#"+idselec).empty();
@@ -49,8 +53,7 @@ var cargardistrito = function (iddist,idsele)
     }); 
  };
  
- var cargarComitelocal = function (idcomitelocal,idselec)
- {
+ var cargarComitelocal = function (idcomitelocal,idselec) {
      var route = "/comite_locales/"+idcomitelocal;        
     $.get(route,function(response){        
         $("#"+idselec).empty();
@@ -59,13 +62,9 @@ var cargardistrito = function (iddist,idsele)
             $("#"+idselec).append("<option value='" + response[i].id+"'>"+response[i].comite_local+"</option>");
         }
     }); 
- }
+ };
 
-
-
-
-
-// CRUD TIPO EGRESO
+// CRUD TIPO EGRESO  *************
 
 
 var EdiTipoEgreso = function(id){
@@ -132,82 +131,7 @@ $("#RegtipoEgreso").click(function(){
        });
 });
 
-//  ************  CRUD COMPRAS  ********************************************************************************
 
-   $("#RegCompras").click(function(){
-       
-       var fecha = $("#fecha").val();
-       var kilos = $("#kilos").val();
-       var precio = $("#precio").val();
-       var observacion = $("#observacion").val();
-       var tipocacao = $("#tipo").val();
-       var sucursal = $("#acopio").val();
-       var codigo = $("#codigo").val();
-       var enumeracion = $("#numero").val();
-       
-       if($("#codigo").val() == '')
-       {
-           codigo="NO SOCIO";
-       }       
-       var condicion = $("#condicion").val();
-       var route = "/Acopio/Compra-Grano";
-       var token = $("#token").val();       
-       $.ajax({
-           url: route,
-                headers: {'X-CSRF-TOKEN': token},
-                type: 'post',
-                datatype: 'json',                
-                data: {                    
-                    kilos: kilos,
-                    fecha: fecha,
-                    precio:precio,
-                    observacion:observacion,
-                    tipocacao: tipocacao,
-                    sucursal:sucursal,
-                    codigo:codigo,
-                    condicion:condicion,
-                    enumeracion : enumeracion
-                },
-                success: function (data)
-                {
-                    if (data.success = 'true')
-                    {
-                        $("#modalcompra").fadeOut(500);
-                        document.location.reload();
-                    }
-                },     
-       });
-       
-   });
-
-var AnulCompra = function(id,name)
-{             
-    // ALERT JQUERY     
-   $.alertable.prompt('<h3>Motivo de la Anulacion ? </h3>'+"<span style='color:#ff0000'>"+name+"</span>").then(function(data){       
-            var motivo = data.value;
-            var route = "/Acopio/Compra-Grano/"+id+"";            
-            var token = $("#token").val();            
-        $.ajax({
-            url: route,
-            headers: {'X-CSRF-TOKEN': token},
-            type: 'PUT',
-            dataType: 'json',
-            data: {
-                motivo:motivo
-            },
-            success: function (data) {
-
-                if (data.success = 'true')
-                {
-                   document.location.reload();
-                }
-            },
-            
-        });
-   },function(){
-       console.log('Prompt canceled'); 
-   });    
-};
 
 //  recepcion de fondo
 
@@ -268,50 +192,8 @@ var RecepConform = function(id)
         });
     }
 
-
-// **********************  CRUD SUCURSAL
-  $(document).ready(function () {        
-        $('#myTable').DataTable();
-    }); 
-
       
-//  ************************   CRUD CARGOS
-
-
-$("#RegCargo").click(function(event)
-    {       
-            var cargo = $("#cargo").val();
-            var token = $("#token").val();           
-            
-            var route = "/RRHH/Cargos";            
-          $.ajax({
-            url:route,
-            headers:{'X-CSRF-TOKEN':token},
-            type:'post',
-            datatype: 'json',
-            //async: false,
-//            data:dataSting,
-            data: {cargo: cargo},
-            success:function(data)
-            {
-                if(data.success = 'true')
-                {                    
-                    document.location.href= '/RRHH/Cargos';
-                }
-            },
-            error:function(data)
-            {                
-                $("#error").html(data.responseJSON.cargo);               
-                if (data.status = 422) {
-                   console.clear();
-                }
-
-            }  
-          })
-      
-
-
-    });
+//  ************************   CRUD CARGOS  *****************
 
 var EdiCargo = function(id) 
     {      
@@ -383,7 +265,7 @@ var EliCArgo = function(id,name)
     });
 };
 
-// ******************  CRUD AREAS
+// ******************  CRUD AREAS *****************************
 $("#RegArea").click(function(event)
     {       
             var area = $("#area").val();
@@ -417,8 +299,7 @@ var EdiArea = function(id)
     }
 
       
-$("#ActArea").click(function()
-{
+$("#ActArea").click(function(){
   var id = $("#id").val();
   
   var area = $("#area_1").val();
@@ -480,7 +361,7 @@ var EliArea = function(id,name)
 
 
 
-// *************************  CRUD FAUNA  ********************************************************************************************************
+// *************************  CRUD FAUNA  *************************************************************************************************************
 $("#nuefauna").click(function(event){$("#RegFauna").text("Registrar");});
 
 $("#RegFauna").click(function(event)
@@ -555,10 +436,9 @@ var EliFauna = function(id,name)
     });
 };
 
-//  ***************************   CRUD INMUEBLE  **************************************************************************************************
+//  ***************************   CRUD INMUEBLE  *******************************************************************************************************
 
-$("#RegInmueble").click(function(event)
-    {                   
+$("#RegInmueble").click(function(event){                   
             var fields = $("#forminmueble").serialize();
             var token = $("#token").val();
             var route = "/socios/basicos/inmuebles";     
@@ -627,7 +507,7 @@ var EliInmueble = function(id,name){
     });
 };
 
-// ******************************  CRUD FUNDOS  ***********************************************************************************************
+// ******************************  CRUD FUNDOS  ********************************************************************************************************
    
     var Eliminarcultivo = function(fila,idcultivo) {        
         var valor=document.getElementById("tablacultivos").rows[fila].cells[0].innerText;            
@@ -648,8 +528,7 @@ var Eliminarinmueble = function(fila,idinmueble){
         $("#inmueble").append("<option value="+idinmueble+" selected='selected'>"+ valor+"</option>")
     }
 
-var fundopropiedadFauna = function(fundo,fauna,cantidad,rendimiento)
-{    
+var fundopropiedadFauna = function(fundo,fauna,cantidad,rendimiento){    
     var route = '/socios/propiedadfauna';
     var token = $("#token").val();
     $.ajax({              
@@ -724,8 +603,7 @@ var fundopropiedadInmueble = function(fundo,inmueble)
           });
 };
 
-var registropropoiedadesFundo = function()
-{
+var registropropoiedadesFundo = function(){
     for (var i = 1; i < document.getElementById("tablacultivos").rows.length; i++) {
                         var hectarea =document.getElementById("tablacultivos").rows[i].cells[1].getElementsByTagName('input');
                         var rendimiento =document.getElementById("tablacultivos").rows[i].cells[2].getElementsByTagName('input');
@@ -880,7 +758,7 @@ var EliminarFundo = function(id,name)
 };
 
 
-//  **************************   CRUD PARIENTE  ***********************************************************************************************
+//  **************************   CRUD PARIENTE  ********************************************************************************************************
 
 $("#RegPariente").click(function(event)
     {       
@@ -1007,7 +885,7 @@ var editPariente = function(idsocio,dnipariente)
         });
     }
 
-//  ********************  CRUD SOCIOS   ********************************************************************************************************
+//  ********************  CRUD SOCIOS   ***************************************************************************************************************
 $("#RegSocio").click(function(event) {                  
         var fields = $("#formsocios").serialize();                                       
             var token = $("#token").val();                       
@@ -1126,11 +1004,10 @@ var EliSocio = function(codigo,name)
     });
 };
 
-//  *****************  CRUD FLORA  **********************************************************************************************************
+//  *****************  CRUD FLORA  *********************************************************************************************************************
 $("#nuevaflora").click(function (event){ $("#RegFlora").text("Registrar");$("#error_flora").html('');});
 
-$("#RegFlora").click(function(event)
-    {                   
+$("#RegFlora").click(function(event){                   
             var fields = $("#formflora").serialize();
             var token = $("#token").val();
             var route = "/socios/basicos/floras";    var type = "POST";
@@ -1196,7 +1073,7 @@ var EliFlora = function(id,name)
 };
 
 
-// *******************   CRUD CARGO DELEGADO  ***************************************************************************************************
+// *******************   CRUD CARGO DELEGADO  **********************************************************************************************************
 $("#nuevodelegado").click(function(event){ $("#RegDelegado").text("Registrar"); });
 
 $("#RegDelegado").click(function(event){                   
@@ -1242,8 +1119,7 @@ var EdDelegado = function(id){
         $("#RegDelegado").text("Actualizar");
         var route = "/socios/basicos/delegados/"+id+"/edit";                
         $.get(route, function(data){              
-        $("#iddelegado").val(data.id);
-        console.log($("#iddelegado").val());
+        $("#iddelegado").val(data.id);        
         $("#cargo_delegado").val(data.cargo_delegado);          
         });
     }
@@ -1267,7 +1143,7 @@ var EliDelegado = function(id,name){
     });
 };
 
-//  ************************  CRUD DIRECTIVO   **********************************************************************************************
+//  ************************  CRUD DIRECTIVO   *********************************************************************************************************
 
 $("#nuevodirectivo").click(function(event){$("#RegDirectivo").text("Registrar"); });
 
@@ -1279,7 +1155,7 @@ $("#RegDirectivo").click(function(event) {
                 route = "/socios/basicos/directivos/" + $("#iddirectivo").val();
                 type = "PUT";
             };
-            console.log(fields);
+            
           $.ajax({
             url:route,
             headers:{'X-CSRF-TOKEN':token},
@@ -1343,7 +1219,7 @@ var EliDirectivo = function(id,name)
     });
 };
 
-//***********************************   DEPARTAMENTO  *********************************************************************************************
+//***********************************   DEPARTAMENTO  **************************************************************************************************
 $("#nuevodepartamento").click(function(event){ $("#regdepartamento").text("Registrar");$("#error_departamento").html('');});
 
 $("#regdepartamento").click(function(event){       
@@ -1417,8 +1293,9 @@ $("#regdepartamento").click(function(event){
  }; 
 
 
-// **************  CRUD PROVINCIAS   **************************************************************************************************************
-$("#nuevaprovincia").click(function(event){ $("#RegProvincia").text("Registrar"); $("#error_provincia").html(''); $("#error_departamento").html(''); });
+// **************  CRUD PROVINCIAS   ********************************************************************************************************************
+$("#nuevaprovincia").click(function(event){ $("#RegProvincia").text("Registrar"); 
+    $("#error_provincia").html(''); $("#error_departamento").html(''); });
 
 var EdProvincia = function(id) {        
               $("#RegProvincia").text("Actualizar"); 
@@ -1490,7 +1367,7 @@ var EliProvincia = function(id,name){
 };
 
 
-//   *********************   CRUD DE DISTRITOS  ********************************************************************************
+//   *********************   CRUD DE DISTRITOS  *********************************************************************************************************
 $("#nuevodistrito").click(function(event){ $("#RegDistrito").text("Registrar");
     $("#error_provincia").html(''); $("#error_departamento").html('');$("#error_distrito").html('');});
 
@@ -1564,7 +1441,7 @@ var EliDistrito = function (id, name) {
     });
 };
 
-//  **************   CRUD COMITE CENTRAL  *****************************************************************************
+//  **************   CRUD COMITE CENTRAL  ***************************************************************************************************************
 $("#RegCentral").click(function(event)  {       
             var fields = $("#formcomite_central").serialize();
             
@@ -1642,8 +1519,9 @@ var EliCentral = function(id,name){
     });
 };
 
-// ******************  CRUD DE COMITE LOCAL  ******************************************************************************
-$("#nuevolocal").click(function(event){$("#RegLocal").text("Registrar");$("#error_provincia").html(''); $("#error_departamento").html('');$("#error_distrito").html('');$("#error_central").html('');
+// ******************  CRUD DE COMITE LOCAL  ************************************************************************************************************
+$("#nuevolocal").click(function(event){$("#RegLocal").text("Registrar");$("#error_provincia").html(''); 
+    $("#error_departamento").html('');$("#error_distrito").html('');$("#error_central").html('');
                 $("#error_local").html('');});
 
 $("#RegLocal").click(function(event){                   
@@ -1723,7 +1601,7 @@ var EliLocal = function(id,name){
 };
 
 
-//  ************************  CRUD TECNICOS  ********************************************************************************
+//  ************************  CRUD TECNICOS  ************************************************************************************************************
 var RegSectores = function(idempleado){
     var options = $("#zona_final option[value]");
     var route = "/RRHH/Tecnicos"; var token = $("#token").val();
@@ -1767,7 +1645,7 @@ $("#RegTecnicos").click(function() {
       RegSectores($("#tecnico").val());
     });    
 
-// **************************  CRUD EMPLEADO  ********************************************************************************
+// **************************  CRUD EMPLEADO  ***********************************************************************************************************
 
   $("#nuevoempleado").click(function(event){     
      $("#RegEmpleado").text('Registrar');   $("#titulo-empleado").html("NUEVO REGISTRO EMPLEADO")
@@ -1797,8 +1675,7 @@ $("#RegEmpleado").click(function(event){
                 data: fields,
                 success: function (data)
                 {
-                    if (data.success == 'true')
-                    {
+                    if (data.success == 'true'){
                         var msj = "<h4>" + data.message + "</h4>";
                         $("#succesempleados").html(msj);
                         $("#msj-infoempleados").fadeIn();
@@ -1902,7 +1779,7 @@ var EliEmpleado = function(id,name){
     });
 };
 
-// ************************   CRUD DE CENTROS DE ACOPIO ********************************************************************************
+// ************************   CRUD DE CENTROS DE ACOPIO *************************************************************************************************
  $("#nuevasucursal").click(function(event){     
      $("#RegSucursal").text('Registrar');   $("#error_codigoId").html('');$("#error_area").html('');$("#error_telefono").html('');
                     $("#error_sucursal").html('');$("#error_fax").html('');
@@ -2026,7 +1903,7 @@ var EliSucursal = function(id,name){
 };        
         
 
-// ****************     DISTRIBUCION FONDOS DE ACOPIO *********************************************************************************************************
+// ****************     DISTRIBUCION FONDOS DE ACOPIO ***************************************************************************************************
 var AnulDistribucion = function(id,name)
 {             
     // ALERT JQUERY     
@@ -2094,6 +1971,245 @@ $("#RegDistribucion").click(function(){
             });
 });
 
+
+//  ***********************  CRUD DE RECIBOS  ***********************************************************************************************************
+$("#nuevorecibo").click(function(data){
+    $("#RegRecibo").text("Registrar");$("#codigo").prop('readonly',false);
+     $("#error_codigo").html('');$("#error_recibo").html('');
+});
+
+$("#RegRecibo").click(function(){
+    var fields = $("#formrecibo").serialize();
+    var token = $("#token").val();var type = "POST"; var route = "/Configuracion";
+    if($("#RegRecibo").text() == "Actualizar"){
+        type="PUT";route="/Configuracion/"+$("#codigo").val();
+    }
+    $.ajax({
+        url: route,
+                headers: {'X-CSRF-TOKEN': token},
+                type: type,
+                datatype: 'json',                
+                data: fields,
+                success: function (data)
+                {
+                    if (data.success == 'true')
+                    {
+                        var msj = "<h4>"+data.message+"</h4>";
+                        $("#succesrecibo").html(msj);
+                        $("#msj-inforecibo").fadeIn();
+                        document.location.reload();
+                    }
+                    else{
+                        var msj = "<h4>"+data.message+"</h4>";
+                        $("#succesrecibo").html(msj);
+                        $("#msj-inforecibo").fadeIn();
+                        $("#msj-inforecibo").fadeOut(500);
+                    }
+                },
+                error: function (data){
+                    
+                    $("#error_codigo").html('');$("#error_recibo").html('');
+                    var errors =  $.parseJSON(data.responseText);      
+                    $.each(errors,function(index, value) {                          
+                            if(index == 'codigo')$("#error_codigo").html(value);
+                            else if(index == 'recibo')$("#error_recibo").html(value);                            
+                      }); 
+                    
+                }
+    });
+});
+
+var EditRecibo = function (idrecibo){
+    $("#RegRecibo").text("Actualizar");
+    var route = "/Configuracion/"+idrecibo+"/edit";      
+    $.getJSON(route,
+            function(data){                
+                $("#recibo").val(data.tipo_documento);
+                $("#codigo").val(data.codigo);
+                $("#codigo").prop('readonly',true);
+            }
+            );
+};
+
+var EliRecibo = function(id,name){      
+   $.alertable.confirm("<span style='color:#000'>¿Está seguro de eliminar el registro?</span>"+"<br><strong><span style='color:#ff0000'>"+name+"</span></strong></br>").then(function() {  
+      var route = "/Configuracion/"+id+"";
+      var token = $("#token").val();
+
+      $.ajax({
+        url: route,
+        headers: {'X-CSRF-TOKEN': token},
+        type: 'DELETE',
+        dataType: 'json',
+        success: function(data){
+        if (data.success == 'true')
+        {
+            document.location.reload();
+        }
+      }
+      });          
+    });
+};
+
+//  ************  CRUD COMPRAS  *************************************************************************************************************************
+
+$("#RegCompras").click(function(){
+       
+       var fields = $("#formcompras").serialize(); 
+       var route = "/Acopio/Compra-Grano";
+       console.log(fields);
+       var token = $("#token").val();       
+       $.ajax({
+           url: route,
+                headers: {'X-CSRF-TOKEN': token},
+                type: 'post',
+                datatype: 'json',                
+                data: fields,
+                success: function (data)
+                {
+                    if (data.success = 'true')
+                    {
+                        $("#modalcompra").fadeOut(500);
+                        document.location.reload();
+                    }
+                },
+                error: function (data){
+                    
+                    $("#error_acopio").html('');$("#error_paterno").html('');$("#error_socio").html('');
+                    $("#error_materno").html('');$("#error_nombres").html('');$("#error_codigo").html('');
+                    $("#error_dni").html('');$("#error_numero").html('');$("#error_comite").html('');$("#error_fecha").html('');
+                    $("#error_condicion").html('');$("#error_kilos").html('');$("#error_precio").html('');
+                    var errors =  $.parseJSON(data.responseText);      
+                    $.each(errors,function(index, value) {                          
+                            if(index == 'acopio')$("#error_acopio").html(value);
+                            else if(index == 'paterno')$("#error_paterno").html(value);
+                            else if(index == 'materno')$("#error_materno").html(value);
+                            else if(index == 'nombres')$("#error_nombres").html(value);
+                            else if(index == 'dni')$("#error_dni").html(value);
+                            else if(index == 'numero')$("#error_numero").html(value);
+                            else if(index == 'comite')$("#error_comite").html(value);
+                            else if(index == 'codigo')$("#error_codigo").html(value);
+                            else if(index == 'socio')$("#error_socio").html(value);
+                            else if(index == 'condicion')$("#error_condicion").html(value);
+                            else if(index == 'kilos')$("#error_kilos").html(value);
+                            else if(index == 'precio')$("#error_precio").html(value);
+                            else if(index == 'fecha')$("#error_fecha").html(value);
+                      }); 
+                    
+                }
+       });
+       
+   });
+
+var AnulCompra = function(id,name){                 
+   $.alertable.prompt('<h3>Motivo de la Anulacion ? </h3>'+"<span style='color:#ff0000'>"+name+"</span>").then(function(data){       
+            var motivo = data.value;
+            var route = "/Acopio/Compra-Grano/"+id+"";            
+            var token = $("#token").val();            
+        $.ajax({
+            url: route,
+            headers: {'X-CSRF-TOKEN': token},
+            type: 'PUT',
+            dataType: 'json',
+            data: {
+                motivo:motivo
+            },
+            success: function (data) {
+
+                if (data.success == 'true')
+                {
+                   document.location.reload();
+                }
+            },
+            
+        });
+   },function(){
+       console.log('Cancelado'); 
+   });    
+};
+
+// ****************************  CRUD PERSONA JURIDICA  *************************************************************************************************
+ 
+$("#nuevoperjuridica").click(function(){
+        $("#formjuridico")[0].reset();$("#error_ruc").html('');$("#error_telefono").html('');
+        $("#error_razon").html('');$("#error_direccion").html('');$("#RegPersonaJuridica").text("Registrar")
+    });
+    
+$("#RegPersonaJuridica").click(function(){
+        var route = '/Acopio/Persona-Juridica';
+        var token = $("#token").val();
+        var fields = $("#formjuridico").serialize();
+        var tipo = 'POST';
+        if($("#RegPersonaJuridica").text() == "Actualizar")
+        {
+            tipo = "PUT";
+            route = "/Acopio/Persona-Juridica/" + $("#idjuridica").val();
+        }
+        $.ajax({
+            url: route,
+            headers: {'X-CSRF-TOKEN':token},
+            type: tipo,
+            dataType: 'json',
+            data: fields,
+            success: function (data) {
+                if(data.success == true){
+                    var msj = "<h4>" + data.message + "</h4>";
+                        $("#info-juridica").html(msj);
+                        $("#alert-juridico").fadeIn();
+                    document.location.reload();
+                }
+                else{
+                    var msj = "<h4>" + data.message + "</h4>";
+                        $("#info-juridica").html(msj);
+                        $("#alert-juridico").fadeOut();
+                }
+                    
+            },
+            error: function(data){
+                var errors = $.parseJSON(data.responseText);
+                $("#error_ruc").html('');$("#error_telefono").html('');$("#error_razon").html('');$("#error_direccion").html('');
+                    $.each(errors, function (index, value) {
+                        console.log(value);
+                        if(index == 'ruc') $("#error_ruc").html(value);
+                        else if(index == 'telefono') $("#error_telefono").html(value);
+                        else if(index == 'razon') $("#error_razon").html(value);
+                        else if(index == 'direccion') $("#error_direccion").html(value);
+                    });
+            }
+        });
+    });
+    
+var EditJuridico = function(id){
+        var route = '/Acopio/Persona-Juridica/'+id+"/edit";
+        $("#idjuridica").val(id);
+        $("#RegPersonaJuridica").text("Actualizar");
+        $.get(route, function(data){                        
+            $("#ruc").val(data.ruc);
+            $("#telefono").val(data.telefono);
+            $("#razon").val(data.razon_social);
+            $("#direccion").val(data.direccion);
+        });
+    };
+   
+var AnulJuridico = function(id,name){
+       $.alertable.confirm("<span style='color:#000'>¿Está seguro de eliminar el registro?</span>"+"<br><strong><span style='color:#ff0000'>"
+           +name+"</span></strong></br>").then(function() {  
+      var route = "/Acopio/Persona-Juridica/"+id+"";
+      var token = $("#token").val();
+      $.ajax({
+        url: route,
+        headers: {'X-CSRF-TOKEN': token},
+        type: 'DELETE',
+        dataType: 'json',
+        success: function(data){
+        if (data.success == true)
+        {
+            document.location.reload();
+        }
+      }
+      });          
+    });
+   };
 
 //var cargarForm = function(idform)
 //{
