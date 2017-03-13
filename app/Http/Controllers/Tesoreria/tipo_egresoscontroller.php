@@ -39,12 +39,17 @@ class tipo_egresoscontroller extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Requests\Tesoreria\Tipo_egresoCreateRequest $request)
     {
         //
         if($request->ajax())
         {
-            $tipoegreso = \App\Models\Tesoreria\Tipo_egreso::create($request->all());
+            $tipoegreso = \App\Models\Tesoreria\Tipo_egreso::create([
+                'tipo_egreso'=>  strtoupper($request->tipo),
+                'descripcion'=>strtoupper($request->descripcion)
+            ]);
+            if($tipoegreso) return response ()->json (['success'=>true,'message'=>'Se registro correctamente']);
+            else return response ()->json (['success'=>false,'message'=>'no se registro ningun dato']);
         }
     }
 
@@ -85,16 +90,16 @@ class tipo_egresoscontroller extends Controller
         if($request->ajax())
         {
             $tipoegreso = Tipo_egreso::FindOrFail($id);
-            $tipoegreso->tipo_egreso=$request->tipo_egreso;
-            $tipoegreso->descripcion = $request->descripcion;
+            $tipoegreso->tipo_egreso=  strtoupper($request->tipo);
+            $tipoegreso->descripcion =strtoupper( $request->descripcion);
             $tipoegreso->save();
             if($tipoegreso)
             {
-                return response()->json(['success'=>'true']);
+                return response()->json(['success'=>true,'message'=>'Se actualizaron correctamente']);
             }
             else
             {
-                return response()->json(['success'=>'false']);
+                return response()->json(['success'=>false,'message'=>'no se actualizaron datos']);
             }
         }
     }
@@ -106,7 +111,9 @@ class tipo_egresoscontroller extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
-    {
-        //
+    {        
+        $egreso = Tipo_egreso::FindOrFail($id)->delete();
+        if($egreso) return response ()->json (['success'=>true]);
+        else return response ()->json (['success'=>false]);        
     }
 }

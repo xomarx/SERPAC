@@ -64,72 +64,6 @@ var cargardistrito = function (iddist,idsele) {
     }); 
  };
 
-// CRUD TIPO EGRESO  *************
-
-
-var EdiTipoEgreso = function(id){
-    
-        $("#RegtipoEgreso").text("Actualizar");
-        var route = "/Tesoreria/Tipos-egresos/"+id+"/edit";
-        
-        $("#id").val(id);
-        $.get(route, function(data){
-            $("#tipo").val(data.tipo_egreso);
-            $("#descripcion").val(data.descripcion);
-        });
-};
-
-var ElitipoEgreso = function(id,name)
-{
-    $.alertable.confirm("<span style='color:#000'>¿Está seguro de eliminar el registro?</span>"+"<br><strong><span style='color:#ff0000'>"+name+"</span></strong></br>").then(function() {  
-      var route = "/Tesoreria/Tipos-egresos/"+id+"";
-      var token = $("#token").val();
-      $.ajax({
-        url: route,
-        headers: {'X-CSRF-TOKEN': token},
-        type: 'DELETE',
-        dataType: 'json',
-        success: function(data){
-        if (data.success = 'true')
-        {           
-            document.location.reload();
-        }
-      }
-      });          
-    });
-}
-
-$("#RegtipoEgreso").click(function(){
-    var tipo = $("#tipo").val();
-    var descripcion = $("#descripcion").val();
-    var route = "/Tesoreria/Tipos-egresos";
-    var id = $("#id").val();
-    var token = $("#token").val();
-    var type = 'post';
-    if($("#RegtipoEgreso").text() == 'Actualizar')
-    {
-        
-        route = '/Tesoreria/Tipos-egresos/'+id;
-        type='put';        
-    }    
-    
-       $.ajax({
-           url:route,
-           headers:{'X-CSRF-TOKEN':token},
-           type: type,
-           data:{
-           tipo_egreso:tipo,
-           descripcion:descripcion
-           },
-           success:function(data){
-               if (data.success = 'true')
-                    {
-                        $("#modaltipoegreso").fadeOut(800);
-                        document.location.reload();
-                    }
-           }
-       });
-});
 
 
 
@@ -1904,11 +1838,9 @@ var EliSucursal = function(id,name){
         
 
 // ****************     DISTRIBUCION FONDOS DE ACOPIO ***************************************************************************************************
-var AnulDistribucion = function(id,name)
-{             
+var AnulDistribucion = function(id,name){             
     // ALERT JQUERY     
-   $.alertable.prompt('<h3>Motivo de la Anulacion ? </h3>'+"<span style='color:#ff0000'>"+name+"</span>").then(function(data){
-       console.log('Prompt submitted', data.value);
+   $.alertable.prompt('<h3>Motivo de la Anulacion ? </h3>'+"<span style='color:#ff0000'>"+name+"</span>").then(function(data){       
             var motivo = data.value;
             var route = "/Tesoreria/Distribucion-Fondos/"+id+"";            
             var token = $("#token").val();            
@@ -1922,16 +1854,14 @@ var AnulDistribucion = function(id,name)
             },
             success: function (data) {
 
-                if (data.success = 'true')
+                if (data.success == 'true')
                 {
-                   document.location.href = '/Tesoreria/Distribucion-Fondos';
+                   document.location.reload();
                 }
             },
             
         });
-   },function(){
-       console.log('Prompt canceled'); 
-   });    
+   },function(){});    
 };
     
 $("#RegDistribucion").click(function(){
@@ -2168,8 +2098,7 @@ $("#RegPersonaJuridica").click(function(){
             error: function(data){
                 var errors = $.parseJSON(data.responseText);
                 $("#error_ruc").html('');$("#error_telefono").html('');$("#error_razon").html('');$("#error_direccion").html('');
-                    $.each(errors, function (index, value) {
-                        console.log(value);
+                    $.each(errors, function (index, value) {                        
                         if(index == 'ruc') $("#error_ruc").html(value);
                         else if(index == 'telefono') $("#error_telefono").html(value);
                         else if(index == 'razon') $("#error_razon").html(value);
@@ -2210,6 +2139,132 @@ var AnulJuridico = function(id,name){
       });          
     });
    };
+   
+// *******************************  CRUD TIPO EGRESO  ***************************************************************************************************
+$("#nuevaegreso").click(function(){
+    $("#formegresos")[0].reset();$("#RegtipoEgreso").text("Registrar");
+    $("#error_tipo").html('');$("#error_descripcion").html('');
+});
+
+var EdiTipoEgreso = function(id){
+    
+        $("#RegtipoEgreso").text("Actualizar");
+        var route = "/Tesoreria/Tipos-egresos/"+id+"/edit";
+        
+        $("#idegreso").val(id);
+        $.get(route, function(data){
+            $("#tipo").val(data.tipo_egreso);
+            $("#descripcion").val(data.descripcion);
+        });
+};
+
+var ElitipoEgreso = function(id,name){
+    $.alertable.confirm("<span style='color:#000'>¿Está seguro de eliminar el registro?</span>"+"<br><strong><span style='color:#ff0000'>"+name+"</span></strong></br>").then(function() {  
+      var route = "/Tesoreria/Tipos-egresos/"+id+"";
+      var token = $("#token").val();
+      $.ajax({
+        url: route,
+        headers: {'X-CSRF-TOKEN': token},
+        type: 'DELETE',
+        dataType: 'json',
+        success: function(data){
+        if (data.success)
+        {           
+            document.location.reload();
+        }
+      }
+      });          
+    });
+}
+
+$("#RegtipoEgreso").click(function(){
+    var fields = $("#formegresos").serialize();
+    var route = "/Tesoreria/Tipos-egresos";    
+    var token = $("#token").val();
+    var type = 'post';
+    if($("#RegtipoEgreso").text() == 'Actualizar')
+    {        
+        route = '/Tesoreria/Tipos-egresos/'+$("#idegreso").val();
+        type='put';        
+    }        
+    $.ajax({
+           url:route,
+           headers:{'X-CSRF-TOKEN':token},
+           type: type,
+           data:fields,
+           success:function(data){
+               if (data.success) {
+                   console.log(data.message);
+                   var msj = "<h4>" + data.message + "</h4>";
+                   $("#msj-egresos").html(msj);
+                   $("#alert-egreso").fadeIn(1000);                   
+                   document.location.reload();
+                   $("#alert-egreso").hide();
+                }
+           },
+           error: function(data){
+               var errors = $.parseJSON(data.responseText);
+                $("#error_tipo").html('');$("#error_descripcion").html('');
+                    $.each(errors, function (index, value) {                        
+                        if(index == 'tipo') $("#error_tipo").html(value);
+                        else if(index == 'descripcion') $("#error_descripcion").html(value);                        
+                    });
+           }
+       });
+});
+
+// ********************************  PAGOS **************************************************************************************************************
+
+$("#RegEgresos").click(function(){        
+        var route = "/Acopio/Gastos";
+        var type = "POST";
+        var token=$("#token").val();
+        var fields=$("#formegresos").serialize();        
+        $.ajax({
+            url:route,
+            headers:{'X-CSRF-TOKEN':token},
+            type:type,
+            datatype: 'json',
+            data: fields,            
+            success:function(data){    
+                if(data.success == true){
+                    $("#modalegresos").fadeOut(1000);                    
+                    document.location.reload();                    
+                }
+            },
+            error: function(data){
+                $("#error-fecha").html('');$("#error-monto").html('');$("#error-egresos").html('');$("#error-almacen").html('');
+                var errors =  $.parseJSON(data.responseText);      
+                $.each(errors,function(index, value) {                      
+                            if(index == 'fecha')$("#error-fecha").html(value);
+                            else if(index == 'monto')$("#error-monto").html(value);
+                            else if(index == 'egresos')$("#error-egresos").html(value);
+                            else if(index == 'almacen')$("#error-almacen").html(value);
+                      });
+            }
+        });
+    });
+    
+var EliGasto = function(id,nombre){        
+        $.alertable.prompt('<h3>Motivo de la Anulacion ? </h3>'+"<span style='color:#ff0000'>"+nombre+"</span>").then(function(data){                        
+            var motivo = data.value;
+            var route = "/Acopio/Gastos/"+id+"";            
+            var token = $("#token").val();            
+        $.ajax({
+            url: route,
+            headers: {'X-CSRF-TOKEN': token},
+            type: 'PUT',
+            dataType: 'json',
+            data: { motivo:motivo },
+            success: function (data) {
+                if (data.success == true) document.location.reload();                
+            },
+            
+        });
+    });
+   };
+   
+
 
 //var cargarForm = function(idform)
 //{

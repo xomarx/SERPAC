@@ -16,7 +16,10 @@ class egresoscontroller extends Controller
      */
     public function index()
     {
-        //
+        $egresos = \App\Models\Tesoreria\Egreso::listaEgresos();
+        $tipo_egresos = \App\Models\Tesoreria\Tipo_egreso::pluck('tipo_egreso','id');
+        $almacenes = \App\Models\RRHH\Sucursal::pluck('sucursal','sucursalId');
+        return view('Tesoreria.gastos',['egresos'=>$egresos,'tipo_egresos'=>$tipo_egresos,'almacenes'=>$almacenes]);
     }
 
     /**
@@ -35,9 +38,21 @@ class egresoscontroller extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Requests\Tesoreria\GastosAcopioCreateRequest $request)
     {
-        //
+        if($request->ajax()){
+            $gastos = \App\Models\Tesoreria\Egreso::create([
+                'fecha'=>  \Carbon\Carbon::parse($request->fecha),
+                'monto'=>$request->monto,
+                'motivo'=>  strtoupper($request->motivo),
+                'estado'=>'CANCELADO',
+                'sucursales_sucursalId'=>$request->almacen,
+                'tipo_egresos_id'=>$request->egresos,
+                'users_id'=>  \Illuminate\Support\Facades\Auth::user()->id
+            ]);
+            if($gastos) return response ()->json (['success'=>true,'message'=>'Se registro correctamente']);
+            else return response ()->json (['success'=>false,'message'=>'No se registro ningun dato']);
+        }
     }
 
     /**
@@ -72,6 +87,13 @@ class egresoscontroller extends Controller
     public function update(Request $request, $id)
     {
         //
+        $gastos = \App\Models\Tesoreria\Egreso::FindOrFail($id);
+        $gastos->estado = 'ANULADO';
+        $gastos->motivo = strtoupper($request->motivo);
+        $gastos->users_id= \Illuminate\Support\Facades\Auth::user()->id;
+        $gastos->save();
+        if($request) return response ()->json (['success'=>true]);
+        else return response ()->json (['success'=>false]);
     }
 
     /**
@@ -82,6 +104,6 @@ class egresoscontroller extends Controller
      */
     public function destroy($id)
     {
-        //
+        //        
     }
 }

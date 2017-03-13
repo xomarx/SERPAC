@@ -87,20 +87,16 @@ Route::group(['middleware' => ['web']], function () {
     route::resource('RRHH/Tecnicos','RRHH\tecnicoscontroller');
     
     
-    route::resource('Acopio/Fondos-Acopio','Acopio\recepcion_fondoscontroller');
-    
-    
+    route::resource('Acopio/Fondos-Acopio','Acopio\recepcion_fondoscontroller');        
     route::get('Acopio/planillasemanal/{idsu?}/{fecha?}/{condicion?}','Acopio\comprascontroller@ListaplanillaSemanal');
     route::resource('Acopio/Planilla-Semanal','Acopio\comprascontroller@planillasemanal');
     route::resource('nosocios','Acopio\comprascontroller@autoCompleteNosocios');
-    route::resource('Acopio/Compra-Grano','Acopio\comprascontroller');
-    
-    
+    route::resource('Acopio/Compra-Grano','Acopio\comprascontroller');        
     route::resource('Acopio/Tara','Acopio\tarascontroller');
     route::resource('Acopio/Transporte','Acopio\transportecontroller');
     route::resource('Acopio/Excel','Acopio\planillacontroller@excel');
     route::resource('Acopio/Pdf','Acopio\planillacontroller@pdf');
-    route::resource('Acopio/Gastos','Acopio\planillacontroller@pdf');
+    route::resource('Acopio/Gastos','Tesoreria\egresoscontroller');
     route::resource('Acopio/Persona-Juridica','Tesoreria\persona_juridicacontroller');
      
     route::get('Tesoreria/Distribucion/ReciboAcopio/{id}','Tesoreria\tesoreriacontroller@recibofondoAcopiador');//recibofondoAcopiador

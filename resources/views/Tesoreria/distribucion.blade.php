@@ -6,7 +6,7 @@
 
 <div class="box box-solid box-primary">
     <div class="box-header" style="text-align: center;">        
-        <a id="nuevadistribucion" style="float: left;" data-toggle='modal' data-target='#modaldistribucion' class="btn btn-dropbox btn-sm m-t-10" >NUEVO  <span class="glyphicon glyphicon-plus"data-toggle="tooltip" data-placement="top" title="Nueva Distribucion"></span></a>
+        <a id="nuevadistribucion" style="float: left;" data-toggle='modal' data-target='#modaldistribucion' class="btn btn-dropbox btn-sm m-t-10" >NUEVO  <span class="glyphicon glyphicon-plus" data-toggle="tooltip" data-placement="top" title="Nueva Distribucion"></span></a>
         <h3 class="box-title" >LISTA DE DISTRIBUCION DE FONDOS</h3>
     </div>
     <div class="box-body">
@@ -80,7 +80,7 @@
                         {!! Form::label('sucursal','Centro de Acopio:',['class' => 'control-label'])!!}                    
                     </div>
                     <div class="col-md-3">
-                        {!! Form::label('monto','Monto:',['class' => 'control-label'])!!}                    
+                        {!! Form::label('monto','Monto:',['class' => 'control-label'])!!}                  
                     </div>
                 </div>
                 <div class="col-md-12">
@@ -113,9 +113,11 @@ $("#fecha").datepicker({
         autoclose: true,
         language: "es"
     });   
+    
 $("#sucursal").select2({
     alloClear:true
 });
+
 $("#tecnico").select2({
     alloClear:true,    
 });
