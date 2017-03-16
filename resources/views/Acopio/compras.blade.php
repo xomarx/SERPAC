@@ -193,14 +193,14 @@
     $("#comite").select2({
     alloClear:true
 });
-   var habilita = function()
-   {
+
+   var habilita = function(){
        $("#sisocio").show();
        $("#nosocio").hide();
        $("#paterno").val('');$("#materno").val('');$("#nombres").val('');$("#dni").val('');
    };
-   var desabilita = function()
-   {
+   
+   var desabilita = function(){
        $("#nosocio").show();
        $("#sisocio").hide();
        
@@ -221,7 +221,7 @@
          }
     });
    
-      $("#acopio").autocomplete({
+    $("#acopio").autocomplete({
          minLength:1,
          autoFocus:true,
          delay:1,
@@ -232,7 +232,7 @@
          }
       });
       
-      $("#codrecibo").autocomplete({
+    $("#codrecibo").autocomplete({
        minLength:1,           
            autoFocus:true,
            delay:1,
@@ -260,9 +260,7 @@
                $("#codigo").val(ui.item.value);
                $("#local").val(ui.item.local);
            }
-   });
-   
-   
+   });      
 //   
    $(function(){              
         $("#socio").autocomplete({     
@@ -287,6 +285,7 @@
            $("#total").val('S/. '+  monto );
        }       
    });
+   
    $("#kilos").keyup(function(){       
        if($("#precio").val() != '')
        {                                
@@ -300,9 +299,7 @@ $("#fecha").datepicker({
        autoclose: true,
         language: "es",        
    })
-  
-  
-   
+     
 </script>
 
 @stop

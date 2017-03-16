@@ -14,7 +14,7 @@ use Dompdf\Adapter\PDFLib;
 
 class planillacontroller extends Controller
 {
-//    $planilla = \App\Models\Acopio\Compra::planillasemanal('ABC-05', \Carbon\Carbon::now(), 2);   
+ 
     public function excel() {
         $date = Carbon::now()->format('m-d-Y');
         Excel::create('Planilla-Semanal-' . $date, function($excel) {
@@ -59,15 +59,22 @@ class planillacontroller extends Controller
         $pdf->loadview('Acopio.formExcel');
         return $pdf->stream();
     }
-
+        
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
-        //
+    {        
+        $planillas = \App\Models\Acopio\Planilla::listaPlanilla();
+        $condiciones = \App\Models\Certificacion\Condicion::all();
+        return view('Acopio.planillasemanal',['condiciones'=>$condiciones,'planillas'=>$planillas]);
+    }
+    
+    public function cierremensual(){
+        $condiciones = \App\Models\Certificacion\Condicion::all();
+        return view('Acopio.cierremensual',['condiciones'=>$condiciones]);
     }
 
     /**
@@ -86,9 +93,22 @@ class planillacontroller extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-        //
+    public function store(Requests\Acopio\PlanillaSemanalCreateRequest $request)
+    {        
+        if($request->ajax()){
+            $planilla = \App\Models\Acopio\Planilla::create([
+                'numero'=>$request->planilla,
+                'fecha'=>  Carbon::parse($request->fecha),
+                'users_id'=>  \Illuminate\Support\Facades\Auth::user()->id]);
+            $compras = Compra::listaPlanillaSemanal($request->almacen,$request->fecha,$request->condicion);
+            foreach ($compras as $compra) {
+                $comprasplanilla = \App\Models\Acopio\Compras_has_planilla::create([
+                            'compras_id' => $compra->id,
+                            'planillas_id' => $planilla->id
+                ]);
+            }
+            if($planilla) return response()->json(['success'=>true,]);
+        }
     }
 
     /**
@@ -98,8 +118,7 @@ class planillacontroller extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show($id)
-    {
-        //
+    {                
     }
 
     /**
@@ -122,7 +141,10 @@ class planillacontroller extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        if($request->ajax()){
+            $planillas = Compra::listaPlanillaSemanal($id,$request->fecha,$request->condicion);
+            return response()->json($planillas);
+        }
     }
 
     /**
@@ -133,6 +155,8 @@ class planillacontroller extends Controller
      */
     public function destroy($id)
     {
-        //
+        $result = \App\Models\Acopio\Planilla::FindOrFail($id)->delete();
+        $planilla = \App\Models\Acopio\Compras_has_planilla::where('planillas_id','=',$id)->delete();
+        if($planilla) return response ()->json (['success'=>true]);
     }
 }

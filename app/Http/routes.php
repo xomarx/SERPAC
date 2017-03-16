@@ -71,6 +71,7 @@ Route::group(['middleware' => ['web']], function () {
     route::resource('socios/dnipersona','socios\personacontroller@autoCompleteDniPersona');//autoCompleteDniPersona
     route::resource('socios/dnibeneficiario','socios\parientescontroller@autocompleteDNIpariente');//autocompleteDNIpariente
     route::resource('RRHH/Sucursalsearch','RRHH\sucursalescontroller@autocomplete');//autocomplete
+    route::resource('RRHH/Sucursales','RRHH\sucursalescontroller@autocompletesucursal');//autocompletesucursal
     
     route::resource('socios','socios\sociocontroller');
     route::get('PadronSocio/{idsocio}','socios\sociocontroller@verPadronsocio');
@@ -87,9 +88,11 @@ Route::group(['middleware' => ['web']], function () {
     route::resource('RRHH/Tecnicos','RRHH\tecnicoscontroller');
     
     
-    route::resource('Acopio/Fondos-Acopio','Acopio\recepcion_fondoscontroller');        
-    route::get('Acopio/planillasemanal/{idsu?}/{fecha?}/{condicion?}','Acopio\comprascontroller@ListaplanillaSemanal');
-    route::resource('Acopio/Planilla-Semanal','Acopio\comprascontroller@planillasemanal');
+    route::resource('Acopio/Fondos-Acopio','Acopio\recepcion_fondoscontroller');
+//    route::resource('Acopio/PlanillaSemanal/{id}','Acopio\planillacontroller@planillasemanal');
+    route::resource('Acopio/Planilla-Semanal','Acopio\planillacontroller');
+    route::resource('Acopio/Planilla-Mensual','Acopio\planillacontroller@cierremensual');//cierremensual
+    
     route::resource('nosocios','Acopio\comprascontroller@autoCompleteNosocios');
     route::resource('Acopio/Compra-Grano','Acopio\comprascontroller');        
     route::resource('Acopio/Tara','Acopio\tarascontroller');

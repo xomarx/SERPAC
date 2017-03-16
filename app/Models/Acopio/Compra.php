@@ -27,7 +27,11 @@ class Compra extends Model
         return $this->belongsTo(\App\Models\Socios\Socio::class);
     }
     
-    
+    public function plantillas(){
+        return $this->belongsToMany(Planilla::class, 'planillas_id');
+    }
+
+
     public static function listaCompras()
     {
         return DB::table('compras')                
@@ -44,18 +48,21 @@ class Compra extends Model
                 ->get();
     }
     
-    public static function planillasemanal($sucursal,$fecha,$condicion)
+    public static function listaPlanillaSemanal($sucursal,$fecha,$condicion)
     {
         return DB::table('compras')
-                ->join('socios','compras.socios_codigo','=','socios.codigo')
-                ->join('condicions','compras.condicions_id','=','condicions.id')
-                ->join('personas','socios.dni','=','personas.dni')                
+                ->leftJoin('compras_has_planillas','compras.id','=','compras_has_planillas.compras_id')                
+                ->leftJoin('socios','compras.socios_codigo','=','socios.codigo')
+                ->leftJoin('nosocios','compras.nosocios_dni','=','nosocios.dni')
+                ->leftJoin('personas','socios.dni','=','personas.dni')
+                ->where('compras_has_planillas.compras_id')
                 ->where('compras.estado','=','CANCELADO')
-                ->where('compras.fecha','<=',$fecha)
+                ->where('compras.fecha','<=',  \Carbon\Carbon::parse($fecha))
                 ->where('compras.condicions_id','=',$condicion)
-                ->where('compras.sucursales_sucursalId','=',$sucursal)
-                ->select('compras.fecha','compras.socios_codigo','compras.tipocacao','compras.kilos','compras.precio'
-                        ,'personas.paterno','personas.materno','personas.nombre')
+                ->where('compras.sucursales_sucursalId','=',$sucursal)                
+                ->select('compras.fecha','compras.socios_codigo','compras.tipocacao','compras.kilos','compras.precio','compras.id'
+                        ,'personas.paterno','personas.materno','personas.nombre','nosocios.paterno as npaterno','nosocios.materno as nmaterno','nosocios.nombres as nnombres'
+                        )
                 ->get();
     }
 }

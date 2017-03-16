@@ -47,6 +47,22 @@ class Sucursal extends Model
                 ->get();
     }
     
+    public static function listaSucursalComplete(){
+        return DB::table('sucursales')
+                ->join('comites_locales','sucursales.comites_locales_id','=','comites_locales.id')
+                ->join('empleados','sucursales.empleados_empleadoId','=','empleados.empleadoId')
+                ->join('personas','empleados.personas_dni','=','personas.dni')                
+                ->join('tecnicos','comites_locales.id','=','tecnicos.comites_locales_id')
+                ->join('empleados as emp','tecnicos.empleados_empleadoId','=','emp.empleadoId')
+                ->join('personas as per','emp.personas_dni','=','per.dni')
+                ->select('sucursales.sucursalId','sucursales.sucursal','comites_locales.comite_local' 
+                        ,DB::raw("concat(personas.nombre,' ', personas.paterno,' ',personas.materno) as acopiador"),
+                DB::raw("concat(per.nombre,' ',per.paterno,' ',per.materno) as tecnico")
+                        )
+                ->take(5)->get();        
+    }
+
+
     public static function sucursal($sucursalId)
     {
         return DB::table('sucursales')

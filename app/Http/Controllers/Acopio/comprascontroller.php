@@ -23,21 +23,7 @@ class comprascontroller extends Controller
             return response()->json($result);
         }
     }
-
-
-    public function  planillasemanal()
-    {                
-        return view('Acopio.planillasemanal');        
-    }
-    
-    public function ListaplanillaSemanal($sucursal,$fecha,$condicion)
-    {                        
-        $fecha = str_replace('-','/', $fecha);
-        $fecha = \Carbon\Carbon::parse($fecha);
-        $planillas = Compra::planillasemanal($sucursal, $fecha, $condicion);
-        return response()->json($planillas);
         
-    }
 
     /**
      * Display a listing of the resource.

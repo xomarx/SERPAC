@@ -13,7 +13,7 @@
                 <a href="#"><i class='fa fa-link'></i> <span>Planillas</span> <i class="fa fa-angle-left pull-right"></i></a>
                 <ul class="treeview-menu">
                     <li class="active"><a href="{{ url('/Acopio/Planilla-Semanal') }}">Planilla Semanal</a></li>
-                    <li><a href="{{ url('/socios/basicos/directivos') }}">Planilla Mensual</a></li>                                     
+                    <li><a href="{{ url('/Acopio/Planilla-Mensual') }}">Planilla Mensual</a></li>                                     
                 </ul>
             </li>
             <li class="treeview">
