@@ -30,11 +30,11 @@
                     <li ><a href="{{ url('/socios') }}">Socios</a></li>
                     <li ><a href="{{ url('/RRHH/empleados') }}">RRHH</a></li>
                     <li class="active"><a href="{{ url('/Acopio/Fondos-Acopio') }}">Acopio</a></li>
-                    <li><a href="{{ url('/Creditos/Creditos-Financieros') }}">Creditos</a></li>
-                    <li><a href="#">Certificacion</a></li>
+                    <li ><a href="{{ url('/Creditos/Creditos-Financieros') }}">Creditos</a></li>
+                    <li ><a href="{{ url('/Creditos/Certificacion') }}">Certificacion</a></li>
                     <li ><a href="{{ url('/Tesoreria/Distribucion-Fondos') }}">Tesoreria</a></li>
-                    <li><a href="#">Contabilidad</a></li>
-                    <li><a href="#">Informes</a></li>
+                    <li><a href="{{ url('/Creditos/Contabilidad') }}">Contabilidad</a></li>
+                    <li><a href="{{ url('/Creditos/Informes') }}">Informes</a></li>
                     <li><a href="{{url('Configuracion') }}">Configuracion</a></li>
                 </ul> 
                 @if(Auth::guest())

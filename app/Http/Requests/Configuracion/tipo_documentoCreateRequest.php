@@ -37,4 +37,5 @@ class tipo_documentoCreateRequest extends Request
             'codigo.unique'=>'El Codigo del Recibo ya Existe'
         ];
     }
+        
 }

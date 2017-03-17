@@ -21,12 +21,14 @@ Route::get('/', function () {
 Route::group(['middleware' => ['web']], function () {    
     // Authentication routes...
     //Route::get('auth/login', 'Auth\AuthController@getLogin');
-    Route::post('auth/login', ['as'=> 'login','uses'=>'Auth\AuthController@postLogin']);
-    Route::get('auth/logout', ['as'=>'logout','uses'=>'Auth\AuthController@getLogout']);
+//    Route::post('auth/login', ['as'=> 'login','uses'=>'Auth\AuthController@postLogin']);
+//    Route::get('auth/logout', ['as'=>'logout','uses'=>'Auth\AuthController@getLogout']);
     // Registration routes...
-    Route::get('register', 'Auth\AuthController@getRegister');
-    Route::post('register',['as'=>'auth/register','uses'=>'Auth\AuthController@postRegister']);
+//    Route::get('register', 'Auth\AuthController@getRegister');
+//    Route::post('register',['as'=>'auth/register','uses'=>'Auth\AuthController@postRegister']);
 
+    
+    
     Route::get('comite_locales/{id}','socios\comite_localcontroller@getcomites_locales');
     Route::get('comites_centrales/{id}','socios\comite_centralcontroller@getcomites_centrales');
     Route::get('provincias/{id}','socios\provinciacontroller@getprovincias');
@@ -111,8 +113,9 @@ Route::group(['middleware' => ['web']], function () {
             
     route::resource('Creditos/Creditos-Financieros','Creditos\prestamoscontroller');
     
+    route::resource('Configuracion/Usuarios','Configuracion\usuarioController');
     route::resource('Configuracion','Configuracion\documentoController');
-    
+        
     route::get('codrecibos/{id}','Configuracion\tipo_documentoController@getnumerodocumento');
     route::resource('codrecibos','Configuracion\tipo_documentoController@autoCompleteCodRecibo');//
     

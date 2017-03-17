@@ -5,9 +5,8 @@
 @section('main-content')
 <div class="box-body">
     <div class="box box-solid box-primary">
-        <div class="box-header" style="text-align:  center;">
-            <a id="nuevoempleado" style="float: left;" data-toggle='modal' data-target='#EmpleadoModal' class="btn btn-dropbox">NUEVO &nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-plus"data-toggle="tooltip" data-placement="top" title="Nueva Sucursal">  </span></a>
-            <h3 class="box-title">LISTA DE EMPLEADOS</h3>
+        <div class="box-header">
+            <a id="nuevoempleado" data-toggle='modal' data-target='#EmpleadoModal' class="btn btn-dropbox">NUEVO &nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-plus"data-toggle="tooltip" data-placement="top" title="Nueva Sucursal">  </span></a>            
         </div>
         <div class="box-body">
             <table class="table table-responsive" id="myTable" >

@@ -10,6 +10,7 @@ use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
 
 class AuthController extends Controller
 {
+    
     /*
     |--------------------------------------------------------------------------
     | Registration & Login Controller
@@ -22,13 +23,14 @@ class AuthController extends Controller
     */
 
     use AuthenticatesAndRegistersUsers, ThrottlesLogins;
+//
 
-    /**
+ /**
      * Where to redirect users after login / registration.
      *
      * @var string
      */
-    protected $redirectTo = '/';
+    protected $redirectTo = '/socios';
 
     /**
      * Create a new authentication controller instance.

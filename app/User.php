@@ -33,4 +33,12 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+    
+    public static function usuarios(){
+        return \Illuminate\Support\Facades\DB::table('users')
+                ->join('empleados','users.empleados_empleadoId','=','empleados.empleadoId')
+                ->join('personas','empleados.personas_dni','=','personas.dni')
+                ->select('users.name','users.email','personas.paterno','personas.materno','personas.nombre','users.created_at')
+                ->get();
+    }
 }
