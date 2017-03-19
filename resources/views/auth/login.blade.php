@@ -39,10 +39,7 @@
                 <button type="submit" class="btn btn-primary btn-block btn-flat">Iniciar Session</button>
             </div><!-- /.col -->
         </div>
-    </form>
-
-    <a href="{{ url('/password/reset') }}">-> Olvide Contraseña</a><br>
-    <a href="{{ url('/register') }}" class="text-center">Registrar un Nuevo Usuario</a>
+    </form>   
 
 </div><!-- /.login-box-body -->
 

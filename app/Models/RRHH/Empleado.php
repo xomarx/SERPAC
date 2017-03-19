@@ -19,8 +19,7 @@ class Empleado extends Model
         return $this ->hasOne(\App\Models\Persona::class);
     }
     
-    public static  function listaEmpleado()
-    {
+    public static  function listaEmpleado() {
         return DB::table('empleados')
                 ->join('personas','empleados.personas_dni','=','personas.dni')
                 ->join('cargos','empleados.cargos_id','=','cargos.id')
@@ -30,8 +29,7 @@ class Empleado extends Model
                 ->get();
     }
     
-    public static function empleado($id)
-    {
+    public static function empleado($id) {
         return DB::table('empleados')
                 ->join('personas','empleados.personas_dni','=','personas.dni')
                 ->join('cargos','empleados.cargos_id','=','cargos.id')
@@ -51,5 +49,15 @@ class Empleado extends Model
                         'comites_locales.comites_centrales_id','comites_centrales.distritos_id','distritos.provincias_id','provincias.departamentos_id',
                         'cargos.cargo','areas.area','departamentos.departamento')
                 ->first();
+    }
+    
+    public static function listaEmplUser(){
+        return DB::table('empleados')
+                ->leftJoin('users','empleados.empleadoId','=','users.empleados_empleadoId')
+                ->join('personas','empleados.personas_dni','=','personas.dni')
+                ->where('users.id')
+//                ->where(DB::raw("concat(personas.paterno,' ',personas.materno,' ',personas.nombre)"),'like','%'.$nombre.'%')
+                ->select(DB::raw("concat(personas.paterno,' ',personas.materno,' ',personas.nombre) as empleados"),'empleados.empleadoId')
+                ->get();
     }
 }

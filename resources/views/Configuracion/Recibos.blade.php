@@ -48,7 +48,7 @@
                             <td>{{$recibo->tipo_documento}}</td>                                                        
                             <td>                                                                    
                                 <a href="javascript:void(0);" onclick="EditRecibo('{{$recibo->codigo}}')" class="btn-sm btn-primary"><span data-toggle="tooltip" data-placement="top" title="Editar" class="glyphicon glyphicon-pencil"></span></a>
-                                <a href="#" onclick="EliRecibo('{{$recibo->codigo}}','{{$recibo->tipo_documento}}')" class="btn-sm btn-danger"><span data-toggle="tooltip" data-placement="top" title="Eliminar" class="glyphicon glyphicon-remove"></span></a>
+                                <a href="javascript:void(0);" onclick="EliRecibo('{{$recibo->codigo}}','{{$recibo->tipo_documento}}')" class="btn-sm btn-danger"><span data-toggle="tooltip" data-placement="top" title="Eliminar" class="glyphicon glyphicon-remove"></span></a>
                             </td>                   
                         </tr>
                         @endforeach

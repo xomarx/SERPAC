@@ -11,23 +11,24 @@
 |
 */
 
-Route::get('/', function () {
-    return view('home');
+Route::get('/', function () {    
+    return view('auth.login');
 });
 
     
     
 
-Route::group(['middleware' => ['web']], function () {    
+Route::group(['middleware' => ['auth']], function () {    
     // Authentication routes...
     //Route::get('auth/login', 'Auth\AuthController@getLogin');
 //    Route::post('auth/login', ['as'=> 'login','uses'=>'Auth\AuthController@postLogin']);
-//    Route::get('auth/logout', ['as'=>'logout','uses'=>'Auth\AuthController@getLogout']);
+    Route::post('logout', ['as'=>'logout','uses'=>'Auth\AuthController@getLogout']);
     // Registration routes...
 //    Route::get('register', 'Auth\AuthController@getRegister');
 //    Route::post('register',['as'=>'auth/register','uses'=>'Auth\AuthController@postRegister']);
 
     
+    Route::get('Usuarios', ['as'=> 'usuarios','uses'=>'Auth\AuthController@listUsers']);
     
     Route::get('comite_locales/{id}','socios\comite_localcontroller@getcomites_locales');
     Route::get('comites_centrales/{id}','socios\comite_centralcontroller@getcomites_centrales');
@@ -73,8 +74,8 @@ Route::group(['middleware' => ['web']], function () {
     route::resource('socios/dnipersona','socios\personacontroller@autoCompleteDniPersona');//autoCompleteDniPersona
     route::resource('socios/dnibeneficiario','socios\parientescontroller@autocompleteDNIpariente');//autocompleteDNIpariente
     route::resource('RRHH/Sucursalsearch','RRHH\sucursalescontroller@autocomplete');//autocomplete
-    route::resource('RRHH/Sucursales','RRHH\sucursalescontroller@autocompletesucursal');//autocompletesucursal
-    
+    route::resource('RRHH/Sucursales','RRHH\sucursalescontroller@autocompletesucursal');//autocompletesucursal        
+        
     route::resource('socios','socios\sociocontroller');
     route::get('PadronSocio/{idsocio}','socios\sociocontroller@verPadronsocio');
                     
@@ -95,6 +96,7 @@ Route::group(['middleware' => ['web']], function () {
     route::resource('Acopio/Planilla-Semanal','Acopio\planillacontroller');
     route::resource('Acopio/Planilla-Mensual','Acopio\planillacontroller@cierremensual');//cierremensual
     
+    
     route::resource('nosocios','Acopio\comprascontroller@autoCompleteNosocios');
     route::resource('Acopio/Compra-Grano','Acopio\comprascontroller');        
     route::resource('Acopio/Tara','Acopio\tarascontroller');
@@ -112,7 +114,7 @@ Route::group(['middleware' => ['web']], function () {
     route::resource('Tesoreria/Tipos-egresos','Tesoreria\tipo_egresoscontroller');
             
     route::resource('Creditos/Creditos-Financieros','Creditos\prestamoscontroller');
-    
+        
     route::resource('Configuracion/Usuarios','Configuracion\usuarioController');
     route::resource('Configuracion','Configuracion\documentoController');
         

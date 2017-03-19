@@ -18,9 +18,16 @@ class RedirectIfAuthenticated
     public function handle($request, Closure $next, $guard = null)
     {
         if (Auth::guard($guard)->check()) {
-            return redirect('/');
+//            return response()->json($request->url());
+//            
+            return $next($request);
         }
-
-        return $next($request);
+        else{
+            Auth::logout();
+//            return redirect('/login');
+            return $next($request);
+        }
+            
+            
     }
 }

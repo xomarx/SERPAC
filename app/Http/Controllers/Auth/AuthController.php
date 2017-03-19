@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
 
+
 class AuthController extends Controller
 {
     
@@ -25,7 +26,13 @@ class AuthController extends Controller
     use AuthenticatesAndRegistersUsers, ThrottlesLogins;
 //
 
- /**
+    public function getLogout() {
+        parent::getLogout();
+    }
+        
+    
+
+    /**
      * Where to redirect users after login / registration.
      *
      * @var string
@@ -51,12 +58,12 @@ class AuthController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'name' => 'required|max:255|min:6|unique:users',
-            'email' => 'required|email|max:255|unique:users',
-            'password' => 'required|confirmed|min:6',            
+            'name' => 'required|max:255|min:6|unique:users,name',
+            'email' => 'required|email|max:255|unique:users,email',
+            'password' => 'required|confirmed|min:6',
+            'empleado'=>'required'
         ]);
     }
-
     /**
      * Create a new user instance after a valid registration.
      *
@@ -69,7 +76,14 @@ class AuthController extends Controller
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
+            'remember_token'=>str_random(100),
+            'empleados_empleadoId'=>$data['empleado'],            
         ]);
-    }        
+    }  
+    
+    public function listUsers(){        
+        $usuarios = \App\User::usuarios();
+        return view('Configuracion.usuarios',['usuarios'=>$usuarios]);        
+    }
     
 }

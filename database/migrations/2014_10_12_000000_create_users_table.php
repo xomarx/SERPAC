@@ -19,6 +19,8 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
+            $table->string('empleados_empleadoId')->unique();
+            $table->boolean('estado')->default(0);
         });
     }
 
