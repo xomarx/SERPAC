@@ -31,8 +31,9 @@
                     <td>{{$transferencia->paterno}} {{$transferencia->materno}} {{$transferencia->nombre}}</td>
                     <td>{{$transferencia->fecha}}</td>
                     <td>{{$transferencia->name}}</td>
-                    <td>                                          
-                        <a href="{{url('socios/transferencias/ficha')}}/{{$transferencia->id}}" ><span class="glyphicon glyphicon-print"data-toggle="tooltip" data-placement="top" title="Imprimir"></span></a>                        
+                    <td>
+                        
+                        <a href="{{url('socios/transferencias/ficha')}}/{{$transferencia->id}}" class="btn-sm btn-success" ><span class="glyphicon glyphicon-print"data-toggle="tooltip" data-placement="top" title="Imprimir"></span></a>                        
                     </td>                    
                 </tr>
                 @endforeach

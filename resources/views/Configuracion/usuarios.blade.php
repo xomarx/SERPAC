@@ -7,11 +7,11 @@
     <div class="box-header">
         <a href="{{url('register')}}" class="btn btn-dropbox" data-toggle="tooltip" data-placement="top" title="Nuevo Usuario">Nuevo &nbsp;<span class="glyphicon glyphicon-user">  </span></a>
         <a href="{{url('Usuarios')}}" class="btn btn-dropbox" data-toggle="tooltip" data-placement="top" title="Lista de Usuarios">Listar &nbsp;<span class="glyphicon glyphicon-list">  </span></a>
-        <a href="{{url('register')}}" class="btn btn-dropbox" data-toggle="tooltip" data-placement="top" title="Roles de Usuarios">Roles &nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-road">  </span></a>
-        <a href="{{url('register')}}" class="btn btn-dropbox">Permisos &nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-plus"data-toggle="tooltip" data-placement="top" title="Nueva Sucursal">  </span></a>
+        <a onclick="activarForm(1)"  class="btn btn-dropbox" data-toggle="tooltip" data-placement="top" title="Rol de Usuarios">Roles &nbsp;<span class="glyphicon glyphicon-road">  </span></a>
+        <a onclick="activarForm(2)" class="btn btn-dropbox">Permisos &nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-log-in"data-toggle="tooltip" data-placement="top" title="Nueva Sucursal">  </span></a>
     </div>
-    <div class="box-body">        
-        <table class="table table-hover table-borderless" id="MyTable">
+    <div class="box-body" id="contenidos-box">  
+        <table class="table table-hover table-borderless" >
             <thead>
             <th>USUARIO</th>
             <th>CORREO</th>
@@ -37,14 +37,41 @@
         </table>
     </div>
 </div>
+<section id="conten-modal">
+    
+</section>
 
-
-@include('layouts.partials.scripts_auth')
 @stop
 @section('script')
 <script>
+    var activarForm = function(id){
+        if(id == 1) {var route = 'ListaRoles'}
+        else if(id == 2) {var route = 'headPermisos';}
+        $.get(route,function(data){
+            $("#contenidos-box").html(data);//                        
+        });
+    };
     
-    //{{ url('/register') }}     action('AuthController@logOut') 
+    var activarmodal = function(id){
+        
+        if(id==1){ var route = 'RolUsuario';}
+        else if(id==2){ var route = 'PermisoUser';}
+        $.get(route,function(data){            
+            $("#conten-modal").html(data);
+            $("#modalrol").modal({show:'false'});
+        });
+    };
+    
+    var cargarLista = function(){
+        
+        $.get('ListaPermisos/'+$("#rol").val(),function(data){
+            $("#SelecListPermiso").html(data);            
+        });
+        
+    };
+    
+    
+       
 </script>
 @stop
 

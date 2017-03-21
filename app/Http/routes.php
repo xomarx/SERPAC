@@ -22,13 +22,22 @@ Route::group(['middleware' => ['auth']], function () {
     // Authentication routes...
     //Route::get('auth/login', 'Auth\AuthController@getLogin');
 //    Route::post('auth/login', ['as'=> 'login','uses'=>'Auth\AuthController@postLogin']);
-    Route::post('logout', ['as'=>'logout','uses'=>'Auth\AuthController@getLogout']);
+//    Route::post('logout', ['as'=>'logout','uses'=>'Auth\AuthController@getLogout']);
     // Registration routes...
 //    Route::get('register', 'Auth\AuthController@getRegister');
 //    Route::post('register',['as'=>'auth/register','uses'=>'Auth\AuthController@postRegister']);
 
     
     Route::get('Usuarios', ['as'=> 'usuarios','uses'=>'Auth\AuthController@listUsers']);
+    
+    route::resource('NewRolUsuario','Configuracion\usuarioController@storerol');
+    route::resource('RolUsuario','Configuracion\usuarioController@roluser');
+    route::resource('ListaRoles','Configuracion\usuarioController@listaRoles');//listaRoles
+    route::resource('PermisoUser','Configuracion\usuarioController@PermisoUser');    
+    route::resource('headPermisos','Configuracion\usuarioController@HeadPermisoUser');//HeadPermisoUser
+    route::resource('NewPermisoUser','Configuracion\usuarioController@PermisoStore');//PermisoStore
+    route::resource('AsigPermisos','Configuracion\usuarioController@AsigPermisoStore');//AsigPermisoStore
+    route::resource('ListaPermisos','Configuracion\usuarioController');
     
     Route::get('comite_locales/{id}','socios\comite_localcontroller@getcomites_locales');
     Route::get('comites_centrales/{id}','socios\comite_centralcontroller@getcomites_centrales');
@@ -114,8 +123,7 @@ Route::group(['middleware' => ['auth']], function () {
     route::resource('Tesoreria/Tipos-egresos','Tesoreria\tipo_egresoscontroller');
             
     route::resource('Creditos/Creditos-Financieros','Creditos\prestamoscontroller');
-        
-    route::resource('Configuracion/Usuarios','Configuracion\usuarioController');
+            
     route::resource('Configuracion','Configuracion\documentoController');
         
     route::get('codrecibos/{id}','Configuracion\tipo_documentoController@getnumerodocumento');

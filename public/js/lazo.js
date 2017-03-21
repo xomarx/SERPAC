@@ -2264,7 +2264,65 @@ var EliGasto = function(id,nombre){
     });
    };
    
-
+   // ***************************   ROL *****************************************************************************************************************
+     
+   
+   var regrol = function (id){
+       var formu = $("#formrol").serialize(); 
+       var token = $("#token").val();
+       if(id==1) var route = "NewRolUsuario";
+       else if(id==2) var route = "NewPermisoUser";       
+       $.ajax({          
+          url:route,
+          headers:{'X-CSRF-TOKEN':token},
+          type:"POST",
+          datatype:'json',
+          data:formu,
+          success:function(data){              
+              if(data.success){
+                $("#txt_rol").html(data.message);
+                $("#msj_rol").fadeIn();
+                $("#msj_rol").fadeOut(1000);
+                $("#formrol")[0].reset();
+              }              
+          },
+          error:function(data){
+              $("#error_rol").html('');$("#error_tag").html('');$("#error_descripcion").html('');
+              var errors =  $.parseJSON(data.responseText);
+              $.each(errors,function(index, value) {                      
+                            if(index == 'rol')$("#error_rol").html(value);
+                            else if(index == 'permiso')$("#error_rol").html(value);
+                            else if(index == 'tag')$("#error_tag").html(value);
+                            else if(index == 'descripcion')$("#error_descripcion").html(value);                            
+                      });
+          }
+       });
+   };
+   
+   var asigpermiso = function(name){          
+       if($("#rol").val() == "") {alert('Seleccione un rol'); return;};
+       var rolid = $("#rol").val();
+       var permisoid = $("input[name="+name+"]").val();
+       var estado = $("input[name="+name+"]").is(':checked');
+       var token = $("input[name=_token]").val();         
+       $.ajax({
+           url:'AsigPermisos',
+          headers:{'X-CSRF-TOKEN':token},
+          type:"POST",
+          datatype:'json',
+          data:{rol:rolid,permiso:permisoid,estado:estado},
+          success:function(data){               
+          }
+       });
+   }
+   
+   
+//    $(document).on('submit','.form_rol',function(e){
+//       
+//       e.preventDefault();
+//       
+//   });
+   
 
 //var cargarForm = function(idform)
 //{

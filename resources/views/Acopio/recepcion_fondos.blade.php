@@ -70,7 +70,7 @@
               {!! Form::label('motivo','Motivo de No Conformidd:',['class' => 'control-label'])!!}                    
               {!! Form::textarea('motivo',null,['id'=>'motivo','class'=>'form-control','placeholder'=>'Descripcion','rows'=>'3'])!!}
           </div>                                                                                
-          {!! Form::close() !!}                     
+          {!! Form::close() !!}                   
       </div>
       <div class="modal-footer">          
           {!!link_to('#', $title='Registrar', $attributes = ['id'=>'RegRecepcion', 'class'=>'btn btn-primary btn-sm m-t-10'])!!}

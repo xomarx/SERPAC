@@ -1,4 +1,4 @@
-<?php
+<?php 
 
 namespace App;
 
@@ -17,5 +17,12 @@ class Permission extends EntrustPermission
    //lo pueden tener varios roles y un rol puede tener varios permisos
    public function roles(){
         return $this->belongsToMany(Role::class);
+    }
+    
+    public static function DeletePermisos($idpermiso,$roleid){
+        \Illuminate\Support\Facades\DB::table('permission_role')
+                ->where('permission_id','=',$idpermiso)
+                ->where('role_id','=',$roleid)->delete()
+                ;
     }
 }

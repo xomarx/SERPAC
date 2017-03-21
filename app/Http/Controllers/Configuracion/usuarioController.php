@@ -7,16 +7,28 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use Validator;
 use App\Http\Controllers\Controller;
-use Illuminate\Foundation\Auth\ThrottlesLogins;
-use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
-use Illuminate\Support\MessageBag;
 
 class usuarioController extends Controller
 {
-    use AuthenticatesAndRegistersUsers, ThrottlesLogins;
+   
+    public function roluser(){        
+        return view('Configuracion.roles');
+    }
     
-protected $registerView = '/Configuracion/usuarios';
-
+    public function listaRoles()
+    {
+        $roles = \App\Role::all();
+        return view('Configuracion.listarRoles')->with('roles',$roles);
+    }
+                
+    public function PermisoUser(){        
+        return view('Configuracion.permisos');
+    }
+    
+    public function HeadPermisoUser(){
+        $roles = \App\Role::all()->pluck('name','id');
+        return view('Configuracion.headListaPermisos',['roles'=>$roles]);
+    }
 
     /**
      * Display a listing of the resource.
@@ -25,9 +37,7 @@ protected $registerView = '/Configuracion/usuarios';
      */
     public function index()
     {        
-        $empleados = \App\Models\RRHH\Empleado::listaEmplUser();
-        $usuarios = \App\User::usuarios();
-        return view('Configuracion.usuarios',['usuarios'=>$usuarios,'empleados'=>$empleados]);
+        
     }
             
     /**
@@ -36,21 +46,6 @@ protected $registerView = '/Configuracion/usuarios';
      * @param  array  $data
      * @return \Illuminate\Contracts\Validation\Validator
      */
-    protected function validator(array $data)
-    {
-//        return $this->validate($data, [
-//            'name' => 'required|max:255|min:6|unique:users',
-//            'email' => 'required|email|max:255|unique:users',
-//            'password' => 'required|confirmed|min:6',
-//            'empleados_empleadoId'=>'required'
-//        ]);
-        return Validator::make($data, [
-            'empleados_empleadoId'=>'required',
-            'name' => 'required|max:255|min:6|unique:users',
-            'email' => 'required|email|max:255|unique:users',
-            'password' => 'required|confirmed|min:6'            
-        ]);
-    }
     
     /**
      * Show the form for creating a new resource.
@@ -68,16 +63,49 @@ protected $registerView = '/Configuracion/usuarios';
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Requests\Configuracion\RolCreateRequest $request)
     {
-        $validator = $this->validator($request->all());
-        if ($validator->fails()) {
-            return response()->json($validator->errors());
+       
+    }
+
+    public function storerol(Requests\Configuracion\RolCreateRequest $request) {
+//        return redirect('Usuarios');
+        if ($request->ajax()) {
+            $rol = \App\Role::create([
+                'name'=>$request->rol,
+                'display_name'=>$request->tag,
+                'description'=>$request->descripcion
+            ]);
+            if($rol)  return response()->json(['success'=>true,'message'=>'Se registro nuevo Rol']);
+            else return response ()->json (['success'=>false,'message'=>'Error en el Registro del Rol']);
         }
-        \Illuminate\Support\Facades\Auth::guard($this->getGuard())->login($this->create($request->all()));
-        return redirect('Configuracion/Usuarios');
-//        return redirect($this->redirectPath());
-//        return view('Configuracion.usuarios');
+    }
+    public function PermisoStore(Requests\Configuracion\PermisosCreateRequest $request){
+        if ($request->ajax()) {
+            $rol = \App\Permission::create([
+                'name'=>$request->permiso,
+                'display_name'=>$request->tag,
+                'description'=>$request->descripcion
+            ]);
+            if($rol)  return response()->json(['success'=>true,'message'=>'Se registro nuevo Permiso']);
+            else return response ()->json (['success'=>false,'message'=>'Error en el Registro del Permiso']);
+        }
+    }
+    
+    public function AsigPermisoStore(Request $request){
+        if($request->ajax()){
+            $rol = \App\Role::Find($request->rol);
+            $permiss = \App\Permission::where('display_name','=',$request->permiso)->first();
+            if($request->estado)if($request->estado == 'true'){                
+                $rol->attachPermission($permiss);
+                return response()->json(true);
+            }
+            else{                                
+                $resul = \App\Permission::DeletePermisos($permiss->id,$rol->id);                                
+//                $rol->perms()->sync([$permiss->id]);
+                return response()->json($resul);
+            }                        
+        }               
     }
 
     /**
@@ -88,7 +116,12 @@ protected $registerView = '/Configuracion/usuarios';
      */
     public function show($id)
     {
-        //
+        $permisos = \App\Role::listaPermisos($id);
+        $results[]=[0=>'nada'];
+        foreach ($permisos as $permiso){
+            $results[] = $permiso->display_name;
+        }
+        return    view('Configuracion.listPermisos')->with('permisos',$results); //response()->json($results);
     }
 
     /**

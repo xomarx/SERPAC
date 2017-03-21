@@ -18,4 +18,11 @@ class Role extends EntrustRole
    public function users(){
         return $this->belongsToMany(User::class);
     }
+    
+    public static function listaPermisos($rolid){
+        return \Illuminate\Support\Facades\DB::table('permission_role')
+                ->join('permissions','permission_role.permission_id','=','permissions.id')
+                ->where('permission_role.role_id','=',$rolid)
+                ->select('permissions.display_name')->get();
+    }
 }

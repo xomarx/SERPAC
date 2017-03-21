@@ -13,7 +13,7 @@
                 <div class="box-body">
                     <form class="form-horizontal" role="form" method="POST" action="{{ url('/register') }}">
                         {{ csrf_field() }}
-                        <div class="form-group{{ $errors->has('empleado') ? ' has-error' : '' }}">
+                        <div class="form-group {{ $errors->has('empleado') ? ' has-error' : '' }}">
                             <label for="name" class="col-md-4 control-label">Empleado</label>
                             <div class="col-md-6 has-feedback">
                             <select name="empleado" id="empleado" class="form-control">

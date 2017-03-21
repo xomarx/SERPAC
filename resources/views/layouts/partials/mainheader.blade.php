@@ -38,7 +38,7 @@
                     <li><a href="{{url('Configuracion') }}">Configuracion</a></li>
                 </ul> 
                 @if(Auth::guest())
-                <a  id="idestado">activo</a>
+                <a></a>
                 @else                        
             <ul class="navbar-custom-menu">
 
