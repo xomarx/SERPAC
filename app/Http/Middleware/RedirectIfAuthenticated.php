@@ -17,11 +17,14 @@ class RedirectIfAuthenticated
      */
     public function handle($request, Closure $next, $guard = null)
     {
+        
+            
         if (Auth::guard($guard)->check()) {
             return $next($request); 
-        }        
+        }    
+        return $next($request); 
 //        Auth::logout();
-        return redirect('login');
+//        return redirect('login');
 //            return $next($request);                               
     }
 }

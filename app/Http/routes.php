@@ -84,7 +84,8 @@ Route::group(['middleware' => ['auth']], function () {
     route::resource('socios/dnibeneficiario','socios\parientescontroller@autocompleteDNIpariente');//autocompleteDNIpariente
     route::resource('RRHH/Sucursalsearch','RRHH\sucursalescontroller@autocomplete');//autocomplete
     route::resource('RRHH/Sucursales','RRHH\sucursalescontroller@autocompletesucursal');//autocompletesucursal        
-        
+    route::resource('RRHH/autoempleado','RRHH\empleadocontroller@autocompleteEmpleado');//   autocompleteEmpleado 
+    
     route::resource('socios','socios\sociocontroller');
     route::get('PadronSocio/{idsocio}','socios\sociocontroller@verPadronsocio');
                     
@@ -118,6 +119,20 @@ Route::group(['middleware' => ['auth']], function () {
     route::get('Tesoreria/Distribucion/ReciboAcopio/{id}','Tesoreria\tesoreriacontroller@recibofondoAcopiador');//recibofondoAcopiador
     route::resource('Tesoreria/Distribucion/ReciboTecnico','Tesoreria\tesoreriacontroller@recibofondoTecnico');//recibofondoTecnicoo
     route::resource('Tesoreria/Distribucion-Fondos','Tesoreria\tesoreriacontroller');
+    
+    route::resource('Tesoreria/modalcheque','Tesoreria\ChequeController@cheque');//cheque  
+    route::resource('Tesoreria/RegistrarCheques','Tesoreria\ChequeController@store');
+    route::put('Tesoreria/ActualizarCheques/{id}','Tesoreria\ChequeController@update'); 
+    route::delete('Tesoreria/deleteCheques/{id}','Tesoreria\ChequeController@destroy');
+    route::resource('Tesoreria/Cheques','Tesoreria\ChequeController');
+    
+    route::resource('Tesoreria/NewMovCheque','Tesoreria\Mov_chequeController');
+    route::resource('Tesoreria/modalmovcheque','Tesoreria\Mov_chequeController@movcheque');
+    route::resource('Tesoreria/Cheques-Girados','Tesoreria\Mov_chequeController');
+    route::resource('uploadimage','Tesoreria\Mov_chequeController@uploadImage');//uploadImage
+    
+    
+    
     
     
     route::resource('Tesoreria/Tipos-egresos','Tesoreria\tipo_egresoscontroller');

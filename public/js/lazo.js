@@ -6,6 +6,45 @@
 
 //  *****************************************************  LOAD **************************************************************************************
 
+//$(document).ready(function (){
+//    console.log(window.location.pathname);
+//    console.log($(".sidebar ul li a").text());
+//    var cambio = false;
+//    $(".sidebar ul li").removeClass('active');
+//    $(".sidebar ul li").each(function( index,value ) {
+//            console.log(this.baseURI);            
+//            console.log(document.location.href);
+//            if(this.baseURI == document.location.href){
+//                
+//                $(this).addClass('active');
+//                var $this = $(this);
+//                $this.closest('ul').children('li').removeClass('active');
+//                $this.parent().className = 'active';
+//                console.log($this);
+//                return false; 
+//            }            
+//            
+//        }
+//        
+//       if(this.href.trim() == window.location){
+//           
+//           $(this).parent().addClass('active');
+//           cambio = true;
+////           console.log(this.href.trim());
+////           console.log(window.location);
+//           $(".sidebar ul li:first").addClass('active');
+//       } 
+//    });
+//    if(!cambio){
+//        $(".sidebar ul li:first").addClass('active');
+//    }
+//    $(".sidebar ul li").on('click',function(){
+//        $("li.active").removeClass('active');
+//        $(this).addClass('active');
+//        console.log('cambio');
+//    })
+//});
+
 $(document).ready(function () {        
         if($('#idestado').is(':visible'))
         {            
@@ -449,8 +488,7 @@ var EliInmueble = function(id,name){
         $("#flora").append("<option value="+idcultivo+" selected='selected'>"+ valor+"</option>")
     };
            
-    var Eliminarfauna = function(fila,idfauna)
-    {
+    var Eliminarfauna = function(fila,idfauna) {
         var valor=document.getElementById("tablafauna").rows[fila].cells[0].innerText;            
         document.getElementById('tablafauna').deleteRow(fila);
         $("#fauna").append("<option value="+idfauna+" selected='selected'>"+ valor+"</option>")
@@ -487,8 +525,7 @@ var fundopropiedadFauna = function(fundo,fauna,cantidad,rendimiento){
           });
 };
 
-var fundopropiedadFlora = function(fundo,flora,hectarea,rendimiento)
-{            
+var fundopropiedadFlora = function(fundo,flora,hectarea,rendimiento) {            
     var route = '/socios/propiedadflora';
     var token = $("#token").val();
     $.ajax({              
@@ -513,8 +550,7 @@ var fundopropiedadFlora = function(fundo,flora,hectarea,rendimiento)
           });
 };
 
-var fundopropiedadInmueble = function(fundo,inmueble)
-{    
+var fundopropiedadInmueble = function(fundo,inmueble){    
     var route = '/socios/propiedadinmueble';
     var token = $("#token").val();
     $.ajax({              
@@ -667,8 +703,7 @@ $("#RegFundo").click(function(event){
 });
 
   
-var EliminarFundo = function(id,name)
-{ 
+var EliminarFundo = function(id,name){ 
      // ALERT JQUERY     
    $.alertable.confirm("<span style='color:#000'>¿Está seguro de eliminar el registro?</span>"+"<br><strong><span style='color:#ff0000'>"+name+"</span></strong></br>").then(function() {  
       var route = "/socios/fundos/"+id+"";
@@ -2269,30 +2304,40 @@ var EliGasto = function(id,nombre){
    
    var regrol = function (id){
        var formu = $("#formrol").serialize(); 
-       var token = $("#token").val();
+       var token = $("input[name=_token]").val();
        if(id==1) var route = "NewRolUsuario";
-       else if(id==2) var route = "NewPermisoUser";       
+       else if(id==2) var route = "NewPermisoUser";
+       else if(id==3) var route = $("#Regmodal").text()+"Cheques" + "/"+$("#idcheque").val();       
+       var type = 'POST';
+       if($("#Regmodal").text() == "Actualizar") type = 'PUT';
+//       console.log($("#Regmodal").text());
        $.ajax({          
           url:route,
           headers:{'X-CSRF-TOKEN':token},
-          type:"POST",
+          type:type,
           datatype:'json',
           data:formu,
-          success:function(data){              
+          success:function(data){
+              $("#msj_rol").fadeIn();
               if(data.success){
                 $("#txt_rol").html(data.message);
-                $("#msj_rol").fadeIn();
-                $("#msj_rol").fadeOut(1000);
                 $("#formrol")[0].reset();
-              }              
+                if(id==3) document.location.reload();
+              }
+              else{
+                  $("#msj_rol").removeClass('alert-success');
+                  $("#msj_rol").addClass('alert-danger');
+                  $("#txt_rol").html(data.message);                                                
+              }
+              $("#msj_rol").fadeOut(1000);                  
           },
           error:function(data){
               $("#error_rol").html('');$("#error_tag").html('');$("#error_descripcion").html('');
               var errors =  $.parseJSON(data.responseText);
               $.each(errors,function(index, value) {                      
                             if(index == 'rol')$("#error_rol").html(value);
-                            else if(index == 'permiso')$("#error_rol").html(value);
-                            else if(index == 'tag')$("#error_tag").html(value);
+                            else if(index == 'permiso' || index == 'cheque')$("#error_rol").html(value);
+                            else if(index == 'tag' || index == 'numero')$("#error_tag").html(value);                             
                             else if(index == 'descripcion')$("#error_descripcion").html(value);                            
                       });
           }
@@ -2304,7 +2349,7 @@ var EliGasto = function(id,nombre){
        var rolid = $("#rol").val();
        var permisoid = $("input[name="+name+"]").val();
        var estado = $("input[name="+name+"]").is(':checked');
-       var token = $("input[name=_token]").val();         
+       var token = $("input[name=_token]").val();
        $.ajax({
            url:'AsigPermisos',
           headers:{'X-CSRF-TOKEN':token},
@@ -2314,9 +2359,144 @@ var EliGasto = function(id,nombre){
           success:function(data){               
           }
        });
+   };
+   
+   
+   var activarForm = function(id){
+        if(id == 1) {var route = 'ListaRoles'}
+        else if(id == 2) {var route = 'headPermisos';}
+        $.get(route,function(data){
+            $("#contenidos-box").html(data);//                        
+        });
+    };
+    
+    var activarmodal = function(id){        
+        if(id==1){ var route = 'RolUsuario';}
+        else if(id==2){ var route = 'PermisoUser';}
+        else if(id==3){ var route = 'modalcheque';}
+        else if(id==4){ var route = 'modalmovcheque';}
+        $.get(route,function(data){
+            $("#conten-modal").html(data);
+            $("#modalrol").modal({show:'false'});
+        });
+    };
+   
+   // ******************************************  CHEQUE *************************************************************************************************
+   
+   var EdiCheque = function(id){     
+     $.get('modalcheque',function(data){
+         $("#conten-modal").html(data);
+     });
+     $.getJSON("Cheques/"+id+"/edit",function(data){         
+         $("#cheque").val(data.cheque);
+         $("#numero").val(data.num_cuenta);
+         $("#descripcion").val(data.descripcion); 
+         $("#idcheque").val(data.id);
+         $("#Regmodal").text("Actualizar");         
+         $("#modalrol").modal({show:'false'});
+     });
+   };
+   
+   var ElimCheque = function(id,nombre){       
+       $.alertable.confirm("<span style='color:#000'>¿Está seguro de eliminar el registro?</span><br><strong><span style='color:#ff0000'>"
+           +nombre+"</span></strong></br>").then(function() {  
+      var route = "deleteCheques/"+id+"";
+      var token = $("input[name=_token]").val();
+      $.ajax({
+        url: route,
+        headers: {'X-CSRF-TOKEN': token},
+        type: 'DELETE',
+        dataType: 'json',
+        success: function(data){
+            if(data) document.location.reload();        
+      }
+      });          
+    });
+   };
+   
+   //**************************************   MOV CHEQUE ************************************************************************************************
+   
+   var regmovCheque = function(){
+       var token = $("input[name=_token]").val();
+       var type="POST";
+       var fields = $("#formmovcheque").serialize();
+      $.ajax({          
+          url:'NewMovCheque',
+          headers:{'X-CSRF-TOKEN':token},
+          type:type,
+          datatype:'json',
+          data:fields,
+          success:function(data){
+              $("#msj_rol").fadeIn();
+              if(data.success){
+                $("#txt_rol").html(data.message);                
+                document.location.reload();
+              }
+              else{
+                  $("#msj_rol").removeClass('alert-success');
+                  $("#msj_rol").addClass('alert-danger');
+                  $("#txt_rol").html(data.message);                                                
+              }
+              $("#msj_rol").fadeOut(1000);                  
+          },
+          error:function(data){
+              $("#error_rol").html('');$("#error_tag").html('');$("#error_descripcion").html('');
+              var errors =  $.parseJSON(data.responseText);
+              $.each(errors,function(index, value) {                      
+                            if(index == 'rol')$("#error_rol").html(value);
+                            else if(index == 'permiso' || index == 'cheque')$("#error_rol").html(value);
+                            else if(index == 'tag' || index == 'numero')$("#error_tag").html(value);                             
+                            else if(index == 'descripcion')$("#error_descripcion").html(value);                            
+                      });
+          }
+       });
+   };
+   
+   var clicktipo = function(id){       
+       if(id==1) var route = '/socios/search';
+       else var route = '/RRHH/autoempleado';
+       $("#dato").autocomplete({     
+          minLength:1,           
+           autoFocus:true,
+           delay:1,
+           source: route,
+           select: function(event, ui){
+               console.log(ui.item.value);
+           }
+        });
    }
+              
+   var cambiarimg = function(){       
+       $("#filecheque").click();                 
+   };
+         
+   var filechange = function (event){       
+     var formData = new FormData();
+       formData.append("filecheque",event.files[0]);
+       var token = $("input[name=_token]").val();       
+    $.ajax({   
+         type:'POST',
+          url:'/uploadimage',
+          headers:{'X-CSRF-TOKEN':token},          
+          data:formData,
+            contentType:false,
+            processData: false,
+            cache:false,
+          success:function(data){
+              console.log(data);
+              if(data.success) $("#imgcheque").attr('src',data.ruta);
+          },
+          error:function(data){
+              console.log(data);
+          }
+       });
+   };
    
-   
+//   $(function(){
+//      $("#filecheque").on('change',function(){
+//         alert('cambio') ;
+//      }); 
+//   });
 //    $(document).on('submit','.form_rol',function(e){
 //       
 //       e.preventDefault();

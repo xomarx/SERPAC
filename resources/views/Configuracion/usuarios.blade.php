@@ -44,34 +44,14 @@
 @stop
 @section('script')
 <script>
-    var activarForm = function(id){
-        if(id == 1) {var route = 'ListaRoles'}
-        else if(id == 2) {var route = 'headPermisos';}
-        $.get(route,function(data){
-            $("#contenidos-box").html(data);//                        
-        });
-    };
-    
-    var activarmodal = function(id){
         
-        if(id==1){ var route = 'RolUsuario';}
-        else if(id==2){ var route = 'PermisoUser';}
-        $.get(route,function(data){            
-            $("#conten-modal").html(data);
-            $("#modalrol").modal({show:'false'});
-        });
-    };
-    
     var cargarLista = function(){
         
         $.get('ListaPermisos/'+$("#rol").val(),function(data){
             $("#SelecListPermiso").html(data);            
         });
         
-    };
-    
-    
-       
+    };               
 </script>
 @stop
 

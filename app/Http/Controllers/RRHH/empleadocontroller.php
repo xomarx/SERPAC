@@ -11,12 +11,24 @@ use App\Models\Socios\Departamento;
 use App\Models\RRHH\Empleado;
 use App\Models\Persona;
 USE Carbon\Carbon;
+use Illuminate\Support\Facades\Input;
 
 
 class empleadocontroller extends Controller
 {
     
     
+    public function autocompleteEmpleado(Request $request)    {
+        if($request->ajax()){
+            $nombre = Input::get('term');
+            $empleados = Empleado::autocompleteDatos($nombre);
+            foreach ($empleados as $empleado) 
+            {
+                $result[] = ['id' => $empleado->dni, 'value' => $empleado->empleado];
+            }
+            return response()->json($result);
+        }
+    }
 
     /**
      * Display a listing of the resource.

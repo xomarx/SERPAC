@@ -22,8 +22,7 @@
                     <div class="text-red" id="error_descripcion"></div>
                 </form>                     
             </div>
-            <div class="modal-footer">              
-                
+            <div class="modal-footer">
                 <a onclick="regrol(2)"  class="btn btn-dropbox" data-toggle="tooltip" data-placement="top" title="Rol de Usuarios">Registrar &nbsp;<span class="glyphicon glyphicon-floppy-save">  </span></a>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
             </div>                    

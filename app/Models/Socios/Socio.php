@@ -89,7 +89,7 @@ class Socio extends Model
     
     public static function Socioautocomplete($nombres)
     {
-      return $socio = DB::table('socios')
+      return DB::table('socios')
                 ->join('personas','socios.dni','=','personas.dni')
                 ->join('comites_locales','personas.comites_locales_id','=','comites_locales.id')
               ->where (DB::raw("CONCAT(personas.paterno,' ',personas.materno,' ',personas.nombre)"),'like','%'.$nombres.'%')
@@ -100,7 +100,7 @@ class Socio extends Model
     
     public static function DNISocioautocomplete($dni)
     {
-      return $socio = DB::table('socios')
+      return DB::table('socios')
                 ->join('personas','socios.dni','=','personas.dni')
                 ->join('comites_locales','personas.comites_locales_id','=','comites_locales.id')
               ->where ('socios.dni','like','%'.$dni.'%')
@@ -111,7 +111,7 @@ class Socio extends Model
     
     public static function CodigoSocioautocomplete($codigo)
     {
-      return $socio = DB::table('socios')
+      return  DB::table('socios')
                 ->join('personas','socios.dni','=','personas.dni')
                 ->join('comites_locales','personas.comites_locales_id','=','comites_locales.id')
               ->where ('socios.codigo','like','%'.$codigo.'%')
@@ -122,7 +122,7 @@ class Socio extends Model
     
     public static function getsocioTransferencia($codigo)
     {
-        return $socio = DB::table('socios')
+        return DB::table('socios')
                 ->join('personas','socios.dni','=','personas.dni')
                 ->join('comites_locales','personas.comites_locales_id','=','comites_locales.id')                                                
                 ->join('comites_centrales','comites_locales.comites_centrales_id','=','comites_centrales.id')                

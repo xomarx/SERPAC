@@ -42,18 +42,22 @@ return [
     */
 
     'disks' => [
-
         'local' => [
             'driver' => 'local',
             'root' => storage_path('app'),
         ],
-
+        
+        'cheques' => [
+            'driver' => 'local',
+            'root' => storage_path('app/cheques'),             
+        ],
+        
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
             'visibility' => 'public',
         ],
-
+        
         's3' => [
             'driver' => 's3',
             'key' => 'your-key',

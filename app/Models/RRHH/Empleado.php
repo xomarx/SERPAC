@@ -60,4 +60,12 @@ class Empleado extends Model
                 ->select(DB::raw("concat(personas.paterno,' ',personas.materno,' ',personas.nombre) as empleados"),'empleados.empleadoId')
                 ->get();
     }
+    
+    public static function autocompleteDatos($nombre){
+        return DB::table('empleados')
+                ->join('personas','empleados.personas_dni','=','personas.dni')
+                ->where(DB::raw("CONCAT(personas.paterno,' ',personas.materno,' ',personas.nombre)"),'like','%'.$nombre.'%')
+                ->select('personas.dni',DB::raw("CONCAT(personas.paterno,' ',personas.materno,' ',personas.nombre) as empleado"),'personas.dni')
+                ->take(5)->get();
+    }
 }
