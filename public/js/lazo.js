@@ -2420,6 +2420,7 @@ var EliGasto = function(id,nombre){
        var token = $("input[name=_token]").val();
        var type="POST";
        var fields = $("#formmovcheque").serialize();
+       console.log($("#idurl").val());
       $.ajax({          
           url:'NewMovCheque',
           headers:{'X-CSRF-TOKEN':token},
@@ -2440,31 +2441,24 @@ var EliGasto = function(id,nombre){
               $("#msj_rol").fadeOut(1000);                  
           },
           error:function(data){
-              $("#error_rol").html('');$("#error_tag").html('');$("#error_descripcion").html('');
+              $("#error_concepto").html('');$("#error_img").html('');$("#error_dni").html('');$("#error_tipo").html('');
+              $("#error_dato").html('');$("#error_numero").html('');$("#error_cheque").html('');$("#error_importe").html('');
               var errors =  $.parseJSON(data.responseText);
               $.each(errors,function(index, value) {                      
-                            if(index == 'rol')$("#error_rol").html(value);
-                            else if(index == 'permiso' || index == 'cheque')$("#error_rol").html(value);
-                            else if(index == 'tag' || index == 'numero')$("#error_tag").html(value);                             
-                            else if(index == 'descripcion')$("#error_descripcion").html(value);                            
+                            if(index == 'concepto')$("#error_concepto").html(value);
+                            else if(index == 'idurl')$("#error_img").html(value);
+                            else if(index == 'dni')$("#error_dni").html(value);                             
+                            else if(index == 'tipo')$("#error_tipo").html(value);
+                            else if(index == 'dato')$("#error_dato").html(value);
+                            else if(index == 'numero')$("#error_numero").html(value);                             
+                            else if(index == 'cheque')$("#error_cheque").html(value);
+                            else if(index == 'importe')$("#error_importe").html(value);
                       });
           }
        });
    };
    
-   var clicktipo = function(id){       
-       if(id==1) var route = '/socios/search';
-       else var route = '/RRHH/autoempleado';
-       $("#dato").autocomplete({     
-          minLength:1,           
-           autoFocus:true,
-           delay:1,
-           source: route,
-           select: function(event, ui){
-               console.log(ui.item.value);
-           }
-        });
-   }
+   
               
    var cambiarimg = function(){       
        $("#filecheque").click();                 
@@ -2483,11 +2477,16 @@ var EliGasto = function(id,nombre){
             processData: false,
             cache:false,
           success:function(data){
-              console.log(data);
-              if(data.success) $("#imgcheque").attr('src',data.ruta);
+              
+              if(data.success) {
+                  $("#imgcheque").attr('src',data.ruta); 
+                  console.log(data.ruta);
+                  $("#idurl").val(data.ruta);
+                  console.log($("#idurl").val());
+              }              
           },
           error:function(data){
-              console.log(data);
+              if(!data.success) $("#error_img").html(data.tuta);
           }
        });
    };

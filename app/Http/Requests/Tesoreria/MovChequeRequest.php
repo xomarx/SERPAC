@@ -34,9 +34,12 @@ class MovChequeRequest extends Request
                         //
                         'cheque' => 'required',
                         'numero' => 'required|numeric|unique:mov_cheques,num_cheque',
-                        'dato' => 'required|exists:personas,paterno,materno,nombre',
+                        'dato' => 'required',
+                        'dni'=>'required|exists:personas,dni',
+                        'idurl'=>'required',
                         'concepto'=>'required',
-                        'tipo'=>'required'
+                        'tipo'=>'required',
+                        'importe'=>'required|numeric'
                     ];
                 }
             case 'PATCH':
@@ -51,5 +54,13 @@ class MovChequeRequest extends Request
                 }
             default : break;
         }
+    }
+    
+    public function messages() {
+        parent::messages();
+        return [
+            'tipo.required'=>'Seleccione un Opcion Socio o Empleado',
+            'idurl.required'=>'Es Obligatorio la Imagen del Cheque'
+        ];
     }
 }

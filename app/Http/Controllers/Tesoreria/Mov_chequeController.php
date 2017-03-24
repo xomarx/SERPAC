@@ -19,8 +19,8 @@ class Mov_chequeController extends Controller
         $nombre = \Carbon\Carbon::now()->format('d-m-Y');
         $nombre = ''.$nombre.'-'.$file->getClientOriginalName();
         $path = Storage::disk('cheques')->put($nombre,  \File($file));        
-        $path = "/storage/app/cheques/".$nombre;            
-        return response()->json(['success'=>true,'ruta'=>$path]);                
+        if($path) return response()->json(['success'=>true,'ruta'=>"/storage/app/cheques/".$nombre]);
+        else return response()->json(['success'=>false,'ruta'=>"No se cargo ninguna imagen"]);
     }
 
         public function movcheque(){
@@ -56,7 +56,20 @@ class Mov_chequeController extends Controller
      */
     public function store(Requests\Tesoreria\MovChequeRequest $request)
     {
-        //
+        if($request->ajax()){
+            $movcheque = \App\Models\Tesoreria\Mov_cheque::create([
+                'num_cheque'=>$request->numero,
+                'concepto'=>  strtoupper($request->concepto),
+                'estado'=>'COPIA DE CHEQUE',
+                'url_cheque'=>$request->idurl,
+                'cheques_id'=>$request->cheque,
+                'users_id'=>  auth()->id(),
+                'personas_dni'=>$request->dni,
+                'importe'=>$request->importe
+            ]);
+            if($movcheque) return response ()->json (['success'=>true,'message'=>'Se Registro Correctamente']);
+            else return response ()->json (['success'=>false,'message'=>'No se Registro ningun dato']);
+        }
     }
 
     /**

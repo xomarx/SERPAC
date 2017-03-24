@@ -133,4 +133,22 @@ class Socio extends Model
                  ->first(); 
     }
     
+    public static function PersonasSociosAuto($nombre){
+        return DB::table('personas')
+                ->leftjoin('empleados','personas.dni','=','empleados.empleadoId')
+                ->where('empleados.empleadoId')
+                ->where(DB::raw("concat(personas.paterno,' ',personas.materno,' ',personas.nombre)"),'like','%'.$nombre.'%')
+                ->select('personas.dni',  DB::raw("concat(personas.paterno,' ',personas.materno,' ',personas.nombre) as socio"))
+                ->take(5)->get();
+    }
+    
+    public static function PersonasSociosDniAuto($dni){
+        return DB::table('personas')
+                ->leftjoin('empleados','personas.dni','=','empleados.empleadoId')
+                ->where('empleados.empleadoId')
+                ->where('personas.dni','like','%'.$dni.'%')
+                ->select('personas.dni',  DB::raw("concat(personas.paterno,' ',personas.materno,' ',personas.nombre) as socio"))
+                ->take(5)->get();
+    }
+    
 }

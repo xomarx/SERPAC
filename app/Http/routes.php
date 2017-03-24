@@ -83,8 +83,12 @@ Route::group(['middleware' => ['auth']], function () {
     route::resource('socios/dnipersona','socios\personacontroller@autoCompleteDniPersona');//autoCompleteDniPersona
     route::resource('socios/dnibeneficiario','socios\parientescontroller@autocompleteDNIpariente');//autocompleteDNIpariente
     route::resource('RRHH/Sucursalsearch','RRHH\sucursalescontroller@autocomplete');//autocomplete
-    route::resource('RRHH/Sucursales','RRHH\sucursalescontroller@autocompletesucursal');//autocompletesucursal        
+    route::resource('RRHH/Sucursales','RRHH\sucursalescontroller@autocompletesucursal');//autocompletesucursal  
+    
+    route::resource('RRHH/autoempleadoDni','RRHH\empleadocontroller@autocompleteEmpleadoDni');
     route::resource('RRHH/autoempleado','RRHH\empleadocontroller@autocompleteEmpleado');//   autocompleteEmpleado 
+    route::resource('socios/autopersonas','socios\sociocontroller@autoSociosPersonas');
+    route::resource('socios/autoDniSocios','socios\sociocontroller@autoSociosDni');
     
     route::resource('socios','socios\sociocontroller');
     route::get('PadronSocio/{idsocio}','socios\sociocontroller@verPadronsocio');

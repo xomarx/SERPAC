@@ -35,15 +35,39 @@ class sociocontroller extends Controller
     {
         $date = Carbon::now();
         return $date->format('d-m-Y');
-    }    
-    
-    public function autocompleteCodigoSocio(Request $request)    {
+    }
+
+    public function autoSociosPersonas(Request $request){
         if($request->ajax()){
             $nombre = Input::get('term');
-            $socios = Socio::CodigoSocioautocomplete($nombre);
+            $socios = Socio::PersonasSociosAuto($nombre);
             foreach ($socios as $socio) 
             {
-                $result[] = ['id' => $socio->fullname, 'value' => $socio->codigo,'local'=>$socio->comite_local,'dni'=>$socio->dni];
+                $result[] = ['id' => $socio->dni, 'value' => $socio->socio];
+            }
+            return response()->json($result);
+        }
+    }
+    
+    public function autoSociosPersonasDni(Request $request){
+        if($request->ajax()){
+            $nombre = Input::get('term');
+            $socios = Socio::PersonasSociosAuto($nombre);
+            foreach ($socios as $socio) 
+            {
+                $result[] = ['id' => $socio->dni, 'value' => $socio->socio];
+            }
+            return response()->json($result);
+        }
+    }
+
+        public function autoSociosDni(Request $request)    {
+        if($request->ajax()){
+            $nombre = Input::get('term');
+            $socios = Socio::PersonasSociosDniAuto($nombre);
+            foreach ($socios as $socio) 
+            {
+                $result[] = ['id' => $socio->socio, 'value' => $socio->dni];
             }
             return response()->json($result);
         }

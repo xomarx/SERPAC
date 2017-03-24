@@ -14,7 +14,8 @@ class Mov_cheque extends Model
         'url_cheque',
         'cheques_id',
         'personas_dni',        
-        'users_id'
+        'users_id',
+        'importe'
     ];
     
     
@@ -25,7 +26,7 @@ class Mov_cheque extends Model
                 ->join('users','mov_cheques.users_id','=','users.id')                
                 ->join('personas','mov_cheques.personas_dni','=','personas.dni')                                
                 ->select('mov_cheques.created_at','cheques.cheque','mov_cheques.num_cheque','users.name','mov_cheques.concepto'
-                        ,'personas.nombre','personas.paterno','personas.materno')
+                        ,'personas.nombre','personas.paterno','personas.materno','mov_cheques.importe','mov_cheques.id')
                 ->get();
     }
 }

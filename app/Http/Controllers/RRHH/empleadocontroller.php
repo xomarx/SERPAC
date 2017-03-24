@@ -29,6 +29,18 @@ class empleadocontroller extends Controller
             return response()->json($result);
         }
     }
+    
+    public function autocompleteEmpleadoDni(Request $request)    {
+        if($request->ajax()){
+            $nombre = Input::get('term');
+            $empleados = Empleado::autocompleteDatosDni($nombre);
+            foreach ($empleados as $empleado) 
+            {
+                $result[] = ['id' => $empleado->empleado, 'value' => $empleado->dni];
+            }
+            return response()->json($result);
+        }
+    }
 
     /**
      * Display a listing of the resource.
