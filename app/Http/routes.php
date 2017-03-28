@@ -129,16 +129,18 @@ Route::group(['middleware' => ['auth']], function () {
     route::put('Tesoreria/ActualizarCheques/{id}','Tesoreria\ChequeController@update'); 
     route::delete('Tesoreria/deleteCheques/{id}','Tesoreria\ChequeController@destroy');
     route::resource('Tesoreria/Cheques','Tesoreria\ChequeController');
-    
-    route::resource('Tesoreria/NewMovCheque','Tesoreria\Mov_chequeController');
+        
+    route::put('Tesoreria/UpdateMovCheque/{id}','Tesoreria\Mov_chequeController@updateAnular');
+//    route::resource('Tesoreria/NewMovCheque','Tesoreria\Mov_chequeController');
+    route::resource('Tesoreria/ListMovcheques','Tesoreria\Mov_chequeController@listMovcheques');
     route::resource('Tesoreria/modalmovcheque','Tesoreria\Mov_chequeController@movcheque');
     route::resource('Tesoreria/Cheques-Girados','Tesoreria\Mov_chequeController');
     route::resource('uploadimage','Tesoreria\Mov_chequeController@uploadImage');//uploadImage
     
-    
-    
-    
-    
+    route::get('Tesoreria/numCheque/{id}','Tesoreria\Caja_chicaController@autoNumCheque');
+    route::resource('Tesoreria/modalCaja','Tesoreria\Caja_chicaController@cajachica');
+    route::resource('Tesoreria/Caja-Chica','Tesoreria\Caja_chicaController');
+               
     route::resource('Tesoreria/Tipos-egresos','Tesoreria\tipo_egresoscontroller');
             
     route::resource('Creditos/Creditos-Financieros','Creditos\prestamoscontroller');

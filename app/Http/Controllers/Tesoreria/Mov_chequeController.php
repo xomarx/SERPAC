@@ -27,6 +27,12 @@ class Mov_chequeController extends Controller
         $cheques = \App\Models\Tesoreria\Cheque::pluck('cheque','id');
         return view('Tesoreria.movcheque',['cheques'=>$cheques]);
     }
+    
+    public function listMovcheques(){        
+        $movcheques = \App\Models\Tesoreria\Mov_cheque::listaMovCheques();
+        return view('Tesoreria.listaMovCheques')->with('cheques',$movcheques);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -35,7 +41,7 @@ class Mov_chequeController extends Controller
     public function index()
     {        
         $movcheques = \App\Models\Tesoreria\Mov_cheque::listaMovCheques();
-        return view('Tesoreria.listaMovCheques')->with('cheques',$movcheques);
+        return view('Tesoreria.cheques_girados')->with('cheques',$movcheques);
     }
 
     /**
@@ -91,7 +97,9 @@ class Mov_chequeController extends Controller
      */
     public function edit($id)
     {
-        //
+        $movcheque = \App\Models\Tesoreria\Mov_cheque::getMovCheque($id);
+        $tipo = \App\Models\Socios\Socio::where('dni','=',$movcheque->dni)->count();
+        return response()->json(['movcheque'=>$movcheque,'tipo'=>$tipo]);
     }
 
     /**
@@ -103,9 +111,32 @@ class Mov_chequeController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        if($request->ajax()){
+            $movcheque = \App\Models\Tesoreria\Mov_cheque::FindOrFail($id);
+            $movcheque->num_cheque=$request->numero;
+            $movcheque->concepto= strtoupper($request->concepto);
+            $movcheque->estado='COPIA DE CHEQUE';
+            $movcheque->url_cheque=$request->idurl;
+            $movcheque->cheques_id=$request->cheque;
+            $movcheque->users_id=auth()->id();
+            $movcheque->personas_dni=$request->dni;
+            $movcheque->importe=$request->importe;
+            $movcheque->save();
+            if($movcheque) return response ()->json (['success'=>true,'message'=>'Se Actualizo Correctamente']);
+            else return response ()->json (['success'=>false,'message'=>'No se Actualizo ningun dato']);
+        }
     }
 
+    public  function updateAnular(Request $request, $id){
+        if($request->ajax()){
+            $movcheque = \App\Models\Tesoreria\Mov_cheque::FindOrFail($id);
+            $movcheque->concepto = strtoupper($request->motivo);
+            $movcheque->users_id=  auth()->id();
+            $movcheque->estado = 'ANULADO';
+            $movcheque->save();
+            return response()->json(['success'=>true]);
+        }
+    }
     /**
      * Remove the specified resource from storage.
      *

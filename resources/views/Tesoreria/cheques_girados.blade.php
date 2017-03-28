@@ -1,3 +1,14 @@
+@extends('tesoreria.mastertesoreria')
+@section('contentheader_title')
+    CHEQUES GIRADOS
+@stop
+@section('main-content')
+<div class="box box-solid box-primary">
+    <div class="box-header">
+        <a onclick="activarForm(4);" class="btn btn-dropbox" class="btn btn-dropbox" data-toggle="tooltip" data-placement="top" title="Nuevo Giro de Cheque"> GIRO DE CHEQUE <span class="fa fa-tasks"></span></a>
+        <a onclick="activarForm(3);" class="btn btn-dropbox" class="btn btn-dropbox" data-toggle="tooltip" data-placement="top" title="Lista de Caja Chica"> CAJA CHICA <span class="glyphicon glyphicon-tasks"></span></a>
+    </div>    
+    <div class="box-body" id="contenidos-box">
     <a onclick="activarmodal(4);" class="btn btn-dropbox" class="btn btn-dropbox" data-toggle="tooltip" data-placement="top" title="Nuevo Giro de Cheque"> NUEVO GIRO <span class="fa fa-plus"></span></a>
     <div class="box box-body">
         <input id="token" type="hidden" name="_token" value="{{ csrf_token() }}" >
@@ -45,3 +56,52 @@
             </tbody>
         </table>
     </div>
+</div>
+<!--,'style'=>'display:none'-->
+<section id="conten-modal">
+    
+</section>
+@stop
+
+@section('script')
+<script>
+var clicktipo = function(id){       
+       if(id==1) {var route = '/socios/autopersonas'; var ruta = '/socios/autoDniSocios'}
+       else {var route = '/RRHH/autoempleado'; var ruta = '/RRHH/autoempleadoDni'}
+       $("#dato").autocomplete({     
+          minLength:1,           
+           autoFocus:true,
+           delay:1,
+           source: route,
+           select: function(event, ui){               
+               $("#dni").val(ui.item.id);
+           }
+        });
+        
+        $("#dni").autocomplete({     
+          minLength:1,           
+           autoFocus:true,
+           delay:1,
+           source: ruta,
+           select: function(event, ui){               
+               $("#dato").val(ui.item.id);
+           }
+        });
+   };    
+   
+   var changecheque = function(){       
+       var route = "{{ url('Tesoreria/numCheque') }}/"+$("#lischeque").val()+'';
+       console.log(route);
+       $("#numero").autocomplete({     
+          minLength:1,           
+           autoFocus:true,
+           delay:1,
+           source: route,
+           select: function(event, ui){               
+               console.log(ui.item);
+           }
+        });
+   };
+</script>
+
+@stop

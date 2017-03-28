@@ -2210,7 +2210,7 @@ var ElitipoEgreso = function(id,name){
       }
       });          
     });
-}
+};
 
 $("#RegtipoEgreso").click(function(){
     var fields = $("#formegresos").serialize();
@@ -2303,11 +2303,12 @@ var EliGasto = function(id,nombre){
      
    
    var regrol = function (id){
-       var formu = $("#formrol").serialize(); 
+       var formu = $("#formrol").serialize();
        var token = $("input[name=_token]").val();
        if(id==1) var route = "NewRolUsuario";
        else if(id==2) var route = "NewPermisoUser";
-       else if(id==3) var route = $("#Regmodal").text()+"Cheques" + "/"+$("#idcheque").val();       
+       else if(id==3) var route = $("#Regmodal").text()+"Cheques" + "/"+$("#idcheque").val();
+       
        var type = 'POST';
        if($("#Regmodal").text() == "Actualizar") type = 'PUT';
 //       console.log($("#Regmodal").text());
@@ -2332,13 +2333,13 @@ var EliGasto = function(id,nombre){
               $("#msj_rol").fadeOut(1000);                  
           },
           error:function(data){
-              $("#error_rol").html('');$("#error_tag").html('');$("#error_descripcion").html('');
+              $("#error_rol").html('');$("#error_tag").html('');$("#error_descripcion").html('');              
               var errors =  $.parseJSON(data.responseText);
               $.each(errors,function(index, value) {                      
-                            if(index == 'rol')$("#error_rol").html(value);
+                            if(index == 'rol' )$("#error_rol").html(value);
                             else if(index == 'permiso' || index == 'cheque')$("#error_rol").html(value);
                             else if(index == 'tag' || index == 'numero')$("#error_tag").html(value);                             
-                            else if(index == 'descripcion')$("#error_descripcion").html(value);                            
+                            else if(index == 'descripcion' || index == 'importe')$("#error_descripcion").html(value);                            
                       });
           }
        });
@@ -2365,6 +2366,8 @@ var EliGasto = function(id,nombre){
    var activarForm = function(id){
         if(id == 1) {var route = 'ListaRoles'}
         else if(id == 2) {var route = 'headPermisos';}
+        else if(id == 3) {var route = 'Caja-Chica';}
+        else if(id == 4) {var route = 'ListMovcheques';}
         $.get(route,function(data){
             $("#contenidos-box").html(data);//                        
         });
@@ -2375,6 +2378,7 @@ var EliGasto = function(id,nombre){
         else if(id==2){ var route = 'PermisoUser';}
         else if(id==3){ var route = 'modalcheque';}
         else if(id==4){ var route = 'modalmovcheque';}
+        else if(id==5){ var route = 'modalCaja';}
         $.get(route,function(data){
             $("#conten-modal").html(data);
             $("#modalrol").modal({show:'false'});
@@ -2417,12 +2421,13 @@ var EliGasto = function(id,nombre){
    //**************************************   MOV CHEQUE ************************************************************************************************
    
    var regmovCheque = function(){
+      
        var token = $("input[name=_token]").val();
        var type="POST";
        var fields = $("#formmovcheque").serialize();
-       console.log($("#idurl").val());
+       if($("#Regmodal").text() == "Actualizar") type = 'PUT';
       $.ajax({          
-          url:'NewMovCheque',
+          url:'Cheques-Girados/'+$("#idmovcheque").val(),
           headers:{'X-CSRF-TOKEN':token},
           type:type,
           datatype:'json',
@@ -2458,16 +2463,55 @@ var EliGasto = function(id,nombre){
        });
    };
    
+   var EdiMovCheque = function(id){
+       $.get('modalmovcheque',function(data){
+         $("#conten-modal").html(data);
+     });
+     $.getJSON("Cheques-Girados/"+id+"/edit",function(data){              
+         if(data.tipo) $("#tipos").attr('checked',true);
+         else $("#tipoe").attr('checked',true);         
+         $("#concepto").val(data.movcheque.concepto);
+         $("#numero").val(data.movcheque.num_cheque);
+         $("#cheque").val(data.movcheque.cheques_id); 
+         $("#importe").val(data.movcheque.importe);
+         $("#idurl").val(data.movcheque.url_cheque);
+         $("#idmovcheque").val(data.movcheque.id);         
+         $("#dato").val(data.movcheque.paterno+ ' ' + data.movcheque.materno+' '+data.movcheque.nombre);
+         $("#dni").val(data.movcheque.dni);
+         $("#imgcheque").attr('src',data.movcheque.url_cheque); 
+         $("#Regmodal").text("Actualizar");
+         $("#modalrol").modal({show:'false'});
+     });
+   }
    
+   var AnulMovCheque = function(id,cheque,num){
+       $.alertable.prompt('<h3>Concepto de la Anulacion del Cheque? </h3>'+"<span style='color:#ff0000'>"+cheque+" N° "+num  +"</span>").then(function(data){                        
+            var motivo = data.value;
+            var route = "UpdateMovCheque/"+id+"";            
+            var token = $("input[name=_token]").val();
+        $.ajax({
+            url: route,
+            headers: {'X-CSRF-TOKEN': token},
+            type: 'PUT',
+            dataType: 'json',
+            data: { motivo:motivo },
+            success: function (data) {
+                if (data.success) document.location.reload();                
+            },
+            
+        });
+    });
+   }
               
    var cambiarimg = function(){       
        $("#filecheque").click();                 
    };
          
-   var filechange = function (event){       
+   var filechange = function (event){
+       
      var formData = new FormData();
        formData.append("filecheque",event.files[0]);
-       var token = $("input[name=_token]").val();       
+       var token = $("input[name=_token]").val();
     $.ajax({   
          type:'POST',
           url:'/uploadimage',
@@ -2479,10 +2523,8 @@ var EliGasto = function(id,nombre){
           success:function(data){
               
               if(data.success) {
-                  $("#imgcheque").attr('src',data.ruta); 
-                  console.log(data.ruta);
-                  $("#idurl").val(data.ruta);
-                  console.log($("#idurl").val());
+                  $("#imgcheque").attr('src',data.ruta);                   
+                  $("#idurl").val(data.ruta);                  
               }              
           },
           error:function(data){
@@ -2491,6 +2533,82 @@ var EliGasto = function(id,nombre){
        });
    };
    
+   ///     ********************************************   CAJA CHICA ************************************************************************************
+    
+   var regCajaChica = function (){
+       
+       var route = 'Caja-Chica';
+       var token = $("input[name=_token]").val();
+       var type = 'POST';
+       if($("#remcaja").text() == "Actualizar"){
+           route = 'Caja-Chica/'+$("#idcaja").val();
+           type = "PUT";
+       }
+       
+       var formu = $("#formcaja").serialize();
+       $.ajax({          
+          url:route,
+          headers:{'X-CSRF-TOKEN':token},
+          type:type,
+          datatype:'json',
+          data:formu,
+          success:function(data){
+              $("#msj_rol").fadeIn();
+              if(data.success){
+                $("#txt_rol").html(data.message);                   
+                activarForm(3);
+                $("#modalrol").modal("hide")
+              }
+              else{
+                  $("#msj_rol").removeClass('alert-success');
+                  $("#msj_rol").addClass('alert-danger');
+                  $("#txt_rol").html(data.message);                                                
+              }
+               $("#msj_rol").fadeOut(1000);                 
+          },
+          error:function(data){
+              $("#error_rol").html('');$("#error_tag").html('');$("#error_descripcion").html('');              
+              var errors =  $.parseJSON(data.responseText);
+              $.each(errors,function(index, value) {                      
+                            if(index == 'lischeque' )$("#error_lischeque").html(value);
+                            else if(index == 'numero' )$("#error_numero").html(value);
+                            else if(index == 'importe' || index == 'numero')$("#error_importe").html(value);                            
+                      });
+          }
+       });
+   }
+   
+   var EdiCajaChica = function(id){
+       $.get('modalCaja',function(data){
+         $("#conten-modal").html(data);
+     });
+     $.getJSON("Caja-Chica/"+id+"/edit",function(data){                       
+         $("#numero").val(data.num_cheque);
+         $("#lischeque").val(data.mov_cheques_id); 
+         $("#importe").val(data.importe);
+         $("#idcaja").val(data.id);
+         $("#title").html(data.num_caja)
+         $("#remcaja").text("Actualizar");
+         $("#modalrol").modal({show:'false'});
+     });
+   };
+   
+   
+   var AnulCajaChica = function (id,caja,cheque){
+       $.alertable.confirm("<span style='color:#000'>¿Está seguro de eliminar el registro?</span>"+"<br><strong><span style='color:#ff0000'>"+caja+" N° "+cheque+"</span></strong></br>").then(function() {  
+      var route = "/Tesoreria/Caja-Chica/"+id+"";
+      var token = $("input[name=_token]").val();
+      $.ajax({
+        url: route,
+        headers: {'X-CSRF-TOKEN': token},
+        type: 'DELETE',
+        dataType: 'json',
+        success: function(data){
+        if (data.success) activarForm(3);        
+      }
+      });          
+    });
+   };
 //   $(function(){
 //      $("#filecheque").on('change',function(){
 //         alert('cambio') ;

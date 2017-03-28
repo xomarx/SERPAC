@@ -7,15 +7,15 @@
             </div>
             <div class="modal-body form-horizontal">     
                 {!! Form::open(['id'=>'formmovcheque','enctype'=>'multipart/form-data']) !!}                
-                <input type="hidden" name="id" id="id"/>
+                <input type="hidden" name="idmovcheque" id="idmovcheque"/>
                 <input type="hidden" name="idurl" id="idurl"/>
                     @include('mensajes.mensaje')
                     <div class="col-md-2 col-md-offset-1">
                         <label class="radio-inline form-group" onclick="clicktipo(1);">
-                        {!!  Form::radio('tipo','socio', null, ['class' => 'forma-control checkbox','id'=>'condicion']) !!} 
+                        {!!  Form::radio('tipo','socio', null, ['class' => 'forma-control checkbox','id'=>'tipos']) !!} 
                         Socio</label> <br>
                         <label class="radio-inline form-group" onclick="clicktipo(2);">
-                        {!!  Form::radio('tipo','empleado', null, ['class' => 'forma-control','id'=>'condicion']) !!} 
+                        {!!  Form::radio('tipo','empleado', null, ['class' => 'forma-control','id'=>'tipoe']) !!} 
                         Empleado</label>
                         <div class="text-red" id="error_tipo"></div>
                     </div>                    
