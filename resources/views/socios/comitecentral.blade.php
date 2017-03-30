@@ -62,8 +62,8 @@
                                     <td>{{$comite_central->provincia}}</td>
                                     <td>{{$comite_central->departamento}}</td>
                                     <td>                                          
-                                        <a href="#"  OnClick='Edcentral({{$comite_central->id}});'><span class="glyphicon glyphicon-pencil"data-toggle="tooltip" data-placement="top" title="Editars"></span></a>
-                                        <a href="#" onclick="EliCentral('{{$comite_central->id}}','{{$name}}')" ><span data-toggle="tooltip" data-placement="top" title="Eliminar" class="glyphicon glyphicon-remove"></span></a>                                                            
+                                        <a href="#"  OnClick='Edcentral({{$comite_central->id}});' class="btn-sm btn-primary"><span class="glyphicon glyphicon-pencil"data-toggle="tooltip" data-placement="top" title="Editars"></span></a>
+                                        <a href="#" onclick="EliCentral('{{$comite_central->id}}','{{$name}}')" class="btn-sm btn-danger"><span data-toggle="tooltip" data-placement="top" title="Eliminar" class="glyphicon glyphicon-remove"></span></a>                                                            
                                     </td>                    
                                 </tr>
                                 @endforeach

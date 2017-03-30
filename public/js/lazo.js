@@ -59,6 +59,10 @@ $(document).ready(function() {
 } );
 
 
+var department = function(){    
+    cargarprovincia($("#departamento").val(),'provincia');
+};
+
 var cargarprovincia = function(iddepa,idselec) {
     var route = '/provincias/'+iddepa;       
     $.get(route,function(response){        
@@ -68,6 +72,10 @@ var cargarprovincia = function(iddepa,idselec) {
             $("#"+idselec).append("<option value='" + response[i].id+"'>"+response[i].provincia+"</option>");
         }
     });
+};
+
+var province = function(){
+    cargardistrito($("#provincia").val(),'distrito');
 };
 
 var cargardistrito = function (iddist,idsele) {
@@ -80,7 +88,9 @@ var cargardistrito = function (iddist,idsele) {
         }
     }); 
  };
- 
+ var district = function(){
+     cargarcomite_central($("#distrito").val(),'comite_central')
+ };
   var cargarcomite_central = function (idcomitecentral,idselec) {
      var route = "/comites_centrales/"+ idcomitecentral; 
      $.get(route,function(response){           
@@ -91,7 +101,9 @@ var cargardistrito = function (iddist,idsele) {
         }
     }); 
  };
- 
+ var central_committe = function(){
+     cargarComitelocal($("#comite_central").val(),'comite_local');
+ };
  var cargarComitelocal = function (idcomitelocal,idselec) {
      var route = "/comite_locales/"+idcomitelocal;        
     $.get(route,function(response){        
@@ -165,50 +177,171 @@ var RecepConform = function(id)
         });
     }
 
+//  ********************  CRUD SOCIOS   ***************************************************************************************************************
+$("#nuevosocio").click(function (){
+    activarmodal(6);
+});
+
+var RegSocio = function(){                              
+            var token = $("input[name=_token]").val();
+            var route = "/socios";
+            var type = 'post';                              
+            if($("#RegSocio").text() == 'Actualizar')
+            {               
+                type = 'PUT';
+                route=  "/socios/"+$("#codigo").val()+"";                
+            }
+          $.ajax({              
+            url:route,            
+            headers:{'X-CSRF-TOKEN':token},            
+            type:type,
+            datatype: 'json',            
+            data: $("#formsocios").serialize(),
+            success:function(data)
+            {                
+                if(data.success)
+                {                            
+                   var msj = "<h4>"+data.message+"</h4>";
+                   $("#succes").html(msj);
+                   $("#msj-info").fadeIn();
+                    document.location.reload();
+                }
+            },
+            error:function(data){
+                $("#error_codigo").html('');$("#error_dni").html('');$("#error_estado").html('');$("#error_estado_civil").html('');$("#error_paterno").html('');
+                $("#error_materno").html('');$("#error_nombre").html('');$("#error_fec_nac").html('');$("#error_fec_empadron").html('');
+                $("#error_fec_asociado").html('');$("#error_grado_inst").html('');$("#error_comite_local").html('');$("#error_direccion").html('');
+                $("#error_direccion").html('');$("#error_produccion").html('');$("#error_ocupacion").html('');  
+                var errors =  $.parseJSON(data.responseText);                
+                $.each(errors,function(index, value) {                      
+                            if(index == 'codigo')$("#error_codigo").html(value);
+                            else if(index == 'dni')$("#error_dni").html(value);
+                            else if(index == 'estado') $("#error_estado").html(value);
+                            else if(index == 'estado_civil')$("#error_estado_civil").html(value);
+                            else if(index == 'paterno') $("#error_paterno").html(value);
+                            else if(index == 'materno')$("#error_materno").html(value);
+                            else if(index == 'nombre')$("#error_nombre").html(value);
+                            else if(index == 'fec_nac')$("#error_fec_nac").html(value);
+                            else if(index == 'fec_empadron')$("#error_fec_empadron").html(value);
+                            else if(index == 'fec_asociado')$("#error_fec_asociado").html(value);
+                            else if(index == 'grado_inst')$("#error_grado_inst").html(value);
+                            else if(index == 'comite_local')$("#error_comite_local").html(value);
+                            else if(index == 'direccion')$("#error_direccion").html(value);
+                            else if(index == 'produccion')$("#error_produccion").html(value);
+                            else if(index == 'ocupacion')$("#error_ocupacion").html(value);                              
+                      });                       
+            }
+          }) 
+};
+
+$("#RegSocio").click(function(event) {     
+    });    
+    
+   var EditSocio = function(codigo){     
+    $("#RegSocio").text('Actualizar');
+    $("#titulosocio").empty().append('<center>ACTUALIZAR DATO</center>');
+    var route = "/socios/"+codigo+"/edit";    
+    $.get(route, function(data){
+//            alert(id);             
+        $("#codigo").val(data.codigo);
+        $("#dni").val(data.dni);
+        if(data.sexo == 'M') $("#sexoM").prop("checked",true);
+        else if(data.sexo == 'F') $("#sexoF").prop("checked",true);        
+        $("#estado").val(data.estado); 
+        $("#estado_civil").val(data.estado_civil);         
+        $("#paterno").val(data.paterno);
+        $("#materno").val(data.materno);
+        $("#nombre").val(data.nombre);
+        
+        $("#fec_nac").val(data.fec_nac);
+        $("#fec_empadron").val(data.fec_empadron);
+        $("#fec_asociado").val(data.fec_asociado);
+        $("#telefono").val(data.telefono);    
+        $("#grado_inst").val(data.grado_inst);
+        
+        $("#departamento").val(data.departamentos_id);
+        $("#provincia").empty();
+        $("#provincia").append("<option value='" + data.provincias_id+"'>"+data.provincia+"</option>");
+        $("#distrito").empty();
+        $("#distrito").append("<option value='" + data.distritos_id+"'>"+data.distrito+"</option>");
+        $("#comite_central").empty();
+        $("#comite_central").append("<option value='" + data.comites_centrales_id+"'>"+data.comite_central+"</option>");
+        $("#comite_local").empty();
+        $("#comite_local").append("<option value='" + data.comites_locales_id+"'>"+data.comite_local+"</option>");
+        $("#direccion").val(data.direccion);
+        
+        $("#produccion").val(data.produccion);                       
+        $("#ocupacion").val(data.ocupacion);        
+        $("#codigo").attr('disabled','disabled') ;
+        $("#dni").prop( "disabled", true );
+        });      
+};
+
+var EliSocio = function(codigo,name)
+{ 
+     // ALERT JQUERY     
+   $.alertable.confirm("<span style='color:#000'>¿Está seguro de eliminar el registro?</span>"+"<br><strong><span style='color:#ff0000'>"+name+"</span></strong></br>").then(function() {  
+      var route = "/socios/"+codigo+"";
+      var token = $("#token").val();
+      $.ajax({
+        url: route,
+        headers: {'X-CSRF-TOKEN': token},
+        type: 'DELETE',
+        dataType: 'json',
+        success: function(data){
+        if (data.success = 'true')
+        {
+            document.location.reload();
+        }
+      }
+      });
+        
+  
+    });
+};
       
-//  ************************   CRUD CARGOS  *****************
+//  ************************   CRUD CARGOS  **************************************************************************************************************
+$("#nuevocargo").click(function(){
+    $("#RegCargo").text("Registrar");
+});
 
 var EdiCargo = function(id) 
     {      
         var route = "/RRHH/Cargos/"+id+"/edit";
-        $.get(route, function(data){
+        $.getJSON(route, function(data){
 //            alert(id);
-        $("#id").val(data.id);
-        $("#cargo_1").val(data.cargo);        
+        $("#idcargo").val(data.id);
+        $("#cargo").val(data.cargo);
+        $("#RegCargo").text("Actualizar");
         });
     };
                    
-$("#ActCargo").click(function()
-{
-
-  var id = $("#id").val();
-  
-  var cargo = $("#cargo_1").val();
-  var route = "/RRHH/Cargos/"+id+"";
-  var token = $("#token").val();
-
+$("#RegCargo").click(function()
+{    
+  var cargo = $("#cargo").val();
+  var route = "/RRHH/Cargos";var type = "POST"
+  var token = $("input[name=_token]").val();
+    if($("#RegCargo").text() == "Actualizar"){
+        route = "/RRHH/Cargos/"+$("#idcargo").val();
+        type = "PUT";
+    }
   $.ajax({
     url: route,
     headers: {'X-CSRF-TOKEN': token},
-    type: 'PUT',
+    type: type,
     dataType: 'json',
     data: {cargo: cargo},
     success: function(data){
      
-     if (data.success = 'true')
-     {
-        
+     if (data.success == true){             
         $("#myModal").fadeOut(3000);
-        document.location.href= '/RRHH/Cargos';
-       }
+        document.location.reload();
+    }
+       
     },
     error:function(data)
     {
-        $("#error").html(data.responseJSON.name);
-        $("#message-error").fadeIn();
-        if (data.status == 422) {
-           console.clear();
-        }
+        
     }  
   });
 });
@@ -238,101 +371,66 @@ var EliCArgo = function(id,name)
     });
 };
 
-// ******************  CRUD AREAS *****************************
-$("#RegArea").click(function(event)
-    {       
+// ******************  CRUD AREAS ***********************************************************************************************************************
+
+$("#nuevaarea").click(function (){
+    $("#RegArea").text('Registrar');
+});
+
+$("#RegArea").click(function(event){       
             var area = $("#area").val();
-            var token = $("#token").val();                       
-            var route = "/RRHH/Area";            
+            var token = $("input[name=_token]").val();
+            var route = "/RRHH/Area"; var type = "POST";
+            if($("#RegArea").text() == "Actualizar")
+            {   
+                route = "/RRHH/Area/" + $("#idarea").val();
+                type = "PUT";
+            }
           $.ajax({
             url:route,
             headers:{'X-CSRF-TOKEN':token},
-            type:'post',
+            type:type,
             datatype: 'json',
-
             data: {area: area},
             success:function(data)
             {
-                if(data.success = 'true')
-                {                    
-                    document.location.href= '/RRHH/Area';
-                }
-            },              
+                if(data.success == true) document.location.reload();
+                
+            }, 
+            error: function(data){
+          
+      }
           })
     });  
 
-var EdiArea = function(id) 
-    {                
+var EdiArea = function(id) {                
         var route = "/RRHH/Area/"+id+"/edit";
-        $.get(route, function(data){
-//            alert(id);
-        $("#id").val(data.id);
-        $("#area_1").val(data.area);        
+        $("#RegArea").text("Actualizar");
+        $.getJSON(route, function(data){
+            $("#id").val(data.id);
+            $("#area_1").val(data.area);        
         });
-    }
-
-      
-$("#ActArea").click(function(){
-  var id = $("#id").val();
-  
-  var area = $("#area_1").val();
-  var route = "/RRHH/Area/"+id+"";
-  var token = $("#token").val();
-
-  $.ajax({
-    url: route,
-    headers: {'X-CSRF-TOKEN': token},
-    type: 'PUT',
-    dataType: 'json',
-    data: {area: area},
-    success: function(data){
-     
-     if (data.success = 'true')
-     {       
-        $("#myModal").fadeOut(1000);
-        document.location.href= '/RRHH/Area';       
-     }
-    },
-    error:function(data)
-    {
-        $("#error").html(data.responseJSON.area);
-        $("#message-error").fadeIn();
-        if (data.status == 422) {
-           console.clear();
-        }
-    }  
-  });
-});
+    };
    
    
-var EliArea = function(id,name)
-{ 
-     
+var EliArea = function(id,name){      
    $.alertable.confirm("<span style='color:#000'>¿Está seguro de eliminar el registro?</span>"+"<br><strong><span style='color:#ff0000'>"+name+"</span></strong></br>").then(function() {  
       var route = "/RRHH/Area/"+id+"";
-      var token = $("#token").val();
-
+      var token = $("input[name=_token]").val();
       $.ajax({
         url: route,
         headers: {'X-CSRF-TOKEN': token},
         type: 'DELETE',
         dataType: 'json',
         success: function(data){
-        if (data.success = 'true')
-        {
-              document.location.href= '/RRHH/Area';    
-        }
+        if (data.success == true) document.location.reload();        
+      },
+      error: function(data){
+          
       }
-      });
-        
-  
+      });          
     });
 };
-
-
-
-
-
 
 // *************************  CRUD FAUNA  *************************************************************************************************************
 $("#nuefauna").click(function(event){$("#RegFauna").text("Registrar");});
@@ -854,124 +952,6 @@ var editPariente = function(idsocio,dnipariente)
         });
     }
 
-//  ********************  CRUD SOCIOS   ***************************************************************************************************************
-$("#RegSocio").click(function(event) {                  
-        var fields = $("#formsocios").serialize();                                       
-            var token = $("#token").val();                       
-            var route = "/socios";
-            var type = 'post';                              
-            if($("#RegSocio").text() == 'Actualizar')
-            {               
-                type = 'PUT';
-                route=  "/socios/"+$("#codigo").val()+"";                
-            }
-          $.ajax({              
-            url:route,            
-            headers:{'X-CSRF-TOKEN':token},            
-            type:type,
-            datatype: 'json',
-            //async: false,
-            data: fields,
-            success:function(data)
-            {                
-                if(data.success == 'true')
-                {                            
-                   var msj = "<h4>"+data.message+"</h4>";
-                   $("#succes").html(msj);
-                   $("#msj-info").fadeIn();
-                    document.location.reload();
-                }
-            },
-            error:function(data)
-            {
-                $("#error_codigo").html('');$("#error_dni").html('');$("#error_estado").html('');$("#error_estado_civil").html('');$("#error_paterno").html('');
-                $("#error_materno").html('');$("#error_nombre").html('');$("#error_fec_nac").html('');$("#error_fec_empadron").html('');
-                $("#error_fec_asociado").html('');$("#error_grado_inst").html('');$("#error_comite_local").html('');$("#error_direccion").html('');
-                $("#error_direccion").html('');$("#error_produccion").html('');$("#error_ocupacion").html('');  
-                var errors =  $.parseJSON(data.responseText);                
-                $.each(errors,function(index, value) {                      
-                            if(index == 'codigo')$("#error_codigo").html(value);
-                            else if(index == 'dni')$("#error_dni").html(value);
-                            else if(index == 'estado') $("#error_estado").html(value);
-                            else if(index == 'estado_civil')$("#error_estado_civil").html(value);
-                            else if(index == 'paterno') $("#error_paterno").html(value);
-                            else if(index == 'materno')$("#error_materno").html(value);
-                            else if(index == 'nombre')$("#error_nombre").html(value);
-                            else if(index == 'fec_nac')$("#error_fec_nac").html(value);
-                            else if(index == 'fec_empadron')$("#error_fec_empadron").html(value);
-                            else if(index == 'fec_asociado')$("#error_fec_asociado").html(value);
-                            else if(index == 'grado_inst')$("#error_grado_inst").html(value);
-                            else if(index == 'comite_local')$("#error_comite_local").html(value);
-                            else if(index == 'direccion')$("#error_direccion").html(value);
-                            else if(index == 'produccion')$("#error_produccion").html(value);
-                            else if(index == 'ocupacion')$("#error_ocupacion").html(value);                              
-                      });                       
-            }
-          })      
-    });    
-    
-   var EditSocio = function(codigo){     
-    $("#RegSocio").text('Actualizar');
-    $("#titulosocio").empty().append('<center>ACTUALIZAR DATO</center>');
-    var route = "/socios/"+codigo+"/edit";    
-    $.get(route, function(data){
-//            alert(id);             
-        $("#codigo").val(data.codigo);
-        $("#dni").val(data.dni);
-        if(data.sexo == 'M') $("#sexoM").prop("checked",true);
-        else if(data.sexo == 'F') $("#sexoF").prop("checked",true);        
-        $("#estado").val(data.estado); 
-        $("#estado_civil").val(data.estado_civil);         
-        $("#paterno").val(data.paterno);
-        $("#materno").val(data.materno);
-        $("#nombre").val(data.nombre);
-        
-        $("#fec_nac").val(data.fec_nac);
-        $("#fec_empadron").val(data.fec_empadron);
-        $("#fec_asociado").val(data.fec_asociado);
-        $("#telefono").val(data.telefono);    
-        $("#grado_inst").val(data.grado_inst);
-        
-        $("#departamento").val(data.departamentos_id);
-        $("#provincia").empty();
-        $("#provincia").append("<option value='" + data.provincias_id+"'>"+data.provincia+"</option>");
-        $("#distrito").empty();
-        $("#distrito").append("<option value='" + data.distritos_id+"'>"+data.distrito+"</option>");
-        $("#comite_central").empty();
-        $("#comite_central").append("<option value='" + data.comites_centrales_id+"'>"+data.comite_central+"</option>");
-        $("#comite_local").empty();
-        $("#comite_local").append("<option value='" + data.comites_locales_id+"'>"+data.comite_local+"</option>");
-        $("#direccion").val(data.direccion);
-        
-        $("#produccion").val(data.produccion);                       
-        $("#ocupacion").val(data.ocupacion);        
-        $("#codigo").attr('disabled','disabled') ;
-        $("#dni").prop( "disabled", true );
-        });      
-};
-
-var EliSocio = function(codigo,name)
-{ 
-     // ALERT JQUERY     
-   $.alertable.confirm("<span style='color:#000'>¿Está seguro de eliminar el registro?</span>"+"<br><strong><span style='color:#ff0000'>"+name+"</span></strong></br>").then(function() {  
-      var route = "/socios/"+codigo+"";
-      var token = $("#token").val();
-      $.ajax({
-        url: route,
-        headers: {'X-CSRF-TOKEN': token},
-        type: 'DELETE',
-        dataType: 'json',
-        success: function(data){
-        if (data.success = 'true')
-        {
-            document.location.reload();
-        }
-      }
-      });
-        
-  
-    });
-};
 
 //  *****************  CRUD FLORA  *********************************************************************************************************************
 $("#nuevaflora").click(function (event){ $("#RegFlora").text("Registrar");$("#error_flora").html('');});
@@ -2300,8 +2280,7 @@ var EliGasto = function(id,nombre){
    };
    
    // ***************************   ROL *****************************************************************************************************************
-     
-   
+        
    var regrol = function (id){
        var formu = $("#formrol").serialize();
        var token = $("input[name=_token]").val();
@@ -2361,13 +2340,13 @@ var EliGasto = function(id,nombre){
           }
        });
    };
-   
-   
+      
    var activarForm = function(id){
         if(id == 1) {var route = 'ListaRoles'}
         else if(id == 2) {var route = 'headPermisos';}
         else if(id == 3) {var route = 'Caja-Chica';}
         else if(id == 4) {var route = 'ListMovcheques';}
+        else if(id == 5) {var route = 'ListUsuarios';}
         $.get(route,function(data){
             $("#contenidos-box").html(data);//                        
         });
@@ -2379,12 +2358,15 @@ var EliGasto = function(id,nombre){
         else if(id==3){ var route = 'modalcheque';}
         else if(id==4){ var route = 'modalmovcheque';}
         else if(id==5){ var route = 'modalCaja';}
-        $.get(route,function(data){
+        else if(id==6){ var route = '/socios/modalsocio';}
+        $.get(route,function(data){            
             $("#conten-modal").html(data);
-            $("#modalrol").modal({show:'false'});
+            $("#modal-form").modal();
         });
     };
-   
+    
+          
+     
    // ******************************************  CHEQUE *************************************************************************************************
    
    var EdiCheque = function(id){     
@@ -2576,7 +2558,7 @@ var EliGasto = function(id,nombre){
                       });
           }
        });
-   }
+   };
    
    var EdiCajaChica = function(id){
        $.get('modalCaja',function(data){
@@ -2609,6 +2591,70 @@ var EliGasto = function(id,nombre){
       });          
     });
    };
+        
+   //***************************************************************   ASIGNAR ROL  - USUARIO ***********************************************************
+   
+   var modalrol = function(name){
+       var route = 'modalRolUser';
+        $.get(route,function(data){
+            $("#conten-modal").html(data);
+            $("#title-user").html(name);
+            $("#modalrol").modal({show:'false'});
+        });
+   };
+   
+  var rolUser = function(){
+       var route = '';
+       var token = $("input[name=_token]").val();           
+       $.ajax({          
+          url: 'NewRolUser',
+          headers:{'X-CSRF-TOKEN':token},
+          type:'POST',
+          datatype:'json',
+          data:{rol:$("#rol").val(),usuario:$("#title-user").html()},
+          success:function(data){
+              console.log(data);
+              $("#msj_rol").fadeIn();
+              if(data.success){
+                $("#txt_rol").html(data.message);
+                activarForm(5);
+                $("#modalrol").modal("hide")
+              }
+              else{
+                  $("#msj_rol").removeClass('alert-success');
+                  $("#msj_rol").addClass('alert-danger');
+                  $("#txt_rol").html(data.message);                                                
+              }
+               $("#msj_rol").fadeOut(1000);                 
+          },
+          error:function(data){
+              $("#error_rol").html('');            
+              var errors =  $.parseJSON(data.responseText);
+              $.each(errors,function(index, value) {                      
+                            if(index == 'rol' )$("#error_rol").html(value);                                                      
+                      });
+          }
+       });
+   };
+   
+   var ActDesact = function(name){
+       $.alertable.confirm("<span style='color:#000'>¿Está seguro de Cambiar el estado del Usuario: ?</span>"+"<br><strong><span style='color:#ff0000'>"+name+"</span></strong></br>").then(function() {  
+      var route = "estado-user"
+      var token = $("input[name=_token]").val();
+      $.ajax({
+        url: route,
+        headers: {'X-CSRF-TOKEN': token},
+        type: 'POST',
+        dataType: 'json',
+        data:{usuario:name},
+        success: function(data){ 
+            if(data.success) 
+                activarForm(5);
+      }
+      });          
+    });
+   };
+   
 //   $(function(){
 //      $("#filecheque").on('change',function(){
 //         alert('cambio') ;

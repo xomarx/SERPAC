@@ -1,10 +1,10 @@
-<div class="modal fade" id="editarsocios" role="dialog">
-    <div class="modal-dialog modal-lg">
+<div class="modal fade" id="modal-form" role="dialog">
+    <div class="modal-dialog modal-lg modal-primary">
         <div class="modal-content">
             {!! Form::open(['id'=>'formsocios']) !!}
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title bg-blue" id="titulosocio"><center>ACTUALIZAR SOCIO</center></h4>          
+                <h4 class="modal-title" id="titulosocio"><center>DATOS DEL SOCIO</center></h4>          
             </div>
             <div class="modal-body">    
                 
@@ -97,22 +97,22 @@
                 <div class="col-md-12 col-md-offset-0 row form-group" >
                     <div class="col-sm-3">
                         {!! Form::label('departamento','Departamento',['class'=>'control-label']) !!}
-                        {!! Form::select('departamento',$departamentos,null,['id'=>'departamento','class'=>'form-control']) !!}
+                        {!! Form::select('departamento',$departamentos,null,['id'=>'departamento','class'=>'form-control','placeholder'=>'Seleccione','onchange'=>'department()']) !!}
                         <div class="text-danger" id="error_departamento"></div>
                     </div>
                     <div class=" col-sm-3">
                         {!! Form::label('Provincia','Provincia',['class'=>'control-label']) !!}
-                        {!! Form::select ('provincia',['placeholder'=>'selecciona'],null,['id'=>'provincia','class'=>'form-control']) !!}
+                        {!! Form::select ('provincia',['placeholder'=>'selecciona'],null,['id'=>'provincia','class'=>'form-control','onchange'=>'province()']) !!}
                         <div class="text-danger" id="error_provincia"></div>
                     </div>
                     <div class="col-sm-3">
                         {!! Form::label('distrito','Distrito',['class'=>'control-label']) !!}
-                        {!! Form::select ('distrito',['placeholder'=>'selecciona'],null,['id'=>'distrito','class'=>'form-control']) !!}
+                        {!! Form::select ('distrito',['placeholder'=>'selecciona'],null,['id'=>'distrito','class'=>'form-control','onchange'=>'district()']) !!}
                         <div class="text-danger" id="error_distrito"></div>
                     </div>
                     <div class=" col-sm-3">      
                         {!! Form::label('Comite ','Comite Central',['class'=>'control-label']) !!}
-                        {!! Form::select ('comite_central',['placeholder'=>'selecciona'],null,['id'=>'comite_central','class'=>'form-control']) !!}
+                        {!! Form::select ('comite_central',['placeholder'=>'selecciona'],null,['id'=>'comite_central','class'=>'form-control','onchange'=>'central_committe()']) !!}
                         <div class="text-danger" id="error_comite_central"></div>
                     </div>
                 </div>
@@ -141,8 +141,8 @@
                 </div>               
             </div>
             <div class="modal-footer">
-                {!!link_to('#', $title='Registrar', $attributes = ['id'=>'RegSocio', 'class'=>'btn btn-primary btn-sm m-t-10'])!!}                
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                {!!link_to('#', $title='REGISTRAR', $attributes = ['id'=>'RegSocio', 'class'=>'btn btn-dropbox','onclick'=>'RegSocio()'])!!}                
+                <button type="button" class="btn btn-default " data-dismiss="modal">Close</button>
             </div>
             {!! Form::close() !!}
         </div>

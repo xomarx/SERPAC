@@ -46,7 +46,10 @@ class User extends Authenticatable
         return \Illuminate\Support\Facades\DB::table('users')
                 ->join('empleados','users.empleados_empleadoId','=','empleados.empleadoId')
                 ->join('personas','empleados.personas_dni','=','personas.dni')
-                ->select('users.name','users.email','personas.paterno','personas.materno','personas.nombre','users.created_at')
+                ->leftjoin('role_user','users.id','=','role_user.user_id')
+                ->leftjoin('roles','role_user.role_id','=','roles.id')
+                ->select('users.name','users.email','personas.paterno','personas.materno','personas.nombre','users.created_at','users.estado'
+                        ,'roles.name as rol')
                 ->get();
     }
 }

@@ -7,8 +7,7 @@
 <div class="box-body">
     <div class="box box-solid box-primary">
         <div class="box-header" style="text-align: center">
-            <a id="nuevasucursal" data-toggle='modal' data-target='#modalsucursal' class="btn btn-dropbox btn-sm m-t-10" style="float: left;">NUEVO  <span class="glyphicon glyphicon-plus"data-toggle="tooltip" data-placement="top" title="Nueva Sucursal"></span></a> 
-            <h3 class="box-title">LISTA DE CENTROS DE ACOPIO</h3>           
+            <a id="nuevasucursal" data-toggle='modal' data-target='#modalsucursal' class="btn btn-dropbox btn-sm m-t-10" style="float: left;">NUEVO  <span class="glyphicon glyphicon-plus"data-toggle="tooltip" data-placement="top" title="Nueva Sucursal"></span></a>               
         </div>
         <div class="box-body">
             <table class="table table-responsive" id="myTable" >

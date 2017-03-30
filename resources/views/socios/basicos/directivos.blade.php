@@ -47,8 +47,8 @@
                             <td>{{$directivo->id}}</td>
                             <td>{{$directivo->cargo_directivo}}</td>                                                        
                             <td>                                          
-                                <a href="#"  OnClick='EdDirectivo({{$directivo->id}});' ><span class="glyphicon glyphicon-pencil"data-toggle="tooltip" data-placement="top" title="Editars"></span></a>
-                                <a href="#" onclick="EliDirectivo('{{$directivo->id}}','{{$name}}')" ><span data-toggle="tooltip" data-placement="top" title="Eliminar" class="glyphicon glyphicon-remove"></span></a>                                                            
+                                <a href="#"  OnClick='EdDirectivo({{$directivo->id}});' class="btn-sm btn-primary"><span class="glyphicon glyphicon-pencil"data-toggle="tooltip" data-placement="top" title="Editars"></span></a>
+                                <a href="#" onclick="EliDirectivo('{{$directivo->id}}','{{$name}}')" class="btn-sm btn-danger"><span data-toggle="tooltip" data-placement="top" title="Eliminar" class="glyphicon glyphicon-remove"></span></a>                                                            
                             </td>                    
                         </tr>
                         @endforeach

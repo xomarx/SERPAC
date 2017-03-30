@@ -1,5 +1,5 @@
 <div class="modal fade" id="pariente" role="dialog">
-    <div class="modal-dialog">    
+    <div class="modal-dialog modal-primary">    
         
         <div class="modal-content">
             <div class="modal-header">
@@ -75,7 +75,6 @@
                     {!! Form::label('central','Com. Central: ',['class'=>'control-label col-xs-2']) !!}
                     <div class="col-sm-4">
                         {!! Form::select ('comite_central',['placeholder'=>'selecciona'],null,['id'=>'comite_central_1','class'=>'form-control','required']) !!}
-
                     </div>                 
                 </div>
                 <div class="col-md-11 col-md-offset-0 row" >

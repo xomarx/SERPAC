@@ -5,9 +5,9 @@
 @section('main-content')
 
 <div class="box box-solid box-primary">
-    <div class="box-header" style="text-align: center;">        
-        <a id="nuevadistribucion" style="float: left;" data-toggle='modal' data-target='#modaldistribucion' class="btn btn-dropbox btn-sm m-t-10" >NUEVO  <span class="glyphicon glyphicon-plus" data-toggle="tooltip" data-placement="top" title="Nueva Distribucion"></span></a>
-        <h3 class="box-title" >LISTA DE DISTRIBUCION DE FONDOS</h3>
+    <div class="box-header" >        
+        <a id="nuevadistribucion" data-toggle='modal' data-target='#modaldistribucion' class="btn btn-dropbox btn-sm m-t-10" >NUEVO  <span class="glyphicon glyphicon-plus" data-toggle="tooltip" data-placement="top" title="Nueva Distribucion"></span></a>
+        
     </div>
     <div class="box-body">
         <table class="table table-responsive" id="myTable" >

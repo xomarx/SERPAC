@@ -7,42 +7,40 @@
 @section('main-content')
 
 <div class="box box-solid box-primary">
-    <div class="box-header">        
-        <center> <h3 class="box-title">LISTA DE PARIENTES DE LOS SOCIOS</h3></center>
-    </div>
+    
     <div class="box-body">        
         <table class="table table-responsive" id="myTable">
-                        <thead>     
-                        <th>CODIGO SOCIO</th>
-                        <th>DNI</th>                                                   
-                        <th>PARIENTE</th>    
-                        <th>ESTADO CIVIL</th>  
-                        <th>DIRECCION</th>
-                        <th>COMITE LOCAL</th>
-                        <th>COMITE CENTRAL</th>
-                        <th>USUARIO</th>
-                        <th>ACCIONES</th>
-                        </thead>
-                        <tbody>
-                            @foreach($parientes as $pariente)
-                            <tr>                                         
-                                <td>{{$pariente->socios_codigo}}</td>                                                        
-                                <td>{{$pariente->dni}}</td>
-                                <td>{{$pariente->paterno}} {{$pariente->materno}} {{$pariente->nombre}}</td>
-                                <td>{{$pariente->estado_civil}}</td>
-                                <td>{{$pariente->direccion}}</td>
-                                <td>{{ $pariente->comite_local }}</td>
-                                <td>{{ $pariente->comite_central }}</td>
-                                <td>{{ $pariente->name }}</td>
-                                <td>                                    
-                                    <a href="javascript:void(0)" onclick="editPariente('{{$pariente->socios_codigo}}','{{$pariente->dni}}')" data-toggle="modal" data-target="#pariente"><span  data-toggle="tooltip" data-placement="top" title="Editar" class="glyphicon glyphicon-pencil"></span></a>
-                                    <a href="#" data-toggle="tooltip" data-placement="top" title="Eliminar"><span class="glyphicon glyphicon-remove"></span></a>
-                                    <!--<a data-toggle="modal" data-target="#pariente"><span class="glyphicon glyphicon-user" data-toggle="tooltip" data-placement="top" title="Parientes"></span></a>-->
-                                </td>                    
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+            <thead>     
+            <th>CODIGO SOCIO</th>
+            <th>DNI</th>                                                   
+            <th>PARIENTE</th>    
+            <th>ESTADO CIVIL</th>  
+            <th>DIRECCION</th>
+            <th>COMITE LOCAL</th>
+            <th>COMITE CENTRAL</th>
+            <th>USUARIO</th>
+            <th>ACCIONES</th>
+            </thead>
+            <tbody>
+                @foreach($parientes as $pariente)
+                <tr>                                         
+                    <td>{{$pariente->socios_codigo}}</td>                                                        
+                    <td>{{$pariente->dni}}</td>
+                    <td>{{$pariente->paterno}} {{$pariente->materno}} {{$pariente->nombre}}</td>
+                    <td>{{$pariente->estado_civil}}</td>
+                    <td>{{$pariente->direccion}}</td>
+                    <td>{{ $pariente->comite_local }}</td>
+                    <td>{{ $pariente->comite_central }}</td>
+                    <td>{{ $pariente->name }}</td>
+                    <td>                                    
+                        <a style="cursor: pointer;" onclick="editPariente('{{$pariente->socios_codigo}}','{{$pariente->dni}}')" data-toggle="modal" data-target="#pariente" class="btn-sm btn-primary"><span  data-toggle="tooltip" data-placement="top" title="Editar" class="glyphicon glyphicon-pencil"></span></a>
+                        <a style="cursor: pointer;" data-toggle="tooltip" data-placement="top" title="Eliminar" class="btn-sm btn-danger"><span class="glyphicon glyphicon-remove"></span></a>
+                        <!--<a data-toggle="modal" data-target="#pariente"><span class="glyphicon glyphicon-user" data-toggle="tooltip" data-placement="top" title="Parientes"></span></a>-->
+                    </td>                    
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
     </div>
 </div>
 

@@ -96,11 +96,18 @@ class sociocontroller extends Controller
             return response()->json($result);
         }
     }
+    
+    public function ModalSocio(){
+        if(!auth()->can('crear socios','editar socios')) 
+            return response()->view('errors.403-modal');
+        $departamentos = Departamento::pluck('departamento','id');
+        return response()->view('socios.formsocio',['departamentos'=>$departamentos]);
+    }
 
     public function index()
     {                     
         $socios = Socio::listasocios();
-        $departamentos = Departamento::pluck('departamento','id')->prepend('Selleciona');
+        $departamentos = Departamento::pluck('departamento','id');
         $floras = Flora::pluck('flora','id');  
         $faunas = Fauna::pluck('fauna','id');  
         $inmuebles = Inmueble::pluck('inmueble','id');  
@@ -159,15 +166,8 @@ class sociocontroller extends Controller
             $socio->dni = $dni;
             $socio->users_id = \Illuminate\Support\Facades\Auth::user()->id;
             $socio->save();                        
-            if($socio)
-            {                            
-                return response()->json(['success'=>'true','message'=> 'Se Registro Correctamente']);
-            }
-            else
-            {                
-                return response()->json(['success'=>'false','message'=> 'No se Registro ningun dato']);
-            }
-//            redirect()->route('Socios');
+            if($socio) return response()->json(['success'=>true,'message'=> 'Se Registro Correctamente']);            
+            else return response()->json(['success'=>false,'message'=> 'No se Registro ningun dato']);            
         }
         
     }
@@ -201,7 +201,7 @@ class sociocontroller extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Updatesociorquest $request, $codigo)
+    public function update(SociocreateRequest $request, $codigo)
     {        
         if ($request->ajax()) {
             $date = Carbon::parse($request->fec_asociado);

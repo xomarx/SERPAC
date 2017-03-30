@@ -46,8 +46,8 @@
                             <td>{{$flora->id}}</td>
                             <td>{{$flora->flora}}</td>                                                        
                             <td>                                          
-                                <a href="javascript:void(0);"  OnClick='EdFlora({{$flora->id}});' data-toggle='modal' data-target='#myModal'><span class="glyphicon glyphicon-pencil"data-toggle="tooltip" data-placement="top" title="Editars"></span></a>
-                                <a href="javascript:void(0);" onclick="EliFlora('{{$flora->id}}','{{$name}}')" ><span data-toggle="tooltip" data-placement="top" title="Eliminar" class="glyphicon glyphicon-remove"></span></a>                                                            
+                                <a href="javascript:void(0);"  OnClick='EdFlora({{$flora->id}});' data-toggle='modal' data-target='#myModal' class="btn-sm btn-primary"><span class="glyphicon glyphicon-pencil"data-toggle="tooltip" data-placement="top" title="Editars"></span></a>
+                                <a href="javascript:void(0);" onclick="EliFlora('{{$flora->id}}','{{$name}}')" class="btn-sm btn-danger"><span data-toggle="tooltip" data-placement="top" title="Eliminar" class="glyphicon glyphicon-remove"></span></a>                                                            
                             </td>                    
                         </tr>
                         @endforeach

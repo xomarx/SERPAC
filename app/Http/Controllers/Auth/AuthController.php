@@ -26,11 +26,14 @@ class AuthController extends Controller
     use AuthenticatesAndRegistersUsers, ThrottlesLogins;
 //
 
-    public function getLogout() {
-        parent::getLogout();
+
+
+    public function getsignOut(){
+//        \Illuminate\Support\Facades\Auth::logout();
+        \Illuminate\Support\Facades\Session::flush();
+//        auth()->logout();        
+       return redirect('/');
     }
-        
-    
 
     /**
      * Where to redirect users after login / registration.
@@ -79,8 +82,14 @@ class AuthController extends Controller
             'remember_token'=>str_random(100),
             'empleados_empleadoId'=>$data['empleado'],            
         ]);
-    }  
+    }
     
+    public function CrearUser(){
+        $empleados = \App\Models\RRHH\Empleado::listaEmplUser();
+        return view('auth.register',['empleados'=>$empleados]);
+    }
+
+
     public function listUsers(){        
         $usuarios = \App\User::usuarios();
         return view('Configuracion.usuarios',['usuarios'=>$usuarios]);        

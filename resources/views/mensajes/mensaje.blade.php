@@ -1,3 +1,3 @@
-<div class="alert alert-success" style="display: none;" id="msj_rol">
-                        <strong id="txt_rol"></strong>
-                    </div> 
+<div class="alert alert-success" role='alert' id="alert-msj">
+    <strong id="alert-txt"></strong>
+</div>

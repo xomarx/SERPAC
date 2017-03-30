@@ -54,8 +54,8 @@
                             <td>{{$distrito->provincia}}</td>
                             <td>{{$distrito->departamento}}</td>
                             <td>                                          
-                                <a href="javascript:void(0);"  OnClick='EdDistrito({{$distrito->id}});'><span class="glyphicon glyphicon-pencil"data-toggle="tooltip" data-placement="top" title="Editars"></span></a>
-                                <a href="javascript:void(0);" onclick="EliDistrito('{{$distrito->id}}','{{$name}}')" ><span data-toggle="tooltip" data-placement="top" title="Eliminar" class="glyphicon glyphicon-remove"></span></a>                                                            
+                                <a href="javascript:void(0);"  OnClick='EdDistrito({{$distrito->id}});' class="btn-sm btn-primary"><span class="glyphicon glyphicon-pencil"data-toggle="tooltip" data-placement="top" title="Editars"></span></a>
+                                <a href="javascript:void(0);" onclick="EliDistrito('{{$distrito->id}}','{{$name}}')" class="btn-sm btn-danger"><span data-toggle="tooltip" data-placement="top" title="Eliminar" class="glyphicon glyphicon-remove"></span></a>                                                            
                             </td>                    
                         </tr>
                         @endforeach

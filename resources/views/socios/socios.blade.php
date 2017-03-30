@@ -6,10 +6,9 @@
 
 <div class="box box-solid box-primary">
     <div class="box-header">        
-        <center> <h3 class="box-title">LISTA DE SOCIOS</h3></center>
+        <a id="nuevosocio" class="btn btn-dropbox btn-sm m-t-10" data-toggle="tooltip" data-placement="top" title="Nuevo Socio">NUEVO  <span class="glyphicon glyphicon-plus"></span></a>
     </div>
-    <div class="box-body">
-        <a id="nuevosocio" data-toggle='modal' data-target='#editarsocios' class="btn btn-primary btn-sm m-t-10" ><span class="glyphicon glyphicon-plus"data-toggle="tooltip" data-placement="top" title="Nuevo Socio"> NUEVO</span></a>
+    <div class="box-body">        
         <table class="table table-responsive" id="myTable">
             <thead>            
             <th>FEC ASOCIADO</th>  
@@ -36,11 +35,11 @@
                     <td>{{$socio->comite_central}}</td>
                     <td>{{$socio->name}}</td>                    
                     <td>                                    
-                        <a href="{{url('PadronSocio')}}/{{$socio->codigo}}" data-toggle="tooltip" data-placement="top" title="Ver"><span class="glyphicon glyphicon-eye-open"></span></a>
-                        <a  href="#" onclick="EditSocio('{{$socio->codigo}}')" data-toggle='modal' data-target='#editarsocios' ><span data-toggle="tooltip" data-placement="top" title="Editar" class="glyphicon glyphicon-pencil"></span></a>
-                        <a href="#" onclick="EliSocio('{{$socio->codigo}}','{{$name}}')" ><span data-toggle="tooltip" data-placement="top" title="Eliminar" class="glyphicon glyphicon-remove"></span></a>
-                        <a href="#" onclick="ParSocio('{{$socio->codigo}}','{{$nombre }}','{{ $paterno }}','{{$materno }}')" data-toggle="modal" data-target="#pariente"><span class="glyphicon glyphicon-user" data-toggle="tooltip" data-placement="top" title="Parientes"></span></a>
-                        <a href="#" onclick="fundosocio('{{$socio->codigo}}','{{$nombre }}','{{ $paterno }}','{{$materno }}')" data-toggle='modal' data-target='#fundomodal' ><span data-toggle="tooltip" data-placement="top" title="Fundos" class="glyphicon glyphicon-home"></span></a>
+                        <a href="{{url('PadronSocio')}}/{{$socio->codigo}}" data-toggle="tooltip" data-placement="top" title="Ver" class="btn-sm btn-success"><span class="glyphicon glyphicon-eye-open"></span></a>
+                        <a  href="#" onclick="EditSocio('{{$socio->codigo}}')" data-toggle='modal' data-target='#editarsocios' class="btn-sm btn-primary" ><span data-toggle="tooltip" data-placement="top" title="Editar" class="glyphicon glyphicon-pencil"></span></a>
+                        <a href="#" onclick="EliSocio('{{$socio->codigo}}','{{$name}}')" class="btn-sm btn-danger"><span data-toggle="tooltip" data-placement="top" title="Eliminar" class="glyphicon glyphicon-remove"></span></a>
+                        <a href="#" onclick="ParSocio('{{$socio->codigo}}','{{$nombre }}','{{ $paterno }}','{{$materno }}')" data-toggle="modal" data-target="#pariente" class="btn-sm btn-info"><span class="glyphicon glyphicon-user" data-toggle="tooltip" data-placement="top" title="Parientes"></span></a>
+                        <a href="#" onclick="fundosocio('{{$socio->codigo}}','{{$nombre }}','{{ $paterno }}','{{$materno }}')" data-toggle='modal' data-target='#fundomodal' class="btn-sm btn-success" ><span data-toggle="tooltip" data-placement="top" title="Fundos" class="glyphicon glyphicon-home"></span></a>
                     </td>                
                 </tr>
                 @endforeach
@@ -50,9 +49,10 @@
     <div class="box-footer">
     </div>
 </div>
-
+<section id="conten-modal">    
+</section>
 <!--formulario de socios-->       
-@include('socios.formsocio')       
+    
 <!--formulario de parientes-->
 @include('socios.formParientes')
 
@@ -110,14 +110,14 @@
         $("#titulof").append('REGISTRO DE FUNDO DEL SOCIO: '+paterno + ' ' + materno + ' ' + nombre + ' CODIGO: '+codigo);
         $("#codigo_socios").val(codigo);
     }
-            
-$("#nuevosocio").click(function(event){
-    $("#ActSocio").text('Registrar');
-    $("#titulosocio").empty().append('<center>NUEVO SOCIO</center>');   
-    $("#codigo").prop( "disabled", false );
-        $("#dni").prop( "disabled", false );
-   $("#formsocios")[0].reset();
-});
+//            
+//$("#nuevosocio").click(function(event){
+//    $("#ActSocio").text('Registrar');
+//    $("#titulosocio").empty().append('<center>NUEVO SOCIO</center>');   
+//    $("#codigo").prop( "disabled", false );
+//        $("#dni").prop( "disabled", false );
+//   $("#formsocios")[0].reset();
+//});
 
    // ************  FECHAS DATETIME
     
@@ -180,8 +180,13 @@ $("#nuevosocio").click(function(event){
      cargardistrito(event.target.value,"distrito");
  });
 
- $("#departamento").change(function(event){     
-     cargarprovincia(event.target.value,"provincia");
+ $("#departamento").on('change',function (event){
+         console.log('evento');
+     });
+
+   $("#departamento").change(function(event){    
+     alert('2');
+//     cargarprovincia(event.target.value,"provincia");
  });
  
  // ****************   lista ubigeo

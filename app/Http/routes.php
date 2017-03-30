@@ -22,13 +22,10 @@ Route::group(['middleware' => ['auth']], function () {
     // Authentication routes...
     //Route::get('auth/login', 'Auth\AuthController@getLogin');
 //    Route::post('auth/login', ['as'=> 'login','uses'=>'Auth\AuthController@postLogin']);
-//    Route::post('logout', ['as'=>'logout','uses'=>'Auth\AuthController@getLogout']);
-    // Registration routes...
-//    Route::get('register', 'Auth\AuthController@getRegister');
-//    Route::post('register',['as'=>'auth/register','uses'=>'Auth\AuthController@postRegister']);
-
+    Route::get('sign-out', 'Auth\AuthController@getsignOut');
     
-    Route::get('Usuarios', ['as'=> 'usuarios','uses'=>'Auth\AuthController@listUsers']);
+    route::get('Usuarios', ['as'=> 'usuarios','uses'=>'Auth\AuthController@listUsers']);
+    route::get('Usuarios/crear-usuario', ['as'=> 'usuarios','uses'=>'Auth\AuthController@CrearUser']);
     
     route::resource('NewRolUsuario','Configuracion\usuarioController@storerol');
     route::resource('RolUsuario','Configuracion\usuarioController@roluser');
@@ -37,7 +34,11 @@ Route::group(['middleware' => ['auth']], function () {
     route::resource('headPermisos','Configuracion\usuarioController@HeadPermisoUser');//HeadPermisoUser
     route::resource('NewPermisoUser','Configuracion\usuarioController@PermisoStore');//PermisoStore
     route::resource('AsigPermisos','Configuracion\usuarioController@AsigPermisoStore');//AsigPermisoStore
-    route::resource('ListaPermisos','Configuracion\usuarioController');
+    route::resource('ListaPermisos','Configuracion\usuarioController');    
+    route::resource('modalRolUser','Configuracion\usuarioController@asigRolUser');
+    route::resource('NewRolUser','Configuracion\usuarioController@AsigRolUserStore');
+    route::resource('ListUsuarios','Configuracion\usuarioController@ListUsers');
+    route::resource('estado-user','Configuracion\usuarioController@ActDesact');
     
     Route::get('comite_locales/{id}','socios\comite_localcontroller@getcomites_locales');
     Route::get('comites_centrales/{id}','socios\comite_centralcontroller@getcomites_centrales');
@@ -71,28 +72,28 @@ Route::group(['middleware' => ['auth']], function () {
     route::resource('socios/comite-central','socios\comite_centralcontroller');    
     route::resource('socios/distritos','socios\distritocontroller');
     route::resource('socios/provincias','socios\provinciacontroller');    
-    route::resource('socios/departamentos','socios\departamentocontroller');   
-     
+    route::resource('socios/departamentos','socios\departamentocontroller');        
 //    route::resource('socios','socios\sociocontroller@create');
-    route::resource('socios/parientes','socios\parientescontroller');
+    route::resource('socios/parientes','socios\parientescontroller');                        
+    route::resource('socios/autopersonas','socios\sociocontroller@autoSociosPersonas');
     route::get('socios/parientes/{idsocio?}/{dnipar?}','socios\parientescontroller@datosparientes');
-    // autocomplete 
+    route::resource('socios/autoDniSocios','socios\sociocontroller@autoSociosDni');
     route::resource('socios/search','socios\sociocontroller@autocomplete');//autocomplete
     route::resource('socios/dni','socios\sociocontroller@autocompleteDniSocio');//autocompleteDniSocio
     route::resource('socios/codigo','socios\sociocontroller@autocompleteCodigoSocio');//autocompleteCodigoSocio
     route::resource('socios/dnipersona','socios\personacontroller@autoCompleteDniPersona');//autoCompleteDniPersona
     route::resource('socios/dnibeneficiario','socios\parientescontroller@autocompleteDNIpariente');//autocompleteDNIpariente
+    
+    route::resource('socios/modalsocio','socios\sociocontroller@ModalSocio');
+    route::resource('socios','socios\sociocontroller');
+    
+    route::get('PadronSocio/{idsocio}','socios\sociocontroller@verPadronsocio');
+     
     route::resource('RRHH/Sucursalsearch','RRHH\sucursalescontroller@autocomplete');//autocomplete
     route::resource('RRHH/Sucursales','RRHH\sucursalescontroller@autocompletesucursal');//autocompletesucursal  
     
     route::resource('RRHH/autoempleadoDni','RRHH\empleadocontroller@autocompleteEmpleadoDni');
     route::resource('RRHH/autoempleado','RRHH\empleadocontroller@autocompleteEmpleado');//   autocompleteEmpleado 
-    route::resource('socios/autopersonas','socios\sociocontroller@autoSociosPersonas');
-    route::resource('socios/autoDniSocios','socios\sociocontroller@autoSociosDni');
-    
-    route::resource('socios','socios\sociocontroller');
-    route::get('PadronSocio/{idsocio}','socios\sociocontroller@verPadronsocio');
-                    
     route::resource('RRHH/empleados','RRHH\empleadocontroller');    
     
     route::resource('RRHH/Cargos','RRHH\cargoscontroller');
@@ -145,7 +146,7 @@ Route::group(['middleware' => ['auth']], function () {
             
     route::resource('Creditos/Creditos-Financieros','Creditos\prestamoscontroller');
             
-    route::resource('Configuracion','Configuracion\documentoController');
+    route::resource('Configuracion','Configuracion\documentoController');    
         
     route::get('codrecibos/{id}','Configuracion\tipo_documentoController@getnumerodocumento');
     route::resource('codrecibos','Configuracion\tipo_documentoController@autoCompleteCodRecibo');//

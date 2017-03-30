@@ -1,6 +1,6 @@
 @extends('tesoreria.mastertesoreria')
 @section('contentheader_title')
-    CHEQUES GIRADOS
+    CAJA CHICAS
 @stop
 @section('main-content')
 <div class="box box-solid box-primary">

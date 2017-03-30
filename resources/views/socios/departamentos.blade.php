@@ -46,8 +46,8 @@
                                     <td>{{$departamento->id}}</td>
                                     <td>{{$departamento->departamento}}</td>                                                        
                                     <td>                                          
-                                        <a href="#"  OnClick='btneditar({{$departamento->id}});' data-toggle='modal' data-target='#myModal'><span class="glyphicon glyphicon-pencil"data-toggle="tooltip" data-placement="top" title="Editars"></span></a>
-                                        <a href="#" onclick="Eliminar('{{$departamento->id}}','{{$name}}')" ><span data-toggle="tooltip" data-placement="top" title="Eliminar" class="glyphicon glyphicon-remove"></span></a>
+                                        <a href="#"  OnClick='btneditar({{$departamento->id}});' data-toggle='modal' data-target='#myModal' class="btn-sm btn-primary"><span class="glyphicon glyphicon-pencil"data-toggle="tooltip" data-placement="top" title="Editars"></span></a>
+                                        <a href="#" onclick="Eliminar('{{$departamento->id}}','{{$name}}')" class="btn-sm btn-danger"><span data-toggle="tooltip" data-placement="top" title="Eliminar" class="glyphicon glyphicon-remove"></span></a>
                                     </td>                    
                                 </tr>
                                 @endforeach

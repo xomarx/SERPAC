@@ -32,8 +32,8 @@
                     <td>{{$fundo->comite_central}}</td>
                     <td>{{$fundo->fecha}}</td>                                                        
                     <td>                                          
-                        <a href="#"  OnClick='EditarFundo({{$fundo->id}});' data-toggle='modal' data-target='#fundomodal'><span class="glyphicon glyphicon-pencil"data-toggle="tooltip" data-placement="top" title="Editars"></span></a>
-                        <a href="#" onclick="EliminarFundo('{{$fundo->id}}','{{$name}}')" ><span data-toggle="tooltip" data-placement="top" title="Eliminar" class="glyphicon glyphicon-remove"></span></a>                                                            
+                        <a href="#"  OnClick='EditarFundo({{$fundo->id}});' data-toggle='modal' data-target='#fundomodal' class="btn-sm btn-primary"><span class="glyphicon glyphicon-pencil"data-toggle="tooltip" data-placement="top" title="Editars"></span></a>
+                        <a href="#" onclick="EliminarFundo('{{$fundo->id}}','{{$name}}')" class="btn-sm btn-danger"><span data-toggle="tooltip" data-placement="top" title="Eliminar" class="glyphicon glyphicon-remove"></span></a>                                                            
                     </td>                    
                 </tr>
                 @endforeach

@@ -21,29 +21,58 @@ class SociocreateRequest extends Request
      *
      * @return array
      */
-    public function rules()
-    {
-        return [
-            //
-            'codigo'=>'required|unique:socios,codigo|min:9|max:9',
-            'fec_asociado' => 'required|date',
-            'fec_empadron' => 'required',
-            'estado_civil'=>'required',
-            'ocupacion'=>'required | max:60|Alpha',
-            'grado_inst'=>'required',
-            'produccion'=>'required | max:30|Alpha',
-            'estado'=>'required',
-            'dni'=>'required | unique:socios,dni|numeric',
-            'paterno'=>'required | max: 60',
-            'materno'=>'required | max:60',
-            'nombre'=>'required | max:60',
-            'fec_nac'=>'required|date',
-            'sexo'=>'required',
-            'direccion'=>'required',
-            'comite_local'=>'required'
-        ];
+    public function rules() {
+        switch ($this->method()) {
+            case 'GET':
+            case 'DELETE': {
+                    return [];
+                }
+            case 'POST': {
+                    return [
+                        //
+                        'codigo' => 'required|unique:socios,codigo|min:9|max:9',
+                        'fec_asociado' => 'required|date',
+                        'fec_empadron' => 'required',
+                        'estado_civil' => 'required',
+                        'ocupacion' => 'required | max:60|Alpha',
+                        'grado_inst' => 'required',
+                        'produccion' => 'required | max:30|Alpha',
+                        'estado' => 'required',
+                        'dni' => 'required | unique:socios,dni|numeric',
+                        'paterno' => 'required | max: 60',
+                        'materno' => 'required | max:60',
+                        'nombre' => 'required | max:60',
+                        'fec_nac' => 'required|date',
+                        'sexo' => 'required',
+                        'direccion' => 'required',
+                        'comite_local' => 'required'
+                    ];
+                }
+            case 'PATCH':
+            case 'PUT': {
+                    return [
+                        //            
+                        'fec_asociado' => 'required|date',
+                        'fec_empadron' => 'required',
+                        'estado_civil' => 'required',
+                        'ocupacion' => 'required | max:60|Alpha',
+                        'grado_inst' => 'required',
+                        'produccion' => 'required | max:30|Alpha',
+                        'estado' => 'required',
+//            'observacion'=>'required',            
+                        'paterno' => 'required | max: 60',
+                        'materno' => 'required | max:60',
+                        'nombre' => 'required | max:60',
+                        'fec_nac' => 'required|date',
+                        'sexo' => 'required',
+                        'direccion' => 'required',
+//            'comites_locales_id'=>'required'
+                    ];
+                }
+            default : break;
+        }
     }
-    
+
     public function messages() {
         parent::messages();
         return [

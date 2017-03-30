@@ -7,7 +7,7 @@
         <ul class="sidebar-menu">
             
             <!-- Optionally, you can add icons to the links -->
-            <li class="{{ $_SERVER['REQUEST_URI'] == 'Tesoreria/Distribucion-Fondos' ? 'active':'' }}" ><a href="{{ url('Tesoreria/Distribucion-Fondos') }}" ><i class='fa fa-share-alt'></i> <span>Distribucion Acopio</span></a></li>
+            <li ><a href="{{ url('Tesoreria/Distribucion-Fondos') }}" ><i class='fa fa-share-alt'></i> <span>Distribucion Acopio</span></a></li>
             <li ><a href="{{ url('Tesoreria/Cheques-Girados') }}"><i class='fa fa-credit-card'></i> <span>Movimientos Cheque</span></a></li>
             <li ><a href="{{ url('Tesoreria/Distribucion-Fondos') }}"><i class='fa fa-money'></i> <span>Adelanto - Sueldo</span></a></li>
             <li class="treeview active">              

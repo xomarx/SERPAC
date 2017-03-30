@@ -43,16 +43,17 @@ class areascontroller extends Controller
     public function store(Request $request)
     {
         //
+        $this->validate($request, ['area'=>'required|unique:areas,area']);
         if($request->ajax())
         {
             $area = Areas::create($request->all());
             if($area)
             {
-                return response()->json(['success'=>'true']);
+                return response()->json(['success'=>true]);
             }
             else
             {
-                return response()->json(['success'=>'false']);
+                return response()->json(['success'=>false]);
             }
         }
     }
@@ -88,8 +89,8 @@ class areascontroller extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-    {
-        //
+    {        
+        $this->validate($request, ['area'=>'required']);
         if($request->ajax())
         {
             $area = Areas::FindOrFail($id);
@@ -97,11 +98,11 @@ class areascontroller extends Controller
             $area->save();
             if($area)
             {
-                return response()->json(['success'=>'true']);
+                return response()->json(['success'=>true]);
             }
             else
             {
-                return response()->json(['success'=>'false']);
+                return response()->json(['success'=>false]);
             }
         }
     }
@@ -115,5 +116,7 @@ class areascontroller extends Controller
     public function destroy($id)
     {
         //
+        $area = Areas::FindOrFail($id)->delete();
+        if($area) return response ()->json (['success'=>true]);
     }
 }

@@ -34,11 +34,11 @@
                         @endif
                     </td>
                     <td>
-                        <a href="#"   data-toggle='modal' data-target='#myModal'><span class="glyphicon glyphicon-eye-open"data-toggle="tooltip" data-placement="top" title="Ver"></span></a>
+                        <a href="#"   data-toggle='modal' data-target='#myModal' class="btn-sm btn-success"><span class="glyphicon glyphicon-eye-open"data-toggle="tooltip" data-placement="top" title="Ver"></span></a>
                         @if($recepcion->estado == null)
-                        <a OnClick='RecepConform({{$recepcion->id}});'><span data-toggle="tooltip" data-placement="top" title="Grabar" class="glyphicon glyphicon-saved"></span></a>
+                        <a OnClick='RecepConform({{$recepcion->id}});' class="btn-sm btn-primary"><span data-toggle="tooltip" data-placement="top" title="Grabar" class="glyphicon glyphicon-saved"></span></a>
                         @else
-                        <a><span data-toggle="tooltip" data-placement="top" title="Grabar" class="glyphicon glyphicon-saved"></span></a>
+                        <a class="btn-sm btn-primary"><span data-toggle="tooltip" data-placement="top" title="Grabar" class="glyphicon glyphicon-saved"></span></a>
                         @endif
                     </td>
                 </tr>

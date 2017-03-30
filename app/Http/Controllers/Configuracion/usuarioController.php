@@ -29,6 +29,16 @@ class usuarioController extends Controller
         $roles = \App\Role::all()->pluck('name','id');
         return view('Configuracion.headListaPermisos',['roles'=>$roles]);
     }
+    
+    public function asigRolUser(){        
+        $roles = \App\Role::all()->pluck('name','id');
+        return view('Configuracion.asignaRolUser',['roles'=>$roles]);
+    }
+    
+    public function ListUsers(){
+        $usuarios = \App\User::usuarios();
+        return view('Configuracion.listUsers',['usuarios'=>$usuarios]);  
+    }
 
     /**
      * Display a listing of the resource.
@@ -107,6 +117,34 @@ class usuarioController extends Controller
             }                        
         }               
     }
+    
+    public function AsigRolUserStore(Request $request){
+        
+        if($request->ajax()){
+            $this->validate($request, ['rol'=>'required'], ['rol.required'=>'Seleccione un Rol']);
+            
+            $rol = \App\Role::FindOrFail($request->rol);            
+            $user = \App\User::where('name','=',$request->usuario)->first();
+            $roluser = \App\Role::deleteRolUSer($user->id);
+            $user->attachRole($rol);
+            if($user) return response ()->json (['success'=>true,'message'=>'Se asigno correctamente su ROL']);
+            else return response ()->json (['success'=>false,'message'=>'No se Asigno ningun ROL']);
+        }
+        
+    }
+    
+    public function ActDesact(Request $request){
+        if($request->ajax()){
+            $user = \App\User::where('name','=',$request->usuario)->first();
+            \App\User::where('name','=',$request->usuario)
+                    ->update(['estado'=>!$user->estado]);
+//            if($user->estado) $user->estado = 0;
+//            else $user->estado = 1;            
+            $roluser = \App\Role::deleteRolUSer($user->id);
+            return response()->json(['success'=>true]);
+        }
+        
+    }
 
     /**
      * Display the specified resource.
@@ -144,7 +182,7 @@ class usuarioController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        //        
     }
 
     /**
@@ -155,7 +193,7 @@ class usuarioController extends Controller
      */
     public function destroy($id)
     {
-        //
+        
     }
     
     

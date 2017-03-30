@@ -25,4 +25,10 @@ class Role extends EntrustRole
                 ->where('permission_role.role_id','=',$rolid)
                 ->select('permissions.display_name')->get();
     }
+    
+    public static function deleteRolUSer($iduser){
+        return \Illuminate\Support\Facades\DB::table('role_user')
+                ->where('role_user.user_id','=',$iduser)                
+                ->delete();
+    }
 }
