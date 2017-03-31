@@ -23,11 +23,28 @@ class createdistritorequest extends Request
      */
     public function rules()
     {
-        return [
-            'distrito'=>'required|unique:distritos',
-            'provincia'=>'required',
-            'departamento'=>'required'
-        ];
+        switch ($this->method()) {
+            case 'GET':
+            case 'DELETE': {
+                    return [];
+                }
+            case 'POST': {
+                    return [
+                        'distrito' => 'required|unique:distritos',
+                        'provincia' => 'required',
+                        'departamento' => 'required'
+                    ];
+                }
+            case 'PATCH':
+            case 'PUT': {
+                    return [
+                        'distrito' => 'required|unique:distritos',
+                        'provincia' => 'required',
+                        'departamento' => 'required'
+                    ];
+                }
+            default : break;
+        }
     }
     
     public function messages() {

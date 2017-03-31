@@ -30,6 +30,8 @@ class comite_localcontroller extends Controller
     public function index()
     {
         //
+        if(!auth()->user()->can('ver local'))
+            return response ()->view ('errors.403');
         $comites_locales = Comites_Locale::getlistaComite_Local();
         $departamentos = Departamento::pluck('departamento','id');        
         return view('socios.comitelocal',array('comites_locales'=>$comites_locales,'departamentos'=>$departamentos));
@@ -56,6 +58,8 @@ class comite_localcontroller extends Controller
         //
         if($request->ajax())
         {
+            if(!auth()->user()->can('crear local'))
+                return response ()->view ('errors.403-content',[],403);
             $local = Comites_Locale::create([
                 'comite_local'=>  strtoupper($request->comite_local),
                 'comites_centrales_id'=>$request->comite_central
@@ -107,18 +111,16 @@ class comite_localcontroller extends Controller
         //
         if($request->ajax())
         {
+            if(!auth()->user()->can('editar local'))
+                return response ()->view ('errors.403-content',[],403);
             $comite_local = Comites_Locale::FindOrFail($id);
             $comite_local->comites_centrales_id = $request->comite_central;
             $comite_local->comite_local = strtoupper($request->comite_local);
             $comite_local->save();
-            if($comite_local)
-            {
-                return response()->json(['success'=>'true','message'=>'Se actualizaron los datos']);
-            }
-            else
-            {
-                return response()->json(['success'=>'false','message'=>'no se actualizo ningun registro']);
-            }
+            if($comite_local)            
+                return response()->json(['success'=>true,'message'=>'Se actualizaron los datos']);            
+            else            
+                return response()->json(['success'=>false,'message'=>'no se actualizo ningun registro']);            
         }
     }
 
@@ -131,15 +133,12 @@ class comite_localcontroller extends Controller
     public function destroy($id)
     {
         //
+        if(auth()->user()->can('crear local')){
+                
         $comite_local = Comites_Locale::FindOrFail($id);
         $result = $comite_local->delete();
-        if($result)
-        {
-            return response()->json(['success'=>'true']);
-        }
-        else
-        {
-            return response()->json(['success'=>'false']);
+        if($result) return response()->json(['success'=>true]);        
+        else return response()->json(['success'=>false]);        
         }
     }
 }

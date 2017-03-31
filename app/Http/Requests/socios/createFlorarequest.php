@@ -23,9 +23,24 @@ class createFlorarequest extends Request
      */
     public function rules()
     {
-        return [
-            'flora'=>'required|unique:floras'
-        ];
+        switch ($this->method()) {
+            case 'GET':
+            case 'DELETE': {
+                    return [];
+                }
+            case 'POST': {
+                    return [
+                        'flora' => 'required|unique:floras'
+                    ];
+                }
+            case 'PATCH':
+            case 'PUT': {
+                    return [
+                        'flora' => 'required'
+                    ];
+                }
+            default : break;
+        }
     }
     
     public function messages() {

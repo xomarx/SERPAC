@@ -41,4 +41,14 @@ class Distrito extends Model
                             ,'provincias.provincia')
                     ->first();
         }
+        
+        public static function listadistritos(){
+            return DB::table('distritos')
+                ->join('provincias','distritos.provincias_id','=','provincias.id')
+                ->join('departamentos','provincias.departamentos_id','=','departamentos.id')
+                ->select( 'distritos.id','distritos.distrito','distritos.provincias_id'
+                        ,'provincias.provincia','provincias.departamentos_id'
+                        ,'departamentos.departamento')
+                ->get();
+        }
 }

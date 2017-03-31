@@ -33,6 +33,8 @@ Route::group(['middleware' => ['auth']], function () {
     route::get('Usuarios', ['as'=> 'usuarios','uses'=>'Auth\AuthController@listUsers']);
     route::get('Usuarios/crear-usuario', ['as'=> 'usuarios','uses'=>'Auth\AuthController@CrearUser']);
     
+    route::resource('error-403','Configuracion\usuarioController@errorModal');
+    
     route::resource('NewRolUsuario','Configuracion\usuarioController@storerol');
     route::resource('RolUsuario','Configuracion\usuarioController@roluser');
     route::resource('ListaRoles','Configuracion\usuarioController@listaRoles');//listaRoles
@@ -55,14 +57,13 @@ Route::group(['middleware' => ['auth']], function () {
     route::resource('socios/asignacion-delegados','socios\cargodelegadosociocontroller');
     route::resource('socios/asignacion-directivos','socios\cargodirectivosociocontroller');
     
-    route::resource('socios/transferencias','socios\transferenciacontroller');
     route::resource('socios/transferencias/newtransferencias','socios\transferenciacontroller@NewTransferencia');
+    route::resource('socios/transferencias','socios\transferenciacontroller');
+    
     route::resource('socios/transferencias/datos','socios\transferenciacontroller@datossocio');
     route::resource('socios/transferencias/nuevo','socios\transferenciacontroller@datosnuevo');//datosnuevo
     route::resource('socios/transferencias/persona','socios\transferenciacontroller@datosnuevobeneficiario');//datosnuevobeneficiario    
-    route::resource('socios/transferencias/ficha','socios\transferenciacontroller@fichaTransferencia');//fichaTransferencia
-        
-    route::resource('socios/eliminarpropiedades','socios\fundoscontroller@EliminarPropiedadesFundo');//EliminarPropiedadesFundo
+    route::resource('socios/transferencias/ficha','socios\transferenciacontroller@fichaTransferencia');//fichaTransferencia            
     
     route::resource('socios/propiedadinmueble','socios\fundoscontroller@propiedadinmueble');
     route::resource('socios/propiedadfauna','socios\fundoscontroller@propiedadfauna');
@@ -83,12 +84,17 @@ Route::group(['middleware' => ['auth']], function () {
     
     route::resource('socios/autopersonas','socios\sociocontroller@autoSociosPersonas');    
     route::resource('socios/autoDniSocios','socios\sociocontroller@autoSociosDni');
-    route::resource('socios/search','socios\sociocontroller@autocomplete');//autocomplete
+    
+    
+    //autocompletados
     route::resource('socios/dni','socios\sociocontroller@autocompleteDniSocio');//autocompleteDniSocio
     route::resource('socios/codigo','socios\sociocontroller@autocompleteCodigoSocio');//autocompleteCodigoSocio
+    route::resource('socios/searchsocio','socios\sociocontroller@autocomplete');//autocomplete
+    
     route::resource('socios/dnipersona','socios\personacontroller@autoCompleteDniPersona');//autoCompleteDniPersona
     route::resource('socios/dnibeneficiario','socios\parientescontroller@autocompleteDNIpariente');//autocompleteDNIpariente
     
+    route::resource('socios/eliminarpropiedades','socios\fundoscontroller@EliminarPropiedadesFundo');//EliminarPropiedadesFundo
     route::resource('socios/modalfundo','socios\fundoscontroller@ModalFundo');
     route::resource('socios/fundos','socios\fundoscontroller');
     

@@ -42,7 +42,7 @@ class Comites_Centrales extends Model
                     ->where('comites_centrales.id','=',$id)
                     ->select('comites_centrales.id','comites_centrales.comite_central','distritos.distrito','comites_centrales.distritos_id'
                             ,'provincias.provincia','distritos.provincias_id','departamentos.departamento','provincias.departamentos_id')
-                    ->get();
+                    ->first();
         }
         
         public static function getlistaComites(){

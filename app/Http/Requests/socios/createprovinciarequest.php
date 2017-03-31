@@ -23,13 +23,30 @@ class createprovinciarequest extends Request
      */
     public function rules()
     {
-        return [
-            //
-            'provincia'=>'required|unique:provincias',
-            'departamento'=>'required'
-        ];
+        switch ($this->method()) {
+            case 'GET':
+            case 'DELETE': {
+                    return [];
+                }
+            case 'POST': {
+                    return [
+                        //
+                        'provincia' => 'required|unique:provincias',
+                        'departamento' => 'required'
+                    ];
+                }
+            case 'PATCH':
+            case 'PUT': {
+                    return [
+                        //
+                        'provincia' => 'required|unique:provincias',
+                        'departamento' => 'required'
+                    ];
+                }
+            default : break;
+        }
     }
-    
+
     public function messages() {
         parent::messages();
         return [

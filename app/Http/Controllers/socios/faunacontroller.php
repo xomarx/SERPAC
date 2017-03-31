@@ -20,6 +20,8 @@ class faunacontroller extends Controller
     public function index()
     {
         //
+        if(!auth()->user()->can('ver faunas'))
+            return response ()->view ('errors.403');
         $faunas = Fauna::all();
         return view('socios.basicos.fauna',  compact('faunas',$faunas));
     }
@@ -44,7 +46,9 @@ class faunacontroller extends Controller
     {
         //
         if($request->ajax())
-        {                                
+        {                         
+            if(!auth()->user()->can('crear faunas'))
+                return response ()->view ('errors.403-content',[],403);
             $fauna = Fauna::create([
                 'fauna'=>strtoupper($request->fauna)
             ]);
@@ -94,6 +98,8 @@ class faunacontroller extends Controller
     {        
         if($request->ajax())
         {
+            if(!auth()->user()->can('editar faunas'))
+                return response ()->view ('errors.403-content',[],403);
             $fauna = Fauna::FindOrFail($id);
             $fauna->fauna=  strtoupper($request->fauna);
             $fauna->save();
@@ -117,15 +123,14 @@ class faunacontroller extends Controller
     public function destroy($id)
     {
         //
+        if(auth()->user()->can('eliminar faunas')){
+                
         $fauna = Fauna::FindOrFail($id);
         $result = $fauna->delete();        
-        if($result)
-        {
-            return response()->json(['success'=>'true']);
-        }
-        else
-        {
-            return response()->json(['success'=>'false']);
+        if($result) return response()->json(['success'=>true]);
+        
+        else return response()->json(['success'=>false]);
+        
         }
     }
 }

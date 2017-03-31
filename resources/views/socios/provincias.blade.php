@@ -4,6 +4,7 @@
 @stop
 @section('main-content')
 <div class="box-body">
+    @permission(['crear provincias','editar provincias'])
     <div class="col-md-4">
         <div class="box box-solid box-primary">
             <div class="box-header">
@@ -11,10 +12,7 @@
             </div>
             {!! Form::open(['id'=>'formprovincia']) !!}
             <div class="box-body">                
-                <div id="msj-infoprovincia" class="alert alert-success" role='alert' style="display: none">
-                    <strong id='succesprovincia'></strong>
-                </div>
-                <input  id="token" type="hidden" name="_token" value="{{ csrf_token() }}">
+                @include('mensajes.mensaje')
                 <input type="hidden" id="idprovincia">                
                 {!! Form::label('departamento','Departamento:',['class' => 'control-label col-xs-1'])!!}                             
                 {!! Form::select('departamento',$departamentos,null,['id'=>'departamento','class'=>'form-control','placeholder'=>'Seleccione un departamento']) !!}
@@ -30,10 +28,12 @@
             {!! Form::close() !!} 
         </div>
     </div>
+    @endpermission
+    @permission('ver provincias')
     <div class="col-md-8">
         <div class="box box-solid box-primary">
             <div class="box-header">
-                <h3 class="box-title">LISTA DE PROVINCIAS</h3>
+                <h3 class="box-title"></h3>
             </div>
             <div class="box-body">
                 <table class="table table-responsive" id="myTable" >
@@ -49,9 +49,13 @@
 
                             <td>{{$provincia->provincia}}</td>
                             <td>{{$provincia->departamento}}</td>
-                            <td>                                          
+                            <td>    
+                                @permission('editar provincias')
                                 <a href="#"  OnClick='EdProvincia({{$provincia->id}});' data-toggle='modal' data-target='#myModal' class="btn-sm btn-primary"><span class="glyphicon glyphicon-pencil"data-toggle="tooltip" data-placement="top" title="Editars"></span></a>
+                                @endpermission
+                                @permission('eliminar provincias')
                                 <a href="#" onclick="EliProvincia('{{$provincia->id}}','{{$name}}')" class="btn-sm btn-danger"><span data-toggle="tooltip" data-placement="top" title="Eliminar" class="glyphicon glyphicon-remove"></span></a>                                                            
+                            @endpermission
                             </td>                    
                         </tr>
                         @endforeach
@@ -60,7 +64,8 @@
             </div>
         </div>
     </div>
+    @endpermission
 </div>
 
-
+<section id="conten-modal"></section>
 @stop

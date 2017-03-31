@@ -4,6 +4,7 @@
 @stop
 @section('main-content')
 <div class="box-body">
+    @permission(['crear local','editar local'])
     <div class="col-md-4">
         <div class="box box-solid box-primary">
             <div class="box-header">
@@ -11,10 +12,7 @@
             </div>
             {!! Form::open(['id'=>'formlocal']) !!}
             <div class="box-body">
-                <div id="msj-infolocal" class="alert alert-success" role='alert' style="display: none">
-                    <strong id='succeslocal'></strong>
-                </div>
-                <input type="hidden" name="_token" value="{{ csrf_token() }}" id="token">
+                @include('mensajes.mensaje')                
                 <input type="hidden" id="idlocal">  
                 {!! Form::label('departamento','Departamento:',['class' => 'control-label'])!!}                             
                 {!! Form::select('departamento',$departamentos,null,['id'=>'departamento','class'=>'form-control','placeholder'=>'selecciona']) !!}
@@ -39,6 +37,8 @@
             {!! Form::close() !!} 
         </div>
     </div>
+    @endpermission
+    @permission('ver local')
     <div class="col-md-8">
         <div class="box box-solid box-primary">
             <div class="box-header">
@@ -63,9 +63,13 @@
                             <td>{{$comite_local->distrito}}</td>
                             <td>{{$comite_local->provincia}}</td>
                             <td>{{$comite_local->departamento}}</td>
-                            <td>                                          
-                                <a href="#"  OnClick='Edlocal({{$comite_local->id}});' data-toggle='modal' data-target='#myModal' class="btn-sm btn-primary"><span class="glyphicon glyphicon-pencil"data-toggle="tooltip" data-placement="top" title="Editars"></span></a>
-                                <a href="#" onclick="EliLocal('{{$comite_local->id}}','{{$name}}')" class="btn-sm btn-danger"><span data-toggle="tooltip" data-placement="top" title="Eliminar" class="glyphicon glyphicon-remove"></span></a>                                                            
+                            <td>    
+                                @permission('editar local')
+                                    <a href="#"  OnClick='Edlocal({{$comite_local->id}});' data-toggle='modal' data-target='#myModal' class="btn-sm btn-primary"><span class="glyphicon glyphicon-pencil"data-toggle="tooltip" data-placement="top" title="Editars"></span></a>
+                                @endpermission
+                                @permission('eliminar local')
+                                    <a href="#" onclick="EliLocal('{{$comite_local->id}}','{{$name}}')" class="btn-sm btn-danger"><span data-toggle="tooltip" data-placement="top" title="Eliminar" class="glyphicon glyphicon-remove"></span></a>
+                                @endpermission
                             </td>                    
                         </tr>
                         @endforeach
@@ -74,8 +78,9 @@
             </div>
         </div>
     </div>
+    @endpermission
 </div>
-
+<section id="conten-modal"></section>
 @stop
 
 @section('script')

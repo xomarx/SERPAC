@@ -4,32 +4,35 @@
     <center> <h3 class="box-title">REGISTRO DE TRANSFERENCIA - SOCIO</h3></center>
 </div> 
 <div class="box-body">
-    {!! Form::open(['id'=>'formtransferencia'])!!}
-    <input type="hidden" name="_token" value="{{ csrf_token() }}" id="token">
+    {!! Form::open(['id'=>'formtransferencia'])!!}  
+    @include('mensajes.mensaje')
     <div class="col-lg-5">
         <div class="box box-solid box-primary content">
             <div class="box-header">
                 <center> <h3 class="box-title">DATOS DEL SOCIO</h3></center>
             </div>
             <div class="box-body">
-
                 <div class="col-lg-12 ">                       
                     <div class=" col-sm-6 form-group">       
                         {!! Form::label('codigo','Codigo',['class'=>'control-label']) !!}
-                        {!! Form::text('codigo',null,['id'=>'codigo','class'=>'form-control col-sm-2','placeholder'=>'ACO-00000'])!!}                        
+                        {!! Form::text('codigo',null,['id'=>'codigo','class'=>'form-control col-sm-2','placeholder'=>'ACO-00000','onkeyup'=>'autocomplet()'])!!}
+                        <div class="text-danger" id="error-codigo"></div>
                     </div>                     
                     <div class=" col-sm-6 form-group">
                         {!!Form::label('dni','D.N.I.',['class'=>'control-label'])!!}
-                        {!! Form::text('dni_socio',null,['id'=>'dni_socio','class'=>'form-control','placeholder'=>'N° DNI'])!!}
+                        {!! Form::text('dni_socio',null,['id'=>'dni_socio','class'=>'form-control','placeholder'=>'N° DNI','onkeyup'=>'autocomplet()'])!!}
+                        <div class="text-danger" id="error-dni_socio"></div>
                     </div>                                       
                 </div>
                 <div class=" col-sm-12 form-group">
                     {!!Form::label('socio','SOCIO',['class'=>'control-label'])!!}
-                    {!! Form::text('socio',null,['id'=>'socio','class'=>'form-control','placeholder'=>'Apellidos y Nombres'])!!}
+                    {!! Form::text('socio',null,['id'=>'socio','class'=>'form-control','placeholder'=>'Apellidos y Nombres','onkeyup'=>'autocomplet()'])!!}
+                    <div class="text-danger" id="error-socio"></div>
                 </div>                
                 <div class="col-lg-12" id="motivo" style="display: none">
                     {!!Form::label('motivo','Motivo de la Transferencia',['class'=>'control-label'])!!}
                     {!! Form::textarea('motivo',null,['id'=>'motivo','class'=>'form-control','rows'=>'3','placeholder'=>'Motivo de la Transferencia de la Titularidad de la Parcela'])!!}
+                    <div class="text-danger" id="error-motivo"></div>
                 </div>
 
                 <table class="table table-responsive table-hover table-striped" style="display: none" id="tablasocio">
@@ -87,7 +90,7 @@
     </div>
 
     <div class="col-lg-1">
-        <a href="javascrip:void(0)" id="transSocio" class="btn btn-primary btn-lg m-t-10" ><span class="fa fa-exchange"data-toggle="tooltip" data-placement="top" title="Transferir a Nuevo Socio"></span></a>
+        <a href="javascrip:void(0)" onclick="RegTransferencia()" class="btn btn-primary btn-lg m-t-10" ><span class="fa fa-exchange"data-toggle="tooltip" data-placement="top" title="Transferir a Nuevo Socio"></span></a>
     </div>
     <div class="col-lg-3">    
         <div class="box box-solid box-primary">
@@ -98,7 +101,7 @@
                 <div class=" col-sm-12 form-group" id="divnuevosocio">
                     {!!Form::label('dni','D.N.I.',['class'=>'control-label'])!!}
                     {!! Form::text('dni_nuevo_socio',null,['id'=>'dni_nuevo_socio','class'=>'form-control','placeholder'=>'N° DNI Nuevo Socio','disabled'=>'true'])!!}
-                    <div class="text-danger" id="error_nuevo_socio"></div>
+                    <div class="text-danger" id="error-dni_nuevo_socio"></div>
                 </div>
                 <table class="table table-responsive table-hover table-striped" id="tablanuevosocio" style="display: none" >
                     <thead>
@@ -140,7 +143,7 @@
                 <div class=" col-sm-12 form-group">
                     {!!Form::label('dni','D.N.I.',['class'=>'control-label'])!!}
                     {!! Form::text('dni_beneficiario',null,['id'=>'dni_beneficiario','class'=>'form-control','placeholder'=>'N° DNI Nuevo Beneficiario','disabled'=>'true'])!!}
-                    <div class="text-danger" id="error_dni_beneficiario"></div>
+                    <div class="text-danger" id="error-dni_beneficiario"></div>
                     <a href='#' data-toggle='modal' data-target='#pariente' id='idlinkbeneficiario' style="display: none"><span data-toggle='tooltip' data-placement='top' title='Registrar Pariente'>Registrar Pariente</span></a>
                 </div>    
                 <table class="table table-responsive table-hover table-striped" id="tablabeneficiario" style="display: none">

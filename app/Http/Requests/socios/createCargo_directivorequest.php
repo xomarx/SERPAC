@@ -23,9 +23,24 @@ class createCargo_directivorequest extends Request
      */
     public function rules()
     {
-        return [
-            'cargo_directivo'=>'required|unique:cargos_directivos'
-        ];
+        switch ($this->method()) {
+            case 'GET':
+            case 'DELETE': {
+                    return [];
+                }
+            case 'POST': {
+                    return [
+                        'cargo_directivo' => 'required|unique:cargos_directivos'
+                    ];
+                }
+            case 'PATCH':
+            case 'PUT': {
+                    return [
+                        'cargo_directivo' => 'required'
+                    ];
+                }
+            default : break;
+        }
     }
     public function messages() {
         parent::messages();

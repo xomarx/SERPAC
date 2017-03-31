@@ -56,10 +56,13 @@ class fundoscontroller extends Controller
         //
         if($request->ajax())
         {
-            if(auth()->user()->can('crear fundos'))
+            if(!auth()->user()->can('crear fundos'))
                 return response ()->view ('errors.403-content',[],403);            
             $date = \Carbon\Carbon::parse($request->fecha);
             $fundo = new \App\Models\Socios\Fundo($request->all());
+            $fundo->comite_local_id=$request->comite_local;
+            $fundo->fundo=  strtoupper($request->fundo);
+            $fundo->direccion=strtoupper($request->direccion);
             $fundo->fecha = $date;
             $fundo->estado=1;
             $fundo->users_id=  \Illuminate\Support\Facades\Auth::user()->id;
@@ -79,8 +82,7 @@ class fundoscontroller extends Controller
                 'inmuebles_id'=>$inmuebleid->id,
                 'fundos_id'=>$fundoid->id
             ]);
-            if($inmueble)
-                return response()->json(['success'=>'true']);
+            if($inmueble) return response()->json(['success'=>true]);
         }
     }
     
@@ -96,10 +98,10 @@ class fundoscontroller extends Controller
                 'cantidad'=>$request->cantidad,
                 'rendimiento'=>$request->rendimiento
             ]);
+            if($faunas)  return response()->json(['success'=>true]);
         }
     }
-    public function propiedadflora(Request $request)
-    {
+    public function propiedadflora(Request $request){
         if($request->ajax())
         {
             $fundo = \App\Models\Socios\Fundo::where('fundo','=',$request->fundo)->first();
@@ -110,6 +112,7 @@ class fundoscontroller extends Controller
                 'hectarea'=>$request->hectarea,
                 'rendimiento'=>$request->rendimiento
             ]);
+            if($floras)  return response()->json(['success'=>true]);
         }
     }
 
@@ -152,26 +155,24 @@ class fundoscontroller extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
+    public function update(Request $request, $id) {
         //
         if($request->ajax())
         {
-            if(auth()->user()->can('editar fundos'))
+            if(!auth()->user()->can('editar fundos'))
                 return response ()->view ('errors.403-content',[],403);
-            $fundo = $date = \Carbon\Carbon::parse($request->fecha);
+            
             $fundo = \App\Models\Socios\Fundo::FindOrFail($id);
-//            $fundo =  $fundo->all($request->all());
-            $fundo->fecha = $date;
+            $fundo->fecha = \Carbon\Carbon::parse($request->fecha);
             $fundo->estadofundo = $request->estadofundo;
-            $fundo->fundo = $request->fundo;
+            $fundo->fundo = strtoupper($request->fundo);
             $fundo->direccion = $request->direccion;
             $fundo->observaciones = $request->observaciones;
-            $fundo->comite_local_id = $request->comite_local_id;
+            $fundo->comite_local_id = $request->comite_local;
             $fundo->users_id=  \Illuminate\Support\Facades\Auth::user()->id;
             $fundo->save();
-            if($fundo)
-                return response()->json(['success'=>'Actualizar','message'=>'Se Actualizaron Correctamente']);
+            if($fundo) return response()->json(['success'=>true,'message'=>'Se Actualizaron Correctamente']);
+            else return response()->json(['success'=>false,'message'=>'No se Actualizo ningun dato']);
         }
         
     }
@@ -184,7 +185,7 @@ class fundoscontroller extends Controller
      */
     public function destroy($id)
     {
-        if(auth()->user()->can('eliminar fundos'))
+        if(!auth()->user()->can('eliminar fundos'))
                 return response ()->view ('errors.403-content',[],403);
         $fundo = \App\Models\Socios\Fundo::where('id','=',$id)
                 ->update([

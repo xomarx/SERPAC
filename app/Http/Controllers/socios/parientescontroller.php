@@ -36,7 +36,9 @@ class parientescontroller extends Controller
         }
     }
            
-    public function index(){        
+    public function index(){
+        if(!auth()->user()->can('ver parientes'))
+            return response ()->view ('errors.403');
         $parientes = Pariente::listaParientes();
         $departamentos = \App\Models\Socios\Departamento::pluck('departamento','id');
         return view('socios/parientes',['parientes'=>$parientes,'departamentos'=>$departamentos]);
@@ -130,7 +132,7 @@ class parientescontroller extends Controller
         if($request->ajax())
         {
             if(!auth()->user()->can('editar parientes'))
-                return response()->view('errors.403-content', [], 403);            
+                return response()->view('errors.403-content', [], 403);
             $result = Pariente::join('personas','parientes.personas_dni','=','personas.dni')
                     ->where('parientes.id','=',$id)
                     ->update([
@@ -172,5 +174,6 @@ class parientescontroller extends Controller
                     ->where('socios_codigo','=',$cod)->delete();
             if($result) return response ()->json (['success'=>true]);
         }
+        return response()->view('errors.403-content', [], 403);            
     }
 }

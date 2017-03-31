@@ -5,6 +5,7 @@
 @section('main-content')
 
 <div class="box-body">
+    @permission(['crear directivos','editar directivos'])
     <div class="col-md-4">
         <div class="box box-solid box-primary">
             <div class="box-header">
@@ -12,10 +13,7 @@
             </div>
             {!! Form::open(['id'=>'formdirectivos']) !!}
             <div class="box-body">
-                <div id="msj-infodirectivo" class="alert alert-success" role='alert' style="display: none">
-                    <strong id='succesdirectivo'></strong>
-                </div>
-                <input type="hidden" name="_token" value="{{ csrf_token() }}" id="token">
+                @include('mensajes.mensaje')                
                 <input type="hidden" id="iddirectivo">
                 {!! Form::label('directivo','Cargo Directivo:',['class' => 'control-label '])!!}                    
                 {!! Form::text('cargo_directivo',null,['id'=>'cargo_directivo','class'=>'form-control','placeholder'=>'NOMBRE DEL CARGO DEL DIRECTIVO'])!!}   
@@ -28,6 +26,8 @@
             {!! Form::close() !!} 
         </div>
     </div>
+    @endpermission
+    @permission('ver directivos')
     <div class="col-md-8">
         <div class="box box-solid box-primary">
             <div class="box-header">
@@ -46,9 +46,13 @@
                         <tr>                                            
                             <td>{{$directivo->id}}</td>
                             <td>{{$directivo->cargo_directivo}}</td>                                                        
-                            <td>                                          
+                            <td>    
+                                @permission('editar directivos')
                                 <a href="#"  OnClick='EdDirectivo({{$directivo->id}});' class="btn-sm btn-primary"><span class="glyphicon glyphicon-pencil"data-toggle="tooltip" data-placement="top" title="Editars"></span></a>
-                                <a href="#" onclick="EliDirectivo('{{$directivo->id}}','{{$name}}')" class="btn-sm btn-danger"><span data-toggle="tooltip" data-placement="top" title="Eliminar" class="glyphicon glyphicon-remove"></span></a>                                                            
+                                @endpermission
+                                @permission('eliminar directivos')
+                                    <a href="#" onclick="EliDirectivo('{{$directivo->id}}','{{$name}}')" class="btn-sm btn-danger"><span data-toggle="tooltip" data-placement="top" title="Eliminar" class="glyphicon glyphicon-remove"></span></a>
+                                @endpermission
                             </td>                    
                         </tr>
                         @endforeach
@@ -57,6 +61,8 @@
             </div>
         </div>
     </div>
+    <section id="conten-modal"></section>
+    @endpermission
 </div>
 
 

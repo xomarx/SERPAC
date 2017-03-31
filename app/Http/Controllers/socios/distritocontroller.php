@@ -33,16 +33,12 @@ class distritocontroller extends Controller
     public function index()
     {
         //
-        $distritos = DB::table('distritos')
-                ->join('provincias','distritos.provincias_id','=','provincias.id')
-                ->join('departamentos','provincias.departamentos_id','=','departamentos.id')
-                ->select( 'distritos.id','distritos.distrito','distritos.provincias_id'
-                        ,'provincias.provincia','provincias.departamentos_id'
-                        ,'departamentos.departamento')
-                ->get();
+        if(!auth()->user()->can('ver distritos'))
+            return response ()->view ('errors.403');
+        $distritos = Distrito::listadistritos();
         $departamentos = Departamento::pluck('departamento','id');        
 //        return view('socios.distrito')->with('distritos',$distritos);
-        return view('socios.distrito',array('distritos'=>$distritos,'departamentos'=>$departamentos));
+        return response ()->view('socios.distrito',array('distritos'=>$distritos,'departamentos'=>$departamentos));
     }
 
     /**
@@ -66,6 +62,8 @@ class distritocontroller extends Controller
         //
         if($request->ajax())
         {
+             if(!auth()->user()->can('crear distritos'))
+                return response ()->view ('errors.403-content',[],403);
             $distrito = Distrito::create([
                 'distrito'=>$request->distrito,
                 'provincias_id'=>$request->provincia
@@ -110,11 +108,13 @@ class distritocontroller extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Requests\socios\updatedistritorequest $request, $id)
+    public function update(Requests\socios\createdistritorequest $request, $id)
     {
         //
         if($request ->ajax())
         {            
+            if(!auth()->user()->can('editar distritos'))
+                return response ()->view ('errors.403-content',[],403);
             $distrito = Distrito::FindOrFail($id);            
             $distrito->distrito = strtoupper($request->distrito);
             $distrito->provincias_id = $request->provincia;
@@ -137,14 +137,13 @@ class distritocontroller extends Controller
     public function destroy($id)
     {
         //
+        if(auth()->user()->can('eliminar distritos')){
         $distritos=Distrito::FindOrFail($id)->delete();
-        if($distritos)
-        {
-            return response()->json(['success'=>'true']);
+        if($distritos)        
+            return response()->json(['success'=>true]);        
+        else        
+            return response()->json(['success'=>false]);        
         }
-        else
-        {
-            return response()->json(['success'=>'false']);
-        }
+        return response ()->view ('errors.403-content',[],403);
     }
 }

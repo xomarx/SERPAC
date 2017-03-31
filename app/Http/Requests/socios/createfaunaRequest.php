@@ -23,9 +23,24 @@ class createfaunaRequest extends Request
      */
     public function rules()
     {
-        return [            
-            'fauna'=>'required|unique:faunas'
-        ];
+        switch ($this->method()) {
+            case 'GET':
+            case 'DELETE': {
+                    return [];
+                }
+            case 'POST': {
+                    return [
+                        'fauna' => 'required|unique:faunas'
+                    ];
+                }
+            case 'PATCH':
+            case 'PUT': {
+                    return [
+                        'fauna' => 'required'
+                    ];
+                }
+            default : break;
+        }
     }
     
     public function messages() {

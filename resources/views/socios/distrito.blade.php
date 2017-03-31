@@ -4,6 +4,7 @@
 @stop
 @section('main-content')
 <div class="box-body">
+    @permission(['editar distritos','crear distritos'])
     <div class="col-md-4">
         <div class="box box-solid box-primary">
             <div class="box-header">
@@ -11,10 +12,7 @@
             </div>
             {!! Form::open(['id'=>'formdistrito']) !!}
             <div class="box-body">
-                <div id="msj-infodistrito" class="alert alert-success" role='alert' style="display: none">
-                    <strong id='succesdistrito'></strong>
-                </div>
-                <input type="hidden" name="_token" value="{{ csrf_token() }}" id="token">
+                @include('mensajes.mensaje')                
                 <input type="hidden" id="iddistrito">
                 {!! Form::label('departamento','Departamento:',['class' => 'control-label'])!!}                             
                 {!! Form::select('departamento',$departamentos,null,['id'=>'departamento','class'=>'form-control','placeholder'=>'Seleccione un departamento']) !!}
@@ -33,6 +31,8 @@
             {!! Form::close() !!}
         </div>
     </div>
+    @endpermission
+    @permission('ver distritos')
     <div class="col-md-8">
         <div class="box box-solid box-primary">
             <div class="box-header">
@@ -53,9 +53,13 @@
                             <td>{{$distrito->distrito}}</td>
                             <td>{{$distrito->provincia}}</td>
                             <td>{{$distrito->departamento}}</td>
-                            <td>                                          
+                            <td>        
+                                @permission('editar distritos')
                                 <a href="javascript:void(0);"  OnClick='EdDistrito({{$distrito->id}});' class="btn-sm btn-primary"><span class="glyphicon glyphicon-pencil"data-toggle="tooltip" data-placement="top" title="Editars"></span></a>
+                                @endpermission
+                                @permission('eliminar distritos')
                                 <a href="javascript:void(0);" onclick="EliDistrito('{{$distrito->id}}','{{$name}}')" class="btn-sm btn-danger"><span data-toggle="tooltip" data-placement="top" title="Eliminar" class="glyphicon glyphicon-remove"></span></a>                                                            
+                                @endpermission
                             </td>                    
                         </tr>
                         @endforeach
@@ -64,7 +68,9 @@
             </div>
         </div>
     </div>
+    @endpermission
 </div>
+<section id="conten-modal"></section>
 @stop
 
 @section('script')

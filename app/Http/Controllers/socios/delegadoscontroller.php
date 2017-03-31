@@ -17,8 +17,9 @@ class delegadoscontroller extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
-        //
+    {        
+        if(!auth()->user()->can('ver delegados'))
+            return response ()->view ('errors.403');
         $delegados = Cargos_delegado::all();        
         return view('socios.basicos.delegados')->with('delegados',$delegados);
     }
@@ -42,13 +43,15 @@ class delegadoscontroller extends Controller
     public function store(Requests\socios\createCargo_delegadorequest $request)
     {
         if ($request->ajax()) {
+            if(!auth()->user()->can('crear delegados'))
+                return response ()->view ('errors.403-content',[],403);
             $cargo_delegada = Cargos_delegado::create([
                 'cargo_delegado'=> strtoupper( $request->cargo_delegado)
             ]);
             if ($cargo_delegada) {
-                return response()->json(['success'=>'true','message'=>'Se registro correctamente']);
+                return response()->json(['success'=>true,'message'=>'Se registro correctamente']);
             } else {
-                return response()->json(['success'=>'false','message'=>'No se registro']);
+                return response()->json(['success'=>false,'message'=>'No se registro']);
             }
         }
     }
@@ -86,16 +89,16 @@ class delegadoscontroller extends Controller
      */
     public function update(Requests\socios\createCargo_delegadorequest $request, $id)
     {        
-        $cargo_delegado = Cargos_delegado::FindOrFail($id);
-        $cargo_delegado->cargo_delegado= strtoupper($request->cargo_delegado);
-        $cargo_delegado->save();
-        if($cargo_delegado)
-        {
-            return response()->json(['success'=>'true','message'=>'Se Actualizo correctamente']);
-        }
-        else
-        {
-            return response()->json(['success'=>'false','message'=>'No se Actualizo']);
+        if($request->ajax()) {
+            if(!auth()->user()->can('editar delegados'))
+                return response ()->view ('errors.403-content',[],403);
+            $cargo_delegado = Cargos_delegado::FindOrFail($id);
+            $cargo_delegado->cargo_delegado = strtoupper($request->cargo_delegado);
+            $cargo_delegado->save();
+            if ($cargo_delegado)
+                return response()->json(['success' => true, 'message' => 'Se Actualizo correctamente']);
+            else
+                return response()->json(['success' => false, 'message' => 'No se Actualizo']);
         }
     }
 
@@ -108,15 +111,13 @@ class delegadoscontroller extends Controller
     public function destroy($id)
     {
         //
-        $cargo_delegado = Cargos_delegado::FindOrFail($id);
-        $resul = $cargo_delegado->delete();
-        if($resul)
-        {
-            return response()->json(['success'=>'true']);
-        }
-        else
-        {
-            return response()->json(['success'=>'false']);
+        if  (auth()->user()->can('crear delegados')) {
+            $cargo_delegado = Cargos_delegado::FindOrFail($id);
+            $resul = $cargo_delegado->delete();
+            if ($resul)
+                return response()->json(['success' => true]);
+            else
+                return response()->json(['success' => false]);
         }
     }
 }

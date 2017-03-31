@@ -19,6 +19,8 @@ class floracontroller extends Controller
     public function index()
     {
         //
+        if(!auth()->user()->can('ver floras'))
+            return response ()->view ('errors.403');
         $floras = Flora::all();
         return view('socios.basicos.flora',  compact('floras',$floras));
     }
@@ -43,11 +45,13 @@ class floracontroller extends Controller
     {
         //
         if ($request->ajax()) {
+            if(!auth()->user()->can('crear floras'))
+                return response ()->view ('errors.403-content',[],403);
             $flora = Flora::create(['flora'=>strtoupper($request->flora)]);
             if ($flora) {
-                return response()->json(['success'=>'true','message'=>'Se registro correctamente']);
+                return response()->json(['success'=>true,'message'=>'Se registro correctamente']);
             } else {
-                return response()->json(['success'=>'false','message'=>'No se registro']);
+                return response()->json(['success'=>false,'message'=>'No se registro']);
             }
         }
     }
@@ -85,16 +89,16 @@ class floracontroller extends Controller
      */
     public function update(Requests\socios\createFlorarequest $request, $id)
     {        
+        if($request->ajax()){
+            if(!auth()->user()->can('editar floras'))
+                return response ()->view ('errors.403-content',[],403);
         $flora = Flora::FindOrFail($id);
         $flora->flora = strtoupper($request->flora);        
         $flora->save();
-        if($flora)
-        {
-            return response()->json(['success'=>'true','message'=>'Se Actualizo correctamente']);
-        }
-        else
-        {
-            return response()->json(['success'=>'false','message'=>'No se Actualizo']);
+        if($flora)        
+            return response()->json(['success'=>true,'message'=>'Se Actualizo correctamente']);        
+        else        
+            return response()->json(['success'=>false,'message'=>'No se Actualizo']);        
         }
     }
 
@@ -107,15 +111,18 @@ class floracontroller extends Controller
     public function destroy($id)
     {
         //
+        if(auth()->user()->can('eliminar floras')){
+                
         $flora = Flora::FindOrFail($id);
         $resul = $flora->delete();
         if($resul)
-        {
-            return response()->json(['success'=>'true']);
-        }
+        
+            return response()->json(['success'=>true]);
+        
         else
-        {
-            return response()->json(['success'=>'false']);
+        
+            return response()->json(['success'=>false]);
+        
         }
     }
 }

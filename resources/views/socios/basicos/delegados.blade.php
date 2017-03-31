@@ -4,17 +4,15 @@
 @stop
 @section('main-content')
 <div class="box-body">
-    <div class="col-md-4">
+    @permission(['crear delegados','editar delegados'])
+    <div class="col-md-4" id="contenidos-box">
         <div class="box box-solid box-primary">
             <div class="box-header">
                 <h3 class="box-title">DELEGADOS</h3>
             </div>
-            {!! Form::open(['id'=>'formdirectivos']) !!}
+            {!! Form::open(['id'=>'formdelegados']) !!}
             <div class="box-body">
-                <div id="msj-infodelegado" class="alert alert-success" role='alert' style="display: none">
-                    <strong id='succesdelegado'></strong>
-                </div>
-                <input type="hidden" name="_token" value="{{ csrf_token() }}" id="token">
+                @include('mensajes.mensaje')                
                 <input type="hidden" id="iddelegado">
                 {!! Form::label('delegados','CARGO DELEGAGO:',['class' => 'control-label'])!!}                    
                 {!! Form::text('cargo_delegado',null,['id'=>'cargo_delegado','class'=>'form-control','placeholder'=>'Nombre del Cargo'])!!}  
@@ -22,12 +20,14 @@
             </div>
             <div class="box-footer">
                 <input type="reset" value="Nuevo" class="btn btn-primary btn-sm m-t-10" id="nuevodelegado">
-                {!!link_to('#', $title='Registrar', $attributes = ['id'=>'RegDelegado', 'class'=>'btn btn-primary btn-sm m-t-10'])!!}
+                {!!link_to('#', $title='Registrar', $attributes = ['id'=>'RegDelegado', 'class'=>'btn btn-primary btn-sm'])!!}
             </div>
             {!! Form::close() !!} 
         </div>
     </div>
-    <div class="col-md-8">
+    @endpermission
+    @permission('ver delegados')
+    <div class="col-md-8" >
         <div class="box box-solid box-primary">
             <div class="box-header">
                 <h3 class="box-title">LISTA DE DELEGADOS</h3>
@@ -45,9 +45,13 @@
                         <tr>                                            
                             <td>{{$delegado->id}}</td>
                             <td>{{$delegado->cargo_delegado}}</td>                                                        
-                            <td>                                          
+                            <td>          
+                                @permission('editar delegados')
                                 <a href="#"  OnClick='EdDelegado({{$delegado->id}});' data-toggle='modal' data-target='#myModal' class="btn-sm btn-primary"><span class="glyphicon glyphicon-pencil"data-toggle="tooltip" data-placement="top" title="Editars"></span></a>
-                                <a href="#" onclick="EliDelegado('{{$delegado->id}}','{{$name}}')" class="btn-sm btn-danger"><span data-toggle="tooltip" data-placement="top" title="Eliminar" class="glyphicon glyphicon-remove"></span></a>                                                            
+                                @endpermission
+                                @permission('eliminar delegados')
+                                <a href="#" onclick="EliDelegado('{{$delegado->id}}','{{$name}}')" class="btn-sm btn-danger"><span data-toggle="tooltip" data-placement="top" title="Eliminar" class="glyphicon glyphicon-remove"></span></a>
+                                @endpermission
                             </td>                    
                         </tr>
                         @endforeach
@@ -56,6 +60,7 @@
             </div>
         </div>
     </div>
+    @endpermission
 </div>
 
 @endsection

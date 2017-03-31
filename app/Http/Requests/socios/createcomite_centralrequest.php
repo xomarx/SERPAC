@@ -23,13 +23,32 @@ class createcomite_centralrequest extends Request
      */
     public function rules()
     {
-        return [
-            //
-            'departamento'=>'required',
-            'provincia'=>'required',
-            'distrito'=>'required',
-            'comite_central'=>'required|unique:comites_centrales,comite_central'
-        ];
+        switch ($this->method()) {
+            case 'GET':
+            case 'DELETE': {
+                    return [];
+                }
+            case 'POST': {
+                    return [
+                        //
+                        'departamento' => 'required',
+                        'provincia' => 'required',
+                        'distrito' => 'required',
+                        'comite_central' => 'required|unique:comites_centrales,comite_central'
+                    ];
+                }
+            case 'PATCH':
+            case 'PUT': {
+                    return [
+                        //
+                        'departamento' => 'required',
+                        'provincia' => 'required',
+                        'distrito' => 'required',
+                        'comite_central' => 'required|unique:comites_centrales,comite_central'
+                    ];
+                }
+            default : break;
+        }
     }
     
     public function messages() {

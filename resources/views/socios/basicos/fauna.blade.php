@@ -4,6 +4,7 @@
 @stop
 @section('main-content')
 <div class="box-body">
+@permission(['crear faunas','editar faunas'])
 <div class="col-md-4">
     <div class="box box-solid box-primary">
         <div class="box-header with-border">
@@ -11,10 +12,7 @@
         </div><!-- /.box-header -->
         {!! Form::open(['id'=>'formfauna']) !!}
         <div class="box-body">            
-            <div id="msj-infofauna" class="alert alert-success" role='alert' style="display: none">
-                    <strong id='succesfauna'></strong>
-                </div>
-            <input type="hidden" name="_token" value="{{ csrf_token() }}" id="token">  
+            @include('mensajes.mensaje') 
             <input type="hidden" id="idfauna" name="idfauna">
             {!! Form::label('fauna','Fauna:',['class' => 'control-label col-xs-1'])!!}                    
             {!! Form::text('fauna',null,['id'=>'fauna','class'=>'form-control','placeholder'=>'Nombre de la Fauna'])!!}
@@ -27,6 +25,8 @@
         {!! Form::close() !!}
     </div><!-- /.box -->
 </div>
+@endpermission
+@permission('ver faunas')
 <div class="col-md-8">
 <div class="box box-solid box-primary">
     <div class="box-header">
@@ -51,9 +51,13 @@
             <tr>                                            
                 <td>{{$fauna->id}}</td>
                 <td>{{$fauna->fauna}}</td>                                                        
-                <td>                                          
+                <td>       
+                    @permission('editar faunas')
                     <a href="javascript:void(0);"  OnClick='EditFauna({{$fauna->id}});' class="btn-sm btn-primary"><span class="glyphicon glyphicon-pencil"data-toggle="tooltip" data-placement="top" title="Editars"></span></a>
-                    <a href="javascript:void(0);" onclick="EliFauna('{{$fauna->id}}','{{$name}}')"class="btn-sm btn-danger" ><span data-toggle="tooltip" data-placement="top" title="Eliminar" class="glyphicon glyphicon-remove"></span></a>                                                            
+                    @endpermission
+                    @permission('eliminar faunas')
+                    <a href="javascript:void(0);" onclick="EliFauna('{{$fauna->id}}','{{$name}}')"class="btn-sm btn-danger" ><span data-toggle="tooltip" data-placement="top" title="Eliminar" class="glyphicon glyphicon-remove"></span></a>
+                    @endpermission
                 </td>                    
             </tr>
             @endforeach
@@ -62,5 +66,7 @@
     </div>
 </div>
 </div>
+@endpermission
 </div>
+<section id="conten-modal"></section>
 @endsection

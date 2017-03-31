@@ -39,6 +39,10 @@ class usuarioController extends Controller
         $usuarios = \App\User::usuarios();
         return view('Configuracion.listUsers',['usuarios'=>$usuarios]);  
     }
+    
+    public function errorModal(){
+        return response()->view('errors.403-modal');
+    }
 
     /**
      * Display a listing of the resource.
@@ -142,8 +146,7 @@ class usuarioController extends Controller
 //            else $user->estado = 1;            
             $roluser = \App\Role::deleteRolUSer($user->id);
             return response()->json(['success'=>true]);
-        }
-        
+        }        
     }
 
     /**

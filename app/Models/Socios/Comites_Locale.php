@@ -55,7 +55,7 @@ class Comites_Locale extends Model
                 ->select( 'comites_locales.id','comites_locales.comite_local','comites_locales.comites_centrales_id'
                         ,'comites_centrales.comite_central','comites_centrales.distritos_id','distritos.distrito'
                         ,'distritos.provincias_id','provincias.provincia','provincias.departamentos_id','departamentos.departamento')
-                ->get();
+                ->first();
         }
         
         public static function getlistaComite_Local(){

@@ -13,7 +13,7 @@ class Comite_localCreateRequet extends Request
      */
     public function authorize()
     {
-        return true;
+        return auth()->user()->can(['editar local','crear local','eliminar local']);
     }
 
     /**
@@ -23,15 +23,34 @@ class Comite_localCreateRequet extends Request
      */
     public function rules()
     {
-        return [
-            'departamento'=>'required',
-            'provincia'=>'required',
-            'distrito'=>'required',
-            'comite_central'=>'required',
-            'comite_local'=>'required|unique:comites_locales,comite_local'
-        ];
+        switch ($this->method()) {
+            case 'GET':
+            case 'DELETE': {
+                    return [];
+                }
+            case 'POST': {
+                    return [
+                        'departamento' => 'required',
+                        'provincia' => 'required',
+                        'distrito' => 'required',
+                        'comite_central' => 'required',
+                        'comite_local' => 'required|unique:comites_locales,comite_local'
+                    ];
+                }
+            case 'PATCH':
+            case 'PUT': {
+                    return [
+                        'departamento' => 'required',
+                        'provincia' => 'required',
+                        'distrito' => 'required',
+                        'comite_central' => 'required',
+                        'comite_local' => 'required|unique:comites_locales,comite_local'
+                    ];
+                }
+            default : break;
+        }
     }
-    
+
     public function messages() {
         parent::messages();
         return [

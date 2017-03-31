@@ -32,6 +32,8 @@ class comite_centralcontroller extends Controller
     public function index()
     {
         //
+        if(!auth()->user()->can('ver central'))
+            return response ()->view ('errors.403');
         $comite_centrales = Comites_Centrales::getlistaComites(); 
         $departamentos = Departamento::pluck('departamento','id');
         return view('socios.comitecentral',array('comites_centrales'=>$comite_centrales,'departamentos'=>$departamentos));
@@ -58,15 +60,14 @@ class comite_centralcontroller extends Controller
         //
         if($request->ajax())
         {
+            if(!auth()->user()->can('crear central'))
+                return response ()->view ('errors.403-content',[],403);
             $comite_centrals = Comites_Centrales::create($request->all());
-            if($comite_centrals)
-            {
-                return response()->json(['success'=>'true','message'=>'Se Registro correctamente']);
-            }
-            else
-            {
-                return response()->json(['success'=>'false','message'=>'No se Registro ningun dato']);
-            }
+            if($comite_centrals)            
+                return response()->json(['success'=>true,'message'=>'Se Registro correctamente']);            
+            else            
+                return response()->json(['success'=>false,'message'=>'No se Registro ningun dato']);
+            
         }
     }
 
@@ -101,21 +102,24 @@ class comite_centralcontroller extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Requests\socios\createcomite_centralrequest $request, $id)
     {
         //
         if($request->ajax())
         {
+            if(!auth()->user()->can('editar central'))
+                return response ()->view ('errors.403-content',[],403);
             $central = Comites_Centrales::FindOrFail($id);
-            $central->fill($request->all());
+            $central->comite_central= strtoupper($request->comite_central);
+            $central->distritos_id=$request->distrito;
             $central->save();
             if($central)
             {
-                return response()->json(['success'=>'true','message'=>'Se actualizaron correctamente los datos']);
+                return response()->json(['success'=>true,'message'=>'Se actualizaron correctamente los datos']);
             }
             else 
             {
-                return response()->json(['success'=>'false','message'=>'no se actualizaron los datos']);
+                return response()->json(['success'=>false,'message'=>'no se actualizaron los datos']);
             }
         }
     }
@@ -128,15 +132,13 @@ class comite_centralcontroller extends Controller
      */
     public function destroy($id)
     {        
+        if(!auth()->user()->can('eliminar central')){
         $central = Comites_Centrales::FindOrFail($id);
         $result = $central->delete();
-        if ($result)
-        {            
-            return response()->json(['success'=>'true']); 
-        }
-        else
-        {
-            return response()->json(['success'=> 'false']);
+        if ($result)                   
+            return response()->json(['success'=>true]);         
+        else        
+            return response()->json(['success'=> false]);  
         }
     }
 }

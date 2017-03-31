@@ -7,11 +7,9 @@
 @permission('ver transferencias')
 <div class="box box-solid box-primary" id="listatransferencia">
     <div class="box-header">
-        <a id="nuevatrans" onclick="activarForm(6)" class="btn btn-dropbox " >NUEVA TRANSFERENCIA <span class="fa fa-rocket"data-toggle="tooltip" data-placement="top" title="Nueva Transferencia"> </span></a>
+        <a id="nuevatrans" class="btn btn-dropbox " >NUEVA TRANSFERENCIA <span class="fa fa-rocket"data-toggle="tooltip" data-placement="top" title="Nueva Transferencia"> </span></a>
     </div>
-    <div class="box-body" id="contenidos-box">
-        
-        <line>
+    <div class="box-body" id="contenidos-box">                
         <table class="table table-responsive" id="myTable" >
             <thead>                                                            
             <th>CODIGO</th> 
@@ -51,7 +49,7 @@
 
 @section('script')
 <script>
-    var rellenardatossocio = function(codigosocio) {          
+var rellenardatossocio = function(codigosocio) {          
         $("#motivo").show(50);
         $("#tablasocio").show(50); 
         
@@ -112,24 +110,22 @@ $(function(){
                rellenardatossocio(ui.item.id);
            }
         });
-   });
-   
-   $(function(){              
-        $("#codigo").autocomplete({     
+   });      
+       var autocomplet = function(){
+           
+           $("#codigo").autocomplete({     
            minLength:1,           
            autoFocus:true,
-           delay:0,
+           delay:1,
            source: "{{url('socios/codigo')}}",
            select: function(event, ui){
-               $("#socio").val(ui.item.id);  
+               $("#socio").val(ui.item.socio);  
                $("#codigo").val(ui.item.value);
-               $("#dni_socio").val(ui.item.dni);               
+               $("#dni_socio").val(ui.item.id);               
                rellenardatossocio(ui.item.value);
            }
         });
-   });
-   
-   $(function(){              
+        
         $("#dni_socio").autocomplete({     
            minLength:1,           
            autoFocus:true,
@@ -142,7 +138,46 @@ $(function(){
                rellenardatossocio(ui.item.id);
            }
         });
-   });
+        
+        $("#socio").autocomplete({
+            minLength:1,           
+           autoFocus:true,
+           delay:1,
+           source: "{{url('socios/searchsocio')}}",
+           select: function(event, ui){
+               $("#socio").val(ui.item.value);  
+               $("#codigo").val(ui.item.id);
+               $("#dni_socio").val(ui.item.dni);
+               rellenardatossocio(ui.item.id);
+           }
+        });
+        
+        $("#dni_nuevo_socio").autocomplete({     
+           minLength:1,           
+           autoFocus:true,
+           delay:1,
+           source: "{{url('socios/dnipersona')}}",           
+           select: function(event, ui){               
+               $("#dni_nuevo_socio").val(ui.item.value);
+               validarnuevosocio(ui.item.value);
+           }
+        });
+        
+        $("#dni_beneficiario").autocomplete({     
+           minLength:1,           
+           autoFocus:true,
+           delay:1,
+           source: "{{url('socios/dnibeneficiario')}}",
+           select: function(event, ui){               
+               $("#dni_beneficiario").val(ui.item.value);
+               validarbeneficiario(ui.item.value);
+           }
+        });
+       };
+        
+   
+   
+   
    
    var validarnuevosocio = function(dninuevo) {              
        $.get("/socios/transferencias/nuevo/{term}",        
@@ -170,19 +205,6 @@ $(function(){
         });
    };
    
-   $(function(){    
-       $("#tabla")
-        $("#dni_nuevo_socio").autocomplete({     
-           minLength:1,           
-           autoFocus:true,
-           delay:1,
-           source: "{{url('socios/dnipersona')}}",           
-           select: function(event, ui){               
-               $("#dni_nuevo_socio").val(ui.item.value);
-               validarnuevosocio(ui.item.value);
-           }
-        });
-   });
    
    var validarbeneficiario = function(dnibeneficiario){
        var codigo=$("#codigo").val();
@@ -235,97 +257,7 @@ $(function(){
              
         });
    };
-   
-   $(function(){              
-        $("#dni_beneficiario").autocomplete({     
-           minLength:1,           
-           autoFocus:true,
-           delay:1,
-           source: "{{url('socios/dnibeneficiario')}}",
-           select: function(event, ui){               
-               $("#dni_beneficiario").val(ui.item.value);
-               validarbeneficiario(ui.item.value);
-           }
-        });
-   });
-
- $("#comite_central_1").change(function(event){          
-     var route = "{{url('comite_locales')}}/"+event.target.value + "";  
-     
-    $.get(route,function(response){         
-        $("#comites_locales_id").empty();
-        $("#comites_locales_id").append("<option value=''>Seleccione</option>");
-        for (var i = 0; i < response.length; i++) {            
-            $("#comites_locales_id").append("<option value='" + response[i].id+"'>"+response[i].comite_local+"</option>");
-        }
-    }); 
- });
-// 
- $("#distrito_1").change(function(event){     
-     var route = "/comites_centrales/"+event.target.value + "";   
-     
-    $.get(route,function(response){           
-        $("#comite_central_1").empty();
-        $("#comite_central_1").append("<option value=''>Seleccione</option>");
-        for (var i = 0; i < response.length; i++) {            
-            $("#comite_central_1").append("<option value='" + response[i].id+"'>"+response[i].comite_central+"</option>");
-        }
-    }); 
- });
   
- $("#provincia_1").change(function(event){     
-     var route = "/distritos/"+event.target.value + "";         
-    $.get(route,function(response){          
-        $("#distrito_1").empty();
-        $("#distrito_1").append("<option value=''>Seleccione</option>");
-        for (var i = 0; i < response.length; i++) {            
-            $("#distrito_1").append("<option value='" + response[i].id+"'>"+response[i].distrito+"</option>");
-        }
-    }); 
- });
-
- $("#departamento_1").change(function(event){     
-     var route = "/provincias/"+event.target.value + "";       
-    $.get(route,function(response){        
-        $("#provincia_1").empty();
-        $("#provincia_1").append("<option value=''>Seleccione</option>");
-        for (var i = 0; i < response.length; i++) {            
-            $("#provincia_1").append("<option value='" + response[i].id+"'>"+response[i].provincia+"</option>");
-        }
-    }); 
- });
-
-//************************  REGISTRAR 
-$("#transSocio").click(function(event)
-    {       
-            var fields = $("#formtransferencia").serialize();
-//            var token = $("input[departamento=_token]").val();
-            var token = $("#token").val();                       
-            var route = "{{url('socios/transferencias')}}"; 
-            console.log(fields);
-          $.ajax({
-            url:route,
-            headers:{'X-CSRF-TOKEN':token},
-            type:'post',
-            datatype: 'json',            
-            data: fields,
-            success:function(data)
-            {
-                if(data.success == 'true')
-                {
-                    document.location.reload();            
-                }
-            },
-            error:function(data)
-            {                
-//                $("#error").html(data.responseJSON.name);
-//                $("#message-error").fadeIn();
-//                if (data.status == 422) {
-//                   console.clear();
-//                }
-            }  
-          })      
-    });  
 
   //******************************
 var btneditar = function(id) 

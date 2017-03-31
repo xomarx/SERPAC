@@ -30,6 +30,8 @@ class provinciacontroller extends Controller
     public function index()
     {
         //
+        if(!auth()->user()->can('ver provincias'))
+            return response ()->view ('errors.403');
         $provincias = DB::table('provincias')
                 ->join('departamentos','provincias.departamentos_id','=','departamentos.id')
                 ->select('provincias.id','provincias.provincia','departamentos.departamento','provincias.departamentos_id')
@@ -58,6 +60,8 @@ class provinciacontroller extends Controller
     {        
         if ($request->ajax())
         {
+            if(!auth()->user()->can('crear provincias'))
+                return response ()->view ('errors.403-content',[],403);
                 $provincia = Provincia::create([
                     'provincia'=> strtoupper($request->provincia),
                     'departamentos_id'=>$request->departamento
@@ -65,9 +69,9 @@ class provinciacontroller extends Controller
                 $provincia ->save();
                 if($provincia)
                 {
-                    return response()->json(['success' => 'true','message'=>'Se Registro Correctamente']);
+                    return response()->json(['success' => true,'message'=>'Se Registro Correctamente']);
                 } else {
-                    return response()->json(['success' => 'false','message'=>'No se registro ningun datos']);
+                    return response()->json(['success' => false,'message'=>'No se registro ningun datos']);
                 }
         }
     }
@@ -108,19 +112,21 @@ class provinciacontroller extends Controller
      * @return \Illuminate\Http\Response
      */
     
-    public function update(Requests\socios\updateprovinciarequest $request, $id)
+    public function update(Requests\socios\createprovinciarequest $request, $id)
     {       
         if ($request->ajax())
         {
+            if(!auth()->user()->can('editar provincias'))
+                return response ()->view ('errors.403-content',[],403);
             $provincia = Provincia::FindOrFail($id);
             $provincia->provincia= strtoupper($request->provincia);
             $provincia->departamentos_id=$request->departamento;
             $provincia->save();            
             if ($provincia){
-                return response()->json(['success'=>'true','message'=>'Se actualizaron correctamente los datos']);
+                return response()->json(['success'=>true,'message'=>'Se actualizaron correctamente los datos']);
             }
             else{
-                return response()->json(['success'=>'false','message'=>'No se Actualizaron los datos']);
+                return response()->json(['success'=>false,'message'=>'No se Actualizaron los datos']);
             } 
         }  
     }
@@ -133,15 +139,16 @@ class provinciacontroller extends Controller
      */
     public function destroy($id)
     {        
+        if(auth()->user()->can('eliminar provincias')){
         $provincias = Provincia::FindOrFail($id);
         $result = $provincias->delete();
         if ($result)
         {
-            return response()->json(['success'=>'true']); 
+            return response()->json(['success'=>true]); 
         }
         else
         {
-            return response()->json(['success'=> 'false']);
-        }
+            return response()->json(['success'=> false]);
+        }}
     }
 }

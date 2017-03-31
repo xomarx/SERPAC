@@ -18,7 +18,8 @@ class inmueblescontroller extends Controller
      */
     public function index()
     {
-        //
+        if(!auth()->user()->can('ver inmuebles'))
+            return response ()->view ('errors.403');
         $inmuebles = Inmueble::all();
         return view('socios.basicos.inmuebles')->  with('inmuebles',$inmuebles);
     }
@@ -44,13 +45,15 @@ class inmueblescontroller extends Controller
         //
         if($request->ajax())
         {
+            if(!auth()->user()->can('crear inmuebles'))
+                return response ()->view ('errors.403-content',[],403);
             $inmueble = Inmueble::create([
                 'inmueble'=>  strtoupper($request->inmueble)
             ]);
             if($inmueble)
-                return response()->json(['success'=>'true','message'=>'Se registro correctamente']);
+                return response()->json(['success'=>true,'message'=>'Se registro correctamente']);
             else 
-                return response()->json(['success'=>'false','message'=>'No se registro']);
+                return response()->json(['success'=>false,'message'=>'No se registro']);
         }
     }
 
@@ -90,13 +93,15 @@ class inmueblescontroller extends Controller
         //
         if($request->ajax())
         {
+            if(!auth()->user()->can('editar inmuebles'))
+                return response ()->view ('errors.403-content',[],403);
             $inmueble = Inmueble::FindOrFail($id);
             $inmueble->inmueble = strtoupper($request->inmueble);
             $inmueble->save();
             if($inmueble)
-                return response()->json(['success'=>'true','message'=>'Se Actualizo correctamente']);
+                return response()->json(['success'=>true,'message'=>'Se Actualizo correctamente']);
             else
-                return response()->json(['success'=>'false','message'=>'No se Actualizo']);
+                return response()->json(['success'=>false,'message'=>'No se Actualizo']);
         }
     }
 
@@ -109,15 +114,16 @@ class inmueblescontroller extends Controller
     public function destroy($id)
     {
         //
+        if(auth()->user()->can('eliminar inmuebles')){
         $inmueble = Inmueble::FindOrFail($id);
         $resul = $inmueble->delete();
         if($resul)
-        {
-            return response()->json(['success'=>'true']);
-        }
+        
+            return response()->json(['success'=>true]);
+        
         else
-        {
-            return response()->json(['success'=>'false']);
+        
+            return response()->json(['success'=>false]);
         }
     }
 }

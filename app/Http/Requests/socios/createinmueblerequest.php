@@ -23,10 +23,26 @@ class createinmueblerequest extends Request
      */
     public function rules()
     {
-        return [
-            //
-            'inmueble'=>'required|unique:inmuebles'
-        ];
+        switch ($this->method()) {
+            case 'GET':
+            case 'DELETE': {
+                    return [];
+                }
+            case 'POST': {
+                    return [
+                        //
+                        'inmueble' => 'required|unique:inmuebles'
+                    ];
+                }
+            case 'PATCH':
+            case 'PUT': {
+                    return [
+                        //
+                        'inmueble' => 'required'
+                    ];
+                }
+            default : break;
+        }
     }
     public function messages() {
         parent::messages();

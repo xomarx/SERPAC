@@ -5,6 +5,7 @@
 @section('main-content')
 
 <div class="box-body">
+    @permission(['crear central','editar central'])
     <div class="col-md-4">
         <div class="box box-primary box-solid">
             <div class="box-header">
@@ -12,10 +13,7 @@
             </div>
             {!! Form::open(['id'=>'formcomite_central']) !!}
             <div class="box-body">
-                <div id="msj-infocentral" class="alert alert-success" role='alert' style="display: none">
-                    <strong id='succescentral'></strong>
-                </div>
-                <input type="hidden" name="_token" value="{{ csrf_token() }}" id="token">
+                @include('mensajes.mensaje')                
                 <input type="hidden" id="idcentral">  
                 {!! Form::label('departamento','Departamento:',['class' => 'control-label'])!!}                             
                 {!! Form::select('departamento',$departamentos,null,['id'=>'departamento','class'=>'form-control','placeholder'=>'selecciona']) !!}
@@ -37,10 +35,12 @@
             {!! Form::close() !!}
         </div>
     </div>
+    @endpermission
+    @permission('ver central')
     <div class="col-md-8">
         <div class="box box-primary box-solid">
             <div class="box-header">
-                <h3 class="box-title">COMITE CENTRAL</h3>
+                <h3 class="box-title">LISTA COMITE CENTRAL</h3>
             </div>
             <div class="box-body">
                 <table class="table table-responsive" id="myTable" >
@@ -61,9 +61,13 @@
                                     <td>{{$comite_central->distrito}}</td>
                                     <td>{{$comite_central->provincia}}</td>
                                     <td>{{$comite_central->departamento}}</td>
-                                    <td>                                          
-                                        <a href="#"  OnClick='Edcentral({{$comite_central->id}});' class="btn-sm btn-primary"><span class="glyphicon glyphicon-pencil"data-toggle="tooltip" data-placement="top" title="Editars"></span></a>
+                                    <td>   
+                                        @permission('editar central')
+                                        <a href="#"  OnClick='Edcentral({{$comite_central->id}});' class="btn-sm btn-primary"><span class="glyphicon glyphicon-pencil"data-toggle="tooltip" data-placement="top" title="Editars"></span></a>                                        
+                                        @endpermission
+                                        @permission('eliminar central')
                                         <a href="#" onclick="EliCentral('{{$comite_central->id}}','{{$name}}')" class="btn-sm btn-danger"><span data-toggle="tooltip" data-placement="top" title="Eliminar" class="glyphicon glyphicon-remove"></span></a>                                                            
+                                    @endpermission
                                     </td>                    
                                 </tr>
                                 @endforeach
@@ -72,8 +76,9 @@
             </div>
         </div>
     </div>
+    @endpermission
 </div>
-
+<section id="conten-modal"></section>
 
 @stop
 

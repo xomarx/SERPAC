@@ -1,6 +1,6 @@
-<div class="modal fade" id="modalrol" role="dialog">
+<div class="modal fade" id="modal-form" role="dialog">
     <div class="modal-dialog modal-primary">
-        <div class="modal-content">
+        <div class="modal-content" id="conten-modal">
             <div class="modal-header">
                 <button type="button" class="close btn-sm" data-dismiss="modal">&times;</button>
                 <h3>PERMISOS</h3>

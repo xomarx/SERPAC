@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\socios;
+namespace App\Http\Requests\Socios;
 
 use App\Http\Requests\Request;
 
-class createDepartamentorequest extends Request
+class TransferenciaRequest extends Request
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -21,7 +21,8 @@ class createDepartamentorequest extends Request
      *
      * @return array
      */
-    public function rules() {
+    public function rules()
+    {
         switch ($this->method()) {
             case 'GET':
             case 'DELETE': {
@@ -29,21 +30,25 @@ class createDepartamentorequest extends Request
                 }
             case 'POST': {
                     return [
-                        'departamento' => 'required|unique:departamentos'
+                        'codigo'=>'required',
+                        'motivo'=>'required',
+                        'dni_socio'=>'required',
+                        'dni_nuevo_socio'=>'required',
+                        'dni_beneficiario'=>'required',
+                        'socio'=>'required'
                     ];
                 }
             case 'PATCH':
-            case 'PUT': {
-                    return [
-                        'departamento' => 'required|unique:departamentos,departamento'
-                    ];
-                }
+            case 'PUT':                
             default : break;
         }
     }
-
+    
     public function messages() {
         parent::messages();
-        return ['departamento.unique'=>'El nombre del departamento ya Existe'];
+        
+        return [
+            
+        ];
     }
 }

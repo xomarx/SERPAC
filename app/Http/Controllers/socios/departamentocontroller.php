@@ -22,6 +22,8 @@ class departamentocontroller extends Controller
      */
     public function index()
     {        
+        if(!auth()->user()->can('ver departamentos'))
+            return response ()->view ('errors.403');
         $departamentos = DB::table('departamentos')
                 ->select('departamentos.id','departamentos.departamento')->get();
         return view('socios.departamentos')->with('departamentos',$departamentos);
@@ -47,12 +49,14 @@ class departamentocontroller extends Controller
     {
         if ($request->ajax())
         {
+            if(!auth()->user()->can('crear departamentos'))
+                return response ()->view ('errors.403-content',[],403);
                 $departamento = Departamento::create(['departamento'=>  strtoupper($request->departamento)]);
                 if($departamento)
                 {
-                    return response()->json(['success' => 'true','message'=>'Se Registro Correctamente']);
+                    return response()->json(['success' => true,'message'=>'Se Registro Correctamente']);
                 } else {
-                    return response()->json(['success' => 'false','message'=>'No se registro ningun datos']);
+                    return response()->json(['success' => false,'message'=>'No se registro ningun datos']);
                 }
         }
     }
@@ -92,14 +96,16 @@ class departamentocontroller extends Controller
         //
         if ($request->ajax())
         {
+            if(!auth()->user()->can('editar departamentos'))
+                return response ()->view ('errors.403-content',[],403);
             $departamento = Departamento::FindOrFail($id);
-            $departamento->departamento = strtoupper($departamento->departamento);            
+            $departamento->departamento = strtoupper($request->departamento);            
             $departamento->save();
             if ($departamento){
-                return response()->json(['success'=>'true','message'=>'Se actualizaron correctamente los datos']);
+                return response()->json(['success'=>true,'message'=>'Se Actualizo correctamente los Datos']);
             }
             else{
-                return response()->json(['success'=>'false','message'=>'No se Actualizaron los datos']);
+                return response()->json(['success'=>false,'message'=>'No se Actualizaron los datos']);
             }  
         }
     }
@@ -112,15 +118,16 @@ class departamentocontroller extends Controller
      */
     public function destroy($id)
     {        
+        if(auth()->user()->can('eliminar departamentos')){
         $departamento = Departamento::FindOrFail($id);
         $result = $departamento->delete();
         if ($result)
         {            
-            return response()->json(['success'=>'true']); 
+            return response()->json(['success'=>true]); 
         }
         else
         {
-            return response()->json(['success'=> 'false']);
-        }
+            return response()->json(['success'=> false]);
+        }}
     }
 }

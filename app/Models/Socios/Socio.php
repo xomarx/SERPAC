@@ -52,6 +52,43 @@ class Socio extends Model
     }
 
     //´para editar
+    public static function DNISocioautocomplete($dni)
+    {
+      return DB::table('socios')
+                ->join('personas','socios.dni','=','personas.dni')
+                ->join('comites_locales','personas.comites_locales_id','=','comites_locales.id')
+              ->where ('socios.dni','like','%'.$dni.'%')
+              ->select('socios.codigo',DB::raw("CONCAT(personas.paterno,' ',personas.materno,' ',personas.nombre)  AS fullname")
+                      ,'comites_locales.comite_local','socios.dni')
+              ->take(7)->get();
+    }
+    
+    public static function CodigoSocioautocomplete($codigo)
+    {
+      return  DB::table('socios')
+                ->join('personas','socios.dni','=','personas.dni')
+                ->join('comites_locales','personas.comites_locales_id','=','comites_locales.id')
+              ->where ('socios.codigo','like','%'.$codigo.'%')
+              ->select('socios.codigo',DB::raw("CONCAT(personas.paterno,' ',personas.materno,' ',personas.nombre)  AS fullname")
+                      ,'comites_locales.comite_local','socios.dni')
+              ->take(7)->get();
+    }
+    
+    public static function Socioautocomplete($nombres)
+    {
+      return DB::table('socios')
+                ->join('personas','socios.dni','=','personas.dni')
+                ->join('comites_locales','personas.comites_locales_id','=','comites_locales.id')
+              ->where (DB::raw("CONCAT(personas.paterno,' ',personas.materno,' ',personas.nombre)"),'like','%'.$nombres.'%')
+              ->select('socios.codigo',DB::raw("CONCAT(personas.paterno,' ',personas.materno,' ',personas.nombre)  AS fullname")
+                      ,'comites_locales.comite_local','socios.dni')
+              ->take(7)->get();
+    }
+    
+    
+    
+    
+    
     public static function  getSocio($codigo)
     {
         $socio = DB::table('socios')
@@ -84,42 +121,10 @@ class Socio extends Model
                ->join('users','socios.users_id','=','users.id')
                 ->select('socios.codigo','personas.paterno','personas.dni','personas.materno','personas.nombre'
                         ,'socios.fec_asociado','comites_locales.comite_local','comites_centrales.comite_central','users.name')
-                ->get();                
+                ->paginate(10);
     }
     
-    public static function Socioautocomplete($nombres)
-    {
-      return DB::table('socios')
-                ->join('personas','socios.dni','=','personas.dni')
-                ->join('comites_locales','personas.comites_locales_id','=','comites_locales.id')
-              ->where (DB::raw("CONCAT(personas.paterno,' ',personas.materno,' ',personas.nombre)"),'like','%'.$nombres.'%')
-              ->select('socios.codigo',DB::raw("CONCAT(personas.paterno,' ',personas.materno,' ',personas.nombre)  AS fullname")
-                      ,'comites_locales.comite_local','socios.dni')
-              ->take(7)->get();
-    }
-    
-    public static function DNISocioautocomplete($dni)
-    {
-      return DB::table('socios')
-                ->join('personas','socios.dni','=','personas.dni')
-                ->join('comites_locales','personas.comites_locales_id','=','comites_locales.id')
-              ->where ('socios.dni','like','%'.$dni.'%')
-              ->select('socios.codigo',DB::raw("CONCAT(personas.paterno,' ',personas.materno,' ',personas.nombre)  AS fullname")
-                      ,'comites_locales.comite_local','socios.dni')
-              ->take(7)->get();
-    }
-    
-    public static function CodigoSocioautocomplete($codigo)
-    {
-      return  DB::table('socios')
-                ->join('personas','socios.dni','=','personas.dni')
-                ->join('comites_locales','personas.comites_locales_id','=','comites_locales.id')
-              ->where ('socios.codigo','like','%'.$codigo.'%')
-              ->select('socios.codigo',DB::raw("CONCAT(personas.paterno,' ',personas.materno,' ',personas.nombre)  AS fullname")
-                      ,'comites_locales.comite_local','socios.dni')
-              ->take(7)->get();
-    }
-    
+       
     public static function getsocioTransferencia($codigo)
     {
         return DB::table('socios')

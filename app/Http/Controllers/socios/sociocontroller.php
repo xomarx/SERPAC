@@ -37,6 +37,49 @@ class sociocontroller extends Controller
         return $date->format('d-m-Y');
     }
 
+    public function autocompleteDniSocio(Request $request) {
+        if($request->ajax()){
+            $nombre = Input::get('term');
+            $socios = Socio::DNISocioautocomplete($nombre);
+            foreach ($socios as $socio) 
+            {
+                $result[] = ['id' => $socio->codigo, 'value' => $socio->dni,'local'=>$socio->comite_local,'socio'=>$socio->fullname];
+            }
+            return response()->json($result);
+        }
+    }
+    
+    
+    public function autocompleteCodigoSocio(Request $request){
+        if($request->ajax()){
+            $nombre = Input::get('term');
+            $socios = Socio::CodigoSocioautocomplete($nombre);
+            foreach ($socios as $socio) 
+            {
+                $result[] = ['id' => $socio->dni, 'value' => $socio->codigo,'local'=>$socio->comite_local,'socio'=>$socio->fullname];
+            }
+            return response()->json($result);
+        }
+    }
+    
+    public function autocomplete (Request $request) {
+        if($request->ajax()){
+            $nombre = Input::get('term');
+            $socios = Socio::Socioautocomplete($nombre);
+            foreach ($socios as $socio) 
+            {
+                $result[] = ['id' => $socio->codigo, 'value' => $socio->fullname,'local'=>$socio->comite_local,'dni'=>$socio->dni];
+            }
+            return response()->json($result);
+        }
+    }
+
+    
+
+
+
+
+
     public function autoSociosPersonas(Request $request){
         if($request->ajax()){
             $nombre = Input::get('term');
@@ -71,31 +114,7 @@ class sociocontroller extends Controller
             }
             return response()->json($result);
         }
-    }
-    
-    public function autocompleteDniSocio(Request $request) {
-        if($request->ajax()){
-            $nombre = Input::get('term');
-            $socios = Socio::DNISocioautocomplete($nombre);
-            foreach ($socios as $socio) 
-            {
-                $result[] = ['id' => $socio->codigo, 'value' => $socio->dni,'local'=>$socio->comite_local,'socio'=>$socio->fullname];
-            }
-            return response()->json($result);
-        }
-    }
-    
-    public function autocomplete (Request $request) {
-        if($request->ajax()){
-            $nombre = Input::get('term');
-            $socios = Socio::Socioautocomplete($nombre);
-            foreach ($socios as $socio) 
-            {
-                $result[] = ['id' => $socio->codigo, 'value' => $socio->fullname,'local'=>$socio->comite_local,'dni'=>$socio->dni];
-            }
-            return response()->json($result);
-        }
-    }
+    }                
     
     public function ModalSocio(){
         if(!auth()->user()->can(['crear socios','editar socios'])) 

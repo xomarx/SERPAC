@@ -4,6 +4,7 @@
 @stop
 @section('main-content')
 <div class="box-body">
+    @permission(['crear floras','editar floras'])
     <div class="col-md-4">
         <div class="box box-solid box-primary">
             <div class="box-header">
@@ -11,10 +12,7 @@
             </div>
             {!! Form::open(['id'=>'formflora']) !!}
             <div class="box-body">
-                <div id="msj-infoflora" class="alert alert-success" role='alert' style="display: none">
-                    <strong id='succesflora'></strong>
-                </div>
-                <input type="hidden" name="_token" value="{{ csrf_token() }}" id="token">
+                @include('mensajes.mensaje')
                 <input type="hidden" id="idflora">  
                 {!! Form::label('flora','Cultivo:',['class' => 'control-label col-xs-1'])!!}                    
                 {!! Form::text('flora',null,['id'=>'flora','class'=>'form-control','placeholder'=>'Nombre de la Planta'])!!}
@@ -27,6 +25,8 @@
             {!! Form::close() !!} 
         </div>
     </div>
+    @endpermission
+    @permission('ver floras')
     <div class="col-md-8">
         <div class="box box-solid box-primary">
             <div class="box-header">
@@ -45,9 +45,13 @@
                         <tr>                                            
                             <td>{{$flora->id}}</td>
                             <td>{{$flora->flora}}</td>                                                        
-                            <td>                                          
+                            <td>       
+                                @permission('editar floras')
                                 <a href="javascript:void(0);"  OnClick='EdFlora({{$flora->id}});' data-toggle='modal' data-target='#myModal' class="btn-sm btn-primary"><span class="glyphicon glyphicon-pencil"data-toggle="tooltip" data-placement="top" title="Editars"></span></a>
+                                @endpermission
+                                @permission('eliminar floras')
                                 <a href="javascript:void(0);" onclick="EliFlora('{{$flora->id}}','{{$name}}')" class="btn-sm btn-danger"><span data-toggle="tooltip" data-placement="top" title="Eliminar" class="glyphicon glyphicon-remove"></span></a>                                                            
+                                @endpermission
                             </td>                    
                         </tr>
                         @endforeach
@@ -56,6 +60,7 @@
             </div>
         </div>
     </div>
+    @endpermission
 </div>
-
+<section id="conten-modal"></section>
 @endsection

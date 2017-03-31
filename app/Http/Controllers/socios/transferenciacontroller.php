@@ -71,11 +71,10 @@ class transferenciacontroller extends Controller
     }
     
     public function NewTransferencia(){
-        if(auth()->user()->can('crear transferencias'))
+        if(!auth()->user()->can('crear transferencias'))
             return response ()->view ('errors.403-content');
-        $departamentos = \App\Models\Socios\Departamento::pluck('departamento','id');
-        return response()->view('socios.formtransferencia');
-        
+//        $departamentos = \App\Models\Socios\Departamento::pluck('departamento','id');
+        return response()->view('socios.formtransferencia');        
     }
 
         /**
@@ -94,10 +93,12 @@ class transferenciacontroller extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Requests\Socios\TransferenciaRequest $request)
     {
         if($request->ajax())
         {
+            if(!auth()->user()->can('crear transferencias'))
+                return response ()->view ('errors.403-content',[],403);
             $beneficiario = \App\Models\Socios\Pariente::getbeneficiario($request->codigo);                    
             $transferencia = \App\Models\Socios\Transferencia::create([
                 'socios_codigo'=>$request->codigo,
@@ -131,10 +132,10 @@ class transferenciacontroller extends Controller
                     ]);
             if($transferencia)
             {
-                return response()->json(['success'=>'true','message'=>'Se Registro Correctamente la Transferencia']);
+                return response()->json(['success'=>true,'message'=>'Se Registro Correctamente la Transferencia']);
             }
             else
-                return response()->json(['success'=>'false','message'=>'No se Realizo la Transferencia']);
+                return response()->json(['success'=>false,'message'=>'No se Realizo la Transferencia']);
         }
     }
 
