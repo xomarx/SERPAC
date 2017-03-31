@@ -6,9 +6,15 @@
         <ul class="sidebar-menu">
             <li class="header text-bold"><center>SUB MENUS</center></li>
             <!-- Optionally, you can add icons to the links -->
+            @permission('ver socios')
             <li ><a href="{{url('socios')}}"><i class='fa fa-child'></i> <span>Socios</span></a></li>
+            @endpermission
+            @permission('ver parientes')
             <li><a href="{{ url('/socios/parientes') }}"><i class='fa fa-users'></i> <span>Parientes/Beneficiario</span></a></li>
+            @endpermission
+            @permission('ver transferencias')
             <li ><a href="{{ url('socios/transferencias') }}"><i class='fa fa-exchange'></i> <span>Transferencia Socios</span></a></li>
+            @endpermission
             <li ><a href="{{ url('/socios/fundos') }}"><i class='fa fa-home'></i> <span>Fundos</span></a></li>
             <li><a href="{{ url('socios/asignacion-delegados') }}"><i class='fa fa-cubes'></i> <span>Asig. Delegados</span></a></li>
             <li><a href="{{ url('socios/asignacion-directivos') }}"><i class='fa fa-sitemap'></i> <span>Asig. Directivos</span></a></li>

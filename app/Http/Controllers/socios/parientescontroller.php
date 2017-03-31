@@ -35,17 +35,21 @@ class parientescontroller extends Controller
             return response()->json($result);
         }
     }
-       
-    public function index()
-    {
-        //
+           
+    public function index(){        
         $parientes = Pariente::listaParientes();
-        $departamentos = \App\Models\Socios\Departamento::pluck('departamento','id')->prepend('Selleciona');
+        $departamentos = \App\Models\Socios\Departamento::pluck('departamento','id');
         return view('socios/parientes',['parientes'=>$parientes,'departamentos'=>$departamentos]);
     }
     
-    public function datosparientes($idsocio,$dnipariente)
-    {
+    public function ModalPariente(){
+        if(!auth()->user()->can(['crear parientes','editar parientes']))
+                return response ()->view ('errors.403-modal');
+        $departamentos = \App\Models\Socios\Departamento::pluck('departamento','id');
+        return response()->view('socios.formParientes',['departamentos'=>$departamentos]);
+    }
+
+    public function datosparientes($idsocio,$dnipariente){
         $pariente = Pariente::getpariente($idsocio,$dnipariente);
         return response()->json($pariente);
     }
@@ -67,14 +71,14 @@ class parientescontroller extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Requests\socios\createparientesrequest $request)
-    {    
-        
+    {            
         if($request->ajax())
         {
-            
-            $persona = new Persona($request->all());
-            $date = Carbon::parse($request->fec_nac);
-            $persona->fec_nac=$date;                       
+            if(!auth()->user()->can('crear parientes'))
+                return response()->view('errors.403-content', [], 403);            
+            $persona = new Persona($request->all());            
+            $persona->fec_nac=Carbon::parse($request->fec_nac);
+           $persona->comites_locales_id = $request->comite_local;
             $persona->save();
             $dni = $persona->dni;                   
             $pariente = new Pariente($request->all());
@@ -83,10 +87,10 @@ class parientescontroller extends Controller
             $pariente->save();
             if($persona)
             {
-                return response()->json(['success'=>'true','message'=>'Se registro correctamente']);
+                return response()->json(['success'=>true,'message'=>'Se registro correctamente']);
             }
             else{
-                return response()->json(['success'=>'false','message'=>$request->comites_locales_id]);
+                return response()->json(['success'=>false,'message'=>'No se Registro ningun Dato']);
             }
         }
     }
@@ -120,12 +124,13 @@ class parientescontroller extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Requests\socios\createparientesrequest $request, $id)
     {
         //
         if($request->ajax())
         {
-            $date = Carbon::parse($request->fec_nac);
+            if(!auth()->user()->can('editar parientes'))
+                return response()->view('errors.403-content', [], 403);            
             $result = Pariente::join('personas','parientes.personas_dni','=','personas.dni')
                     ->where('parientes.id','=',$id)
                     ->update([
@@ -134,22 +139,22 @@ class parientescontroller extends Controller
                         'parientes.estado_civil'=>$request->estado_civil,
                         'parientes.tipo_pariente'=>$request->tipo_pariente,
                         'parientes.users_id'=>  \Illuminate\Support\Facades\Auth::user()->id,
-                        
-                        'personas.paterno'=>$request->paterno,
-                        'personas.materno'=>$request->materno,
-                        'personas.nombre'=>$request->nombre,
-                        'personas.fec_nac'=>$date ,
+                                               
+                        'personas.paterno'=>  strtoupper($request->paterno),
+                        'personas.materno'=>strtoupper($request->materno),
+                        'personas.nombre'=>strtoupper($request->nombre),
+                        'personas.fec_nac'=>Carbon::parse($request->fec_nac) ,
                         'personas.sexo'=>$request->sexo,
                         'personas.direccion'=>$request->direccion,
                         'personas.telefono'=>$request->telefono,
-                        'personas.comites_locales_id'=>$request->comites_locales_id,
+                        'personas.comites_locales_id'=>$request->comite_local,
                     ]);
             if($result)
             {
-                return response()->json(['success'=>'true','message'=>'Se Actualizaron correctamente']);
+                return response()->json(['success'=>true,'message'=>'Se Actualizaron correctamente']);
             }
             else{
-                return response()->json(['success'=>'false','message'=>'No se Actualizo']);
+                return response()->json(['success'=>false,'message'=>'No se Actualizo']);
             }
         }
     }
@@ -160,8 +165,12 @@ class parientescontroller extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
-        //
+    public function destroy($id,$cod)
+    {        
+        if(auth()->user()->can('eliminar parientes')){
+            $result = Pariente::where('personas_dni','=',$id)
+                    ->where('socios_codigo','=',$cod)->delete();
+            if($result) return response ()->json (['success'=>true]);
+        }
     }
 }

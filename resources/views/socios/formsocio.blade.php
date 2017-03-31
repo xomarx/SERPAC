@@ -1,19 +1,14 @@
 <div class="modal fade" id="modal-form" role="dialog">
     <div class="modal-dialog modal-lg modal-primary">
-        <div class="modal-content">
-            {!! Form::open(['id'=>'formsocios']) !!}
+        <div class="modal-content" id="error-modal">
+            
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                 <h4 class="modal-title" id="titulosocio"><center>DATOS DEL SOCIO</center></h4>          
             </div>
             <div class="modal-body">    
-                
-                <div id="msj-info" class="alert alert-success" role='alert' style="display: none">
-                    <strong id='succes'></strong>
-                </div>  
-                
-                <input type="hidden" name="_token" value="{{ csrf_token() }}" id="token">
-                
+                {!! Form::open(['id'=>'formsocios']) !!}
+                @include('mensajes.mensaje')
                 <div class="col-md-12 col-md-offset-0 row form-group">   
                     <div class=" col-sm-2">
                         {!! Form::label('codigo','Codigo: ',['class'=>'form-label']) !!}                        
@@ -32,6 +27,7 @@
                         <label class="radio">
                             <input type="radio" name="sexo" id="sexoF" value="F" /> Femenino
                         </label>
+                        <div class="text-danger" id="error_sexo"></div>
                     </div>
                     <div class=" col-sm-3">
                         {!! Form::label('estado','Estado: ',['class'=>'control-label col-xs-1']) !!}                        
@@ -66,26 +62,22 @@
                 </div> 
 
                 <div class="col-md-12 col-md-offset-0 row form-group">
-                    <div class=" col-sm-2">                                
+                    <div class=" col-md-3">                                
                         {!! Form::label('fecnaci','Fec. Nacimiento',['class'=>'control-label']) !!}
-                        {!! Form::text('fec_nac',null,['id'=>'fec_nac','class'=>'form-control','required','placeholder'=>'mm/dd/año']) !!}
+                        {!! Form::date('fec_nac',null,['id'=>'fec_nac','class'=>'form-control']) !!}
                         <div class="text-danger" id="error_fec_nac"></div>
                     </div> 
-                    <div class=" col-sm-2">
+                    <div class=" col-sm-3">
                         {!! Form::label('asociadosocio','Fecha Asociado',['class'=>'control-label']) !!}    
-                        {!! Form::text('fec_asociado',null,['id'=>'fec_asociado','class'=>'form-control','required','placeholder'=>'mm/dd/año']) !!}
+                        {!! Form::date('fec_asociado',null,['id'=>'fec_asociado','class'=>'form-control']) !!}
                         <div class="text-danger" id="error_fec_asociado"></div>
                     </div>
-                    <div class="col-sm-2">
+                    <div class="col-sm-3">
                         {!! Form::label('empadronsocio','Fecha Empadron',['class'=>'control-label']) !!}                        
-                        {!! Form::text('fec_empadron',null,['id'=>'fec_empadron','class'=>'form-control','required','placeholder'=>'mm/dd/año']) !!}
+                        {!! Form::date('fec_empadron',null,['id'=>'fec_empadron','class'=>'form-control','required','placeholder'=>'mm/dd/año']) !!}
                         <div class="text-danger" id="error_fec_empadron"></div>
                     </div>
-                    <div class=" col-sm-2">
-                        {!! Form::label('telefono','Telefono',['class'=>'control-label']) !!}                        
-                        {!! Form::text('telefono',null,['id'=>'telefono','class'=>'form-control','placeholder'=>'Telefono/celular','maxlength'=>'9'])!!}
-                        <div class="text-danger" id="error_telefono"></div>
-                    </div>
+                    
                     <div class=" col-sm-3">
                         {!! Form::label('gradosocio','Grado Instruccion: ',['class'=>'control-label']) !!}
                         {!! Form::select('grado_inst',[''=>'Grado Socio','PRIMARIA INCOMPLETA'=>'Primaria Incompleta','PRIMARIA COMPLETA'=>'Primaria Completa','ILETRADO'=>'Iletrado','SECUNDARIA COMPLETA'=>'Secundaria Completa','SECUNDARIA INCOMPLETA'=>'Secundaria Incompleta'
@@ -116,35 +108,45 @@
                         <div class="text-danger" id="error_comite_central"></div>
                     </div>
                 </div>
-                <div class="col-md-12 col-md-offset-0 row form-group" >    
+                <div class="col-md-12 col-md-offset-0 row form-group" >
 
                     <div class="col-sm-3">
                         {!! Form::label('local','Comite Local',['class'=>'control-label']) !!}
                         {!! Form::select ('comite_local',['placeholder'=>'selecciona'],null,['id'=>'comite_local','class'=>'form-control']) !!}
                         <div class="text-danger" id="error_comite_local"></div>
                     </div>
-                    <div class=" col-sm-3">
-                        {!! Form::label('direccion','Direccion',['class'=>'form-label']) !!}
-                        {!! Form::text('direccion',null,['id'=>'direccion','class'=>'form-control','placeholder'=>'Direccion de la vivienda'])!!}
-                        <div class="text-danger" id="error_direccion"></div>
-                    </div>    
                     <div class="col-sm-3">
                         {!! Form::label('ocupacion','Ocupacion',['class'=>'form-label']) !!}
                         {!! Form::text('ocupacion',null,['id'=>'ocupacion','class'=>'form-control','placeholder'=>'Ocupacion del Socio'])!!}
                         <div class="text-danger" id="error_ocupacion"></div>
                     </div>
+                      
+                                       
                     <div class=" col-sm-3">
                         {!! Form::label('produccion','Produccion',['class'=>'form-label']) !!}
                         {!! Form::text('produccion',null,['id'=>'produccion','class'=>'form-control','placeholder'=>'Referencia de la vivienda'])!!}
                         <div class="text-danger" id="error_produccion"></div>
+                    </div>
+                    <div class=" col-sm-2">
+                        {!! Form::label('telefono','Telefono',['class'=>'control-label']) !!}                        
+                        {!! Form::text('telefono',null,['id'=>'telefono','class'=>'form-control','placeholder'=>'Telefono/celular','maxlength'=>'9'])!!}
+                        <div class="text-danger" id="error_telefono"></div>
                     </div> 
-                </div>               
+                    </div> 
+                <div class="col-md-12 col-md-offset-0 row form-group" >
+                    <div class=" col-sm-6">
+                        {!! Form::label('direccion','Direccion',['class'=>'form-label']) !!}
+                        {!! Form::text('direccion',null,['id'=>'direccion','class'=>'form-control','placeholder'=>'Direccion de la vivienda'])!!}
+                        <div class="text-danger" id="error_direccion"></div>
+                    </div>
+                </div>
+                 {!! Form::close() !!}             
             </div>
             <div class="modal-footer">
-                {!!link_to('#', $title='REGISTRAR', $attributes = ['id'=>'RegSocio', 'class'=>'btn btn-dropbox','onclick'=>'RegSocio()'])!!}                
+                {!!link_to('#', $title='REGISTRAR', $attributes = ['id'=>'Regsocio', 'class'=>'btn btn-dropbox','onclick'=>'RegSocio()'])!!}                
                 <button type="button" class="btn btn-default " data-dismiss="modal">Close</button>
             </div>
-            {!! Form::close() !!}
+            
         </div>
     </div>
 </div>

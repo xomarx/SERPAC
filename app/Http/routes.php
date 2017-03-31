@@ -19,9 +19,15 @@ Route::get('/', function () {
     
 
 Route::group(['middleware' => ['auth']], function () {    
-    // Authentication routes...
-    //Route::get('auth/login', 'Auth\AuthController@getLogin');
-//    Route::post('auth/login', ['as'=> 'login','uses'=>'Auth\AuthController@postLogin']);
+    
+    
+////tambien pueden ir por roles separados con el | 
+//'middleware' => ['role:administrador|miembro']
+// 
+////para dejar pasar a los usuarios con un o mas determinado permiso
+//'middleware' => ['permission:crearPost', 'permission:editarPost']
+    
+    
     Route::get('sign-out', 'Auth\AuthController@getsignOut');
     
     route::get('Usuarios', ['as'=> 'usuarios','uses'=>'Auth\AuthController@listUsers']);
@@ -50,12 +56,12 @@ Route::group(['middleware' => ['auth']], function () {
     route::resource('socios/asignacion-directivos','socios\cargodirectivosociocontroller');
     
     route::resource('socios/transferencias','socios\transferenciacontroller');
+    route::resource('socios/transferencias/newtransferencias','socios\transferenciacontroller@NewTransferencia');
     route::resource('socios/transferencias/datos','socios\transferenciacontroller@datossocio');
     route::resource('socios/transferencias/nuevo','socios\transferenciacontroller@datosnuevo');//datosnuevo
     route::resource('socios/transferencias/persona','socios\transferenciacontroller@datosnuevobeneficiario');//datosnuevobeneficiario    
     route::resource('socios/transferencias/ficha','socios\transferenciacontroller@fichaTransferencia');//fichaTransferencia
-    
-    route::resource('socios/fundos','socios\fundoscontroller');
+        
     route::resource('socios/eliminarpropiedades','socios\fundoscontroller@EliminarPropiedadesFundo');//EliminarPropiedadesFundo
     
     route::resource('socios/propiedadinmueble','socios\fundoscontroller@propiedadinmueble');
@@ -74,15 +80,22 @@ Route::group(['middleware' => ['auth']], function () {
     route::resource('socios/provincias','socios\provinciacontroller');    
     route::resource('socios/departamentos','socios\departamentocontroller');        
 //    route::resource('socios','socios\sociocontroller@create');
-    route::resource('socios/parientes','socios\parientescontroller');                        
-    route::resource('socios/autopersonas','socios\sociocontroller@autoSociosPersonas');
-    route::get('socios/parientes/{idsocio?}/{dnipar?}','socios\parientescontroller@datosparientes');
+    
+    route::resource('socios/autopersonas','socios\sociocontroller@autoSociosPersonas');    
     route::resource('socios/autoDniSocios','socios\sociocontroller@autoSociosDni');
     route::resource('socios/search','socios\sociocontroller@autocomplete');//autocomplete
     route::resource('socios/dni','socios\sociocontroller@autocompleteDniSocio');//autocompleteDniSocio
     route::resource('socios/codigo','socios\sociocontroller@autocompleteCodigoSocio');//autocompleteCodigoSocio
     route::resource('socios/dnipersona','socios\personacontroller@autoCompleteDniPersona');//autoCompleteDniPersona
     route::resource('socios/dnibeneficiario','socios\parientescontroller@autocompleteDNIpariente');//autocompleteDNIpariente
+    
+    route::resource('socios/modalfundo','socios\fundoscontroller@ModalFundo');
+    route::resource('socios/fundos','socios\fundoscontroller');
+    
+    route::resource('socios/modalparientes','socios\parientescontroller@ModalPariente');    
+    route::resource('socios/parientes','socios\parientescontroller');
+    route::delete('socios/parientes/{dni}/{cod}','socios\parientescontroller@destroy');
+    route::get('socios/parientes/{idsocio?}/{dnipar?}','socios\parientescontroller@datosparientes');
     
     route::resource('socios/modalsocio','socios\sociocontroller@ModalSocio');
     route::resource('socios','socios\sociocontroller');

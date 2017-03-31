@@ -23,14 +23,28 @@ class createfundorequest extends Request
      */
     public function rules()
     {
-        return [
-            //
-            'fundo'=>'required|unique:fundos,fundo',
-            'estadofundo'=>'required',
-            'fecha'=>'required | date',
-            'comite_local_id'=>'required',
-            'direccion'=>'required',            
-        ];
+        switch ($this->method()) {
+            case 'GET':
+            case 'DELETE': {
+                    return [];
+                }
+            case 'POST': {
+                    return [
+                        //
+                        'fundo' => 'required|unique:fundos,fundo',
+                        'estadofundo' => 'required',
+                        'fecha' => 'required | date',
+                        'comite_local' => 'required',
+                        'direccion' => 'required',
+                    ];
+                }
+            case 'PATCH':
+            case 'PUT': {
+                    return [
+                    ];
+                }
+            default : break;
+        }
     }
     
     public function messages() {

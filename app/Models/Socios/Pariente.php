@@ -71,7 +71,7 @@ class Pariente extends Model
                 ->select('parientes.socios_codigo','personas.dni','personas.paterno','personas.materno','personas.nombre'
                         ,'parientes.estado_civil','personas.direccion','personas.fec_nac','parientes.grado_inst','parientes.tipo_pariente'
                         ,'distritos.distrito','provincias.provincia','departamentos.departamento','parientes.beneficiario','parientes.id','provincias.departamentos_id'
-                        ,'comites_centrales.comite_central','comites_locales.comite_local','personas.comites_locales_id')
+                        ,'comites_centrales.comite_central','comites_locales.comite_local','personas.comites_locales_id','personas.sexo','personas.telefono')
                 ->first();
     }
     

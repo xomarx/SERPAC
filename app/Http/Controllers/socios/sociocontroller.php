@@ -98,20 +98,23 @@ class sociocontroller extends Controller
     }
     
     public function ModalSocio(){
-        if(!auth()->can('crear socios','editar socios')) 
+        if(!auth()->user()->can(['crear socios','editar socios'])) 
             return response()->view('errors.403-modal');
         $departamentos = Departamento::pluck('departamento','id');
         return response()->view('socios.formsocio',['departamentos'=>$departamentos]);
+        
     }
-
+    
     public function index()
-    {                     
+    {         
+//        if(!auth()->user()->can('ver socios'))
+//            return response ()->view ('errors.403');
         $socios = Socio::listasocios();
-        $departamentos = Departamento::pluck('departamento','id');
-        $floras = Flora::pluck('flora','id');  
-        $faunas = Fauna::pluck('fauna','id');  
-        $inmuebles = Inmueble::pluck('inmueble','id');  
-        return view('socios/socios',array('socios'=>$socios,'departamentos'=>$departamentos,'floras'=>$floras,'faunas'=>$faunas,'inmuebles'=>$inmuebles));
+//        $departamentos = Departamento::pluck('departamento','id');
+//        $floras = Flora::pluck('flora','id');  
+//        $faunas = Fauna::pluck('fauna','id');  
+//        $inmuebles = Inmueble::pluck('inmueble','id');  
+        return view('socios/socios',array('socios'=>$socios));
     }
         
     public function verPadronsocio($idsocio) {
@@ -152,6 +155,8 @@ class sociocontroller extends Controller
         //     
         if($request->ajax())
         {
+            if(!auth()->user()->can('crear socios'))
+                return response()->view('errors.403-content', [], 403);
             $persona = new Persona($request->all());
             $date = Carbon::parse($request->fec_nac);
             $persona->fec_nac=$date;
@@ -204,6 +209,8 @@ class sociocontroller extends Controller
     public function update(SociocreateRequest $request, $codigo)
     {        
         if ($request->ajax()) {
+            if(!auth()->user()->can('editar socios'))
+                return response()->view('errors.403-content', [], 403);
             $date = Carbon::parse($request->fec_asociado);
             $date2 = Carbon::parse($request->fec_empadron);
             $date3 = Carbon::parse($request->fec_nac);
@@ -244,18 +251,16 @@ class sociocontroller extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
-        //        
-        $socio = Socio::where('codigo','=',$id)->first();        
-        $result = $socio->delete();        
-        if ($result)
-        {
-            return response()->json(['success'=>'true','message'=> 'Se Elimino Correctamente el registro']);   
-        }
-        else
-        {
-            return response()->json(['success'=>'false','message'=> 'No se elimino ningun registro']);
+    public function destroy($id) {
+        if (auth()->user()->can('eliminar socios')) {
+            $socio = Socio::where('codigo', '=', $id)->delete();
+            
+            if ($socio) 
+                return response()->json(['success' => true]);
+             else 
+                return response()->json(['success' => false]);
+            
         }
     }
+
 }

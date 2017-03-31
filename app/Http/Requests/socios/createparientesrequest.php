@@ -23,19 +23,42 @@ class createparientesrequest extends Request
      */
     public function rules()
     {
-        return [
-            //
-            'dni'=>'required | unique:parientes,personas_dni|numeric',
-            'paterno'=>'required | max: 60',
-            'materno'=>'required | max:60',
-            'nombre'=>'required | max:60',
-            'fec_nac'=>'required|date',            
-            'grado_inst'=>'required',                                    
-            'estado_civil'=>'required',                                   
-            'direccion'=>'required',
-            'comites_locales_id'=>'required',
-            'tipo_pariente'=>'required',            
-        ];
+        switch ($this->method()) {
+            case 'GET':
+            case 'DELETE': {
+                    return [];
+                }
+            case 'POST': {
+                    return [
+                        //
+                        'dni' => 'required | unique:parientes,personas_dni|numeric',
+                        'paterno' => 'required | max: 60',
+                        'materno' => 'required | max:60',
+                        'nombre' => 'required | max:60',
+                        'fec_nac' => 'required|date',
+                        'grado_inst' => 'required',
+                        'estado_civil' => 'required',
+                        'direccion' => 'required',
+                        'comite_local' => 'required',
+                        'tipo_pariente' => 'required',
+                    ];
+                }
+            case 'PATCH':
+            case 'PUT': {
+                    return [                        
+                        'paterno' => 'required | max: 60',
+                        'materno' => 'required | max:60',
+                        'nombre' => 'required | max:60',
+                        'fec_nac' => 'required|date',
+                        'grado_inst' => 'required',
+                        'estado_civil' => 'required',
+                        'direccion' => 'required',
+                        'comite_local' => 'required',
+                        'tipo_pariente' => 'required',
+                    ];
+                }
+            default : break;
+        }        
     }
     
     public function messages() {

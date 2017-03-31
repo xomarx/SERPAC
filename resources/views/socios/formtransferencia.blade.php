@@ -1,19 +1,18 @@
 
-    <div class="box-header">
-        
-        <button id="cerrartransferencia" type="button" class="close fa fa-close btn-sm" data-toggle="tooltip" data-placement="top" title="Salir del Registro">&times;</button>
-        <center> <h3 class="box-title">REGISTRO DE TRANSFERENCIA - SOCIO</h3></center>
-    </div> 
+<div class="box-header">
+    <button id="cerrartransferencia" type="button" class="close fa fa-close btn-sm" data-toggle="tooltip" data-placement="top" title="Salir del Registro">&times;</button>
+    <center> <h3 class="box-title">REGISTRO DE TRANSFERENCIA - SOCIO</h3></center>
+</div> 
 <div class="box-body">
-{!! Form::open(['id'=>'formtransferencia'])!!}
-<input type="hidden" name="_token" value="{{ csrf_token() }}" id="token">
+    {!! Form::open(['id'=>'formtransferencia'])!!}
+    <input type="hidden" name="_token" value="{{ csrf_token() }}" id="token">
     <div class="col-lg-5">
         <div class="box box-solid box-primary content">
             <div class="box-header">
                 <center> <h3 class="box-title">DATOS DEL SOCIO</h3></center>
             </div>
             <div class="box-body">
-                
+
                 <div class="col-lg-12 ">                       
                     <div class=" col-sm-6 form-group">       
                         {!! Form::label('codigo','Codigo',['class'=>'control-label']) !!}
@@ -174,5 +173,5 @@
             </div>                               
         </div>
     </div>
-{!!Form::close()!!}
+    {!!Form::close()!!}
 </div>

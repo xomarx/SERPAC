@@ -1,24 +1,15 @@
 <div class="modal fade" id="modal-form" role="dialog">
-    <div class="modal-dialog modal-lg modal-primary">
+    <div class="modal-dialog modal-primary">
         <div class="modal-content">
             <div class="error-page">
-                <h2 class="headline text-yellow"> 404</h2>
-                <div class="error-content">
-                    <h3><i class="fa fa-warning text-yellow"></i> Oops! {{ trans('adminlte_lang::message.pagenotfound') }}.</h3>
-                    <p>
-                        {{ trans('adminlte_lang::message.notfindpage') }}
-                        {{ trans('adminlte_lang::message.mainwhile') }} <a href='{{ url('/home') }}'>{{ trans('adminlte_lang::message.returndashboard') }}</a> {{ trans('adminlte_lang::message.usingsearch') }}
-                    </p>
-                    <form class='search-form'>
-                        <div class='input-group'>
-                            <input type="text" name="search" class='form-control' placeholder="{{ trans('adminlte_lang::message.search') }}"/>
-                            <div class="input-group-btn">
-                                <button type="submit" name="submit" class="btn btn-warning btn-flat"><i class="fa fa-search"></i></button>
-                            </div>
-                        </div><!-- /.input-group -->
-                    </form>
-                </div><!-- /.error-content -->
+                <h2 class="headline text-yellow"> 403</h2>
             </div><!-- /.error-page -->
+                <div class="error-content">
+                    <h3><i class="fa fa-warning text-yellow"></i> Oops! No tiene Permiso.</h3>
+                    
+                        <img src="{{url('img/403.png')}}" class="img-responsive" />                    
+                </div><!-- /.error-content -->
+            
         </div>
     </div>
 </div>

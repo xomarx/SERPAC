@@ -175,9 +175,48 @@ var RecepConform = function(id)
             },
             
         });
-    }
-
-//  ********************  CRUD SOCIOS   ***************************************************************************************************************
+    };
+    
+var activarForm = function(id){
+        if(id == 1) {var route = 'ListaRoles'}
+        else if(id == 2) {var route = 'headPermisos';}
+        else if(id == 3) {var route = 'Caja-Chica';}
+        else if(id == 4) {var route = 'ListMovcheques';}
+        else if(id == 5) {var route = 'ListUsuarios';}
+        else if(id == 6) {var route = 'transferencias/newtransferencias';}
+        $.get(route,function(data){
+            console.log(data);
+            $("#contenidos-box").html(data);//                        
+        });
+    };
+    
+var activarmodal = function(id){        
+        if(id==1){ var route = 'RolUsuario';}
+        else if(id==2){ var route = 'PermisoUser';}
+        else if(id==3){ var route = 'modalcheque';}
+        else if(id==4){ var route = 'modalmovcheque';}
+        else if(id==5){ var route = 'modalCaja';}
+        else if(id==6){ var route = '/socios/modalsocio';}
+        $.get(route,function(data){            
+            $("#conten-modal").html(data);
+            $("#modal-form").modal();
+        });
+    };
+    
+var mensajeRegistro = function(data,formu){
+    $("#alert-msj").fadeIn();
+              if(data.success){
+                $("#alert-txt").html(data.message);                
+                $("#"+formu)[0].reset();
+              }
+              else{
+                  $("#alert-msj").removeClass('alert-success');
+                  $("#alert-msj").addClass('alert-danger');
+                  $("#alert-txt").html(data.message);                                                
+              }
+              $("#alert-msj").fadeOut(1000);
+};
+//  ******************************************************************  CRUD SOCIOS   *******************************************************************
 $("#nuevosocio").click(function (){
     activarmodal(6);
 });
@@ -186,7 +225,7 @@ var RegSocio = function(){
             var token = $("input[name=_token]").val();
             var route = "/socios";
             var type = 'post';                              
-            if($("#RegSocio").text() == 'Actualizar')
+            if($("#Regsocio").text() == 'Actualizar')
             {               
                 type = 'PUT';
                 route=  "/socios/"+$("#codigo").val()+"";                
@@ -199,19 +238,26 @@ var RegSocio = function(){
             data: $("#formsocios").serialize(),
             success:function(data)
             {                
-                if(data.success)
-                {                            
-                   var msj = "<h4>"+data.message+"</h4>";
-                   $("#succes").html(msj);
-                   $("#msj-info").fadeIn();
-                    document.location.reload();
-                }
+                $("#alert-msj").fadeIn();
+              if(data.success){
+                $("#alert-txt").html(data.message);                
+                document.location.reload();
+              }
+              else{
+                  $("#alert-msj").removeClass('alert-success');
+                  $("#alert-msj").addClass('alert-danger');
+                  $("#alert-txt").html(data.message);                                                
+              }
+              $("#alert-msj").fadeOut(1000);
             },
             error:function(data){
+                if(data.status == 403)                    
+                    $("#error-modal").html(data.responseText);
+                else {
                 $("#error_codigo").html('');$("#error_dni").html('');$("#error_estado").html('');$("#error_estado_civil").html('');$("#error_paterno").html('');
                 $("#error_materno").html('');$("#error_nombre").html('');$("#error_fec_nac").html('');$("#error_fec_empadron").html('');
                 $("#error_fec_asociado").html('');$("#error_grado_inst").html('');$("#error_comite_local").html('');$("#error_direccion").html('');
-                $("#error_direccion").html('');$("#error_produccion").html('');$("#error_ocupacion").html('');  
+                $("#error_direccion").html('');$("#error_produccion").html('');$("#error_ocupacion").html('');  $("#error_sexo").html('');
                 var errors =  $.parseJSON(data.responseText);                
                 $.each(errors,function(index, value) {                      
                             if(index == 'codigo')$("#error_codigo").html(value);
@@ -228,21 +274,23 @@ var RegSocio = function(){
                             else if(index == 'comite_local')$("#error_comite_local").html(value);
                             else if(index == 'direccion')$("#error_direccion").html(value);
                             else if(index == 'produccion')$("#error_produccion").html(value);
-                            else if(index == 'ocupacion')$("#error_ocupacion").html(value);                              
+                            else if(index == 'ocupacion')$("#error_ocupacion").html(value);
+                            else if(index == 'sexo')$("#error_sexo").html(value);
                       });                       
-            }
+            }}
           }) 
 };
-
-$("#RegSocio").click(function(event) {     
-    });    
-    
+      
    var EditSocio = function(codigo){     
-    $("#RegSocio").text('Actualizar');
-    $("#titulosocio").empty().append('<center>ACTUALIZAR DATO</center>');
-    var route = "/socios/"+codigo+"/edit";    
-    $.get(route, function(data){
-//            alert(id);             
+    
+    
+    var route = "/socios/"+codigo+"/edit";  
+    $.get('socios/modalsocio',function(data){
+         $("#conten-modal").html(data);
+         $("#Regsocio").text('Actualizar');
+     });     
+    $.getJSON(route, function(data){
+        $("#titulosocio").empty().append('<center>ACTUALIZAR DATO</center>');
         $("#codigo").val(data.codigo);
         $("#dni").val(data.dni);
         if(data.sexo == 'M') $("#sexoM").prop("checked",true);
@@ -274,12 +322,11 @@ $("#RegSocio").click(function(event) {
         $("#ocupacion").val(data.ocupacion);        
         $("#codigo").attr('disabled','disabled') ;
         $("#dni").prop( "disabled", true );
+        $("#modal-form").modal();
         });      
 };
 
-var EliSocio = function(codigo,name)
-{ 
-     // ALERT JQUERY     
+var EliSocio = function(codigo,name){      
    $.alertable.confirm("<span style='color:#000'>¿Está seguro de eliminar el registro?</span>"+"<br><strong><span style='color:#ff0000'>"+name+"</span></strong></br>").then(function() {  
       var route = "/socios/"+codigo+"";
       var token = $("#token").val();
@@ -289,9 +336,367 @@ var EliSocio = function(codigo,name)
         type: 'DELETE',
         dataType: 'json',
         success: function(data){
-        if (data.success = 'true')
+        if (data.success) document.location.reload();
+        
+      }
+      });
+        
+  
+    });
+};
+
+//  **********************************************************   CRUD PARIENTE  ***************************************************************************
+
+var RegPariente = function(){       
+        
+            var fields = $("#formpariente").serialize();
+            var token = $("input[name=_token]").val();
+            var route = "/socios/parientes"; 
+            var type = "POST";            
+            if($("#Regpariente").text() == 'Actualizar')
+            {
+                route = "/socios/parientes/"+$("#idpariente").val();   
+                type="PUt";
+            }
+            
+          $.ajax({              
+            url:route,            
+            headers:{'X-CSRF-TOKEN':token},            
+            type:type,
+            datatype: 'json',
+            data: fields,
+            success:function(data)
+            {    
+               mensajeRegistro(data,'formpariente');
+               if($("#Regpariente").text() == 'Actualizar') document.location.reload();
+            },
+             error:function(data)
+            {
+                if(data.status == 403)
+                    $("#error-modal").html(data.responseText);
+                else{
+                $("#error_dnip").html('');$("#error_estado_civil_1").html('');$("#error_paternop").html('');$("#error_maternop").html('');$("#error_Direccion_1").html('');
+                $("#error_nombrep").html('');$("#error_fec_nac_1").html(''); $("#error_grado_inst_1").html('');$("#error_comite_local_1").html('');$("#error_pariente").html('');
+                var errors =  $.parseJSON(data.responseText);                
+                $.each(errors,function(index, value) {
+                            if(index == 'dni')$("#error_dnip").html(value);                            
+                            else if(index == 'estado_civil')$("#error_estado_civil_1").html(value);
+                            else if(index == 'paterno') $("#error_paternop").html(value);
+                            else if(index == 'materno')$("#error_maternop").html(value);
+                            else if(index == 'nombre')$("#error_nombrep").html(value);
+                            else if(index == 'fec_nac')$("#error_fec_nac_1").html(value);                            
+                            else if(index == 'grado_inst')$("#error_grado_inst_1").html(value);
+                            else if(index == 'comites_locales_id')$("#error_comite_local_1").html(value);
+                            else if(index == 'direccion')$("#error_Direccion_1").html(value);
+                            else if(index == 'tipo_pariente')$("#error_pariente").html(value);
+                      });                       
+            }
+            }
+          })      
+    }; 
+
+var editPariente = function(idsocio,dnipariente){
+
+    $("#Regpariente").text("Actualizar");
+    var route = '/socios/modalparientes';
+    $.get(route, function (data) {
+        $("#conten-modal").html(data);
+        $("#titulo").empty();
+        $("#titulo").append('PARIENTES DE ' + idsocio);
+        $("#socios_codigo").val(idsocio);
+
+        var ruta = "/socios/parientes/" + idsocio + "/" + dnipariente;
+        $.getJSON(ruta, function (data) {            
+            $("#dni").val(data.dni);
+            $("#dni").prop('disabled', true);
+            if (data.sexo == 'M') {
+                $("#sexom").prop('checked', true);
+                $("#sexof").prop('checked', false);
+            } else {
+                $("#sexom").prop('checked', false);
+                $("#sexof").prop('checked', true);
+            }
+            $("#tipo_pariente").val(data.tipo_pariente);
+            $("#paterno").val(data.paterno);
+            $("#materno").val(data.materno);
+            $("#nombre").val(data.nombre);
+            $("#fec_nac").val(data.fec_nac);
+            $("#idpariente").val(data.id);
+            $("#departamento").val(data.departamentos_id);
+            $("#provincia").empty();
+            $("#provincia").append("<option value='" + data.provincias_id + "'>" + data.provincia + "</option>");
+            $("#distrito").empty();
+            $("#distrito").append("<option value='" + data.distritos_id + "'>" + data.distrito + "</option>");
+            $("#comite_central").empty();
+            $("#comite_central").append("<option value='" + data.comites_centrales_id + "'>" + data.comite_central + "</option>");
+            $("#comite_local").empty();
+            $("#comite_local").append("<option value='" + data.comites_locales_id + "'>" + data.comite_local + "</option>");
+            $("#grado_inst").val(data.grado_inst);
+            $("#telefono").val(data.telefono);
+            $("#estado_civil").val(data.estado_civil);
+            $("#direccion").val(data.direccion);
+            if (data.beneficiario == 0) {
+                $("#beneficiarios").prop('checked', true);
+                $("#beneficiariop").prop('checked', false);
+            } else {
+                $("#beneficiariop").prop('checked', true);
+                $("#beneficiarios").prop('checked', false);
+            }
+        });
+        $("#modal-form").modal();
+    });
+};
+    
+var ElimPariente = function(dni,codsocio){
+    $.alertable.confirm("<span style='color:#000'>¿Está seguro de eliminar el registro?</span>"+"<br><strong><span style='color:#ff0000'>"
+            +dni+"</span></strong></br>").then(function() {  
+      var route = "/socios/parientes/"+dni+"/"+codsocio;
+      var token = $("input[name=_token]").val();
+      $.ajax({
+        url: route,
+        headers: {'X-CSRF-TOKEN': token},
+        type: 'DELETE',
+        dataType: 'json',
+        success: function(data){
+        if (data.success) document.location.reload();
+        
+      }
+      });
+        
+  
+    });
+};
+    
+// ******************************  CRUD FUNDOS  ********************************************************************************************************
+   
+    var Eliminarcultivo = function(fila,idcultivo) {        
+        var valor=document.getElementById("tablacultivos").rows[fila].cells[0].innerText;            
+        document.getElementById('tablacultivos').deleteRow(fila);
+        $("#flora").append("<option value="+idcultivo+" selected='selected'>"+ valor+"</option>")
+    };
+           
+    var Eliminarfauna = function(fila,idfauna) {
+        var valor=document.getElementById("tablafauna").rows[fila].cells[0].innerText;            
+        document.getElementById('tablafauna').deleteRow(fila);
+        $("#fauna").append("<option value="+idfauna+" selected='selected'>"+ valor+"</option>")
+    }
+       
+var Eliminarinmueble = function(fila,idinmueble){
+        var valor=document.getElementById("tablainmueble").rows[fila].cells[0].innerText;            
+        document.getElementById('tablainmueble').deleteRow(fila);
+        $("#inmueble").append("<option value="+idinmueble+" selected='selected'>"+ valor+"</option>")
+    }
+
+var fundopropiedadFauna = function(fundo,fauna,cantidad,rendimiento){    
+    var route = '/socios/propiedadfauna';
+    var token = $("#token").val();
+    $.ajax({              
+            url:route,            
+            headers:{'X-CSRF-TOKEN':token},            
+            type:'POST',
+            datatype: 'json',
+            //async: false,
+            data: {
+                fundo:fundo,
+                fauna:fauna,
+                cantidad:cantidad,
+                rendimiento:rendimiento
+            },
+            success:function(data)
+            {                
+                if(data.success == 'true')
+                {                            
+                   console.log('fauna registrado');
+                }
+            },            
+          });
+};
+
+var fundopropiedadFlora = function(fundo,flora,hectarea,rendimiento) {            
+    var route = '/socios/propiedadflora';
+    var token = $("#token").val();
+    $.ajax({              
+            url:route,            
+            headers:{'X-CSRF-TOKEN':token},            
+            type:'POST',
+            datatype: 'json',
+            //async: false,
+            data: {
+                fundo:fundo,
+                flora:flora,
+                hectarea:hectarea,
+                rendimiento:rendimiento
+            },
+            success:function(data)
+            {                
+                if(data.success == 'true')
+                {                            
+                   console.log('flora registrado');
+                }
+            },            
+          });
+};
+
+var fundopropiedadInmueble = function(fundo,inmueble){    
+    var route = '/socios/propiedadinmueble';
+    var token = $("#token").val();
+    $.ajax({              
+            url:route,            
+            headers:{'X-CSRF-TOKEN':token},            
+            type:'POST',
+            datatype: 'json',
+            //async: false,
+            data: {
+                fundo:fundo,
+                inmueble:inmueble                
+            },
+            success:function(data)
+            {                
+                if(data.success == 'true')
+                {                            
+                   console.log('inmueble registrado');
+                }
+            },            
+          });
+};
+
+var registropropoiedadesFundo = function(){
+    for (var i = 1; i < document.getElementById("tablacultivos").rows.length; i++) {
+                        var hectarea =document.getElementById("tablacultivos").rows[i].cells[1].getElementsByTagName('input');
+                        var rendimiento =document.getElementById("tablacultivos").rows[i].cells[2].getElementsByTagName('input');
+                        var flora =document.getElementById("tablacultivos").rows[i].cells[0].innerText;                        
+                        fundopropiedadFlora($("#fundo").val(),flora,hectarea[0].value,rendimiento[0].value);
+                    }
+                    for (var i = 1; i < document.getElementById("tablafauna").rows.length; i++) {
+                        var cantidad =document.getElementById("tablafauna").rows[i].cells[1].getElementsByTagName('input');
+                        var rendimiento =document.getElementById("tablafauna").rows[i].cells[2].getElementsByTagName('input');
+                        var fauna =document.getElementById("tablafauna").rows[i].cells[0].innerText;                        
+                        fundopropiedadFauna($("#fundo").val(),fauna,cantidad[0].value,rendimiento[0].value);
+                    }
+                    for (var i = 1; i < document.getElementById("tablainmueble").rows.length; i++) {                        
+                        var inmueble =document.getElementById("tablainmueble").rows[i].cells[0].innerText;                        
+                        fundopropiedadInmueble($("#fundo").val(),inmueble);
+                    }
+}
+
+var limpiarPropiedadesFundo = function (idfundo){
+    var route = "/socios/eliminarpropiedades/" + idfundo + "";
+    var token = $("#token").val();
+    $.ajax({
+        url: route,
+        headers: {'X-CSRF-TOKEN': token},
+        type: 'DELETE',
+        dataType: 'json',
+        success: function (data) {            
+        }
+    });
+}
+
+var RegFundo = function(){
+    var errortexto;
+    for (var i = 1; i < document.getElementById("tablacultivos").rows.length; i++) {
+        var texto =document.getElementById("tablacultivos").rows[i].cells[1].getElementsByTagName('input');
+        var texto2 =document.getElementById("tablacultivos").rows[i].cells[2].getElementsByTagName('input');
+         if(texto[0].value == '') {
+             errortexto =document.getElementById("tablacultivos").rows[i].cells[1].getElementsByTagName('div');
+             errortexto[0].innerHTML = "Ingrese el N° de Hectarea";
+         }
+         else {var errortexto =document.getElementById("tablacultivos").rows[i].cells[1].getElementsByTagName('div');
+             errortexto[0].innerHTML = "";}
+         if(texto2[0].value == '') {
+             errortexto =document.getElementById("tablacultivos").rows[i].cells[2].getElementsByTagName('div');
+             errortexto[0].innerHTML = "Ingrese el rendimineto anual";
+         }
+         else {var errortexto =document.getElementById("tablacultivos").rows[i].cells[2].getElementsByTagName('div');
+             errortexto[0].innerHTML = "";}
+    }
+    
+    for (var i = 1; i < document.getElementById("tablafauna").rows.length; i++) {
+        var texto =document.getElementById("tablafauna").rows[i].cells[1].getElementsByTagName('input');
+        var texto2 =document.getElementById("tablafauna").rows[i].cells[2].getElementsByTagName('input');
+         if(texto[0].value == '') {
+             errortexto =document.getElementById("tablafauna").rows[i].cells[1].getElementsByTagName('div');
+             errortexto[0].innerHTML = "Ingrese una cantidad";
+         }
+         else {var errortexto =document.getElementById("tablafauna").rows[i].cells[1].getElementsByTagName('div');
+             errortexto[0].innerHTML = "";}
+         if(texto2[0].value == '') {
+             errortexto =document.getElementById("tablafauna").rows[i].cells[2].getElementsByTagName('div');
+             errortexto[0].innerHTML = "Ingrese el rendimineto anual";
+         }
+         else {var errortexto =document.getElementById("tablafauna").rows[i].cells[2].getElementsByTagName('div');
+             errortexto[0].innerHTML = "";}
+    }
+        
+    if( $("#tablacultivos tr").length == 1) $("#error_cultivos").html("Agregue un cultivo"); 
+    else $("#error_cultivos").html("");
+    if( $("#tablafauna tr").length == 1) $("#error_crianzas").html("Agregue una crianza");
+    else $("#error_crianzas").html("");
+    if( $("#tablainmueble tr").length == 1) $("#error_inmuebles").html("Agregue un inmueble");
+    else $("#error_inmuebles").html("");
+    if($("#tablacultivos tr").length == 1 || $("#tablafauna tr").length == 1 || $("#tablainmueble tr").length == 1) return;            
+    var type = 'POST';
+    var route = '/socios/fundos';
+    var fields = $("#formfundo").serialize('hidden');
+    console.log(fields);
+    if($("#RegFundo").text() == "Actualizar")
+    {
+        type = "PUT";
+        route = "/socios/fundos/"+$("#idfundo").val();
+    }        
+    var token = $("input[name=_token]").val();
+    $.ajax({              
+            url:route,            
+            headers:{'X-CSRF-TOKEN':token},            
+            type:type,
+            datatype: 'json',
+            //async: false,
+            data: fields,
+            success:function(data)
+            {        
+                       $("#alert-msj").fadeIn();
+              if(data.success){
+                $("#alert-txt").html(data.message);                
+                $("#modal-form").modal('hide');
+              }
+              else{
+                  $("#alert-msj").removeClass('alert-success');
+                  $("#alert-msj").addClass('alert-danger');
+                  $("#alert-txt").html(data.message);                                                
+              }
+              $("#alert-msj").fadeOut(1000);
+            },
+            error:function(data)
+            {
+                $("#error_fundo").html('');$("#error_estadofundo").html('');$("#error_fecha").html('');
+                $("#error_comite_local_id").html('');$("#error_direccionf").html('');                
+                var errors =  $.parseJSON(data.responseText);                
+                $.each(errors,function(index, value) {                      
+                            if(index == 'fundo')$("#error_fundo").html(value);
+                            else if(index == 'estadofundo')$("#error_estadofundo").html(value);
+                            else if(index == 'fecha') $("#error_fecha").html(value);
+                            else if(index == 'comite_local_id')$("#error_comite_local_id").html(value);
+                            else if(index == 'direccion') $("#error_direccionf").html(value);                              
+                      });                       
+            }
+          });
+};
+ 
+var EliminarFundo = function(id,name){ 
+     // ALERT JQUERY     
+   $.alertable.confirm("<span style='color:#000'>¿Está seguro de eliminar el registro?</span>"+"<br><strong><span style='color:#ff0000'>"+name+"</span></strong></br>").then(function() {  
+      var route = "/socios/fundos/"+id+"";
+      var token = $("#token").val();
+
+      $.ajax({
+        url: route,
+        headers: {'X-CSRF-TOKEN': token},
+        type: 'DELETE',
+        dataType: 'json',
+        success: function(data){
+        if (data.success == 'true')
         {
-            document.location.reload();
+            document.location.reload();          
         }
       }
       });
@@ -299,6 +704,8 @@ var EliSocio = function(codigo,name)
   
     });
 };
+
+
       
 //  ************************   CRUD CARGOS  **************************************************************************************************************
 $("#nuevocargo").click(function(){
@@ -578,379 +985,8 @@ var EliInmueble = function(id,name){
     });
 };
 
-// ******************************  CRUD FUNDOS  ********************************************************************************************************
-   
-    var Eliminarcultivo = function(fila,idcultivo) {        
-        var valor=document.getElementById("tablacultivos").rows[fila].cells[0].innerText;            
-        document.getElementById('tablacultivos').deleteRow(fila);
-        $("#flora").append("<option value="+idcultivo+" selected='selected'>"+ valor+"</option>")
-    };
-           
-    var Eliminarfauna = function(fila,idfauna) {
-        var valor=document.getElementById("tablafauna").rows[fila].cells[0].innerText;            
-        document.getElementById('tablafauna').deleteRow(fila);
-        $("#fauna").append("<option value="+idfauna+" selected='selected'>"+ valor+"</option>")
-    }
-       
-var Eliminarinmueble = function(fila,idinmueble){
-        var valor=document.getElementById("tablainmueble").rows[fila].cells[0].innerText;            
-        document.getElementById('tablainmueble').deleteRow(fila);
-        $("#inmueble").append("<option value="+idinmueble+" selected='selected'>"+ valor+"</option>")
-    }
-
-var fundopropiedadFauna = function(fundo,fauna,cantidad,rendimiento){    
-    var route = '/socios/propiedadfauna';
-    var token = $("#token").val();
-    $.ajax({              
-            url:route,            
-            headers:{'X-CSRF-TOKEN':token},            
-            type:'POST',
-            datatype: 'json',
-            //async: false,
-            data: {
-                fundo:fundo,
-                fauna:fauna,
-                cantidad:cantidad,
-                rendimiento:rendimiento
-            },
-            success:function(data)
-            {                
-                if(data.success == 'true')
-                {                            
-                   console.log('fauna registrado');
-                }
-            },            
-          });
-};
-
-var fundopropiedadFlora = function(fundo,flora,hectarea,rendimiento) {            
-    var route = '/socios/propiedadflora';
-    var token = $("#token").val();
-    $.ajax({              
-            url:route,            
-            headers:{'X-CSRF-TOKEN':token},            
-            type:'POST',
-            datatype: 'json',
-            //async: false,
-            data: {
-                fundo:fundo,
-                flora:flora,
-                hectarea:hectarea,
-                rendimiento:rendimiento
-            },
-            success:function(data)
-            {                
-                if(data.success == 'true')
-                {                            
-                   console.log('flora registrado');
-                }
-            },            
-          });
-};
-
-var fundopropiedadInmueble = function(fundo,inmueble){    
-    var route = '/socios/propiedadinmueble';
-    var token = $("#token").val();
-    $.ajax({              
-            url:route,            
-            headers:{'X-CSRF-TOKEN':token},            
-            type:'POST',
-            datatype: 'json',
-            //async: false,
-            data: {
-                fundo:fundo,
-                inmueble:inmueble                
-            },
-            success:function(data)
-            {                
-                if(data.success == 'true')
-                {                            
-                   console.log('inmueble registrado');
-                }
-            },            
-          });
-};
-
-var registropropoiedadesFundo = function(){
-    for (var i = 1; i < document.getElementById("tablacultivos").rows.length; i++) {
-                        var hectarea =document.getElementById("tablacultivos").rows[i].cells[1].getElementsByTagName('input');
-                        var rendimiento =document.getElementById("tablacultivos").rows[i].cells[2].getElementsByTagName('input');
-                        var flora =document.getElementById("tablacultivos").rows[i].cells[0].innerText;                        
-                        fundopropiedadFlora($("#fundo").val(),flora,hectarea[0].value,rendimiento[0].value);
-                    }
-                    for (var i = 1; i < document.getElementById("tablafauna").rows.length; i++) {
-                        var cantidad =document.getElementById("tablafauna").rows[i].cells[1].getElementsByTagName('input');
-                        var rendimiento =document.getElementById("tablafauna").rows[i].cells[2].getElementsByTagName('input');
-                        var fauna =document.getElementById("tablafauna").rows[i].cells[0].innerText;                        
-                        fundopropiedadFauna($("#fundo").val(),fauna,cantidad[0].value,rendimiento[0].value);
-                    }
-                    for (var i = 1; i < document.getElementById("tablainmueble").rows.length; i++) {                        
-                        var inmueble =document.getElementById("tablainmueble").rows[i].cells[0].innerText;                        
-                        fundopropiedadInmueble($("#fundo").val(),inmueble);
-                    }
-}
-
-var limpiarPropiedadesFundo = function (idfundo){
-    var route = "/socios/eliminarpropiedades/" + idfundo + "";
-    var token = $("#token").val();
-    $.ajax({
-        url: route,
-        headers: {'X-CSRF-TOKEN': token},
-        type: 'DELETE',
-        dataType: 'json',
-        success: function (data) {            
-        }
-    });
-}
-
-$("#RegFundo").click(function(event){      
-            
-        var errortexto;
-    for (var i = 1; i < document.getElementById("tablacultivos").rows.length; i++) {
-        var texto =document.getElementById("tablacultivos").rows[i].cells[1].getElementsByTagName('input');
-        var texto2 =document.getElementById("tablacultivos").rows[i].cells[2].getElementsByTagName('input');
-         if(texto[0].value == '') {
-             errortexto =document.getElementById("tablacultivos").rows[i].cells[1].getElementsByTagName('div');
-             errortexto[0].innerHTML = "Ingrese el N° de Hectarea";
-         }
-         else {var errortexto =document.getElementById("tablacultivos").rows[i].cells[1].getElementsByTagName('div');
-             errortexto[0].innerHTML = "";}
-         if(texto2[0].value == '') {
-             errortexto =document.getElementById("tablacultivos").rows[i].cells[2].getElementsByTagName('div');
-             errortexto[0].innerHTML = "Ingrese el rendimineto anual";
-         }
-         else {var errortexto =document.getElementById("tablacultivos").rows[i].cells[2].getElementsByTagName('div');
-             errortexto[0].innerHTML = "";}
-    }
-    
-    for (var i = 1; i < document.getElementById("tablafauna").rows.length; i++) {
-        var texto =document.getElementById("tablafauna").rows[i].cells[1].getElementsByTagName('input');
-        var texto2 =document.getElementById("tablafauna").rows[i].cells[2].getElementsByTagName('input');
-         if(texto[0].value == '') {
-             errortexto =document.getElementById("tablafauna").rows[i].cells[1].getElementsByTagName('div');
-             errortexto[0].innerHTML = "Ingrese una cantidad";
-         }
-         else {var errortexto =document.getElementById("tablafauna").rows[i].cells[1].getElementsByTagName('div');
-             errortexto[0].innerHTML = "";}
-         if(texto2[0].value == '') {
-             errortexto =document.getElementById("tablafauna").rows[i].cells[2].getElementsByTagName('div');
-             errortexto[0].innerHTML = "Ingrese el rendimineto anual";
-         }
-         else {var errortexto =document.getElementById("tablafauna").rows[i].cells[2].getElementsByTagName('div');
-             errortexto[0].innerHTML = "";}
-    }
-        
-    if( $("#tablacultivos tr").length == 1) $("#error_cultivos").html("Agregue un cultivo"); 
-    else $("#error_cultivos").html("");
-    if( $("#tablafauna tr").length == 1) $("#error_crianzas").html("Agregue una crianza");
-    else $("#error_crianzas").html("");
-    if( $("#tablainmueble tr").length == 1) $("#error_inmuebles").html("Agregue un inmueble");
-    else $("#error_inmuebles").html("");
-    if($("#tablacultivos tr").length == 1 || $("#tablafauna tr").length == 1 || $("#tablainmueble tr").length == 1) return;            
-    var type = 'POST';
-    var route = '/socios/fundos';
-    var fields = $("#formfundo").serialize('hidden');
-    if($("#RegFundo").text() == "Actualizar")
-    {
-        type = "PUT";
-        route = "/socios/fundos/"+$("#idfundo").val();
-    }        
-    var token = $("#token").val();
-    $.ajax({              
-            url:route,            
-            headers:{'X-CSRF-TOKEN':token},            
-            type:type,
-            datatype: 'json',
-            //async: false,
-            data: fields,
-            success:function(data)
-            {        
-                
-                if(data.success == 'Registrar')
-                {           
-                    registropropoiedadesFundo();
-                   var msj = "<h4>"+data.message+"</h4>";
-                   $("#succesfundo").html(msj);
-                   $("#msj-infofundo").fadeIn();                   
-                    document.location.reload();
-                }
-                else if(data.success == 'Actualizar')
-                {     
-                    limpiarPropiedadesFundo($("#idfundo").val());                    
-                    registropropoiedadesFundo();
-                    var msj = "<h4>"+data.message+"</h4>";
-                   $("#succesfundo").html(msj);
-                   $("#msj-infofundo").fadeIn();                   
-                    document.location.reload();
-                }
-            },
-            error:function(data)
-            {
-                $("#error_fundo").html('');$("#error_estadofundo").html('');$("#error_fecha").html('');
-                $("#error_comite_local_id").html('');$("#error_direccionf").html('');                
-                var errors =  $.parseJSON(data.responseText);                
-                $.each(errors,function(index, value) {                      
-                            if(index == 'fundo')$("#error_fundo").html(value);
-                            else if(index == 'estadofundo')$("#error_estadofundo").html(value);
-                            else if(index == 'fecha') $("#error_fecha").html(value);
-                            else if(index == 'comite_local_id')$("#error_comite_local_id").html(value);
-                            else if(index == 'direccion') $("#error_direccionf").html(value);                              
-                      });                       
-            }
-          });
-});
-
-  
-var EliminarFundo = function(id,name){ 
-     // ALERT JQUERY     
-   $.alertable.confirm("<span style='color:#000'>¿Está seguro de eliminar el registro?</span>"+"<br><strong><span style='color:#ff0000'>"+name+"</span></strong></br>").then(function() {  
-      var route = "/socios/fundos/"+id+"";
-      var token = $("#token").val();
-
-      $.ajax({
-        url: route,
-        headers: {'X-CSRF-TOKEN': token},
-        type: 'DELETE',
-        dataType: 'json',
-        success: function(data){
-        if (data.success == 'true')
-        {
-            document.location.reload();          
-        }
-      }
-      });
-        
-  
-    });
-};
 
 
-//  **************************   CRUD PARIENTE  ********************************************************************************************************
-
-$("#RegPariente").click(function(event)
-    {       
-            var dni = $("#dni_1").val();
-            var paterno = $("#paterno_1").val();
-            var materno = $("#materno_1").val();
-            
-            var nombre = $("#nombre_1").val();
-            var sexo;if( $("#sexof").is(':checked') )sexo = $("#sexof").val();
-            else sexo = $("#sexom").val();                        
-            var fec_nac = $("#fec_nac_1").val();
-            var direccion = $("#direccion_1").val();            
-            var telefono = $("#telefono_1").val();
-            var comite_local = $("#comites_locales_id").val();
-            var beneficiario;if( $("#beneficiariop").is(':checked') ) beneficiario = $("#beneficiariop").val();
-            else beneficiario = $("#beneficiarios").val();             
-            var codigo = $("#socios_codigo").val();                                    
-            var grado_inst = $("#grado_inst_1").val();   
-            var estado_civil = $("#estado_civil_1").val();
-            var tipo_pariente = $("#tipo_pariente").val();
-            var token = $("#token").val();
-            var route = "/socios/parientes"; 
-            var type = "POST";            
-            if($("#RegPariente").text() == 'Actualizar')
-            {
-                route = "/socios/parientes/"+$("#idpariente").val();   
-                type="PUt";
-            }
-          $.ajax({              
-            url:route,            
-            headers:{'X-CSRF-TOKEN':token},            
-            type:type,
-            datatype: 'json',
-            data: {
-                   dni: dni,
-                   paterno: paterno,
-                   materno: materno,
-                   nombre: nombre,
-                   sexo: sexo,
-                   fec_nac: fec_nac,
-                   direccion: direccion,                   
-                   telefono: telefono,
-                   comites_locales_id: comite_local,
-                   socios_codigo: codigo,                                      
-                   estado_civil: estado_civil,                   
-                   grado_inst: grado_inst, 
-                   tipo_pariente:tipo_pariente,
-                   beneficiario:beneficiario
-            },
-            success:function(data)
-            {                
-                if(data.success == 'true')
-                {                            
-                   var msj = "<h4>"+data.message+"</h4>";
-                   $("#succespariente").html(msj);
-                   $("#msj-infopariente").fadeIn();
-                   $("#formpariente")[0].reset();
-                }
-                else
-                {
-                    var msj = "<h4>"+data.message+"</h4>";
-                   $("#succespariente").html(msj);
-                   $("#msj-infopariente").fadeIn();                    
-                }
-            },
-             error:function(data)
-            {
-                $("#error_dnip").html('');$("#error_estado_civil_1").html('');$("#error_paternop").html('');$("#error_maternop").html('');$("#error_Direccion_1").html('');
-                $("#error_nombrep").html('');$("#error_fec_nac_1").html(''); $("#error_grado_inst_1").html('');$("#error_comite_local_1").html('');$("#error_pariente").html('');
-                var errors =  $.parseJSON(data.responseText);                
-                $.each(errors,function(index, value) {
-                            if(index == 'dni')$("#error_dnip").html(value);                            
-                            else if(index == 'estado_civil')$("#error_estado_civil_1").html(value);
-                            else if(index == 'paterno') $("#error_paternop").html(value);
-                            else if(index == 'materno')$("#error_maternop").html(value);
-                            else if(index == 'nombre')$("#error_nombrep").html(value);
-                            else if(index == 'fec_nac')$("#error_fec_nac_1").html(value);                            
-                            else if(index == 'grado_inst')$("#error_grado_inst_1").html(value);
-                            else if(index == 'comites_locales_id')$("#error_comite_local_1").html(value);
-                            else if(index == 'direccion')$("#error_Direccion_1").html(value);
-                            else if(index == 'tipo_pariente')$("#error_pariente").html(value);
-                      });                       
-            }
-          })      
-    }); 
-    
-$("#nuepariente").click(function (event){   
-                   $("#succespariente").html("");
-                   $("#msj-infopariente").fadeOut();
-                   $("#formpariente")[0].reset();
-});
-
-var editPariente = function(idsocio,dnipariente)
-    {
-        $("#nuepariente").hide();
-        $("#RegPariente").text("Actualizar");
-        var route = "/socios/parientes/"+idsocio+"/"+dnipariente;
-        $.get(route, function(data){
-            $("#dni_1").val(data.dni);
-            $("#dni_1").prop('disabled',true);
-            if(data.sexo == 'M') { $("#sexom").prop('checked',true); $("#sexof").prop('checked',false); }
-            else { $("#sexom").prop('checked',false); $("#sexof").prop('checked',true); }
-            $("#tipo_pariente").val(data.tipo_pariente);
-            $("#paterno_1").val(data.paterno);
-            $("#materno_1").val(data.materno);
-            $("#nombre_1").val(data.nombre);
-            $("#fec_nac_1").val(data.fec_nac);
-            $("#idpariente").val(data.id);            
-            $("#departamento_1").val(data.departamentos_id);
-            $("#provincia_1").empty();
-            $("#provincia_1").append("<option value='" + data.provincias_id+"'>"+data.provincia+"</option>");
-            $("#distrito_1").empty();
-            $("#distrito_1").append("<option value='" + data.distritos_id+"'>"+data.distrito+"</option>");
-            $("#comite_central_1").empty();
-            $("#comite_central_1").append("<option value='" + data.comites_centrales_id+"'>"+data.comite_central+"</option>");
-            $("#comites_locales_id").empty();
-            $("#comites_locales_id").append("<option value='" + data.comites_locales_id+"'>"+data.comite_local+"</option>");            
-            $("#grado_inst_1").val(data.grado_inst);
-            $("#telefono_1").val(data.telefono);
-            $("#estado_civil_1").val(data.estado_civil);
-            $("#direccion_1").val(data.direccion);            
-            if(data.beneficiario == 0) { $("#beneficiarios").prop('checked',true); $("#beneficiariop").prop('checked',false); }
-            else { $("#beneficiariop").prop('checked',true); $("#beneficiarios").prop('checked',false); }            
-        });
-    }
 
 
 //  *****************  CRUD FLORA  *********************************************************************************************************************
@@ -2341,29 +2377,7 @@ var EliGasto = function(id,nombre){
        });
    };
       
-   var activarForm = function(id){
-        if(id == 1) {var route = 'ListaRoles'}
-        else if(id == 2) {var route = 'headPermisos';}
-        else if(id == 3) {var route = 'Caja-Chica';}
-        else if(id == 4) {var route = 'ListMovcheques';}
-        else if(id == 5) {var route = 'ListUsuarios';}
-        $.get(route,function(data){
-            $("#contenidos-box").html(data);//                        
-        });
-    };
-    
-    var activarmodal = function(id){        
-        if(id==1){ var route = 'RolUsuario';}
-        else if(id==2){ var route = 'PermisoUser';}
-        else if(id==3){ var route = 'modalcheque';}
-        else if(id==4){ var route = 'modalmovcheque';}
-        else if(id==5){ var route = 'modalCaja';}
-        else if(id==6){ var route = '/socios/modalsocio';}
-        $.get(route,function(data){            
-            $("#conten-modal").html(data);
-            $("#modal-form").modal();
-        });
-    };
+   
     
           
      

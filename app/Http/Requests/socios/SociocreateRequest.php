@@ -45,7 +45,8 @@ class SociocreateRequest extends Request
                         'fec_nac' => 'required|date',
                         'sexo' => 'required',
                         'direccion' => 'required',
-                        'comite_local' => 'required'
+                        'comite_local' => 'required',
+                        'sexo'=>'required'
                     ];
                 }
             case 'PATCH':

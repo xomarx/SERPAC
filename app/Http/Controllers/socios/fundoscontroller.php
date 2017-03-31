@@ -26,6 +26,14 @@ class fundoscontroller extends Controller
         return view('socios.fundos',  ['fundos'=>$fundos,'departamentos'=>$departamentos,'floras'=>$floras,'faunas'=>$faunas,'inmuebles'=>$inmuebles]);
                 
     }
+    
+    public function ModalFundo(){
+        $departamentos = \App\Models\Socios\Departamento::pluck('departamento','id');
+        $floras = \App\Models\Socios\Flora::pluck('flora','id');  
+        $faunas = \App\Models\Socios\Fauna::pluck('fauna','id');  
+        $inmuebles = \App\Models\Socios\Inmueble::pluck('inmueble','id');
+        return response()->view('socios.formFundo',['departamentos'=>$departamentos,'floras'=>$floras,'faunas'=>$faunas,'inmuebles'=>$inmuebles]);
+    }
 
     /**
      * Show the form for creating a new resource.
@@ -48,6 +56,8 @@ class fundoscontroller extends Controller
         //
         if($request->ajax())
         {
+            if(auth()->user()->can('crear fundos'))
+                return response ()->view ('errors.403-content',[],403);            
             $date = \Carbon\Carbon::parse($request->fecha);
             $fundo = new \App\Models\Socios\Fundo($request->all());
             $fundo->fecha = $date;
@@ -147,6 +157,8 @@ class fundoscontroller extends Controller
         //
         if($request->ajax())
         {
+            if(auth()->user()->can('editar fundos'))
+                return response ()->view ('errors.403-content',[],403);
             $fundo = $date = \Carbon\Carbon::parse($request->fecha);
             $fundo = \App\Models\Socios\Fundo::FindOrFail($id);
 //            $fundo =  $fundo->all($request->all());
@@ -172,7 +184,8 @@ class fundoscontroller extends Controller
      */
     public function destroy($id)
     {
-        //
+        if(auth()->user()->can('eliminar fundos'))
+                return response ()->view ('errors.403-content',[],403);
         $fundo = \App\Models\Socios\Fundo::where('id','=',$id)
                 ->update([
                     'estado'=>0

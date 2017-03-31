@@ -3,12 +3,14 @@
     TRANSFERENCIAS DE SOCIOS
 @stop
 @section('main-content')
+
+@permission('ver transferencias')
 <div class="box box-solid box-primary" id="listatransferencia">
     <div class="box-header">
-       <center> <h3 class="box-title">LISTA DE TRANSFERENCIAS DE SOCIOS</h3></center>
+        <a id="nuevatrans" onclick="activarForm(6)" class="btn btn-dropbox " >NUEVA TRANSFERENCIA <span class="fa fa-rocket"data-toggle="tooltip" data-placement="top" title="Nueva Transferencia"> </span></a>
     </div>
-    <div class="box-body">
-        <a id="nuevatrans" onclick="cargartransfer(1)" class="btn btn-primary btn-sm m-t-10" ><span class="glyphicon glyphicon-plus"data-toggle="tooltip" data-placement="top" title="Nueva Transferencia"> TRANSFERENCIA</span></a>
+    <div class="box-body" id="contenidos-box">
+        
         <line>
         <table class="table table-responsive" id="myTable" >
             <thead>                                                            
@@ -31,8 +33,7 @@
                     <td>{{$transferencia->paterno}} {{$transferencia->materno}} {{$transferencia->nombre}}</td>
                     <td>{{$transferencia->fecha}}</td>
                     <td>{{$transferencia->name}}</td>
-                    <td>
-                        
+                    <td>                        
                         <a href="{{url('socios/transferencias/ficha')}}/{{$transferencia->id}}" class="btn-sm btn-success" ><span class="glyphicon glyphicon-print"data-toggle="tooltip" data-placement="top" title="Imprimir"></span></a>                        
                     </td>                    
                 </tr>
@@ -42,11 +43,9 @@
     </div>
 </div>
 
-<div class="box box-solid box-primary" id="registrotransferencia" style="display: none">    
-    @include('socios.formtransferencia')
-</div>
+@endpermission
 
-@include('socios.formParientes')
+
 
 @endsection
 

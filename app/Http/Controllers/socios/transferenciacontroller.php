@@ -64,15 +64,21 @@ class transferenciacontroller extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
+    public function index(){
         //
-        $transferencias = \App\Models\Socios\Transferencia::listaTransferencia();
-        $departamentos = \App\Models\Socios\Departamento::pluck('departamento','id')->prepend('Selleciona');
-        return view('socios.trasnferencias', ['transferencias'=>$transferencias,'departamentos'=>$departamentos]);
+        $transferencias = \App\Models\Socios\Transferencia::listaTransferencia();        
+        return view('socios.trasnferencias', ['transferencias'=>$transferencias]);
     }
- 
-    /**
+    
+    public function NewTransferencia(){
+        if(auth()->user()->can('crear transferencias'))
+            return response ()->view ('errors.403-content');
+        $departamentos = \App\Models\Socios\Departamento::pluck('departamento','id');
+        return response()->view('socios.formtransferencia');
+        
+    }
+
+        /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
