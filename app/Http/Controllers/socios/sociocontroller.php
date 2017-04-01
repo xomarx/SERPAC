@@ -126,16 +126,12 @@ class sociocontroller extends Controller
     
     public function index()
     {         
-//        if(!auth()->user()->can('ver socios'))
-//            return response ()->view ('errors.403');
+        if(!auth()->user()->can('ver socios'))
+            return response ()->view ('errors.403');
         $socios = Socio::listasocios();
-//        $departamentos = Departamento::pluck('departamento','id');
-//        $floras = Flora::pluck('flora','id');  
-//        $faunas = Fauna::pluck('fauna','id');  
-//        $inmuebles = Inmueble::pluck('inmueble','id');  
-        return view('socios/socios',array('socios'=>$socios));
-    }
-        
+        return response()->view('socios.socios',['socios'=>$socios]);
+    }       
+
     public function verPadronsocio($idsocio) {
         $socio = Socio::getSocio($idsocio);
         $parientes = \App\Models\Socios\Pariente::getparientesSocio($idsocio);

@@ -22,9 +22,9 @@
 @section('script')
 <script>
         
-    var cargarLista = function(){
+    var cargarLista = function(id){
         
-        $.get('ListaPermisos/'+$("#rol").val(),function(data){
+        $.get('ListaPermisos/'+$("#rol").val()+'/'+id,function(data){
             $("#SelecListPermiso").html(data);            
         });
         

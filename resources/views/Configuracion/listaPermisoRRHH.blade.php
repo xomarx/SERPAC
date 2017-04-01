@@ -1,6 +1,6 @@
 <ul class="pager "> 
-  <li><a href="javascript:void(0)" onclick="cargarLista(1)" class="bg-blue-gradient" >SOCIOS</a></li>
-  <li><a href="javascript:void(0)" onclick="cargarLista(2)">RRHH</a></li>
+  <li><a href="javascript:void(0)" onclick="cargarLista(1)" >SOCIOS</a></li>
+  <li><a href="javascript:void(0)" onclick="cargarLista(2)" class="bg-blue-gradient">RRHH</a></li>
   <li><a href="javascript:void(0)" onclick="cargarLista(3)">ACOPIO</a></li>
   <li><a href="javascript:void(0)" onclick="cargarLista(4)">CREDITOS</a></li>
   <li><a href="javascript:void(0)" onclick="cargarLista(5)">CERTIFICACION</a></li>
@@ -19,7 +19,7 @@
     </thead>
     <tbody>
         <tr>
-            <th ><h4><b>Modulo de Socios</b></h4></th>
+            <th ><h4><b>Modulo de RRHH</b></h4></th>
             <th><b>CREAR</b></th>
             <th><b>EDITAR</b></th>
             <th><b>VER</b></th>
@@ -512,5 +512,3 @@
     </tbody>
 </table>
 {!! Form::close() !!}
-
-    

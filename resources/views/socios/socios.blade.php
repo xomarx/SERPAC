@@ -10,17 +10,19 @@
         <a id="nuevosocio" class="btn btn-dropbox btn-sm m-t-10" data-toggle="tooltip" data-placement="top" title="Nuevo Socio">NUEVO  <span class="glyphicon glyphicon-plus"></span></a>
         @endpermission
     </div>
-    <div class="box-body box-content">        
-        <table class="table table-responsive" id="myTable">
+    <div class="box-body box-content" id="contenidos-box">
+        <table class="table table-hover table-responsive" id="myTable" >
             <thead>            
-            <th>FEC ASOCIADO</th>  
-            <th>CODIGO</th> 
-            <th>DNI</th>    
-            <th>SOCIOS</th>  
-            <th>COMITE LOCAL</th>
-            <th>COMITE CENTRAL</th>
-            <th>USUARIO</th>
-            <th>ACCIONES</th>            
+                <tr >
+                    <th >FEC ASOCIADO</th>  
+                    <th >CODIGO</th> 
+                    <th >DNI</th>    
+                    <th >SOCIOS</th>  
+                    <th >COMITE LOCAL</th>
+                    <th >COMITE CENTRAL</th>
+                    <th >USUARIO</th>
+                    <th>ACCION</th> 
+                </tr>           
             </thead>
             <tbody>
                 @foreach($socios as $socio)
@@ -29,7 +31,7 @@
                 {{--*/ @$paterno = str_replace(' ','&nbsp;', $socio->paterno) /*--}}
                 {{--*/ @$materno = str_replace(' ','&nbsp;', $socio->materno) /*--}}
                 <tr>         
-                    <td>{{$socio->fec_asociado}}</td>
+                    <td >{{$socio->fec_asociado}}</td>
                     <td>{{$socio->codigo}}</td>
                     <td>{{$socio->dni}}</td>
                     <td>{{$socio->paterno}} {{$socio->materno}} {{$socio->nombre}}</td>
@@ -37,7 +39,7 @@
                     <td>{{$socio->comite_central}}</td>
                     <td>{{$socio->name}}</td>                    
                     <td>                                    
-                        <a href="{{url('PadronSocio')}}/{{$socio->codigo}}" data-toggle="tooltip" data-placement="top" title="Ver" class="btn-sm btn-success"><span class="glyphicon glyphicon-eye-open"></span></a>                        
+                        <a href="{{url('PadronSocio')}}/{{$socio->codigo}}" target="_blank" data-toggle="tooltip" data-placement="top" title="Ver" class="btn-sm btn-success"><span class="glyphicon glyphicon-eye-open"></span></a>                        
                         @permission('crear parientes')
                             <a href="javascript:void(0)" onclick="ParSocio('{{$socio->codigo}}','{{$nombre }}','{{ $paterno }}','{{$materno }}')" data-toggle="modal" data-target="#pariente" class="btn-sm btn-info"><span class="glyphicon glyphicon-user" data-toggle="tooltip" data-placement="top" title="Parientes"></span></a>
                         @endpermission
@@ -55,9 +57,7 @@
                 @endforeach
             </tbody>
         </table>
-    </div>
-    <div class="box-footer">
-    </div>
+    </div>   
 </div>
 <section id="conten-modal">    
 </section>
@@ -68,7 +68,7 @@
 @stop
 @section('script')
 <script>       
-      
+              
     var AgreFlora = function(){
         var tds = "<tr>";
         var tds = '<tr>';var idcul = $("#flora").val();
@@ -132,5 +132,7 @@
             $("#modal-form").modal();
         });        
     };   
+    
+    
 </script>
 @endsection

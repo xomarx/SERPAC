@@ -121,7 +121,7 @@ class Socio extends Model
                ->join('users','socios.users_id','=','users.id')
                 ->select('socios.codigo','personas.paterno','personas.dni','personas.materno','personas.nombre'
                         ,'socios.fec_asociado','comites_locales.comite_local','comites_centrales.comite_central','users.name')
-                ->paginate(10);
+                ->get();
     }
     
        

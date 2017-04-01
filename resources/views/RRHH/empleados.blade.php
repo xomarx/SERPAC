@@ -9,7 +9,7 @@
             <a id="nuevoempleado" data-toggle='modal' data-target='#EmpleadoModal' class="btn btn-dropbox">NUEVO &nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-plus"data-toggle="tooltip" data-placement="top" title="Nueva Sucursal">  </span></a>            
         </div>
         <div class="box-body">
-            <table class="table table-responsive" id="myTable" >
+            <table class="table table-hover table-responsive" id="myTable" >
                 <thead>                                                            
                 <th>CODIGO</th> 
                 <th>DNI</th>
@@ -17,7 +17,7 @@
                 <th>CARGO</th> 
                 <th>AREA</th> 
                 <th>ESTADO</th> 
-                <th>ACCIONES</th>            
+                <th>ACCION</th>            
                 </thead>
                 <tbody>
                     @foreach($empleados as $empleado)

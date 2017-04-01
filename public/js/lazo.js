@@ -53,8 +53,11 @@ $(document).ready(function () {
     }); 
 
 $(document).ready(function() {
-    $('#myTable').DataTable( {
-        
+    $('#myTable').DataTable( {        
+        responsive: true,
+        "language": {
+            "url": "/js/Spanish.json",
+        },        
     } );
 } );
 
@@ -2441,11 +2444,7 @@ var EliGasto = function(id,nombre){
           }
        });
    };
-      
-   
-    
-          
-     
+                            
    // ******************************************  CHEQUE *************************************************************************************************
    
    var EdiCheque = function(id){     

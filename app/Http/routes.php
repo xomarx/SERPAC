@@ -42,11 +42,12 @@ Route::group(['middleware' => ['auth']], function () {
     route::resource('headPermisos','Configuracion\usuarioController@HeadPermisoUser');//HeadPermisoUser
     route::resource('NewPermisoUser','Configuracion\usuarioController@PermisoStore');//PermisoStore
     route::resource('AsigPermisos','Configuracion\usuarioController@AsigPermisoStore');//AsigPermisoStore
-    route::resource('ListaPermisos','Configuracion\usuarioController');    
+    route::get('ListaPermisos/{id?}/{modulo?}','Configuracion\usuarioController@show');    
     route::resource('modalRolUser','Configuracion\usuarioController@asigRolUser');
     route::resource('NewRolUser','Configuracion\usuarioController@AsigRolUserStore');
     route::resource('ListUsuarios','Configuracion\usuarioController@ListUsers');
     route::resource('estado-user','Configuracion\usuarioController@ActDesact');
+//    route::get('ListaPermisos/{id?}/{modu?}','Configuracion\usuarioController@showPermisos');
     
     Route::get('comite_locales/{id}','socios\comite_localcontroller@getcomites_locales');
     Route::get('comites_centrales/{id}','socios\comite_centralcontroller@getcomites_centrales');
@@ -103,8 +104,10 @@ Route::group(['middleware' => ['auth']], function () {
     route::delete('socios/parientes/{dni}/{cod}','socios\parientescontroller@destroy');
     route::get('socios/parientes/{idsocio?}/{dnipar?}','socios\parientescontroller@datosparientes');
     
+    
     route::resource('socios/modalsocio','socios\sociocontroller@ModalSocio');
     route::resource('socios','socios\sociocontroller');
+    
     
     route::get('PadronSocio/{idsocio}','socios\sociocontroller@verPadronsocio');
      

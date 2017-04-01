@@ -155,15 +155,24 @@ class usuarioController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($id,$modulo)
     {
         $permisos = \App\Role::listaPermisos($id);
         $results[]=[0=>'nada'];
         foreach ($permisos as $permiso){
             $results[] = $permiso->display_name;
         }
-        return    view('Configuracion.listPermisos')->with('permisos',$results); //response()->json($results);
+        if($modulo==1) return    view('Configuracion.listPermisos')->with('permisos',$results);
+        else if($modulo==2) return    view('Configuracion.listaPermisoRRHH')->with('permisos',$results);
+        else if($modulo==3) return    view('Configuracion.listPermisos')->with('permisos',$results);
+        else if($modulo==4) return    view('Configuracion.listPermisos')->with('permisos',$results);
+        else if($modulo==5) return    view('Configuracion.listPermisos')->with('permisos',$results);
+        else if($modulo==6) return    view('Configuracion.listPermisos')->with('permisos',$results);
+        else if($modulo==7) return    view('Configuracion.listPermisos')->with('permisos',$results);
+        else if($modulo==8) return    view('Configuracion.listPermisos')->with('permisos',$results);
+        else if($modulo==9) return    view('Configuracion.listPermisos')->with('permisos',$results);
     }
+    
 
     /**
      * Show the form for editing the specified resource.
