@@ -49,11 +49,19 @@ class empleadocontroller extends Controller
      */
     public function index()
     {        
-        $empleados  = \App\Models\RRHH\Empleado::listaEmpleado();
+        if(!auth()->user()->can('ver empleados'))
+            return response ()->view ('errors.403');
+        $empleados  = \App\Models\RRHH\Empleado::listaEmpleado();        
+        return view('RRHH/empleados',  array('empleados'=>$empleados));
+    }
+    
+    public function modalEmpleado(){
+        if(!auth()->user()->can(['crear empleados','editar empleados']))
+                return response ()->view ('errors.403-modal');
         $departamentos = Departamento::pluck('departamento','id');
         $areas = \App\Models\RRHH\Areas::pluck('area','id');
         $cargos = \App\Models\RRHH\Cargos::pluck('cargo','id');
-        return view('RRHH/empleados',  array('empleados'=>$empleados,'departamentos'=>$departamentos,'areas'=>$areas,'cargos'=>$cargos));
+        return view('RRHH/modalempleados',  array('departamentos'=>$departamentos,'areas'=>$areas,'cargos'=>$cargos));
     }
 
     /**
@@ -73,8 +81,9 @@ class empleadocontroller extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Requests\RRHH\EmpleadosCreateRequest $request) {        
-        if($request->ajax())
-        {                                  
+        if($request->ajax()){
+            if(!auth()->user()->can('crear empleados'))
+                return response ()->view ('errors.403-content',[],403);
             $persona = new Persona($request->all());                        
             $persona->comites_locales_id = $request->comite_local;     
             $persona->fec_nac = Carbon::parse($request->fec_nac);
@@ -92,11 +101,11 @@ class empleadocontroller extends Controller
             $empleado->save();            
             if($empleado)
             {                            
-                return response()->json(['success'=>'true','message'=>'Se registro Correctamente el Empleado']);
+                return response()->json(['success'=>true,'message'=>'Se registro Correctamente el Empleado']);
             }
             else
             {                
-                return response()->json(['success'=>'false','message'=>'No se Registro ningun dato']);
+                return response()->json(['success'=>false,'message'=>'No se Registro ningun dato']);
             }
         }
     }
@@ -135,10 +144,12 @@ class empleadocontroller extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Requests\RRHH\EmpleadosUpdateRequest $request, $id){
+    public function update(Requests\RRHH\EmpleadosCreateRequest $request, $id){
         //
         IF($request->ajax())
         {            
+            if(!auth()->user()->can('editar empleados'))
+                return response ()->view ('errors.403-content',[],403);
             $date = Carbon::parse($request->fec_nac);
             $empleado = Empleado::where('empleadoId', '=', $id)
                     ->join('personas', 'empleados.personas_dni', '=', 'personas.dni')
@@ -160,14 +171,8 @@ class empleadocontroller extends Controller
                 'personas.comites_locales_id' => $request->comite_local
             ]);
 
-            if($empleado)
-            {                            
-                return response()->json(['success'=>'true','message'=>'Se actualizaron correctamente los Datos']);
-            }
-            else
-            {                
-                return response()->json(['success'=>'false','message'=>'No se actualizaron ningun Datos']);
-            }
+            if($empleado) return response()->json(['success'=>true,'message'=>'Se actualizaron correctamente los Datos']);            
+            else return response()->json(['success'=>false,'message'=>'No se actualizaron ningun Datos']);            
         }
     }
 
@@ -178,11 +183,13 @@ class empleadocontroller extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy($id) {
-        //
+        
+        if(!auth()->user()->can('eliminar empleados'))
+            return response ()->view ('errors.403-modal',[],403);
         $empleado = Empleado::where('empleadoId','=',$id)->delete();
         if($empleado)
-            return response ()->json (['success'=>'true']);
+            return response ()->json (['success'=>true]);
         else
-            return response ()->json (['success'=>'false']);
+            return response ()->json (['success'=>false]);
     }
 }

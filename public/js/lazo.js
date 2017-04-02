@@ -45,12 +45,6 @@
 //    })
 //});
 
-$(document).ready(function () {        
-        if($('#idestado').is(':visible'))
-        {            
-            document.location.href= '/login';
-        }            
-    }); 
 
 $(document).ready(function() {
     $('#myTable').DataTable( {        
@@ -117,9 +111,6 @@ var cargardistrito = function (iddist,idsele) {
         }
     }); 
  };
-
-
-
 
 //  recepcion de fondo
 
@@ -201,6 +192,7 @@ var activarmodal = function(id){
         else if(id==5){ var route = 'modalCaja';}
         else if(id==6){ var route = '/socios/modalsocio';}
         else if(id==0){ var route = '/error-403';}
+        else if(id==7){ var route = 'modalempleado';}        
         $.get(route,function(data){            
             $("#conten-modal").html(data);
             $("#modal-form").modal();
@@ -479,7 +471,7 @@ var ElimPariente = function(dni,codsocio){
     });
 };
     
-// ******************************  CRUD FUNDOS  ********************************************************************************************************
+// *****************************************************************************  CRUD FUNDOS  *********************************************************
    
     var Eliminarcultivo = function(fila,idcultivo) {        
         var valor=document.getElementById("tablacultivos").rows[fila].cells[0].innerText;            
@@ -718,8 +710,6 @@ var EliminarFundo = function(id,name){
     });
 };
 
-
-
 $("#nuevatrans").click(function(){
     if($("#nuevatrans").text() == "LISTA TRANSFERENCIA") document.location.reload();
     else {activarForm(6); $("#nuevatrans").text("LISTA TRANSFERENCIA"); }
@@ -763,7 +753,7 @@ var RegTransferencia = function (){
 };
 
 //  ************************   CRUD CARGOS  **************************************************************************************************************
-$("#nuevocargo").click(function(){
+$("#nuevocargos").click(function(){
     $("#RegCargo").text("Registrar");
 });
 
@@ -778,8 +768,7 @@ var EdiCargo = function(id)
         });
     };
                    
-$("#RegCargo").click(function()
-{    
+$("#RegCargo").click(function(){    
   var cargo = $("#cargo").val();
   var route = "/RRHH/Cargos";var type = "POST"
   var token = $("input[name=_token]").val();
@@ -794,27 +783,29 @@ $("#RegCargo").click(function()
     dataType: 'json',
     data: {cargo: cargo},
     success: function(data){
-     
-     if (data.success == true){             
-        $("#myModal").fadeOut(3000);
-        document.location.reload();
-    }
-       
-    },
+            mensajeRegistro(data,'formcargos');
+        document.location.reload();           
+   },
     error:function(data)
-    {
-        
+    {        
+        if(data.status==403)activarmodal(0);
+        else{
+            $("#error-cargo").empty();
+            var errors = $.parseJSON(data.responseText);
+                $.each(errors, function (index, value) {
+                    if (index == 'cargo')
+                        $("#error-cargo").html(value);
+                });
+        }
     }  
   });
-});
+});   
    
-   
-var EliCArgo = function(id,name)
-{ 
+var EliCArgo = function(id,name){ 
      // ALERT JQUERY     
    $.alertable.confirm("<span style='color:#000'>¿Está seguro de eliminar el registro?</span>"+"<br><strong><span style='color:#ff0000'>"+name+"</span></strong></br>").then(function() {  
       var route = "/RRHH/Cargos/"+id+"";
-      var token = $("#token").val();
+      var token = $("input[name=_token]").val();
 
       $.ajax({
         url: route,
@@ -822,12 +813,11 @@ var EliCArgo = function(id,name)
         type: 'DELETE',
         dataType: 'json',
         success: function(data){
-        if (data.success )
-        
-            document.location.href= '/RRHH/Cargos';
-        
+        if (data.success )        
+            document.location.reload();
       },
       error:function(data){
+          console.log(data);
           if(data.status==403)
                     activarmodal(0);
       }
@@ -840,7 +830,7 @@ var EliCArgo = function(id,name)
 // ********************************************************  CRUD AREAS *********************************************************************************
 
 $("#nuevaarea").click(function (){
-    $("#RegArea").text('Registrar');
+    $("#RegArea").text('Registrar');$("#area").val('');
 });
 
 $("#RegArea").click(function(event){       
@@ -851,7 +841,7 @@ $("#RegArea").click(function(event){
             {   
                 route = "/RRHH/Area/" + $("#idarea").val();
                 type = "PUT";
-            }
+            }            
           $.ajax({
             url:route,
             headers:{'X-CSRF-TOKEN':token},
@@ -860,12 +850,19 @@ $("#RegArea").click(function(event){
             data: {area: area},
             success:function(data)
             {
-                if(data.success == true) document.location.reload();
-                
+                if(data.success) document.location.reload();                
             }, 
             error: function(data){
-          
-      }
+                if(data.status==403) activarmodal(0);
+                else{                
+                    $("#error-area").empty();                    
+                var errors = $.parseJSON(data.responseText);
+                $.each(errors, function (index, value) {
+                    if (index == 'area')
+                        $("#error-area").html(value);
+                });
+            }
+            }
           })
     });  
 
@@ -873,12 +870,11 @@ var EdiArea = function(id) {
         var route = "/RRHH/Area/"+id+"/edit";
         $("#RegArea").text("Actualizar");
         $.getJSON(route, function(data){
-            $("#id").val(data.id);
-            $("#area_1").val(data.area);        
+            $("#idarea").val(data.id);
+            $("#area").val(data.area);        
         });
     };
-   
-   
+      
 var EliArea = function(id,name){      
    $.alertable.confirm("<span style='color:#000'>¿Está seguro de eliminar el registro?</span>"+"<br><strong><span style='color:#ff0000'>"+name+"</span></strong></br>").then(function() {  
       var route = "/RRHH/Area/"+id+"";
@@ -892,8 +888,7 @@ var EliArea = function(id,name){
         if (data.success) document.location.reload();        
       },
       error:function(data){
-          if(data.status==403)
-                    activarmodal(0);
+          if(data.status==403) activarmodal(0);
       }
       });          
     });
@@ -1087,8 +1082,7 @@ $("#RegFlora").click(function(event){
           })      
     });  
 
-var EdFlora = function(id) 
-    {           
+var EdFlora = function(id){           
         $("#RegFlora").text("Actualizar");
         var route = "/socios/basicos/floras/"+id+"/edit";                
         $.get(route, function(data){              
@@ -1267,7 +1261,7 @@ var EliDirectivo = function(id,name)
     });
 };
 
-//***********************************   DEPARTAMENTO  **************************************************************************************************
+//**************************************************************************************   DEPARTAMENTO  ***********************************************
 $("#nuevodepartamento").click(function(event){ $("#regdepartamento").text("Registrar");$("#error_departamento").html('');});
 
 $("#regdepartamento").click(function(event){       
@@ -1343,7 +1337,7 @@ $("#regdepartamento").click(function(event){
  }; 
 
 
-// **************  CRUD PROVINCIAS   ********************************************************************************************************************
+// ****************************************************************************  CRUD PROVINCIAS   ******************************************************
 $("#nuevaprovincia").click(function(event){ $("#RegProvincia").text("Registrar"); 
     $("#error_provincia").html(''); $("#error_departamento").html(''); });
 
@@ -1417,7 +1411,7 @@ var EliProvincia = function(id,name){
 };
 
 
-//   *********************   CRUD DE DISTRITOS  *********************************************************************************************************
+//   *************************************************************************************   CRUD DE DISTRITOS  *****************************************
 $("#nuevodistrito").click(function(event){ $("#RegDistrito").text("Registrar");
     $("#error_provincia").html(''); $("#error_departamento").html('');$("#error_distrito").html('');});
 
@@ -1493,7 +1487,7 @@ var EliDistrito = function (id, name) {
     });
 };
 
-//  **************   CRUD COMITE CENTRAL  ***************************************************************************************************************
+//  **************************************************************************   CRUD COMITE CENTRAL  ***************************************************
 $("#RegCentral").click(function(event)  {       
             var fields = $("#formcomite_central").serialize();
             
@@ -1572,7 +1566,7 @@ var EliCentral = function(id,name){
     });
 };
 
-// ******************  CRUD DE COMITE LOCAL  ************************************************************************************************************
+// ***********************************************************************************  CRUD DE COMITE LOCAL  *******************************************
 $("#nuevolocal").click(function(event){$("#RegLocal").text("Registrar");$("#error_provincia").html(''); 
     $("#error_departamento").html('');$("#error_distrito").html('');$("#error_central").html('');
                 $("#error_local").html('');});
@@ -1619,8 +1613,7 @@ $("#RegLocal").click(function(event){
 var Edlocal = function(id) {
         $('#RegLocal').text("Actualizar");               
         var route = "/socios/comite-local/"+id+"/edit";                
-        $.getJSON(route, function(data){  
-            console.log(data);
+        $.getJSON(route, function(data){              
         $("#departamento").val(data.departamentos_id);
         $("#provincia").empty();
         $("#provincia").append("<option value='" + data.provincias_id+"'>"+data.provincia+"</option>");
@@ -1654,10 +1647,115 @@ var EliLocal = function(id,name){
 };
 
 
-//  ************************  CRUD TECNICOS  ************************************************************************************************************
+//  **************************************************************************************  CRUD TECNICOS  **********************************************
+$("#nuevotecnicos").click(function () {
+    var route = 'modaltecnicos';
+    $.get(route, function (data) {
+        $("#conten-modal").html(data);        
+        loadTecnicos();       
+        $("#modal-form").modal();                       
+    });
+});
+
+var cargarZonas = function(){
+    var route = "/RRHH/Tecnicos/Tecnico-Local";
+        $.getJSON(route, function (data) {            
+            $("#zona_inicial").empty();var datos;
+            $.each(data.lista, function (index, value) {
+                datos += "<option value='" + index+"'>"+ value+"</option>"; 
+            });
+            $("#zona_inicial").html(datos);
+//            $.each(data.lista, function (index, value) {
+//                $("#zona_inicial ").find('option[value="' + value.comites_locales_id + '"]').remove();
+//            });                        
+        }); 
+};
+
+var changetecnicos = function (){
+    var route = '/RRHH/Tecnicos/'+$("#tecnico").val();  
+    cargarZonas();
+    $.get(route,function(data){                  
+          if(data.success){
+              $("#zona_final").empty();var datos;
+              $.each(data.sectores, function( index, value ){                   
+                  datos += "<option value='" + value.comites_locales_id+"'>"+ value.comite_local+"</option>"; 
+              });              
+              $("#zona_final").html(datos);
+          }
+      });
+};
+
+var loadTecnicos = function () {
+    
+    $("#tecnico").select2({
+            allowClear: true,
+        });
+    $("#zona_inicial").dblclick(function (event) {
+        $("#zona_inicial option:selected").clone().appendTo("#zona_final");
+        $("#zona_inicial option:selected").remove();
+    });
+
+    $("#zona_final").dblclick(function (event) {
+        $("#zona_final option:selected").clone().appendTo("#zona_inicial");
+        $("#zona_final option:selected").remove();
+    });
+
+    $("#inicial").click(function (event) {
+        $("#zona_inicial option").clone().appendTo("#zona_final");
+        $("#zona_inicial option").remove();
+    });
+
+    $("#final").click(function (event) {
+        $("#zona_final option").clone().appendTo("#zona_inicial");
+        $("#zona_final option").remove();
+    });
+
+    $("#buscarinicial").keyup(function (event) {
+        var texto = $(this).val();
+        if (!texto)
+        {
+            $("#zona_inicial option").show();
+        } else {
+            $("#zona_inicial option").hide();
+            $("#zona_inicial ").find('option:contains("' + texto.toUpperCase() + '")').show();
+        }
+    });
+
+    $("#buscarfinal").keyup(function (event) {
+        var texto = $(this).val();
+        if (!texto)
+        {
+            $("#zona_final option").show();
+        } else {
+            $("#zona_final option").hide();
+            $("#zona_final ").find('option:contains("' + texto.toUpperCase() + '")').show();
+        }
+    });
+    
+    $("#RegTecnicos").click(function() {        
+      if(!$("#tecnico").val())
+        {$("#error_tecnico").html("Seleccione un Tecnico o Extensionista"); return;}
+      $("#error_tecnico").html("")      
+      var route = "/RRHH/Tecnicos/"+$("#tecnico").val()+"";
+      var token = $("input[name=_token]").val();      
+      $.ajax({
+        url: route,
+        headers: {'X-CSRF-TOKEN': token},
+        type: 'DELETE',
+        dataType: 'json',
+        success: function(data){ 
+           RegSectores($("#tecnico").val());
+        },
+        error:function(data){
+            if(data.status==403) $("#error-modal").html(data);
+        }
+      });        
+    });
+};
+
 var RegSectores = function(idempleado){
     var options = $("#zona_final option[value]");
-    var route = "/RRHH/Tecnicos"; var token = $("#token").val();
+    var route = "/RRHH/Tecnicos"; var token = $("input[name=_token]").val();
       $.each(options,function( index, value ){          
           $.ajax({
                 url: route,
@@ -1669,54 +1767,31 @@ var RegSectores = function(idempleado){
                 },
                 success: function (data)
                 {
-                    if (data.success)
-                    {
-                        var msj = "<h4>" + data.message + "</h4>";
-                        $("#succestecnicos").html(msj);
-                        $("#msj-infotecnicos").fadeIn();
+                        mensajeRegistro(data,'formtecnicos');
                         document.location.reload();
-                    }
                 },
+                error:function(data){
+                    if(data.status==403) $("#error-modal").html(data);
+                }
             });          
-      });
+      }); 
+      
 }
 
-$("#RegTecnicos").click(function() {       
-      if(!$("#tecnico").val())
-      {$("#error_tecnico").html("Seleccione un Tecnico o Extensionista"); return;}
-      $("#error_tecnico").html("")
-      var fields = $("#formtecnicos").serialize();      
-      var route = "/RRHH/Tecnicos/"+$("#tecnico").val()+"";
-      var token = $("#token").val();      
-      $.ajax({
-        url: route,
-        headers: {'X-CSRF-TOKEN': token},
-        type: 'DELETE',
-        dataType: 'json',
-        success: function(data){ }
-      });  
-      RegSectores($("#tecnico").val());
-    });    
-
-// **************************  CRUD EMPLEADO  ***********************************************************************************************************
+ 
+// ********************************************************************************************************  CRUD EMPLEADO  *****************************
 
   $("#nuevoempleado").click(function(event){     
-     $("#RegEmpleado").text('Registrar');   $("#titulo-empleado").html("NUEVO REGISTRO EMPLEADO")
-     $("#error_codigo").html('');$("#error_dni").html('');$("#error_ruc").html('');
-                    $("#error_estado").html('');$("#error_estado_civil").html('');$("#error_area").html('');
-                    $("#error_cargo").html('');$("#error_paterno").html(''); $("#error_materno").html('');
-                    $("#error_nombre").html('');$("#error_fec_nac").html('');$("#error_profesion").html('');
-                    $("#error_provincia").html(''); $("#error_departamento").html(''); $("#error_distrito").html('');
-                    $("#error_central").html('');$("#error_local").html('');$("#error_email").html('');$("#error_direccion").html('');
+      activarmodal(7);
  });
  
-$("#RegEmpleado").click(function(event){                       
-        var token = $("#token").val();
+var RegEmpleado = function(){                       
+        var token = $("input[name=_token]").val();
         var fields = $("#formempleado").serialize();
         
         var route = "/RRHH/empleados";
         var type = "POST";
-        if($("#RegEmpleado").text() == "Actualizar"){
+        if($("#Regempleado").text() == "Actualizar"){
             route = "/RRHH/empleados/" + $("#codigo").val();
             type="PUT"            
         }                                                                  
@@ -1728,14 +1803,13 @@ $("#RegEmpleado").click(function(event){
                 data: fields,
                 success: function (data)
                 {
-                    if (data.success == 'true'){
-                        var msj = "<h4>" + data.message + "</h4>";
-                        $("#succesempleados").html(msj);
-                        $("#msj-infoempleados").fadeIn();
-                        document.location.reload();
-                    }
+                    mensajeRegistro(data,'formempleado');
+                    document.location.reload();                    
                 },
                 error: function (data){
+                    if(data.status==403)
+                        $("#error-modal").html(data.responseText);
+                    else{
                     $("#error_codigo").html('');$("#error_dni").html('');$("#error_ruc").html('');
                     $("#error_estado").html('');$("#error_estado_civil").html('');$("#error_area").html('');
                     $("#error_cargo").html('');$("#error_paterno").html(''); $("#error_materno").html('');
@@ -1765,47 +1839,55 @@ $("#RegEmpleado").click(function(event){
                         else if (index == 'direccion')$("#error_direccion").html(value);                        
                     }); 
                 }
+                }
             });                                                          
-    });
+    };
 
-var EdiEmpleado = function(id) {
-       $("#RegEmpleado").text("Actualizar"); 
-       $("#titulo-empleado").html("ACTUALIZAR DATOS EMPLEADO")
-        var route = "/RRHH/empleados/"+id+"/edit";            
-        $.get(route, function(data){
-            console.log(data);
+var EdiEmpleado = function (id) {
+    $.get('modalempleado', function (data) {
+        $("#conten-modal").html(data);
+        var route = "/RRHH/empleados/" + id + "/edit";
+        $.get(route, function (data) {
+            $("#Regempleado").text("Actualizar");
+            $("#titulo-empleado").html("ACTUALIZAR DATOS EMPLEADO")
             $("#codigo").val(data.empleadoId);
-            $("#codigo").prop("readonly",true);
+            $("#codigo").prop("readonly", true);
             $("#dni").val(data.personas_dni);
-            $("#dni").prop("readonly",true);
-            console.log(data.estadocivil);
+            $("#dni").prop("readonly", true);
             $("#estado_civil").val(data.estadocivil);
             $("#estado").val(data.estado);
             $("#email").val(data.email);
             $("#profesion").val(data.profesion);
             $("#ruc").val(data.ruc);
             $("#cargo").val(data.cargos_id);
-            
-            $("#area").val(data.areas_id);                        
+
+            $("#area").val(data.areas_id);
             $("#paterno").val(data.paterno);
             $("#materno").val(data.materno);
             $("#nombre").val(data.nombre);
             $("#fec_nac").val(data.fec_nac);
-            if(data.sexo == 'M') $("#sexoM").prop("checked",true);
-            else if(data.sexo == 'F') $("#sexoF").prop("checked",true);       
+            if (data.sexo == 'M')
+                $("#sexoM").prop("checked", true);
+            else if (data.sexo == 'F')
+                $("#sexoF").prop("checked", true);
             $("#direccion").val(data.direccion);
             $("#referencia").val(data.referencia);
             $("#telefono").val(data.telefono);
             $("#departamento").val(data.departamentos_id);
-        $("#provincia").empty();
-        $("#provincia").append("<option value='" + data.provincias_id+"'>"+data.provincia+"</option>");
-        $("#distrito").empty();
-        $("#distrito").append("<option value='" + data.distritos_id+"'>"+data.distrito+"</option>");
-        $("#comite_central").empty();
-        $("#comite_central").append("<option value='" + data.comites_centrales_id+"'>"+data.comite_central+"</option>");
+            $("#provincia").empty();
+            $("#provincia").append("<option value='" + data.provincias_id + "'>" + data.provincia + "</option>");
+            $("#distrito").empty();
+            $("#distrito").append("<option value='" + data.distritos_id + "'>" + data.distrito + "</option>");
+            $("#comite_central").empty();
+            $("#comite_central").append("<option value='" + data.comites_centrales_id + "'>" + data.comite_central + "</option>");
             $("#comite_local").empty();
-        $("#comite_local").append("<option value='" + data.comites_locales_id+"'>"+data.comite_local+"</option>");                         
+            $("#comite_local").append("<option value='" + data.comites_locales_id + "'>" + data.comite_local + "</option>");
+            $("#modal-form").modal();
         });
+    });
+       
+      
+        
     }
 
 var EliEmpleado = function(id,name){ 
@@ -1813,7 +1895,7 @@ var EliEmpleado = function(id,name){
    $.alertable.confirm("<span style='color:#000'>¿Está seguro de eliminar el registro?</span>"+"<br><strong><span style='color:#ff0000'>"
            +name+"</span></strong></br>").then(function() {  
       var route = "/RRHH/empleados/"+id+"";
-      var token = $("#token").val();
+      var token = $("input[name=_token]").val();
 
       $.ajax({
         url: route,
@@ -1821,10 +1903,11 @@ var EliEmpleado = function(id,name){
         type: 'DELETE',
         dataType: 'json',
         success: function(data){
-        if (data.success == 'true')
-        {
-            document.location.reload();
-        }
+        if (data.success)        
+            document.location.reload();        
+      },
+      error:function(data){
+         if(data.status==403) activarmodal(0);
       }
       });
         
@@ -1857,7 +1940,7 @@ var cargarAcopiador = function ()
 
 $("#RegSucursal").click(function(event) {
     var type = "POST";
-    var token = $("#token").val();
+    var token = $("input[name=_token]").val();
     var route = "/RRHH/Sucursal";
     var fields = $("#formsucursal").serialize();    
     if( $("#RegSucursal").text() == 'Actualizar' ){   
@@ -1871,36 +1954,34 @@ $("#RegSucursal").click(function(event) {
                 data: fields,
                 success: function (data)
                 {
-                    if (data.success == 'true')
-                    {
-                        var msj = "<h4>" + data.message + "</h4>";
-                        $("#successucursal").html(msj);
-                        $("#msj-infosucursal").fadeIn();
+                    mensajeRegistro(data,'formsucursal');
                         document.location.reload();
-                    }
+                   
                 },
                 error: function (data)
-                {                    
-                    $("#error_codigoId").html('');$("#error_area").html('');$("#error_telefono").html('');
-                    $("#error_sucursal").html('');$("#error_fax").html('');$("#error_acopiador").html('');
-                    $("#error_provincia").html(''); $("#error_departamento").html(''); $("#error_distrito").html('');
-                    $("#error_central").html('');$("#error_local").html('');$("#error_direccion").html('');                    
-                    var errors = $.parseJSON(data.responseText);
-                    $.each(errors, function (index, value) {
-                        if (index == 'codigoId')$("#error_codigoId").html(value);
-                        else if (index == 'area')$("#error_area").html(value);
-                        else if (index == 'telefono')$("#error_telefono").html(value);
-                        else if (index == 'fax')$("#error_fax").html(value);
-                        else if (index == 'sucursal')$("#error_sucursal").html(value);                                                
-                        else if (index == 'departamento') $("#error_departamento").html(value);                        
-                        else if (index == 'provincia')$("#error_provincia").html(value);
-                        else if (index == 'distrito')$("#error_distrito").html(value);
-                        else if (index == 'comite_central') $("#error_central").html(value);
-                        else if (index == 'comite_local')$("#error_local").html(value);                                                
-                        else if (index == 'direccion')$("#error_direccion").html(value);
-                        else if (index == 'acopiador')$("#error_acopiador").html(value);
-                    }); 
-                    
+                {   
+                    if(data.status==403) $("#error-modal").html(data.responseText);
+                    else {
+                        $("#error_codigoId").empty();$("#error_area").empty();$("#error_telefono").empty();
+                        $("#error_sucursal").empty();$("#error_fax").empty();$("#error_acopiador").empty();
+                        $("#error_provincia").empty(); $("#error_departamento").empty(); $("#error_distrito").empty();
+                        $("#error_central").empty();$("#error_local").empty();$("#error_direccion").empty();                    
+                        var errors = $.parseJSON(data.responseText);
+                        $.each(errors, function (index, value) {
+                            if (index == 'codigoId')$("#error_codigoId").html(value);
+                            else if (index == 'area')$("#error_area").html(value);
+                            else if (index == 'telefono')$("#error_telefono").html(value);
+                            else if (index == 'fax')$("#error_fax").html(value);
+                            else if (index == 'sucursal')$("#error_sucursal").html(value);                                                
+                            else if (index == 'departamento') $("#error_departamento").html(value);                        
+                            else if (index == 'provincia')$("#error_provincia").html(value);
+                            else if (index == 'distrito')$("#error_distrito").html(value);
+                            else if (index == 'comite_central') $("#error_central").html(value);
+                            else if (index == 'comite_local')$("#error_local").html(value);                                                
+                            else if (index == 'direccion')$("#error_direccion").html(value);
+                            else if (index == 'acopiador')$("#error_acopiador").html(value);
+                        }); 
+                    }
                 }
             });
         
@@ -1944,10 +2025,12 @@ var EliSucursal = function(id,name){
         type: 'DELETE',
         dataType: 'json',
         success: function(data){
-        if (data.success == 'true')
-        {
+        if (data.success)        
             document.location.reload();
-        }
+        
+      },
+      error:function(data){
+          if(data.status) activarmodal(0);
       }
       });
         

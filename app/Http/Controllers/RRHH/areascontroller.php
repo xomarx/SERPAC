@@ -18,9 +18,9 @@ class areascontroller extends Controller
      */
     public function index()
     {
-        //
-        $areas = DB::table('areas')
-                ->get();
+        if(!auth()->user()->can('ver areas'))
+            return response ()->view ('errors.403');
+        $areas = Areas::all();
         return view('RRHH/areas',  compact('areas',$areas));
     }
 
@@ -41,20 +41,15 @@ class areascontroller extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
-        //
+    {        
         $this->validate($request, ['area'=>'required|unique:areas,area']);
         if($request->ajax())
         {
+            if(!auth()->user()->can('crear areas'))
+                return response ()->view ('errors.403-content',[],403);
             $area = Areas::create($request->all());
-            if($area)
-            {
-                return response()->json(['success'=>true]);
-            }
-            else
-            {
-                return response()->json(['success'=>false]);
-            }
+            if($area) return response()->json(['success'=>true,'message'=>'Se Registro correctamente']);
+            else return response()->json(['success'=>false,'No se registro nigun Dato']);            
         }
     }
 
@@ -90,20 +85,18 @@ class areascontroller extends Controller
      */
     public function update(Request $request, $id)
     {        
-        $this->validate($request, ['area'=>'required']);
+        $this->validate($request, ['area'=>'required|unique:areas,area']);
         if($request->ajax())
         {
+            if(!auth()->user()->can('editar areas'))
+                return response ()->view ('errors.403-content',[],403);
             $area = Areas::FindOrFail($id);
             $area->area = $request->area;
             $area->save();
-            if($area)
-            {
-                return response()->json(['success'=>true]);
-            }
-            else
-            {
-                return response()->json(['success'=>false]);
-            }
+            if($area)          
+                return response()->json(['success'=>true,'message'=>'Se actualizo correctamente']);            
+            else            
+                return response()->json(['success'=>false,'message'=>'No se actualizo ningun Dato']);            
         }
     }
 
@@ -115,7 +108,8 @@ class areascontroller extends Controller
      */
     public function destroy($id)
     {
-        //
+        if(!auth()->user()->can('eliminar areas'))
+            return response ()->view ('errors.403-content',[],403);
         $area = Areas::FindOrFail($id)->delete();
         if($area) return response ()->json (['success'=>true]);
     }

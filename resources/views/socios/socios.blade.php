@@ -39,18 +39,18 @@
                     <td>{{$socio->comite_central}}</td>
                     <td>{{$socio->name}}</td>                    
                     <td>                                    
-                        <a href="{{url('PadronSocio')}}/{{$socio->codigo}}" target="_blank" data-toggle="tooltip" data-placement="top" title="Ver" class="btn-sm btn-success"><span class="glyphicon glyphicon-eye-open"></span></a>                        
+                        <a href="{{url('PadronSocio')}}/{{$socio->codigo}}" target="_blank" data-toggle="tooltip" data-placement="top" title="Ver" class="btn-xs btn-success"><span class="glyphicon glyphicon-eye-open"></span></a>                        
                         @permission('crear parientes')
-                            <a href="javascript:void(0)" onclick="ParSocio('{{$socio->codigo}}','{{$nombre }}','{{ $paterno }}','{{$materno }}')" data-toggle="modal" data-target="#pariente" class="btn-sm btn-info"><span class="glyphicon glyphicon-user" data-toggle="tooltip" data-placement="top" title="Parientes"></span></a>
+                            <a href="javascript:void(0)" onclick="ParSocio('{{$socio->codigo}}','{{$nombre }}','{{ $paterno }}','{{$materno }}')" data-toggle="modal" data-target="#pariente" class="btn-info btn-xs"><span class="glyphicon glyphicon-user" data-toggle="tooltip" data-placement="top" title="Parientes"></span></a>
                         @endpermission
                         @permission('crear fundos')
-                        <a href="#" onclick="fundosocio('{{$socio->codigo}}','{{$nombre }}','{{ $paterno }}','{{$materno }}')" data-toggle='modal' data-target='#fundomodal' class="btn-sm btn-success" ><span data-toggle="tooltip" data-placement="top" title="Fundos" class="glyphicon glyphicon-home"></span></a>
+                        <a href="#" onclick="fundosocio('{{$socio->codigo}}','{{$nombre }}','{{ $paterno }}','{{$materno }}')" data-toggle='modal' data-target='#fundomodal' class="btn-success btn-xs" ><span data-toggle="tooltip" data-placement="top" title="Fundos" class="glyphicon glyphicon-home"></span></a>
                         @endpermission
                         @permission('editar socios')
-                            <a  href="javascript:void(0)" onclick="EditSocio('{{$socio->codigo}}')"  class="btn-sm btn-primary" data-toggle="tooltip" data-placement="top" title="Editar Socio"><span  class="glyphicon glyphicon-pencil"></span></a>
+                            <a  href="javascript:void(0)" onclick="EditSocio('{{$socio->codigo}}')"  class="btn-xs btn-primary" data-toggle="tooltip" data-placement="top" title="Editar Socio"><span  class="glyphicon glyphicon-pencil"></span></a>
                         @endpermission
                         @permission ('eliminar socios')
-                            <a href="javascript:void(0)" onclick="EliSocio('{{$socio->codigo}}','{{$name}}')" class="btn-sm btn-danger"><span data-toggle="tooltip" data-placement="top" title="Eliminar Socio" class="glyphicon glyphicon-remove"></span></a>
+                            <a href="javascript:void(0)" onclick="EliSocio('{{$socio->codigo}}','{{$name}}')" class="btn-xs btn-danger"><span data-toggle="tooltip" data-placement="top" title="Eliminar Socio" class="glyphicon glyphicon-remove"></span></a>
                         @endpermission
                     </td>                
                 </tr>

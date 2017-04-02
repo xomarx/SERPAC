@@ -23,27 +23,60 @@ class EmpleadosCreateRequest extends Request
      */
     public function rules()
     {
-        return [
-            'codigo'=>'required|unique:empleados,empleadoId',
-            'dni'=>'required|unique:empleados,personas_dni|numeric|min:8',
-            'ruc'=>'required|unique:empleados,ruc|numeric|min:11',            
-            'estado'=>'required',
-            'estado_civil'=>'required',
-            'area'=>'required',
-            'cargo'=>'required',
-            'paterno'=>'required',
-            'materno'=>'required',
-            'nombre'=>'required',
-            'fec_nac'=>'required|date',
-            'profesion'=>'required',
-            'departamento'=>'required',
-            'provincia'=>'required',
-            'distrito'=>'required',
-            'comite_central'=>'required',
-            'comite_local'=>'required',
-            'email'=>'email|required',
-            'direccion'=>'required',
-        ];
+        switch ($this->method()) {
+            case 'GET':
+            case 'DELETE': {
+                    return [];
+                }
+            case 'POST': {
+                    return [
+                        'codigo' => 'required|unique:empleados,empleadoId',
+                        'dni' => 'required|unique:empleados,personas_dni|numeric|min:8',
+                        'ruc' => 'required|unique:empleados,ruc|numeric|min:11',
+                        'estado' => 'required',
+                        'estado_civil' => 'required',
+                        'area' => 'required',
+                        'cargo' => 'required',
+                        'paterno' => 'required',
+                        'materno' => 'required',
+                        'nombre' => 'required',
+                        'fec_nac' => 'required|date',
+                        'profesion' => 'required',
+                        'departamento' => 'required',
+                        'provincia' => 'required',
+                        'distrito' => 'required',
+                        'comite_central' => 'required',
+                        'comite_local' => 'required',
+                        'email' => 'email|required',
+                        'direccion' => 'required',
+                    ];
+                }
+            case 'PATCH':
+            case 'PUT': {
+                    return [
+                        'codigo' => 'required',
+                        'dni' => 'required|numeric',
+                        'ruc' => 'required|numeric|min:11',
+                        'estado' => 'required',
+                        'estado_civil' => 'required',
+                        'area' => 'required',
+                        'cargo' => 'required',
+                        'paterno' => 'required',
+                        'materno' => 'required',
+                        'nombre' => 'required',
+                        'fec_nac' => 'required|date',
+                        'profesion' => 'required',
+                        'departamento' => 'required',
+                        'provincia' => 'required',
+                        'distrito' => 'required',
+                        'comite_central' => 'required',
+                        'comite_local' => 'required',
+                        'email' => 'email|required',
+                        'direccion' => 'required',
+                    ];
+                }
+            default : break;
+        }
     }
     
     public function messages() {

@@ -13,7 +13,7 @@ class almacenCreateRequest extends Request
      */
     public function authorize()
     {
-        return true;
+        return auth()->user()->can(['crear almacen','editar almacen']);
     }
 
     /**
@@ -23,20 +23,45 @@ class almacenCreateRequest extends Request
      */
     public function rules()
     {
-        return [
-            'sucursal'=>'required|unique:sucursales,sucursal',
-            'telefono'=>'required|numeric|min:9',
-            'fax'=>'required|numeric|min:9',
-            'direccion'=>'required',
-            'codigoId'=>'required|unique:sucursales,sucursalId',
-            'area'=>'required',
-            'departamento'=>'required',
-            'provincia'=>'required',
-            'distrito'=>'required',
-            'comite_central'=>'required',
-            'comite_local'=>'required',
-            'acopiador'=>'required'
-        ];
+        switch ($this->method()) {
+            case 'GET':
+            case 'DELETE': {
+                    return [];
+                }
+            case 'POST': {
+                    return [
+                        'sucursal' => 'required|unique:sucursales,sucursal',
+                        'telefono' => 'required|numeric|min:9',
+                        'fax' => 'required|numeric|min:9',
+                        'direccion' => 'required',
+                        'codigoId' => 'required|unique:sucursales,sucursalId',
+                        'area' => 'required',
+                        'departamento' => 'required',
+                        'provincia' => 'required',
+                        'distrito' => 'required',
+                        'comite_central' => 'required',
+                        'comite_local' => 'required',
+                        'acopiador' => 'required'
+                    ];
+                }
+            case 'PATCH':
+            case 'PUT': {
+                    return [
+                        'sucursal' => 'required|unique:sucursales,sucursal',
+                        'telefono' => 'required|numeric|min:9',
+                        'fax' => 'required|numeric|min:9',
+                        'direccion' => 'required',
+                        'area' => 'required',
+                        'departamento' => 'required',
+                        'provincia' => 'required',
+                        'distrito' => 'required',
+                        'comite_central' => 'required',
+                        'comite_local' => 'required',
+                        'acopiador' => 'required'
+                    ];
+                }
+            default : break;
+        }
     }
     
     public function messages() {

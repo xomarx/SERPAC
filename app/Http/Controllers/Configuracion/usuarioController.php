@@ -164,13 +164,13 @@ class usuarioController extends Controller
         }
         if($modulo==1) return    view('Configuracion.listPermisos')->with('permisos',$results);
         else if($modulo==2) return    view('Configuracion.listaPermisoRRHH')->with('permisos',$results);
-        else if($modulo==3) return    view('Configuracion.listPermisos')->with('permisos',$results);
-        else if($modulo==4) return    view('Configuracion.listPermisos')->with('permisos',$results);
-        else if($modulo==5) return    view('Configuracion.listPermisos')->with('permisos',$results);
-        else if($modulo==6) return    view('Configuracion.listPermisos')->with('permisos',$results);
-        else if($modulo==7) return    view('Configuracion.listPermisos')->with('permisos',$results);
-        else if($modulo==8) return    view('Configuracion.listPermisos')->with('permisos',$results);
-        else if($modulo==9) return    view('Configuracion.listPermisos')->with('permisos',$results);
+        else if($modulo==3) return    view('Configuracion.listPermisosACOPIO')->with('permisos',$results);
+        else if($modulo==4) return    view('Configuracion.listPermisosCREDITOS')->with('permisos',$results);
+        else if($modulo==5) return    view('Configuracion.listPermisosCERTIFICACION')->with('permisos',$results);
+        else if($modulo==6) return    view('Configuracion.listPermisosTESORERIA')->with('permisos',$results);
+        else if($modulo==7) return    view('Configuracion.listPermisosCONTABILIDAD')->with('permisos',$results);
+        else if($modulo==8) return    view('Configuracion.listPermisosINFORMES')->with('permisos',$results);
+        else if($modulo==9) return    view('Configuracion.listPermisosCONFIGURACION')->with('permisos',$results);
     }
     
 

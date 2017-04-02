@@ -3,13 +3,16 @@
     ALMACENES DE ACOPIO
 @stop
 @section('main-content')
-
+@permission('ver almacen')
 <div class="box-body">
     <div class="box box-solid box-primary">
-        <div class="box-header" style="text-align: center">
+        <div class="box-header" >
+            @permission('crear almacen')
             <a id="nuevasucursal" data-toggle='modal' data-target='#modalsucursal' class="btn btn-dropbox btn-sm m-t-10" style="float: left;">NUEVO  <span class="glyphicon glyphicon-plus"data-toggle="tooltip" data-placement="top" title="Nueva Sucursal"></span></a>               
+            @endpermission
         </div>
         <div class="box-body">
+            <input type="hidden" name="_token" value="{{ csrf_token() }}">
             <table class="table table-responsive" id="myTable" >
                 <thead>
                 <th>AREA</th>
@@ -36,9 +39,13 @@
                         <td>{{$sucursal->comite_central}}</td>
                         <td>{{$sucursal->distrito}}</td>
                         <td>{{$sucursal->provincia}}</td>
-                        <td>                            
-                            <a onclick="Editsucur('{{$sucursal->sucursalId}}')" data-toggle='modal' data-target='#modalsucursal' class="btn btn-primary btn-xs"><span data-toggle="tooltip" data-placement="top" title="Editar" class="glyphicon glyphicon-pencil"></span></a>                                                        
-                            <a onclick="EliSucursal('{{$sucursal->sucursalId}}','{{$name}}')" class="btn btn-danger btn-xs"><span data-toggle="tooltip" data-placement="top" title="Eliminar" class="glyphicon glyphicon-remove"></span></a>
+                        <td>
+                            @permission('editar almacen')
+                            <a onclick="Editsucur('{{$sucursal->sucursalId}}')" data-toggle='modal' data-target='#modalsucursal' class="btn-primary btn-xs"><span data-toggle="tooltip" data-placement="top" title="Editar" class="glyphicon glyphicon-pencil"></span></a>                                                        
+                            @endpermission
+                            @permission('eliminar almacen')
+                            <a onclick="EliSucursal('{{$sucursal->sucursalId}}','{{$name}}')" class="btn-danger btn-xs"><span data-toggle="tooltip" data-placement="top" title="Eliminar" class="glyphicon glyphicon-remove"></span></a>
+                            @endpermission
                         </td>                    
                     </tr>
                     @endforeach
@@ -47,21 +54,21 @@
         </div>
     </div>
 </div>
-
+<section id="conten-modal"></section>
+@endpermission
+@permission(['crear almacen','editar almacen'])
 <div class="modal fade" id="modalsucursal" role="dialog">
     <div class="modal-dialog modal-primary">    
       <!-- Modal content-->
-      <div class="modal-content">
+      <div class="modal-content" id="error-modal">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal">&times;</button>
           <h4 class="modal-title">NUEVA SUCURSAL</h4>
         </div>
           <div class="modal-body col-md-12 form-group-sm">
-              <div id="msj-infosucursal" class="alert alert-success" role='alert' style="display: none">
-                    <strong id='successucursal'></strong>
-              </div>
+              @include('mensajes.mensaje')
               {!! Form::open(['id'=>'formsucursal']) !!}
-              <input type="hidden" name="_token" value="{{ csrf_token() }}" id="token">              
+              
               <div class="col-md-12">
               <div class="col-md-6 " >
                   {!! Form::label('area','Area:',['class' => 'control-label'])!!}      
@@ -145,13 +152,16 @@
       
     </div>
   </div>
-
+@endpermission
 @stop
 
 @section('script')
 <script>
    
-   
+   $(document).ready(function (){
+      $("#subalmacen").addClass('active');
+    $("#menuRRHH").addClass('active');
+   });
 
    
   $("#acopiador").select2({      

@@ -27,6 +27,8 @@ class sucursalescontroller extends Controller
      */
     public function index()
     {        
+        if(!auth()->user()->can('ver almacen'))
+            return response ()->view ('errors.403');
         $sucursales = Sucursal::listaSucursales();    
         $areas = Areas::pluck('area','id');
         $empleados = \App\Models\RRHH\Tecnico::tecnicos();       
@@ -49,7 +51,6 @@ class sucursalescontroller extends Controller
             return response()->json($result);
         }
     }
-
 
     public function autocomplete(Request $request){
         if($request->ajax())
@@ -85,6 +86,8 @@ class sucursalescontroller extends Controller
         //
         if($request->ajax())
         {
+            if(!auth()->user()->can('crear almacen'))
+                return response ()->view ('errors.403-content',[],403);
             $sucursal = Sucursal::create([
                 'sucursalId'=>$request->codigoId,
                 'sucursal'=>  strtoupper($request->sucursal),
@@ -97,14 +100,10 @@ class sucursalescontroller extends Controller
                 'empleados_empleadoId'=>$request->acopiador
                     
             ]);
-            if($sucursal)
-            {
-                return response()->json(['success'=>'true','message'=>'Se Registro Correctamente']);
-            }
-            else
-            {
-                return response()->json(['success'=>'false','message'=>'No se registro ningun dato']);
-            }
+            if($sucursal)            
+                return response()->json(['success'=>true,'message'=>'Se Registro Correctamente']);            
+            else            
+                return response()->json(['success'=>false,'message'=>'No se registro ningun dato']);            
         }
     }
 
@@ -139,10 +138,12 @@ class sucursalescontroller extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Requests\RRHH\almacenUpdateRequest $request, $id)
+    public function update(Requests\RRHH\almacenCreateRequest $request, $id)
     {        
         if($request->ajax())
-        {                        
+        {              
+            if(!auth()->user()->can('editar almacen'))
+                return response ()->view ('errors.403-content',[],403);
             $sucursal =  Sucursal::where('sucursalId','=',$id)
                       ->update([
                           'sucursal'=>  strtoupper($request->sucursal),
@@ -172,18 +173,14 @@ class sucursalescontroller extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
-    {
-        //
-        $sucursal = Sucursal::where('sucursalId','=',$id)
+    {        
+        if(!auth()->user()->can('eliminar almacen'))
+                return response ()->view ('errors.403-content',[],403);
+            $sucursal = Sucursal::where('sucursalId','=',$id)
                 ->delete();
-       if($sucursal)
-            {
-                return response()->json(['success'=>'true']);
-            }
-            else
-            {
-                return response()->json(['success'=>'false']);
-            } 
-        
+       if($sucursal)            
+                return response()->json(['success'=>true]);            
+            else            
+                return response()->json(['success'=>false]);                    
     }
 }

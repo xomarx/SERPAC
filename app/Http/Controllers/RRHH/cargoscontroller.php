@@ -18,8 +18,9 @@ class cargoscontroller extends Controller
      */
     public function index()
     {
-        //
-        $cargos = DB::table('cargos')->get();
+        if(!auth()->user()->can('ver cargos'))
+            return response ()->view ('errors.403');
+        $cargos = Cargos::all();
         return view('RRHH.cargos',  compact('cargos',$cargos));                
     }
 
@@ -42,17 +43,16 @@ class cargoscontroller extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, ['cargo'=>'required|unique:cargos,cargo']);
         if($request->ajax())
         {
+            if(!auth()->user()->can('crear cargos'))
+                return response ()->view ('errors.403-content',[],403);
             $cargo = Cargos::create($request->all());
-            if($cargo)
-            {
-                return response()->json(['success','true']);
-            }
-            else {
-            return response()->json(['success','false']);
-            }
+            if($cargo)  return response()->json(['success',true,'message'=>'Se registro correctamente']);            
+            else 
+            return response()->json(['success',false,'message'=>'No se Registro Ningun dato']);
+            
         }
     }
 
@@ -89,17 +89,20 @@ class cargoscontroller extends Controller
      */
     public function update(Request $request, $id)
     {        
+         $this->validate($request, ['cargo'=>'required|unique:cargos,cargo']);
         if($request->ajax())
         {
+            if(!auth()->user()->can('editar cargos'))
+                return response ()->view ('errors.403-content',[],403);
             $cargo = Cargos::FindOrFail($id);
             $cargo->cargo = $request->cargo;
             $cargo->save();
             if($cargo)
                 {
-                return response()->json(['success','true']);
+                return response()->json(['success',true,'message'=>'Se actualizaron los DAtos']);
             }
             else {
-            return response()->json(['success','false']);
+            return response()->json(['success',false,'message'=>'No se actualizo ningun dato']);
             }
         }
     }
@@ -112,6 +115,10 @@ class cargoscontroller extends Controller
      */
     public function destroy($id)
     {
-        //
+        if(!auth()->user()->can('eliminar cargos'))
+                return response ()->view ('errors.403-content',[],403);
+        $cargo = Cargos::FindOrFail($id)->delete();
+        if($cargo) return response ()->json (['success'=>true]);
+        
     }
 }

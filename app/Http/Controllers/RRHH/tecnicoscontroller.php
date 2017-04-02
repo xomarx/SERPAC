@@ -12,8 +12,8 @@ class tecnicoscontroller extends Controller
 {
     
     public static function listaSectorAsignados(){
-        $lista = Tecnico::all();
-        return response()->json(['lista'=>$lista]);
+        $locales = \App\Models\Socios\Comites_Locale::listaSectorTecnicos();  
+        return response()->json(['lista'=>$locales]);
     }
     
         /**
@@ -21,11 +21,20 @@ class tecnicoscontroller extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index() {        
+    public function index() {
+        if(!auth()->user()->can('ver tecnicos'))
+            return response ()->view ('errors.403');
         $tecnicos = Tecnico::listaTecnicos();
+        
+        return view('RRHH/tecnicos',['tecnicos'=>$tecnicos]);
+    }
+    
+    public function modalTecnicos(){
+        if(!auth()->user()->can('crear tecnicos'))
+            return response ()->view ('errors.403-modal');
         $tecnics = Tecnico::tecnicos();
         $locales = \App\Models\Socios\Comites_Locale::listaSectorTecnicos();
-        return view('RRHH/tecnicos',['tecnicos'=>$tecnicos,'tecnics'=>$tecnics,'locales'=>$locales]);
+        return view('RRHH/modaltecnicos',['tecnics'=>$tecnics,'locales'=>$locales]);
     }
 
     /**
@@ -49,17 +58,15 @@ class tecnicoscontroller extends Controller
         //
         if($request->ajax())
         {
+            if(!auth()->user()->can('crear tecnicos'))
+                return response ()->view ('errors.403-content',[],403);
             $tecnicos = Tecnico::create([
                 'comites_locales_id'=>$request->comites_locales_id,
                 'empleados_empleadoId'=>$request->empleados_empleadoId]);                   
-            if($tecnicos)
-            {
-                return response()->json(['success'=>'true','message'=>'Se Asignaron Correctamente los Sectores']);
-            }
-            else
-            {
-                return response()->json(['success'=>'false','message'=>'No se Registro ningun Dato']);
-            }
+            if($tecnicos)            
+                return response()->json(['success'=>true,'message'=>'Se Asignaron Correctamente los Sectores']);            
+            else            
+                return response()->json(['success'=>false,'message'=>'No se Registro ningun Dato']);            
         }
     }
 
@@ -72,7 +79,7 @@ class tecnicoscontroller extends Controller
     public function show($id)
     {
         $sectores = Tecnico::getComitesTecnicos($id);
-        return response()->json(['success'=>'true','sectores'=>$sectores]);
+        return response()->json(['success'=>true,'sectores'=>$sectores]);
     }
 
     /**
@@ -106,14 +113,12 @@ class tecnicoscontroller extends Controller
      */
     public function destroy($id)
     {
+        if(!auth()->user()->can('crear tecnicos'))
+            return response ()->view ('errors.403-content',[],403);
         $tecnico = Tecnico::where('empleados_empleadoId','=',$id)->delete();
-        if($tecnico)
-        {
-            return response()->json(['success'=>'true']);
-        }
-        else
-        {
-            return response()->json(['success'=>'false']);
-        }
+        if($tecnico)        
+            return response()->json(['success'=>true]);        
+        else        
+            return response()->json(['success'=>false]);        
     }
 }
