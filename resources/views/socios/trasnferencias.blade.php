@@ -32,7 +32,7 @@
                     <td>{{$transferencia->fecha}}</td>
                     <td>{{$transferencia->name}}</td>
                     <td>                        
-                        <a href="{{url('socios/transferencias/ficha')}}/{{$transferencia->id}}" class="btn-sm btn-success" ><span class="glyphicon glyphicon-print"data-toggle="tooltip" data-placement="top" title="Imprimir"></span></a>                        
+                        <a href="{{url('socios/transferencias/ficha')}}/{{$transferencia->id}}" class="btn-xs btn-success" ><span class="glyphicon glyphicon-print"data-toggle="tooltip" data-placement="top" title="Imprimir"></span></a>                        
                     </td>                    
                 </tr>
                 @endforeach
@@ -174,11 +174,7 @@ $(function(){
            }
         });
        };
-        
-   
-   
-   
-   
+                    
    var validarnuevosocio = function(dninuevo) {              
        $.get("/socios/transferencias/nuevo/{term}",        
         {dni:dninuevo},
@@ -204,8 +200,7 @@ $(function(){
              }             
         });
    };
-   
-   
+      
    var validarbeneficiario = function(dnibeneficiario){
        var codigo=$("#codigo").val();
        $.get("/socios/transferencias/persona/{term}",        
@@ -336,6 +331,10 @@ var Eliminar = function(id,name)
     });
 };
 
+$(document).ready(function(){
+    $("#subtransferencias").addClass("active");
+    $("#menusocios").addClass('active');
+});
   
 </script>
 @stop

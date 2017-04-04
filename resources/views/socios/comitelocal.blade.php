@@ -65,10 +65,10 @@
                             <td>{{$comite_local->departamento}}</td>
                             <td>    
                                 @permission('editar local')
-                                    <a href="#"  OnClick='Edlocal({{$comite_local->id}});' data-toggle='modal' data-target='#myModal' class="btn-sm btn-primary"><span class="glyphicon glyphicon-pencil"data-toggle="tooltip" data-placement="top" title="Editars"></span></a>
+                                    <a href="#"  OnClick='Edlocal({{$comite_local->id}});' data-toggle='modal' data-target='#myModal' class="btn-xs btn-primary" data-toggle="tooltip" data-placement="top" title="Editar"><span class="glyphicon glyphicon-pencil"></span></a>
                                 @endpermission
                                 @permission('eliminar local')
-                                    <a href="#" onclick="EliLocal('{{$comite_local->id}}','{{$name}}')" class="btn-sm btn-danger"><span data-toggle="tooltip" data-placement="top" title="Eliminar" class="glyphicon glyphicon-remove"></span></a>
+                                    <a href="#" onclick="EliLocal('{{$comite_local->id}}','{{$name}}')" class="btn-xs btn-danger" data-toggle="tooltip" data-placement="top" title="Eliminar" ><span class="glyphicon glyphicon-remove"></span></a>
                                 @endpermission
                             </td>                    
                         </tr>
@@ -100,6 +100,11 @@
      cargarprovincia(event.target.value,"provincia");
  });
     
+    $(document).ready(function(){   
+        $("#menusocios").addClass('active');
+        $("#sububigeo").addClass('active');
+        $("#sublocal").addClass('active');        
+});
 </script>
 
 @stop

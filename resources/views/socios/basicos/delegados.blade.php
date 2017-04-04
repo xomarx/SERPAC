@@ -47,10 +47,10 @@
                             <td>{{$delegado->cargo_delegado}}</td>                                                        
                             <td>          
                                 @permission('editar delegados')
-                                <a href="#"  OnClick='EdDelegado({{$delegado->id}});' data-toggle='modal' data-target='#myModal' class="btn-sm btn-primary"><span class="glyphicon glyphicon-pencil"data-toggle="tooltip" data-placement="top" title="Editars"></span></a>
+                                <a href="#"  OnClick='EdDelegado({{$delegado->id}});' data-toggle='modal' data-target='#myModal' class="btn-xs btn-primary"><span class="glyphicon glyphicon-pencil"data-toggle="tooltip" data-placement="top" title="Editars"></span></a>
                                 @endpermission
                                 @permission('eliminar delegados')
-                                <a href="#" onclick="EliDelegado('{{$delegado->id}}','{{$name}}')" class="btn-sm btn-danger"><span data-toggle="tooltip" data-placement="top" title="Eliminar" class="glyphicon glyphicon-remove"></span></a>
+                                <a href="#" onclick="EliDelegado('{{$delegado->id}}','{{$name}}')" class="btn-xs btn-danger"><span data-toggle="tooltip" data-placement="top" title="Eliminar" class="glyphicon glyphicon-remove"></span></a>
                                 @endpermission
                             </td>                    
                         </tr>
@@ -64,4 +64,16 @@
 </div>
 
 @endsection
+
+@section('script')
+<script>
+    
+    $(document).ready(function(){
+       $("#subdelegados").addClass('active');
+       $("#subbasicos").addClass('active');
+       $("#menusocios").addClass('active');
+    });
+
+</script>
+@stop
 

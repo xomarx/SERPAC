@@ -48,10 +48,10 @@
                             <td>{{$directivo->cargo_directivo}}</td>                                                        
                             <td>    
                                 @permission('editar directivos')
-                                <a href="#"  OnClick='EdDirectivo({{$directivo->id}});' class="btn-sm btn-primary"><span class="glyphicon glyphicon-pencil"data-toggle="tooltip" data-placement="top" title="Editars"></span></a>
+                                <a href="#"  OnClick='EdDirectivo({{$directivo->id}});' class="btn-xs btn-primary"><span class="glyphicon glyphicon-pencil"data-toggle="tooltip" data-placement="top" title="Editars"></span></a>
                                 @endpermission
                                 @permission('eliminar directivos')
-                                    <a href="#" onclick="EliDirectivo('{{$directivo->id}}','{{$name}}')" class="btn-sm btn-danger"><span data-toggle="tooltip" data-placement="top" title="Eliminar" class="glyphicon glyphicon-remove"></span></a>
+                                    <a href="#" onclick="EliDirectivo('{{$directivo->id}}','{{$name}}')" class="btn-xs btn-danger"><span data-toggle="tooltip" data-placement="top" title="Eliminar" class="glyphicon glyphicon-remove"></span></a>
                                 @endpermission
                             </td>                    
                         </tr>
@@ -64,7 +64,15 @@
     <section id="conten-modal"></section>
     @endpermission
 </div>
+@stop
 
-
+@section('script')
+<script>
+    $(document).ready(function(){
+        $("#menusocios").addClass('active');
+        $("#subbasicos").addClass('active');
+        $("#subdirectivos").addClass('active');
+    });
+</script>
 @stop
 

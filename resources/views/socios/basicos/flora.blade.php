@@ -47,10 +47,10 @@
                             <td>{{$flora->flora}}</td>                                                        
                             <td>       
                                 @permission('editar floras')
-                                <a href="javascript:void(0);"  OnClick='EdFlora({{$flora->id}});' data-toggle='modal' data-target='#myModal' class="btn-sm btn-primary"><span class="glyphicon glyphicon-pencil"data-toggle="tooltip" data-placement="top" title="Editars"></span></a>
+                                <a href="javascript:void(0);"  OnClick='EdFlora({{$flora->id}});' data-toggle="tooltip" data-placement="top" title="Editar" class="btn-xs btn-primary"><span class="glyphicon glyphicon-pencil"></span></a>
                                 @endpermission
                                 @permission('eliminar floras')
-                                <a href="javascript:void(0);" onclick="EliFlora('{{$flora->id}}','{{$name}}')" class="btn-sm btn-danger"><span data-toggle="tooltip" data-placement="top" title="Eliminar" class="glyphicon glyphicon-remove"></span></a>                                                            
+                                <a href="javascript:void(0);" onclick="EliFlora('{{$flora->id}}','{{$name}}')" class="btn-xs btn-danger" data-toggle="tooltip" data-placement="top" title="Eliminar" ><span class="glyphicon glyphicon-remove"></span></a>                                                            
                                 @endpermission
                             </td>                    
                         </tr>
@@ -64,3 +64,13 @@
 </div>
 <section id="conten-modal"></section>
 @endsection
+@section('script')
+
+<script>
+$(document).ready(function(){
+        $("#menusocios").addClass('active');
+        $("#subbasicos").addClass('active');
+        $("#subfloras").addClass('active');
+    });
+</script>
+@stop

@@ -55,10 +55,10 @@
                             <td>{{$distrito->departamento}}</td>
                             <td>        
                                 @permission('editar distritos')
-                                <a href="javascript:void(0);"  OnClick='EdDistrito({{$distrito->id}});' class="btn-sm btn-primary"><span class="glyphicon glyphicon-pencil"data-toggle="tooltip" data-placement="top" title="Editars"></span></a>
+                                <a href="javascript:void(0);"  OnClick='EdDistrito({{$distrito->id}});' class="btn-xs btn-primary" data-toggle="tooltip" data-placement="top" title="Editar"><span class="glyphicon glyphicon-pencil"></span></a>
                                 @endpermission
                                 @permission('eliminar distritos')
-                                <a href="javascript:void(0);" onclick="EliDistrito('{{$distrito->id}}','{{$name}}')" class="btn-sm btn-danger"><span data-toggle="tooltip" data-placement="top" title="Eliminar" class="glyphicon glyphicon-remove"></span></a>                                                            
+                                <a href="javascript:void(0);" onclick="EliDistrito('{{$distrito->id}}','{{$name}}')" class="btn-xs btn-danger" data-toggle="tooltip" data-placement="top" title="Eliminar"><span class="glyphicon glyphicon-remove"></span></a>                                                            
                                 @endpermission
                             </td>                    
                         </tr>
@@ -77,6 +77,12 @@
 <script>  
  $("#departamento").change(function(event){     
      cargarprovincia(event.target.value,"provincia");     
- });  
+ });
+ 
+ $(document).ready(function(){
+    $("#menusocios").addClass('active');
+    $("#sububigeo").addClass('active');
+    $("#subdistritos").addClass('active');
+ });
 </script>
 @stop

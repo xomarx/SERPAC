@@ -34,10 +34,10 @@
                     <td>{{ $pariente->name }}</td>
                     <td>      
                         @permission('editar parientes')
-                            <a style="cursor: pointer;" onclick="editPariente('{{$pariente->socios_codigo}}','{{$pariente->dni}}')" class="btn-sm btn-primary" data-toggle="tooltip" data-placement="top" title="Editar"><span class="glyphicon glyphicon-pencil"></span></a>
+                            <a style="cursor: pointer;" onclick="editPariente('{{$pariente->socios_codigo}}','{{$pariente->dni}}')" class="btn-xs btn-primary" data-toggle="tooltip" data-placement="top" title="Editar"><span class="glyphicon glyphicon-pencil"></span></a>
                         @endpermission
                         @permission('eliminar parientes')
-                        <a style="cursor: pointer;" onclick="ElimPariente('{{$pariente->dni}}','{{$pariente->socios_codigo}}')" data-toggle="tooltip" data-placement="top" title="Eliminar" class="btn-sm btn-danger"><span class="glyphicon glyphicon-remove"></span></a>
+                        <a style="cursor: pointer;" onclick="ElimPariente('{{$pariente->dni}}','{{$pariente->socios_codigo}}')" data-toggle="tooltip" data-placement="top" title="Eliminar" class="btn-xs btn-danger"><span class="glyphicon glyphicon-remove"></span></a>
                         @endpermission
 <!--<a data-toggle="modal" data-target="#pariente"><span class="glyphicon glyphicon-user" data-toggle="tooltip" data-placement="top" title="Parientes"></span></a>-->
                     </td>                    
@@ -47,7 +47,16 @@
         </table>
     </div>
 </div>
-
-@include('socios.formParientes')
+<section id="conten-modal"></section>
 @endpermission
+@stop
+
+@section('script')
+<script>
+    $(document).ready(function(){
+       $("#subparientes").addClass('active');
+       $("#menusocios").addClass('active');
+    });
+</script>    
+
 @stop

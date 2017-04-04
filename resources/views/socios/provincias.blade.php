@@ -22,7 +22,7 @@
                 <div class="text-danger" id="error_provincia"></div>
             </div>
             <div class="box-footer">
-                <input type="reset" value="Nuevo" class="btn btn-primary btn-sm m-t-10" id="nuevaprovincia">
+                <input type="reset" value="Nuevo" class="btn btn-primary btn-sm " id="nuevaprovincia">
                 {!!link_to('#', $title='Registrar', $attributes = ['id'=>'RegProvincia', 'class'=>'btn btn-primary btn-sm m-t-10'])!!}
             </div>
             {!! Form::close() !!} 
@@ -51,10 +51,10 @@
                             <td>{{$provincia->departamento}}</td>
                             <td>    
                                 @permission('editar provincias')
-                                <a href="#"  OnClick='EdProvincia({{$provincia->id}});' data-toggle='modal' data-target='#myModal' class="btn-sm btn-primary"><span class="glyphicon glyphicon-pencil"data-toggle="tooltip" data-placement="top" title="Editars"></span></a>
+                                <a href="javascript:void(0)"  OnClick='EdProvincia({{$provincia->id}});' data-toggle="tooltip" data-placement="top" title="Editar" class="btn-xs btn-primary"><span class="glyphicon glyphicon-pencil"></span></a>
                                 @endpermission
                                 @permission('eliminar provincias')
-                                <a href="#" onclick="EliProvincia('{{$provincia->id}}','{{$name}}')" class="btn-sm btn-danger"><span data-toggle="tooltip" data-placement="top" title="Eliminar" class="glyphicon glyphicon-remove"></span></a>                                                            
+                                <a href="javascript:void(0)" onclick="EliProvincia('{{$provincia->id}}','{{$name}}')" data-toggle="tooltip" data-placement="top" title="Eliminar"  class="btn-xs btn-danger"><span class="glyphicon glyphicon-remove"></span></a>                                                            
                             @endpermission
                             </td>                    
                         </tr>
@@ -68,4 +68,14 @@
 </div>
 
 <section id="conten-modal"></section>
+@stop
+@section('script')
+
+<script>
+$(document).ready(function(){
+        $("#menusocios").addClass('active');
+        $("#sububigeo").addClass('active');
+        $("#subprovincias").addClass('active');
+    });
+</script>
 @stop

@@ -133,6 +133,10 @@
         });        
     };   
     
+    $(document).ready(function(){
+       $("#subsocios").addClass('active');
+       $("#menusocios").addClass('active');
+    });
     
 </script>
 @endsection

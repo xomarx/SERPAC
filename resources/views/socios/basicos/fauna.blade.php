@@ -53,10 +53,10 @@
                 <td>{{$fauna->fauna}}</td>                                                        
                 <td>       
                     @permission('editar faunas')
-                    <a href="javascript:void(0);"  OnClick='EditFauna({{$fauna->id}});' class="btn-sm btn-primary"><span class="glyphicon glyphicon-pencil"data-toggle="tooltip" data-placement="top" title="Editars"></span></a>
+                    <a href="javascript:void(0);"  OnClick='EditFauna({{$fauna->id}});' class="btn-xs btn-primary"><span class="glyphicon glyphicon-pencil"data-toggle="tooltip" data-placement="top" title="Editars"></span></a>
                     @endpermission
                     @permission('eliminar faunas')
-                    <a href="javascript:void(0);" onclick="EliFauna('{{$fauna->id}}','{{$name}}')"class="btn-sm btn-danger" ><span data-toggle="tooltip" data-placement="top" title="Eliminar" class="glyphicon glyphicon-remove"></span></a>
+                    <a href="javascript:void(0);" onclick="EliFauna('{{$fauna->id}}','{{$name}}')"class="btn-xs btn-danger" ><span data-toggle="tooltip" data-placement="top" title="Eliminar" class="glyphicon glyphicon-remove"></span></a>
                     @endpermission
                 </td>                    
             </tr>
@@ -70,3 +70,14 @@
 </div>
 <section id="conten-modal"></section>
 @endsection
+
+@section('script')
+
+<script>
+$(document).ready(function(){
+        $("#menusocios").addClass('active');
+        $("#subbasicos").addClass('active');
+        $("#subfaunas").addClass('active');
+    });
+</script>
+@stop

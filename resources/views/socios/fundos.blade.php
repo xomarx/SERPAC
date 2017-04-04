@@ -34,10 +34,10 @@
                     <td>{{$fundo->fecha}}</td>                                                        
                     <td>       
                         @permission('editar fundos')
-                        <a href="#"  OnClick='EditarFundo({{$fundo->id}});' class="btn-sm btn-primary" data-toggle="tooltip" data-placement="top" title="Editar Fundo"><span class="glyphicon glyphicon-pencil"></span></a>
+                        <a href="#"  OnClick='EditarFundo({{$fundo->id}});' class="btn-xs btn-primary" data-toggle="tooltip" data-placement="top" title="Editar Fundo"><span class="glyphicon glyphicon-pencil"></span></a>
                         @endpermission
                         @permission('eliminar fundos')
-                        <a href="#" onclick="EliminarFundo('{{$fundo->id}}','{{$name}}')" class="btn-sm btn-danger"><span data-toggle="tooltip" data-placement="top" title="Eliminar" class="glyphicon glyphicon-remove"></span></a>                                                            
+                        <a href="#" onclick="EliminarFundo('{{$fundo->id}}','{{$name}}')" class="btn-xs btn-danger"><span data-toggle="tooltip" data-placement="top" title="Eliminar" class="glyphicon glyphicon-remove"></span></a>                                                            
                         @endpermission
                     </td>                    
                 </tr>
@@ -167,6 +167,11 @@ var AgregInmueble = function(){
         $("#tablainmueble").append(tds);
         $("#inmueble option:selected").remove();
     };
+    
+    $(document).ready(function(){
+        $("#subfundos").addClass('active');
+        $("#menusocios").addClass('active');
+    });
      
 </script>
 @stop

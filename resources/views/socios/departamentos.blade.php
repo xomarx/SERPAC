@@ -47,10 +47,10 @@
                                     <td>{{$departamento->departamento}}</td>                                                        
                                     <td>
                                         @permission('editar departamentos')
-                                        <a href="#"  OnClick='btneditar({{$departamento->id}});' data-toggle='modal' data-target='#myModal' class="btn-sm btn-primary"><span class="glyphicon glyphicon-pencil"data-toggle="tooltip" data-placement="top" title="Editars"></span></a>
+                                        <a href="#"  OnClick='btneditar({{$departamento->id}});' data-toggle="tooltip" data-placement="top" title="Editar" class="btn-xs btn-primary"><span class="glyphicon glyphicon-pencil"></span></a>
                                         @endpermission
                                         @permission('eliminar departamentos')
-                                        <a href="#" onclick="Eliminar('{{$departamento->id}}','{{$name}}')" class="btn-sm btn-danger"><span data-toggle="tooltip" data-placement="top" title="Eliminar" class="glyphicon glyphicon-remove"></span></a>
+                                        <a href="#" onclick="Eliminar('{{$departamento->id}}','{{$name}}')" data-toggle="tooltip" data-placement="top" title="Eliminar"  class="btn-xs btn-danger"><span class="glyphicon glyphicon-remove"></span></a>
                                         @endpermission
                                     </td>                    
                                 </tr>
@@ -66,3 +66,13 @@
 
 @endsection
 
+@section('script')
+
+<script>
+$(document).ready(function(){
+        $("#menusocios").addClass('active');
+        $("#sububigeo").addClass('active');
+        $("#subdepartamentos").addClass('active');
+    });
+</script>
+@stop

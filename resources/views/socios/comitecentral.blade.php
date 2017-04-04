@@ -63,10 +63,10 @@
                                     <td>{{$comite_central->departamento}}</td>
                                     <td>   
                                         @permission('editar central')
-                                        <a href="#"  OnClick='Edcentral({{$comite_central->id}});' class="btn-sm btn-primary"><span class="glyphicon glyphicon-pencil"data-toggle="tooltip" data-placement="top" title="Editars"></span></a>                                        
+                                        <a href="#"  OnClick='Edcentral({{$comite_central->id}});' class="btn-xs btn-primary" data-toggle="tooltip" data-placement="top" title="Editar"><span class="glyphicon glyphicon-pencil"></span></a>                                        
                                         @endpermission
                                         @permission('eliminar central')
-                                        <a href="#" onclick="EliCentral('{{$comite_central->id}}','{{$name}}')" class="btn-sm btn-danger"><span data-toggle="tooltip" data-placement="top" title="Eliminar" class="glyphicon glyphicon-remove"></span></a>                                                            
+                                        <a href="#" onclick="EliCentral('{{$comite_central->id}}','{{$name}}')" class="btn-xs btn-danger" data-toggle="tooltip" data-placement="top" title="Eliminar" ><span class="glyphicon glyphicon-remove"></span></a>                                                            
                                     @endpermission
                                     </td>                    
                                 </tr>
@@ -93,7 +93,13 @@
      cargarprovincia(event.target.value,"provincia")     
  });
 
-    
+$(document).ready(function(){
+   
+    $("#menusocios").addClass('active');
+    $("#sububigeo").addClass('active');
+    $("#subcentral").addClass('active');
+     
+});
 </script>
 
 @stop
