@@ -16,6 +16,8 @@ class egresoscontroller extends Controller
      */
     public function index()
     {
+        if(!auth()->user()->can('ver pagos'))
+            return response ()->view ('errors.403');
         $egresos = \App\Models\Tesoreria\Egreso::listaEgresos();
         $tipo_egresos = \App\Models\Tesoreria\Tipo_egreso::pluck('tipo_egreso','id');
         $almacenes = \App\Models\RRHH\Sucursal::pluck('sucursal','sucursalId');
@@ -41,6 +43,8 @@ class egresoscontroller extends Controller
     public function store(Requests\Tesoreria\GastosAcopioCreateRequest $request)
     {
         if($request->ajax()){
+            if(!auth()->user()->can('crear pagos'))
+                return response ()->view ('errors.403-content',[],403);
             $gastos = \App\Models\Tesoreria\Egreso::create([
                 'fecha'=>  \Carbon\Carbon::parse($request->fecha),
                 'monto'=>$request->monto,
@@ -87,13 +91,19 @@ class egresoscontroller extends Controller
     public function update(Request $request, $id)
     {
         //
-        $gastos = \App\Models\Tesoreria\Egreso::FindOrFail($id);
-        $gastos->estado = 'ANULADO';
-        $gastos->motivo = strtoupper($request->motivo);
-        $gastos->users_id= \Illuminate\Support\Facades\Auth::user()->id;
-        $gastos->save();
-        if($request) return response ()->json (['success'=>true]);
-        else return response ()->json (['success'=>false]);
+        if($request->ajax()) {
+            if(!auth()->user()->can('eliminar pagos'))
+                return response ()->view ('errors.403-content',[],403);
+            $gastos = \App\Models\Tesoreria\Egreso::FindOrFail($id);
+            $gastos->estado = 'ANULADO';
+            $gastos->motivo = strtoupper($request->motivo);
+            $gastos->users_id = \Illuminate\Support\Facades\Auth::user()->id;
+            $gastos->save();
+            if ($request)
+                return response()->json(['success' => true]);
+            else
+                return response()->json(['success' => false]);
+        }
     }
 
     /**

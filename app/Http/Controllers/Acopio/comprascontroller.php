@@ -33,10 +33,19 @@ class comprascontroller extends Controller
     public function index()
     {
         //
+        if(!auth()->user()->can('ver compras'))
+            return response()->view ('errors.403');
         $compras = \App\Models\Acopio\Compra::listaCompras();
+                        
+        return view('Acopio.compras',['compras'=>$compras]);
+    }
+    
+    public function modalCompras(){
+        if(!auth()->user()->can('crear compras'))
+            return response ()->view ('errors.403-modal');
         $condicions = Condicion::pluck('condicion','id'); 
-        $comite = \App\Models\Socios\Comites_Locale::pluck('comite_local','id');                
-        return view('Acopio.compras',['compras'=>$compras,'condicions'=>$condicions,'comite'=>$comite]);
+        $comite = \App\Models\Socios\Comites_Locale::pluck('comite_local','id');
+        return response()->view('Acopio.modalcompras',['condicions'=>$condicions,'comite'=>$comite]);
     }
 
     /**
@@ -57,7 +66,8 @@ class comprascontroller extends Controller
      */
     public function store(Requests\Acopio\ComprasCreateRequest $request)
     {
-        //
+        if(!auth()->user()->can('crear compras'))
+            return response()->view ('errors.403-content',[],403);
         $date = \Carbon\Carbon::parse($request->fecha);
         if($request->ajax())
         {
@@ -88,14 +98,10 @@ class comprascontroller extends Controller
                 'nosocios_dni'=>$request->dni,
                 'users_id'=>  \Illuminate\Support\Facades\Auth::user()->id
             ]);                        
-            if($compra)
-            {
-                return response()->json(['success'=>'true','message'=>'Se realiso la Compra correctamente']);
-            }
-            else
-            {
-                return response()->json(['success'=>'false','message'=>'No se realizo ninguna compra']);
-            }
+            if($compra)            
+                return response()->json(['success'=>true,'message'=>'Se realiso la Compra correctamente']);            
+            else            
+                return response()->json(['success'=>false,'message'=>'No se realizo ninguna compra']);            
         }
     }
 
@@ -133,17 +139,19 @@ class comprascontroller extends Controller
         //
         if($request->ajax())
         {
+            if(!auth()->user()->can('eliminar compras'))
+                return response()->view ('errors.403',[],403);
             $compra = \App\Models\Acopio\Compra::FindOrFail($id);
             $compra->estado = 'ANULADO';
             $compra->motivo = $request->motivo;
             $compra->save();                                   
             if($compra)
             {
-                return response()->json(['success'=>'true']);
+                return response()->json(['success'=>true]);
             }
             else
             {
-                return response()->json(['success'=>'false']);
+                return response()->json(['success'=>false]);
             }
         }
         

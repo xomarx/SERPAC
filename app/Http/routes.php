@@ -132,12 +132,15 @@ Route::group(['middleware' => ['auth']], function () {
     
     route::resource('Acopio/Fondos-Acopio','Acopio\recepcion_fondoscontroller');
 //    route::resource('Acopio/PlanillaSemanal/{id}','Acopio\planillacontroller@planillasemanal');
+    route::resource('Acopio/ListaPlanillaSemanal','Acopio\planillacontroller@ListaSemanal');
+    route::resource('Acopio/newplanillasemanal','Acopio\planillacontroller@newPlanillaSemanal');
     route::resource('Acopio/Planilla-Semanal','Acopio\planillacontroller');
     route::resource('Acopio/Planilla-Mensual','Acopio\planillacontroller@cierremensual');//cierremensual
     
     
     route::resource('nosocios','Acopio\comprascontroller@autoCompleteNosocios');
-    route::resource('Acopio/Compra-Grano','Acopio\comprascontroller');        
+    route::resource('Acopio/modalcompras','Acopio\comprascontroller@modalCompras');
+    route::resource('Acopio/Compra-Grano','Acopio\comprascontroller');
     route::resource('Acopio/Tara','Acopio\tarascontroller');
     route::resource('Acopio/Transporte','Acopio\transportecontroller');
     route::resource('Acopio/Excel','Acopio\planillacontroller@excel');
@@ -170,7 +173,10 @@ Route::group(['middleware' => ['auth']], function () {
             
     route::resource('Creditos/Creditos-Financieros','Creditos\prestamoscontroller');
             
-    route::resource('Configuracion','Configuracion\documentoController');    
+    route::resource('Configuracion','Configuracion\documentoController');
+    
+    route::resource('Informes/Padron-Socios','Informes\ListaInformescontroller@padronsocios');
+    route::resource('Informes','Informes\ListaInformescontroller');
         
     route::get('codrecibos/{id}','Configuracion\tipo_documentoController@getnumerodocumento');
     route::resource('codrecibos','Configuracion\tipo_documentoController@autoCompleteCodRecibo');//

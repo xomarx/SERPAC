@@ -3,11 +3,13 @@
     RECEPCION DE FONDOS DE ACOPIO
 @stop
 @section('main-content')
+@permission('ver fondos')
 <div class="box box-solid box-primary">
-    <div class="box-header">
-        <a id="nuevasucursal" data-toggle='modal' data-target='#modalsucursal' class="btn btn-primary btn-sm m-t-10" >INPORTAR DATOS  <span class="glyphicon glyphicon-import"data-toggle="tooltip" data-placement="top" title="Nueva Sucursal"></span></a>
+    <div class="box-header">        
+        <a id="nuevasucursal" data-toggle='modal' data-target='#modalsucursal' class="btn btn-dropbox btn-sm" >INPORTAR DATOS  <span class="glyphicon glyphicon-import"data-toggle="tooltip" data-placement="top" title="Nueva Sucursal"></span></a>        
     </div>
     <div class="box-body">
+        <input id="token" type="hidden" name="_token" value="{{ csrf_token() }}" >
         <table class="table table-responsive" id="myTable" >
             <thead>
             <th>DNI</th>
@@ -16,7 +18,7 @@
             <th>MONTO</th>
             <th>RECEPCION</th>
             <th>ESTADO</th>                                                      
-            <th>ACCIONES</th>            
+            <th>ACCION</th>            
             </thead>
             <tbody>
                 @foreach($recepcions as $recepcion)
@@ -34,12 +36,14 @@
                         @endif
                     </td>
                     <td>
-                        <a href="#"   data-toggle='modal' data-target='#myModal' class="btn-sm btn-success"><span class="glyphicon glyphicon-eye-open"data-toggle="tooltip" data-placement="top" title="Ver"></span></a>
+                        <a href="#"   data-toggle='modal' data-target='#myModal' class="btn-xs btn-success"><span class="glyphicon glyphicon-eye-open"data-toggle="tooltip" data-placement="top" title="Ver"></span></a>
+                        @permission('crear fondos')
                         @if($recepcion->estado == null)
-                        <a OnClick='RecepConform({{$recepcion->id}});' class="btn-sm btn-primary"><span data-toggle="tooltip" data-placement="top" title="Grabar" class="glyphicon glyphicon-saved"></span></a>
+                            <a OnClick='RecepConform({{$recepcion->id}});' class="btn-xs btn-primary" data-toggle="tooltip" data-placement="top" title="Grabar" ><span class="glyphicon glyphicon-saved"></span></a>
                         @else
-                        <a class="btn-sm btn-primary"><span data-toggle="tooltip" data-placement="top" title="Grabar" class="glyphicon glyphicon-saved"></span></a>
+                            <a class="btn-xs btn-primary"  data-toggle="tooltip" data-placement="top" title="Grabar"><span class="glyphicon glyphicon-saved"></span></a>
                         @endif
+                        @endpermission
                     </td>
                 </tr>
                 @endforeach
@@ -47,22 +51,24 @@
         </table>
     </div>
 </div>
+<section id="conten-modal"></section>
+@endpermission
 
+@permission('crear fondos')
 
 <div id="myModal" class="modal fade" role="dialog">
   <div class="modal-dialog">
-
     <!-- Modal content-->
-    <div class="modal-content">
+    <div class="modal-content" id="error-modal">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
         <h4 class="modal-title">RECEPCION DE FONDOS</h4>
       </div>
       <div class="modal-body">
           {!! Form::open(['id'=>'form']) !!}
-          <input id="token" type="hidden" name="_token" value="{{ csrf_token() }}" >
+          
           <input type="hidden" id="id">
-          <div class="col-lg-3 form-group-sm">
+          <div class="col-md-3 form-group-sm">
               {!! Form::label('monto','Monto:',['class' => 'control-label'])!!}                    
               {!! Form::text('monto',null,['id'=>'monto','class'=>'form-control','placeholder'=>'Departamento'])!!}
           </div>
@@ -73,11 +79,22 @@
           {!! Form::close() !!}                   
       </div>
       <div class="modal-footer">          
-          {!!link_to('#', $title='Registrar', $attributes = ['id'=>'RegRecepcion', 'class'=>'btn btn-primary btn-sm m-t-10'])!!}
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          {!!link_to('#', $title='Registrar', $attributes = ['id'=>'RegRecepcion', 'class'=>'btn btn-dropbox '])!!}
+            <button type="button" class="btn btn-default" data-dismiss="modal">Salir</button>
       </div>
     </div>
 
   </div>
 </div>
+@endpermission
+@stop
+
+@section('script')
+<script>
+    $(document).ready(function(){
+       $("#menuacopio").addClass('active');
+       $("#subfondos").addClass('active');
+    });
+</script>
+
 @stop

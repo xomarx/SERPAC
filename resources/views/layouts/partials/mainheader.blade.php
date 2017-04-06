@@ -35,7 +35,7 @@
                     <li id="menucertificacion"><a href="{{ url('/Creditos/Certificacion') }}">Certificacion</a></li>
                     <li id="menutesoreria"><a href="{{ url('/Tesoreria/Distribucion-Fondos') }}">Tesoreria</a></li>
                     <li id="menucontabilidad"><a href="{{ url('/Creditos/Contabilidad') }}">Contabilidad</a></li>
-                    <li id="menuinformes"><a href="{{ url('/Creditos/Informes') }}">Informes</a></li>
+                    <li id="menuinformes" ><a href="{{ url('/Informes') }}">Informes <i class="glyphicon glyphicon-stats"></i></a></li>
                     <li id="menuconfiguracion"><a href="{{url('Configuracion') }}">Configuracion</a></li>
                 </ul>                                                                       
                 <ul class="navbar-custom-menu">

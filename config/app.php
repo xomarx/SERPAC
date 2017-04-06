@@ -166,6 +166,7 @@ return [
         Barryvdh\DomPDF\ServiceProvider::class,        
         Zizaco\Entrust\EntrustServiceProvider::class,  
         Yajra\Datatables\DatatablesServiceProvider::class,
+        Khill\Lavacharts\Laravel\LavachartsServiceProvider::class,        
     ],
 
     /*
@@ -222,6 +223,7 @@ return [
         'PDF' => Barryvdh\DomPDF\Facade::class,        
         'Entrust'   => Zizaco\Entrust\EntrustFacade::class,
         'Datatables' =>Yajra\Datatables\Facades\Datatables::class,
+        'Lava' => Khill\Lavacharts\Laravel\LavachartsFacade::class,
     ],
 
 ];

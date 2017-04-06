@@ -1,14 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\Acopio;
+namespace App\Http\Controllers\Informes;
 
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use App\Models\Acopio\Recepcion_fondo;
 
-class recepcion_fondoscontroller extends Controller
+class ListaInformescontroller extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -18,10 +17,11 @@ class recepcion_fondoscontroller extends Controller
     public function index()
     {
         //
-        if(!auth()->user()->can('ver fondos'))
-            return response ()->view ('errors.403');
-        $recepcions = Recepcion_fondo::listaRecepcio();
-        return view('Acopio.recepcion_fondos',  compact('recepcions',$recepcions));
+        return response()->view('Reportes.masterInform');
+    }
+    
+    public function padronsocios(){
+        return response()->view('Reportes.socios.PadronSocios');
     }
 
     /**
@@ -65,8 +65,6 @@ class recepcion_fondoscontroller extends Controller
     public function edit($id)
     {
         //
-        $recepcion = Recepcion_fondo::FindOrFail($id);
-        return response()->json($recepcion);
     }
 
     /**
@@ -79,24 +77,6 @@ class recepcion_fondoscontroller extends Controller
     public function update(Request $request, $id)
     {
         //
-        if($request->ajax())
-        {
-            if(!auth()->user()->can('crear fondos'))
-                return response ()->view ('errors.403-content',[],403);
-            $recepcio = Recepcion_fondo::FindOrFail($id);
-            $recepcio->monto = $request->monto;
-            $recepcio->estado= $request->estado;
-            $recepcio->motivo = $request->motivo;            
-            $recepcio->save();
-            if($recepcio)
-            {
-                return response()->json(['success'=>true]);
-            }
-            else
-            {
-                return response()->json(['success'=>false]);
-            }
-        }
     }
 
     /**

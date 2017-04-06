@@ -67,11 +67,22 @@ class planillacontroller extends Controller
      */
     public function index()
     {        
-        $planillas = \App\Models\Acopio\Planilla::listaPlanilla();
-        $condiciones = \App\Models\Certificacion\Condicion::all();
-        return view('Acopio.planillasemanal',['condiciones'=>$condiciones,'planillas'=>$planillas]);
+        $planillas = \App\Models\Acopio\Planilla::listaPlanilla();        
+        return view('Acopio.planillasemanal',['planillas'=>$planillas]);
     }
     
+    public function ListaSemanal(){
+        $planillas = \App\Models\Acopio\Planilla::listaPlanilla();        
+        return response()->view('Acopio.listaPlanillasemanal',['planillas'=>$planillas]);
+    }
+
+        public function newPlanillaSemanal(){
+        if(!auth()->user()->can('crear semanal'))
+            return response ()->view ('errors.403-content');
+        $condiciones = \App\Models\Certificacion\Condicion::all();
+        return response()->view('Acopio.newPlanillaSemanal',['condiciones'=>$condiciones]);
+    }
+
     public function cierremensual(){
         $condiciones = \App\Models\Certificacion\Condicion::all();
         return view('Acopio.cierremensual',['condiciones'=>$condiciones]);

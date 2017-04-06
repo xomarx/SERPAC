@@ -114,8 +114,7 @@ var cargardistrito = function (iddist,idsele) {
 
 //  recepcion de fondo
 
-var RecepConform = function(id)
-    {        
+var RecepConform = function(id) {        
         //  cargar datos
         var route = "/Acopio/Fondos-Acopio/"+id+"/edit";             
             $.get(route, function(data){                
@@ -148,7 +147,7 @@ var RecepConform = function(id)
         var estado = $("#estado").val();
         var motivo = $("#motivo").val();     
         var route = '/Acopio/Fondos-Acopio/'+id;        
-        var token = $("#token").val();                    
+        var token = $("input[name=_token]").val();                    
         $.ajax({
             url: route,
             headers: {'X-CSRF-TOKEN': token},
@@ -160,14 +159,13 @@ var RecepConform = function(id)
                 motivo:motivo
             },
             success: function (data) {
-                if (data.success)
-                
-                   document.location.reload();
-                
+                if (data.success)                
+                   document.location.reload();                
             },
             error:function(data){
-          if(data.status==403)
-                    activarmodal(0);
+                if ($("#estado").val() == 'CONFORME') activarmodal(0);
+                else if(data.status==403) $("#error-modal").html(data.responseText);
+                    
       }
         });
     };
@@ -179,6 +177,7 @@ var activarForm = function(id){
         else if(id == 4) {var route = 'ListMovcheques';}
         else if(id == 5) {var route = 'ListUsuarios';}
         else if(id == 6) {var route = 'transferencias/newtransferencias';}
+        else if(id == 7) {var route = 'ListaPlanillaSemanal';}
         $.get(route,function(data){            
             $("#contenidos-box").html(data);//                        
         });
@@ -192,7 +191,8 @@ var activarmodal = function(id){
         else if(id==5){ var route = 'modalCaja';}
         else if(id==6){ var route = '/socios/modalsocio';}
         else if(id==0){ var route = '/error-403';}
-        else if(id==7){ var route = 'modalempleado';}        
+        else if(id==7){ var route = 'modalempleado';}
+//        else if(id==8){ var route = 'modalcompras';}
         $.get(route,function(data){            
             $("#conten-modal").html(data);
             $("#modal-form").modal();
@@ -234,17 +234,8 @@ var RegSocio = function(){
             data: $("#formsocios").serialize(),
             success:function(data)
             {                
-                $("#alert-msj").fadeIn();
-              if(data.success){
-                $("#alert-txt").html(data.message);                
-                document.location.reload();
-              }
-              else{
-                  $("#alert-msj").removeClass('alert-success');
-                  $("#alert-msj").addClass('alert-danger');
-                  $("#alert-txt").html(data.message);                                                
-              }
-              $("#alert-msj").fadeOut(1000);
+                mensajeRegistro(data,'formsocios');
+                document.location.reload();             
             },
             error:function(data){
                 if(data.status == 403)                    
@@ -757,8 +748,7 @@ $("#nuevocargos").click(function(){
     $("#RegCargo").text("Registrar");
 });
 
-var EdiCargo = function(id) 
-    {      
+var EdiCargo = function(id) {      
         var route = "/RRHH/Cargos/"+id+"/edit";
         $.getJSON(route, function(data){
 //            alert(id);
@@ -938,8 +928,7 @@ $("#RegFauna").click(function (event)
     })
 });  
 
-var EditFauna = function(id) 
-    {                
+var EditFauna = function(id) {                
         $("#RegFauna").text("Actualizar");
         var route = "/socios/basicos/faunas/"+id+"/edit";                
         $.get(route, function(data){   
@@ -948,8 +937,7 @@ var EditFauna = function(id)
         });
     }
           
-var EliFauna = function(id,name)
-{ 
+var EliFauna = function(id,name){ 
      // ALERT JQUERY        
    $.alertable.confirm("<span style='color:#000'>¿Está seguro de eliminar el registro?</span>"+"<br><strong><span style='color:#ff0000'>"+name+"</span></strong></br>").then(function() {  
       var route = "/socios/basicos/faunas/"+id+"";      
@@ -1091,8 +1079,7 @@ var EdFlora = function(id){
         });
     }
            
-var EliFlora = function(id,name)
-{ 
+var EliFlora = function(id,name){ 
      // ALERT JQUERY        
    $.alertable.confirm("<span style='color:#000'>¿Está seguro de eliminar el registro?</span>"+"<br><strong><span style='color:#ff0000'>"+name+"</span></strong></br>").then(function() {  
       var route = "/socios/basicos/floras/"+id+"";      
@@ -1114,7 +1101,6 @@ var EliFlora = function(id,name)
       });          
     });
 };
-
 
 // ***********************************************************************   CRUD CARGO DELEGADO  ******************************************************
 $("#nuevodelegado").click(function(event){ $("#RegDelegado").text("Registrar"); });
@@ -1229,8 +1215,7 @@ $("#RegDirectivo").click(function(event) {
           });     
     });  
 
-var EdDirectivo = function(id) 
-    {              
+var EdDirectivo = function(id){              
         var route = "/socios/basicos/directivos/"+id+"/edit";
         $("#RegDirectivo").text("Actualizar");
         $.get(route, function(data){              
@@ -1239,8 +1224,7 @@ var EdDirectivo = function(id)
         });
     }
           
-var EliDirectivo = function(id,name)
-{      
+var EliDirectivo = function(id,name){      
    $.alertable.confirm("<span style='color:#000'>¿Está seguro de eliminar el registro?</span>"+"<br><strong><span style='color:#ff0000'>"+name+"</span></strong></br>").then(function() {  
       var route = "/socios/basicos/directivos/"+id+"";      
       var token = $("#token").val();
@@ -1409,7 +1393,6 @@ var EliProvincia = function(id,name){
       });          
     });
 };
-
 
 //   *************************************************************************************   CRUD DE DISTRITOS  *****************************************
 $("#nuevodistrito").click(function(event){ $("#RegDistrito").text("Registrar");
@@ -1645,7 +1628,6 @@ var EliLocal = function(id,name){
       });          
     });
 };
-
 
 //  **************************************************************************************  CRUD TECNICOS  **********************************************
 $("#nuevotecnicos").click(function () {
@@ -1928,8 +1910,7 @@ var EliEmpleado = function(id,name){
                     cargarAcopiador();
  });
 
-var cargarAcopiador = function ()
-{
+var cargarAcopiador = function (){
     var route = "/RRHH/Sucursal/Acopiador";     
      $.getJSON(route,function(data){
          $.each(data, function( index, value ){               
@@ -2124,11 +2105,9 @@ $("#RegRecibo").click(function(){
                 data: fields,
                 success: function (data)
                 {
-                    if (data.success == 'true')
+                    if (data.success)
                     {
-                        var msj = "<h4>"+data.message+"</h4>";
-                        $("#succesrecibo").html(msj);
-                        $("#msj-inforecibo").fadeIn();
+                        mensajeRegistro(data.message);
                         document.location.reload();
                     }
                     else{
@@ -2139,14 +2118,15 @@ $("#RegRecibo").click(function(){
                     }
                 },
                 error: function (data){
-                    
+                    if(data,status==403) $("#error-modal").html(data.responseText);
+                    else {
                     $("#error_codigo").html('');$("#error_recibo").html('');
                     var errors =  $.parseJSON(data.responseText);      
                     $.each(errors,function(index, value) {                          
                             if(index == 'codigo')$("#error_codigo").html(value);
                             else if(index == 'recibo')$("#error_recibo").html(value);                            
                       }); 
-                    
+                  }
                 }
     });
 });
@@ -2174,10 +2154,9 @@ var EliRecibo = function(id,name){
         type: 'DELETE',
         dataType: 'json',
         success: function(data){
-        if (data.success == 'true')
-        {
+        if (data.success)        
             document.location.reload();
-        }
+        
       }
       });          
     });
@@ -2185,53 +2164,161 @@ var EliRecibo = function(id,name){
 
 //  ************  CRUD COMPRAS  *************************************************************************************************************************
 
-$("#RegCompras").click(function(){
-       
-       var fields = $("#formcompras").serialize(); 
-       var route = "/Acopio/Compra-Grano";
-       console.log(fields);
-       var token = $("#token").val();       
-       $.ajax({
-           url: route,
-                headers: {'X-CSRF-TOKEN': token},
-                type: 'post',
-                datatype: 'json',                
-                data: fields,
-                success: function (data)
-                {
-                    if (data.success = 'true')
-                    {
-                        $("#modalcompra").fadeOut(500);
-                        document.location.reload();
-                    }
-                },
-                error: function (data){
-                    
-                    $("#error_acopio").html('');$("#error_paterno").html('');$("#error_socio").html('');
-                    $("#error_materno").html('');$("#error_nombres").html('');$("#error_codigo").html('');
-                    $("#error_dni").html('');$("#error_numero").html('');$("#error_comite").html('');$("#error_fecha").html('');
-                    $("#error_condicion").html('');$("#error_kilos").html('');$("#error_precio").html('');
-                    var errors =  $.parseJSON(data.responseText);      
-                    $.each(errors,function(index, value) {                          
-                            if(index == 'acopio')$("#error_acopio").html(value);
-                            else if(index == 'paterno')$("#error_paterno").html(value);
-                            else if(index == 'materno')$("#error_materno").html(value);
-                            else if(index == 'nombres')$("#error_nombres").html(value);
-                            else if(index == 'dni')$("#error_dni").html(value);
-                            else if(index == 'numero')$("#error_numero").html(value);
-                            else if(index == 'comite')$("#error_comite").html(value);
-                            else if(index == 'codigo')$("#error_codigo").html(value);
-                            else if(index == 'socio')$("#error_socio").html(value);
-                            else if(index == 'condicion')$("#error_condicion").html(value);
-                            else if(index == 'kilos')$("#error_kilos").html(value);
-                            else if(index == 'precio')$("#error_precio").html(value);
-                            else if(index == 'fecha')$("#error_fecha").html(value);
-                      }); 
-                    
+$("#nuevacompra").click(function(){
+//    activarmodal(8);
+var route = 'modalcompras';
+        $.get(route,function(data){            
+            $("#conten-modal").html(data);
+            loadcompras();
+            $("#modal-form").modal();
+        });
+    
+});
+
+    var loadcompras = function () {
+
+    $("#comite").select2({
+        alloClear: true
+    });
+
+    $("#dni").autocomplete({
+        minLength: 1,
+        autoFocus: true,
+        delay: 1,
+        source: "/nosocios",
+        select: function (event, ui) {
+            $("#paterno").val(ui.item.id);
+            $("#materno").val(ui.item.materno);
+            $("#nombres").val(ui.item.nombres);
+        }
+    });
+    $("#acopio").autocomplete({
+        minLength: 1,
+        autoFocus: true,
+        delay: 1,
+        source: "/RRHH/Sucursalsearch",
+        select: function (event, ui) {
+            $("#acopio").val(ui.item.value);
+            $("#sucursal").val(ui.item.sucursal);
+        }
+    });
+    $("#codrecibo").autocomplete({
+        minLength: 1,
+        autoFocus: true,
+        delay: 1,
+        source: "/codrecibos",
+        select: function (event, ui) {
+//               $("#numero").val(ui.item.value);
+            numerorecibo(ui.item.value);
+        }
+    });
+    $("#codigo").autocomplete({
+        minLength: 1,
+        autoFocus: true,
+        delay: 1,
+        source: "/socios/codigo",
+        select: function (event, ui) {            
+            $("#socio").val(ui.item.socio);
+            $("#codigo").val(ui.item.value);
+            $("#local").val(ui.item.local);
+        }
+    });
+    $("#socio").autocomplete({
+        minLength: 1,
+        autoFocus: true,
+        delay: 1,
+        source: "/socios/searchsocio",
+        select: function (event, ui) {            
+            $("#socio").val(ui.item.value);
+            $("#codigo").val(ui.item.id);
+            $("#local").val(ui.item.local);
+        }
+    });
+    $("#precio").keyup(function () {
+        if ($("#kilos").val() != '')
+        {
+            var monto = $("#precio").val() * $("#kilos").val();
+            monto = parseFloat(monto).toFixed(2);
+            $("#total").val('S/. ' + monto);
+        }
+    });
+    $("#kilos").keyup(function () {
+        if ($("#precio").val() != '')
+        {
+            var monto = $("#precio").val() * $("#kilos").val();
+            monto = parseFloat(monto).toFixed(2);
+            $("#total").val('S/. ' + monto);
+        }
+    });
+    $("#RegCompras").click(function () {
+
+        var fields = $("#formcompras").serialize();
+        var route = "/Acopio/Compra-Grano";
+        var token = $("input[name=_token]").val();
+        $.ajax({
+            url: route,
+            headers: {'X-CSRF-TOKEN': token},
+            type: 'post',
+            datatype: 'json',
+            data: fields,
+            success: function (data)
+            {
+
+                mensajeRegistro(data, 'formcompras');
+                document.location.reload();
+
+            },
+            error: function (data) {
+                if (data.status == 403)
+                    $("#error-modal").html(data.responseText);
+                else {
+                    $("#error_acopio").html('');
+                    $("#error_paterno").html('');
+                    $("#error_socio").html('');
+                    $("#error_materno").html('');
+                    $("#error_nombres").html('');
+                    $("#error_codigo").html('');
+                    $("#error_dni").html('');
+                    $("#error_numero").html('');
+                    $("#error_comite").html('');
+                    $("#error_fecha").html('');
+                    $("#error_condicion").html('');
+                    $("#error_kilos").html('');
+                    $("#error_precio").html('');
+                    var errors = $.parseJSON(data.responseText);
+                    $.each(errors, function (index, value) {
+                        if (index == 'acopio')
+                            $("#error_acopio").html(value);
+                        else if (index == 'paterno')
+                            $("#error_paterno").html(value);
+                        else if (index == 'materno')
+                            $("#error_materno").html(value);
+                        else if (index == 'nombres')
+                            $("#error_nombres").html(value);
+                        else if (index == 'dni')
+                            $("#error_dni").html(value);
+                        else if (index == 'numero')
+                            $("#error_numero").html(value);
+                        else if (index == 'comite')
+                            $("#error_comite").html(value);
+                        else if (index == 'codigo')
+                            $("#error_codigo").html(value);
+                        else if (index == 'socio')
+                            $("#error_socio").html(value);
+                        else if (index == 'condicion')
+                            $("#error_condicion").html(value);
+                        else if (index == 'kilos')
+                            $("#error_kilos").html(value);
+                        else if (index == 'precio')
+                            $("#error_precio").html(value);
+                        else if (index == 'fecha')
+                            $("#error_fecha").html(value);
+                    });
                 }
-       });
-       
-   });
+            }
+        });
+    });
+};
 
 var AnulCompra = function(id,name){                 
    $.alertable.prompt('<h3>Motivo de la Anulacion ? </h3>'+"<span style='color:#ff0000'>"+name+"</span>").then(function(data){       
@@ -2248,10 +2335,9 @@ var AnulCompra = function(id,name){
             },
             success: function (data) {
 
-                if (data.success == 'true')
-                {
+                if (data.success)                
                    document.location.reload();
-                }
+                
             },
             
         });
@@ -2420,7 +2506,7 @@ $("#RegtipoEgreso").click(function(){
 $("#RegEgresos").click(function(){        
         var route = "/Acopio/Gastos";
         var type = "POST";
-        var token=$("#token").val();
+        var token=$("input[name=_token]").val();
         var fields=$("#formegresos").serialize();        
         $.ajax({
             url:route,
@@ -2429,12 +2515,13 @@ $("#RegEgresos").click(function(){
             datatype: 'json',
             data: fields,            
             success:function(data){    
-                if(data.success == true){
-                    $("#modalegresos").fadeOut(1000);                    
+                    mensajeRegistro(data,'formegresos');
                     document.location.reload();                    
-                }
+                
             },
             error: function(data){
+                if(data.status) $("#error-modal").html(data.responseText);
+                else{
                 $("#error-fecha").html('');$("#error-monto").html('');$("#error-egresos").html('');$("#error-almacen").html('');
                 var errors =  $.parseJSON(data.responseText);      
                 $.each(errors,function(index, value) {                      
@@ -2444,6 +2531,7 @@ $("#RegEgresos").click(function(){
                             else if(index == 'almacen')$("#error-almacen").html(value);
                       });
             }
+        }
         });
     });
     
@@ -2451,17 +2539,19 @@ var EliGasto = function(id,nombre){
         $.alertable.prompt('<h3>Motivo de la Anulacion ? </h3>'+"<span style='color:#ff0000'>"+nombre+"</span>").then(function(data){                        
             var motivo = data.value;
             var route = "/Acopio/Gastos/"+id+"";            
-            var token = $("#token").val();            
+            var token = $("input[name=_token]").val();            
         $.ajax({
             url: route,
             headers: {'X-CSRF-TOKEN': token},
             type: 'PUT',
             dataType: 'json',
             data: { motivo:motivo },
-            success: function (data) {
-                if (data.success == true) document.location.reload();                
+            success: function (data) {                
+               if (data.success == true) document.location.reload();
             },
-            
+            error: function(data){
+                if(data.status==403) activarmodal(0);
+            }
         });
     });
    };
@@ -2814,6 +2904,41 @@ var EliGasto = function(id,nombre){
       });          
     });
    };
+   
+   //****************************************************************** **********************  PLANILLA SEMANAL ****************************************
+   
+   $("#nuevaplanilla").click(function () { 
+            if ($("#nuevaplanilla").text() == "NUEVO") {
+        $("#nuevaplanilla").text("LISTA")
+        $("#btnexportar").show();
+        $("#RegPlanilla").show();
+        var route = 'newplanillasemanal';
+        $.get(route, function (data) {
+            $("#contenidos-box").html(data);// 
+            $("#almacencod").autocomplete({
+                minLength: 1,
+                autoFocus: true,
+                delay: 1,
+                source: "/RRHH/Sucursalsearch",
+                select: function (event, ui) {
+                    console.log(ui.item);
+                    $("#firmaacopiador").html(ui.item.acopiador);
+                    $("#firmatecnico").html(ui.item.tecnico);
+                    cargarplanilla(ui.item.value);
+                }
+            });
+        });
+        loadSemanal();
+    } else {
+       
+        document.location.reload();
+    }
+
+
+
+});
+      
+      
    
 //   $(function(){
 //      $("#filecheque").on('change',function(){

@@ -36,9 +36,9 @@
                 </td>
             <td>
                 @if(in_array('editar_fondos',$permisos) )
-                {!!Form::checkbox('editar_fondos','editar_fondos',null,['class'=>'checkbox-inline','onclick'=>'asigpermiso("editar_fondos")','checked'])!!}
+                {!!Form::checkbox('editar_fondos','editar_fondos',null,['class'=>'checkbox-inline','disabled'=>'disabled','onclick'=>'asigpermiso("editar_fondos")','checked'])!!}
                 @else
-                {!!Form::checkbox('editar_fondos','editar_fondos',null,['class'=>'checkbox-inline','onclick'=>'asigpermiso("editar_fondos")'])!!}
+                {!!Form::checkbox('editar_fondos','editar_fondos',null,['class'=>'checkbox-inline','disabled'=>'disabled','onclick'=>'asigpermiso("editar_fondos")'])!!}
                 @endif
                 </td>
             <td>
@@ -50,9 +50,9 @@
                 </td>
             <td>
                 @if(in_array('eliminar_fondos',$permisos) )
-                    {!!Form::checkbox('eliminar_fondos','eliminar_fondos',null,['class'=>'checkbox-inline','onclick'=>'asigpermiso("eliminar_fondos")','checked'])!!}
+                    {!!Form::checkbox('eliminar_fondos','eliminar_fondos',null,['class'=>'checkbox-inline','disabled'=>'disabled','onclick'=>'asigpermiso("eliminar_fondos")','checked'])!!}
                 @else
-                    {!!Form::checkbox('eliminar_fondos','eliminar_fondos',null,['class'=>'checkbox-inline','onclick'=>'asigpermiso("eliminar_fondos")'])!!}
+                    {!!Form::checkbox('eliminar_fondos','eliminar_fondos',null,['class'=>'checkbox-inline','disabled'=>'disabled','onclick'=>'asigpermiso("eliminar_fondos")'])!!}
                 @endif
                 </td>
         </tr>
@@ -67,9 +67,9 @@
                 </td>
             <td>
                 @if(in_array('editar_compras',$permisos) )
-                {!!Form::checkbox('editar_compras','editar_compras',null,['class'=>'checkbox-inline','onclick'=>'asigpermiso("editar_compras")','checked'])!!}
+                {!!Form::checkbox('editar_compras','editar_compras',null,['class'=>'checkbox-inline','disabled'=>'disabled','onclick'=>'asigpermiso("editar_compras")','checked'])!!}
                 @else
-                {!!Form::checkbox('editar_compras','editar_compras',null,['class'=>'checkbox-inline','onclick'=>'asigpermiso("editar_compras")'])!!}
+                {!!Form::checkbox('editar_compras','editar_compras',null,['class'=>'checkbox-inline','disabled'=>'disabled','onclick'=>'asigpermiso("editar_compras")'])!!}
                 @endif
                 </td>
             <td>
@@ -99,9 +99,9 @@
                 </td>
             <td>
                 @if(in_array('editar_pagos',$permisos) )
-                {!!Form::checkbox('editar_pagos','editar_pagos',null,['class'=>'checkbox-inline','onclick'=>'asigpermiso("editar_pagos")','checked'])!!}
+                {!!Form::checkbox('editar_pagos','editar_pagos',null,['class'=>'checkbox-inline','disabled'=>'disabled','onclick'=>'asigpermiso("editar_pagos")','checked'])!!}
                 @else
-                {!!Form::checkbox('editar_pagos','editar_pagos',null,['class'=>'checkbox-inline','onclick'=>'asigpermiso("editar_pagos")'])!!}
+                {!!Form::checkbox('editar_pagos','editar_pagos',null,['class'=>'checkbox-inline','disabled'=>'disabled','onclick'=>'asigpermiso("editar_pagos")'])!!}
                 @endif
                 </td>
             <td>
@@ -123,10 +123,10 @@
         <tr>
             <td>Sub modulo de Planilla Semanal</td>
             <td>
-                @if(in_array('crear_semana',$permisos) )
-                {!!Form::checkbox('crear_semana','crear_semana',null,['class'=>'checkbox-inline','onclick'=>'asigpermiso("crear_semana")','checked'])!!}
+                @if(in_array('crear_semanal',$permisos) )
+                {!!Form::checkbox('crear_semanal','crear_semanal',null,['class'=>'checkbox-inline','onclick'=>'asigpermiso("crear_semanal")','checked'])!!}
                 @else
-                {!!Form::checkbox('crear_semana','crear_semana',null,['class'=>'checkbox-inline','onclick'=>'asigpermiso("crear_semana")'])!!}
+                {!!Form::checkbox('crear_semanal','crear_semanal',null,['class'=>'checkbox-inline','onclick'=>'asigpermiso("crear_semanal")'])!!}
                 @endif
                 </td>
             <td>

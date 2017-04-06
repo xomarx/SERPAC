@@ -48,10 +48,10 @@
                             <td>{{$area->area}}</td>                                                        
                             <td>      
                                 @permission('editar areas')
-                                <a href="#"  OnClick='EdiArea({{$area->id}});' data-toggle='modal' data-target='#myModal' class="btn-sm btn-primary"><span class="glyphicon glyphicon-pencil"data-toggle="tooltip" data-placement="top" title="Editars"></span></a>
+                                <a href="#"  OnClick='EdiArea({{$area->id}});' data-toggle='modal' data-target='#myModal' class="btn-xs btn-primary"><span class="glyphicon glyphicon-pencil"data-toggle="tooltip" data-placement="top" title="Editars"></span></a>
                                 @endpermission
                                 @permission('eliminar areas')
-                                <a href="#" onclick="EliArea('{{$area->id}}','{{$name}}')"  class="btn-sm btn-danger"><span data-toggle="tooltip" data-placement="top" title="Eliminar" class="glyphicon glyphicon-remove"></span></a>                                                            
+                                <a href="#" onclick="EliArea('{{$area->id}}','{{$name}}')"  class="btn-xs btn-danger"><span data-toggle="tooltip" data-placement="top" title="Eliminar" class="glyphicon glyphicon-remove"></span></a>                                                            
                                 @endpermission
                             </td>                    
                         </tr>
