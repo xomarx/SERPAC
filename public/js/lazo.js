@@ -2929,8 +2929,7 @@ var EliGasto = function(id,nombre){
             });
         });
         loadSemanal();
-    } else {
-       
+    } else {       
         document.location.reload();
     }
 
