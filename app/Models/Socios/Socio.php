@@ -156,4 +156,32 @@ class Socio extends Model
                 ->take(5)->get();
     }
     
+    public static function getcontActivos($anio,$mes,$estado,$day){
+        if($mes==0){
+            return  \App\Models\Socios\Socio::select(\Illuminate\Support\Facades\DB::raw('IFNULL(count(fec_asociado),0) as cont'))
+                    ->orderby('fec_asociado','asc')
+                    ->where('estado','=',$estado)
+                    ->whereyear('fec_asociado','=',$anio)
+                    ->first();
+        }
+        else if($day == 0){
+            return  \App\Models\Socios\Socio::select(\Illuminate\Support\Facades\DB::raw('IFNULL(count(fec_asociado),0) as cont'))
+                    ->orderby('fec_asociado','asc')
+                    ->where('estado','=',$estado)
+                    ->whereyear('fec_asociado','=',$anio)
+                    ->wheremonth('fec_asociado','=',$mes)
+                    ->first();
+        }
+        else{
+            return  \App\Models\Socios\Socio::select(\Illuminate\Support\Facades\DB::raw('IFNULL(count(fec_asociado),0) as cont'))
+                    ->orderby('fec_asociado','asc')
+                    ->where('estado','=',$estado)
+                    ->whereyear('fec_asociado','=',$anio)
+                    ->wheremonth('fec_asociado','=',$mes)
+                    ->whereday('fec_asociado','=',$day)
+                    ->first();
+        }
+            
+    }
+    
 }

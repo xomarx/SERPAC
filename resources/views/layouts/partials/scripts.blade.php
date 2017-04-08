@@ -16,6 +16,9 @@
 <script src="{{ asset('/plugins/datepicker/bootstrap-datepicker.js') }}" type="text/javascript"></script>
 <script src="{{ asset('/plugins/datepicker/locales/bootstrap-datepicker.es.js') }}" type="text/javascript"></script>
 
+<script src="{{ asset('/js/highcharts.js') }}" type="text/javascript"></script>
+<script src="{{ asset('/js/graficas.js') }}" type="text/javascript"></script>
+
 
 <script src="{{ asset('/js/jquery-alertable-master/jquery.alertable.js') }}" type="text/javascript"></script>
 

@@ -34,4 +34,40 @@ class Recepcion_fondo extends Model
                         ,'recepcion_fondos.estado')
                 ->get();
     }
+    
+    public static function listaRecFondos($anio,$mes){
+        if($anio==0)
+            return DB::table('recepcion_fondos')
+                ->join('distribucions','recepcion_fondos.distribucions_id','=','distribucions.id')
+                ->join('sucursales','distribucions.sucursales_sucursalId','=','sucursales.sucursalId')                
+                ->join('empleados','distribucions.tecnicos_empleados_empleadoId','=','empleados.empleadoId')
+                ->join('personas','empleados.personas_dni','=','personas.dni')
+                ->select('empleados.personas_dni','personas.paterno','personas.materno','personas.nombre',
+                        'sucursales.sucursal','recepcion_fondos.monto','recepcion_fondos.fecha','recepcion_fondos.id'
+                        ,'recepcion_fondos.estado')
+                ->get();
+        else if($mes==0)
+            return DB::table('recepcion_fondos')
+                ->join('distribucions','recepcion_fondos.distribucions_id','=','distribucions.id')
+                ->join('sucursales','distribucions.sucursales_sucursalId','=','sucursales.sucursalId')                
+                ->join('empleados','distribucions.tecnicos_empleados_empleadoId','=','empleados.empleadoId')
+                ->join('personas','empleados.personas_dni','=','personas.dni')
+                ->whereyear('recepcion_fondos.fecha','=',$anio)                
+                ->select('empleados.personas_dni','personas.paterno','personas.materno','personas.nombre',
+                        'sucursales.sucursal','recepcion_fondos.monto','recepcion_fondos.fecha','recepcion_fondos.id'
+                        ,'recepcion_fondos.estado')                
+                ->get();
+        else 
+        return DB::table('recepcion_fondos')
+                ->join('distribucions','recepcion_fondos.distribucions_id','=','distribucions.id')
+                ->join('sucursales','distribucions.sucursales_sucursalId','=','sucursales.sucursalId')                
+                ->join('empleados','distribucions.tecnicos_empleados_empleadoId','=','empleados.empleadoId')
+                ->join('personas','empleados.personas_dni','=','personas.dni')
+                ->whereyear('recepcion_fondos.fecha','=',$anio)
+                ->wheremonth('recepcion_fondos.fecha','=',$mes)
+                ->select('empleados.personas_dni','personas.paterno','personas.materno','personas.nombre',
+                        'sucursales.sucursal','recepcion_fondos.monto','recepcion_fondos.fecha','recepcion_fondos.id'
+                        ,'recepcion_fondos.estado')                
+                ->get();
+    }
 }

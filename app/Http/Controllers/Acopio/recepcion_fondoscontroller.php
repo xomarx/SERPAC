@@ -21,7 +21,34 @@ class recepcion_fondoscontroller extends Controller
         if(!auth()->user()->can('ver fondos'))
             return response ()->view ('errors.403');
         $recepcions = Recepcion_fondo::listaRecepcio();
-        return view('Acopio.recepcion_fondos',  compact('recepcions',$recepcions));
+        $anios = \App\Models\Socios\Socio::orderby('fec_asociado', 'asc')->first();
+        $resul[] = 'Todo los Años';
+        for ($i = 2016; $i <= \Carbon\Carbon::now()->format('Y'); $i++) {
+            $resul[$i] = $i;                                                   
+        }
+        setlocale(LC_TIME, 'spanish');
+        $meses[] = 'Todo los Meses';
+        for ($i = 1; $i <= 12; $i++) {
+            $meses[] = strftime("%B", mktime(0, 0, 0, $i, 1, 2000));
+        }
+        return view('Acopio.recepcion_fondos',  ['recepcions'=>$recepcions,'anios'=>$resul,'meses'=>$meses]);
+    }
+    
+    public function recepcionfondos($anio,$mes){
+        if(!auth()->user()->can('ver fondos'))
+            return response ()->view ('errors.403');
+        $recepcions = Recepcion_fondo::listaRecFondos($anio,$mes);
+        return view('Acopio.listaRecepcionFondos')->with('recepcions',$recepcions);
+    }
+
+    public function excelrecepcion(){
+        \Maatwebsite\Excel\Facades\Excel::create('Recepcion Fondos',function($excel){
+            $excel->setTitle('recepcion de fondos');
+            $excel->sheet('Fondos',function($sheet){
+                $recepciones = Recepcion_fondo::listaRecepcio();
+                $sheet->loadView('Acopio.listaRecepcionFondos',['recepcions'=>$recepciones]);
+            });
+        })->export('xls');
     }
 
     /**

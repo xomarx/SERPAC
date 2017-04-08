@@ -129,7 +129,8 @@ Route::group(['middleware' => ['auth']], function () {
     route::resource('RRHH/modaltecnicos','RRHH\tecnicoscontroller@modalTecnicos');
     route::resource('RRHH/Tecnicos','RRHH\tecnicoscontroller');
     
-    
+    route::get('Acopio/listaRecepcionFondos/{an?}/{mes?}','Acopio\recepcion_fondoscontroller@recepcionfondos');
+    route::resource('Acopio/ExcelRecepcion','Acopio\recepcion_fondoscontroller@excelrecepcion');
     route::resource('Acopio/Fondos-Acopio','Acopio\recepcion_fondoscontroller');
 //    route::resource('Acopio/PlanillaSemanal/{id}','Acopio\planillacontroller@planillasemanal');
     route::resource('Acopio/ListaPlanillaSemanal','Acopio\planillacontroller@ListaSemanal');
@@ -175,8 +176,10 @@ Route::group(['middleware' => ['auth']], function () {
             
     route::resource('Configuracion','Configuracion\documentoController');
     
+    route::get('Informes/grafica-socios/{a?}/{mes?}','Informes\ListaInformescontroller@grafico_socios');
     route::resource('Informes/Padron-Socios','Informes\ListaInformescontroller@padronsocios');
     route::resource('Informes','Informes\ListaInformescontroller');
+    route::resource('ReporpadronSocios','Informes\Repostecontroller@ReporpadronSocios');
         
     route::get('codrecibos/{id}','Configuracion\tipo_documentoController@getnumerodocumento');
     route::resource('codrecibos','Configuracion\tipo_documentoController@autoCompleteCodRecibo');//

@@ -178,6 +178,7 @@ var activarForm = function(id){
         else if(id == 5) {var route = 'ListUsuarios';}
         else if(id == 6) {var route = 'transferencias/newtransferencias';}
         else if(id == 7) {var route = 'ListaPlanillaSemanal';}
+        else if(id == 8) {var route = 'listaRecepcionFondos/'+$("#anio").val()+'/'+$("#mes").val();}
         $.get(route,function(data){            
             $("#contenidos-box").html(data);//                        
         });
@@ -2937,6 +2938,8 @@ var EliGasto = function(id,nombre){
 
 });
       
+      
+  
       
    
 //   $(function(){

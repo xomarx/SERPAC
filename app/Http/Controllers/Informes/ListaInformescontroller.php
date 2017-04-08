@@ -21,45 +21,59 @@ class ListaInformescontroller extends Controller
         return response()->view('Reportes.masterInform');
     }
     
-    public function padronsocios(){
-        $anios = \App\Models\Socios\Socio::orderby('fec_asociado','asc')->first();
-        for ($i = \Carbon\Carbon::parse($anios->fec_asociado)->format('Y');$i <= \Carbon\Carbon::now()->format('Y');$i++){
-            $resul[$i]= $i;
+    public function padronsocios() {
+        $anios = \App\Models\Socios\Socio::orderby('fec_asociado', 'asc')->first();
+        $resul[] = 'Todo los Años';
+        for ($i = \Carbon\Carbon::parse($anios->fec_asociado)->format('Y'); $i <= \Carbon\Carbon::now()->format('Y'); $i++) {
+            $resul[$i] = $i;                                                   
         }
-        setlocale(LC_TIME, 'spanish'); 
+        setlocale(LC_TIME, 'spanish');
         $meses[] = 'Todo los Meses';
-        for ($i=1;$i <= 12;$i++){
-            $meses[]=strftime("%B",mktime(0, 0, 0, $i, 1, 2000));
-        }        
-                
-        $departamentos = \App\Models\Socios\Departamento::pluck('departamento','id');
-        
-        $lava = new Lavacharts();
-        $socios = $lava->DataTable();
-        $socios->addDateColumn('Registrados')
-        ->addNumberColumn('Sales')
-         ->addNumberColumn('Expenses')
-         ->addNumberColumn('Net Worth')
-         ->addRow(['2009-1-1', 1100, 490, 1324])
-         ->addRow(['2010-1-1', 1000, 400, 1524])
-         ->addRow(['2011-1-1', 1400, 450, 1351])
-         ->addRow(['2012-1-1', 1250, 600, 1243])
-         ->addRow(['2013-1-1', 1100, 550, 1462]);
-        $lava->ComboChart('socios', $socios, [
-    'title' => 'Company Performance',
-    'titleTextStyle' => [
-        'color'    => 'rgb(123, 65, 89)',
-        'fontSize' => 16
-    ],
-    'legend' => [
-        'position' => 'in'
-    ],
-    'seriesType' => 'bars',
-    'series' => [
-        2 => ['type' => 'line']
-    ]
-]);
-        return response()->view('Reportes.socios.PadronSocios',['departamentos'=>$departamentos,'anios'=>$resul,'meses'=>$meses,'lava'=>$lava]);
+        for ($i = 1; $i <= 12; $i++) {
+            $meses[] = strftime("%B", mktime(0, 0, 0, $i, 1, 2000));
+        }
+
+        $departamentos = \App\Models\Socios\Departamento::pluck('departamento', 'id');
+                        
+        return response()->view('Reportes.socios.PadronSocios', ['departamentos' => $departamentos, 
+            'anios' => $resul, 'meses' => $meses]);
+    }
+    
+    public function grafico_socios($anio,$mes){
+        if ($anio == 0) {
+            $anios = \App\Models\Socios\Socio::orderby('fec_asociado', 'asc')->first();
+            for ($i = \Carbon\Carbon::parse($anios->fec_asociado)->format('Y'); $i <= \Carbon\Carbon::now()->format('Y'); $i++) {
+                $resul[] = $i;
+                $activos[] = \App\Models\Socios\Socio::getcontActivos($i, 0, 'ACTIVO',0)->cont;
+                $reinscrito[] = \App\Models\Socios\Socio::getcontActivos($i, 0, 'REINSCRITO',0)->cont;
+                $renunciante[] = \App\Models\Socios\Socio::getcontActivos($i, 0, 'RENUNCIANTE',0)->cont;
+                $retirado[] = \App\Models\Socios\Socio::getcontActivos($i, 0, 'RETIRADO',0)->cont;
+            }            
+        }
+        else if($mes==0){
+            setlocale(LC_TIME, 'spanish');
+            for ($i = 1; $i <= 12; $i++) {
+                $resul[] = strftime("%B", mktime(0, 0, 0, $i, 1, 2000));
+                $activos[] = \App\Models\Socios\Socio::getcontActivos($anio, $i, 'ACTIVO',0)->cont;
+                $reinscrito[] = \App\Models\Socios\Socio::getcontActivos($anio, $i, 'REINSCRITO',0)->cont;
+                $renunciante[] = \App\Models\Socios\Socio::getcontActivos($anio, $i, 'RENUNCIANTE',0)->cont;
+                $retirado[] = \App\Models\Socios\Socio::getcontActivos($anio, $i, 'RETIRADO',0)->cont;
+            }
+        }
+        else{
+            
+            for ($i = 1; $i <= date("t",mktime(0,0,0,$mes,1,$anio)); $i++) {
+                $resul[] = $i;
+                $activos[] = \App\Models\Socios\Socio::getcontActivos($anio, $mes, 'ACTIVO',$i)->cont;
+                $reinscrito[] = \App\Models\Socios\Socio::getcontActivos($anio, $mes, 'REINSCRITO',$i)->cont;
+                $renunciante[] = \App\Models\Socios\Socio::getcontActivos($anio, $mes, 'RENUNCIANTE',$i)->cont;
+                $retirado[] = \App\Models\Socios\Socio::getcontActivos($anio, $mes, 'RETIRADO',$i)->cont;
+            }
+        }
+
+        $data = ['anios' => $resul, 'activos' => $activos,'reinscrito' => $reinscrito,
+            'renunciante' => $renunciante, 'retirado' => $retirado];      
+        return json_encode($data);
     }
 
     /**

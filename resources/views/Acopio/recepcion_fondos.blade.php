@@ -5,50 +5,25 @@
 @section('main-content')
 @permission('ver fondos')
 <div class="box box-solid box-primary">
-    <div class="box-header">        
-        <a id="nuevasucursal" data-toggle='modal' data-target='#modalsucursal' class="btn btn-dropbox btn-sm" >INPORTAR DATOS  <span class="glyphicon glyphicon-import"data-toggle="tooltip" data-placement="top" title="Nueva Sucursal"></span></a>        
+    <div class="box-header"> 
+        <div class="col-sm-3">
+            <button  class="btn btn-dropbox dropdown-toggle" type="button" data-toggle="dropdown" id="btnexportar">EXPORTAR
+            <span class="caret"></span></button>
+            <ul class="dropdown-menu btn btn-github">
+                <li class="btn-dropbox"><a href="{{ url('/Acopio/ExcelRecepcion') }}">Exportar a Excel</a></li>
+                <li class="btn-dropbox" ><a href="{{ url('/Acopio/PdfRecepcion') }}">Exportar a PDF</a></li>        
+            </ul>
+        </div>         
+         <div class="col-sm-2" style="float: right">
+            {!! Form::select('mes',$meses,null,['id'=>'mes','class'=>'form-control']) !!} 
+        </div>   
+        <div class="col-sm-2" style="float: right">           
+            {!! Form::select('anio',$anios,null,['id'=>'anio','class'=>'form-control','placeholder'=>'Seleccione el Año']) !!} 
+        </div>
+                                              
     </div>
-    <div class="box-body">
-        <input id="token" type="hidden" name="_token" value="{{ csrf_token() }}" >
-        <table class="table table-responsive" id="myTable" >
-            <thead>
-            <th>DNI</th>
-            <th>TECNICO</th> 
-            <th>CENTRO DE ACOPIO</th>                            
-            <th>MONTO</th>
-            <th>RECEPCION</th>
-            <th>ESTADO</th>                                                      
-            <th>ACCION</th>            
-            </thead>
-            <tbody>
-                @foreach($recepcions as $recepcion)
-                <tr>
-                    <td>{{$recepcion->personas_dni }}</td>
-                    <td>{{$recepcion->paterno }} {{$recepcion->materno }} {{ $recepcion->nombre }}</td>
-                    <td>{{ $recepcion->sucursal }}</td>
-                    <td>{{ $recepcion->monto }}</td>
-                    <td>{{$recepcion->fecha }}</td>
-                    <td>
-                        @if($recepcion->estado == null)
-                        {!! Form::select('estado',['CONFORME'=>'Conforme','NO CONFORME'=>'No Conforme'],null,['id'=>'estado','placeholder'=>'Seleccione']) !!}
-                        @else
-                        {!! Form::select('estado',['CONFORME'=>'Conforme','NO CONFORME'=>'No Conforme'],null,['id'=>'estado','placeholder'=>$recepcion->estado,'disabled']) !!}
-                        @endif
-                    </td>
-                    <td>
-                        <a href="#"   data-toggle='modal' data-target='#myModal' class="btn-xs btn-success"><span class="glyphicon glyphicon-eye-open"data-toggle="tooltip" data-placement="top" title="Ver"></span></a>
-                        @permission('crear fondos')
-                        @if($recepcion->estado == null)
-                            <a OnClick='RecepConform({{$recepcion->id}});' class="btn-xs btn-primary" data-toggle="tooltip" data-placement="top" title="Grabar" ><span class="glyphicon glyphicon-saved"></span></a>
-                        @else
-                            <a class="btn-xs btn-primary"  data-toggle="tooltip" data-placement="top" title="Grabar"><span class="glyphicon glyphicon-saved"></span></a>
-                        @endif
-                        @endpermission
-                    </td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
+    <div class="box-body" id="contenidos-box">        
+        @include('Acopio.listaRecepcionFondos')
     </div>
 </div>
 <section id="conten-modal"></section>
@@ -94,6 +69,14 @@
     $(document).ready(function(){
        $("#menuacopio").addClass('active');
        $("#subfondos").addClass('active');
+    });
+    
+    $("#anio").change(function (){
+        activarForm(8);
+    });
+    $("#mes").change(function (){
+        activarForm(8);
+        
     });
 </script>
 
