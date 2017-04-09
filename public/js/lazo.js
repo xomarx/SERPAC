@@ -156,6 +156,7 @@ var activarForm = function(id){
         else if(id == 6) {var route = 'transferencias/newtransferencias';}
         else if(id == 7) {var route = 'ListaPlanillaSemanal';}
         else if(id == 8) {var route = 'listaRecepcionFondos/'+$("#anio").val()+'/'+$("#mes").val();}
+        else if(id == 9) {var route = 'ListaDistribucion';}
         $.get(route,function(data){            
             $("#contenidos-box").html(data);//                        
         });
@@ -721,7 +722,7 @@ var RegTransferencia = function (){
           })
 };
 
-//  ************************   CRUD CARGOS  **************************************************************************************************************
+//  *************************************************************************************************   CRUD CARGOS  *************************************
 $("#nuevocargos").click(function(){
     $("#RegCargo").text("Registrar");
 });
@@ -795,7 +796,7 @@ var EliCArgo = function(id,name){
     });
 };
 
-// ********************************************************  CRUD AREAS *********************************************************************************
+// **************************************************************************************************  CRUD AREAS ***************************************
 
 $("#nuevaarea").click(function (){
     $("#RegArea").text('Registrar');$("#area").val('');
@@ -1875,7 +1876,7 @@ var EliEmpleado = function(id,name){
     });
 };
 
-// ************************   CRUD DE CENTROS DE ACOPIO *************************************************************************************************
+// ****************************************************************************************   CRUD DE CENTROS DE ACOPIO *********************************
  $("#nuevasucursal").click(function(event){     
      $("#RegSucursal").text('Registrar');   $("#error_codigoId").html('');$("#error_area").html('');$("#error_telefono").html('');
                     $("#error_sucursal").html('');$("#error_fax").html('');
@@ -1998,7 +1999,7 @@ var EliSucursal = function(id,name){
 };        
         
 
-// ****************     DISTRIBUCION FONDOS DE ACOPIO ***************************************************************************************************
+// **********************************************************************************     DISTRIBUCION FONDOS DE ACOPIO *********************************
 var AnulDistribucion = function(id,name){             
     // ALERT JQUERY     
    $.alertable.prompt('<h3>Motivo de la Anulacion ? </h3>'+"<span style='color:#ff0000'>"+name+"</span>").then(function(data){       
@@ -2029,7 +2030,7 @@ $("#RegDistribucion").click(function(){
     
       var fields = $("#formfondosdistri").serialize();
     var route = "/Tesoreria/Distribucion-Fondos";
-      var token = $("#token").val();       
+      var token = $("input[name=_token]").val();       
       $.ajax({
                 url: route,
                 headers: {'X-CSRF-TOKEN': token},
@@ -2038,16 +2039,13 @@ $("#RegDistribucion").click(function(){
                 data: fields,
                 success: function (data)
                 {
-                    if (data.success == 'true')
-                    {
-                        var msj = "<h4>" + data.message + "</h4>";
-                        $("#msjtextodistribucion").html(msj);
-                        $("#msjdistribucion").fadeIn();
-                        document.location.reload();
-                    }
+                    mensajeRegistro(data,'formfondosdistri');
+                    activarForm(9);
                 },
                 error: function (data)
-                {                               
+                {             
+                    if(data.status) $("#error-modal").html(data.responseText);
+                    else{
                     $("#error_tecnico").html('');$("#error_sucursal").html('');$("#error_monto").html('');
                     $("#error_fecha").html('');                    
                     var errors = $.parseJSON(data.responseText);
@@ -2057,7 +2055,7 @@ $("#RegDistribucion").click(function(){
                         else if (index == 'fecha')$("#error_fecha").html(value);
                         else if (index == 'monto')$("#error_monto").html(value);                        
                     }); 
-                    
+                }
                 }            
             });
 });

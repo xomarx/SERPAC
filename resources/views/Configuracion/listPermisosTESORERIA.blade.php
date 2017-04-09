@@ -28,18 +28,15 @@
         <tr>
             <td>Sub modulo de Distribucion de Acopio </td>
             <td>
-                @if(in_array('crear_disribucion',$permisos) )
-                    {!!Form::checkbox('crear_disribucion','crear_disribucion',null,['class'=>'checkbox-inline','onclick'=>'asigpermiso("crear_disribucion")','checked'])!!}
+                @if(in_array('crear_distribucion',$permisos) )
+                    {!!Form::checkbox('crear_distribucion','crear_distribucion',null,['class'=>'checkbox-inline','onclick'=>'asigpermiso("crear_distribucion")','checked'])!!}
                 @else
-                    {!!Form::checkbox('crear_disribucion','crear_disribucion',null,['class'=>'checkbox-inline','onclick'=>'asigpermiso("crear_disribucion")'])!!}
+                    {!!Form::checkbox('crear_distribucion','crear_distribucion',null,['class'=>'checkbox-inline','onclick'=>'asigpermiso("crear_distribucion")'])!!}
                 @endif
                 </td>
             <td>
-                @if(in_array('editar_distribucion',$permisos) )
-                {!!Form::checkbox('editar_distribucion','editar_distribucion',null,['class'=>'checkbox-inline','onclick'=>'asigpermiso("editar_distribucion")','checked'])!!}
-                @else
-                {!!Form::checkbox('editar_distribucion','editar_distribucion',null,['class'=>'checkbox-inline','onclick'=>'asigpermiso("editar_distribucion")'])!!}
-                @endif
+                
+                {!!Form::checkbox('editar_distribucion','editar_distribucion',null,['class'=>'checkbox-inline','disabled'=>'disabled'])!!}                
                 </td>
             <td>
                 @if(in_array('ver_distribucion',$permisos) )

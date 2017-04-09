@@ -3,59 +3,33 @@
     DISTRIBUCION DE FONDOS PARA ACOPIO
 @stop
 @section('main-content')
-
+@permission('ver distribucion')
 <div class="box box-solid box-primary">
-    <div class="box-header" >        
-        <a id="nuevadistribucion" data-toggle='modal' data-target='#modaldistribucion' class="btn btn-dropbox btn-sm m-t-10" >NUEVO  <span class="glyphicon glyphicon-plus" data-toggle="tooltip" data-placement="top" title="Nueva Distribucion"></span></a>
-        
+    <div class="box-header" >   
+        @permission('crear distribucion')
+        <a id="nuevadistribucion" data-toggle='modal' data-target='#modaldistribucion' class="btn btn-dropbox" >NUEVA DISTRIBUCION  <span class="glyphicon glyphicon-plus" data-toggle="tooltip" data-placement="top" title="Nueva Distribucion"></span></a>
+        @endpermission
+        <a id="nuevadistribucion" data-toggle='modal' data-target='#modaldistribucion' class="btn btn-dropbox" data-toggle="tooltip" data-placement="top" title="Exportar Excel" >EXCEL  <span class="fa fa-file-excel-o"></span></a>
+        <a id="nuevadistribucion" data-toggle='modal' data-target='#modaldistribucion' class="btn btn-dropbox" data-toggle="tooltip" data-placement="top" title="Exportar PDF">PDF  <span class="fa fa-file-pdf-o"></span></a>
     </div>
-    <div class="box-body">
-        <table class="table table-responsive" id="myTable" >
-                        <thead>
-                        <th>DNI</th>
-                        <th>TECNICO</th> 
-                        <th>CENTRO DE ACOPIO</th>                            
-                        <th>MONTO</th>
-                        <th>FECHA</th>
-                        <th>USUARIO</th>                                                           
-                        <th>ACCIONES</th>            
-                        </thead>
-                        <tbody>
-                            @foreach($distribucions as $distribucion)
-                            {{--*/ @$name = str_replace(' ','&nbsp;', $distribucion->sucursal) /*--}}
-                            <tr>                                                                                
-                                <td>{{$distribucion->personas_dni}}</td>
-                                <td>{{$distribucion->paterno}} {{$distribucion->materno}} {{$distribucion->nombre}}</td>
-                                <td>{{$distribucion->sucursal}}</td>
-                                <td>{{$distribucion->monto}}</td>
-                                <td>{{$distribucion->fecha}}</td>                                    
-                                <td>{{$distribucion->name}}</td>
-                                <td>
-                                    <a href="{{url('Tesoreria/Distribucion/ReciboTecnico') }}/{{$distribucion->id}}" class="btn-sm btn-success"><span class="glyphicon glyphicon-eye-open" data-toggle="tooltip" data-placement="top" title="Imprimir" ></span></a>
-                                    <a href="{{url('Tesoreria/Distribucion/ReciboAcopio') }}/{{$distribucion->id}}" class="btn-sm btn-success"  ><span data-toggle="tooltip" data-placement="top" title="Imprimir" class="glyphicon glyphicon-print"></span></a>                                    
-                                    <a href="javascript:void(0);" onclick="AnulDistribucion('{{$distribucion->id}}','{{$name}}')" class="btn-sm btn-danger" ><span data-toggle="tooltip" data-placement="top" title="Anular" class="glyphicon glyphicon-remove"></span></a>
-                                </td>                    
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+    <div class="box-body" id="contenidos-box">
+        @include('Tesoreria.listaDistribucion')
     </div>
 </div>
-
+<section id="conten-modal"></section>
+@endpermission
+@permission('ver distribucion')
 <div class="modal fade" id="modaldistribucion" role="dialog">
     <div class="modal-dialog modal-primary">
         <!-- Modal content-->
-        <div class="modal-content">
+        <div class="modal-content" id="error-modal">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                 <h4 class="modal-title">NUEVA DISTRIBUCION</h4>
             </div>
             <div class="modal-body col-md-12 form-group-sm">
-                <div class="alert alert-success" id="msjdistribucion" style="display: none;">
-                    <strong id="msjtextodistribucion"></strong>
-                </div>
-                {!! Form::open(['id'=>'formfondosdistri']) !!}
-                <input type="hidden" name="_token" value="{{ csrf_token() }}" id="token">
+                @include('mensajes.mensaje')
+                {!! Form::open(['id'=>'formfondosdistri']) !!}                
                 <div class="col-md-12">
                     <div class="col-sm-9">
                         {!! Form::label('texnicos','Extensionistas: ',['class'=>'control-label ']) !!}                    
@@ -104,10 +78,16 @@
 
     </div>
 </div>
+@endpermission
 @stop
 
 @section('script')
 <script>
+  
+  $(document).ready(function (){
+      $("#menutesoreria").addClass('active');
+      $("#subdistribucion").addClass('active');
+  });
   
 $("#fecha").datepicker({
         autoclose: true,

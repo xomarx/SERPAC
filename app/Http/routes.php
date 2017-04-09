@@ -150,6 +150,7 @@ Route::group(['middleware' => ['auth']], function () {
      
     route::get('Tesoreria/Distribucion/ReciboAcopio/{id}','Tesoreria\tesoreriacontroller@recibofondoAcopiador');//recibofondoAcopiador
     route::resource('Tesoreria/Distribucion/ReciboTecnico','Tesoreria\tesoreriacontroller@recibofondoTecnico');//recibofondoTecnicoo
+    route::resource('Tesoreria/ListaDistribucion','Tesoreria\tesoreriacontroller@listaDistribucion');
     route::resource('Tesoreria/Distribucion-Fondos','Tesoreria\tesoreriacontroller');
     
     route::resource('Tesoreria/modalcheque','Tesoreria\ChequeController@cheque');//cheque  

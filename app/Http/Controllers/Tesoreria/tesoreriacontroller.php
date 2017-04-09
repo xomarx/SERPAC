@@ -41,9 +41,16 @@ class tesoreriacontroller extends Controller
      */
     public function index()
     {        
+        if(!auth()->user()->can('ver distribucion'))
+            return response ()->view ('errors.403');
         $distribucions = Distribucion::listaDistribucion();
         $tecnicos = Distribucion::tecnicos();        
         return view('Tesoreria.distribucion',['distribucions'=>$distribucions,'tecnicos'=>$tecnicos]);
+    }
+
+    public function listaDistribucion(){
+        $distribucions = Distribucion::listaDistribucion();           
+        return view('Tesoreria.listaDistribucion',['distribucions'=>$distribucions]);
     }
 
     /**
@@ -68,7 +75,8 @@ class tesoreriacontroller extends Controller
         //
         if($request->ajax())
         {
-            
+            if(!auth()->user()->can('crear distribucion'))
+                return response ()->view ('errors.403-content',[],403);
             $distribucion = Distribucion::create([
                 'tecnicos_empleados_empleadoId'=>$request->tecnico,
                 'fecha'=>Carbon::parse($request->fecha),
