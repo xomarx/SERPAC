@@ -25,6 +25,42 @@
             <th><b>VER</b></th>
             <th><b>ELIMINAR</b></th>                
         </tr>
+        <tr>
+            <td>Reportes Padron de Socios </td>
+            <td>                
+                    {!!Form::checkbox('crear_empleados','crear_empleados',null,['class'=>'checkbox-inline','disabled'=>'disabled'])!!}
+            </td>
+            <td>
+               {!!Form::checkbox('crear_empleados','crear_empleados',null,['class'=>'checkbox-inline','disabled'=>'disabled'])!!}
+            <td>
+                @if(in_array('ver_padron_socios',$permisos) )
+                    {!!Form::checkbox('ver_padron_socios','ver_padron_socios',null,['class'=>'checkbox-inline','onclick'=>'asigpermiso("ver_padron_socios")','checked'])!!}
+                @else
+                    {!!Form::checkbox('ver_padron_socios','ver_padron_socios',null,['class'=>'checkbox-inline','onclick'=>'asigpermiso("ver_padron_socios")'])!!}
+                @endif
+                </td>
+            <td>
+               {!!Form::checkbox('crear_empleados','crear_empleados',null,['class'=>'checkbox-inline','disabled'=>'disabled'])!!}
+                </td>
+        </tr>
+        <tr>
+            <td>Grafico - Kardex Dinero </td>
+            <td>                
+                {!!Form::checkbox('crear_empleados','crear_empleados',null,['class'=>'checkbox-inline','disabled'=>'disabled'])!!}
+            </td>
+            <td>
+               {!!Form::checkbox('crear_empleados','crear_empleados',null,['class'=>'checkbox-inline','disabled'=>'disabled'])!!}
+            <td>
+                @if(in_array('ver_kardex_dinero',$permisos) )
+                    {!!Form::checkbox('ver_kardex_dinero','ver_kardex_dinero',null,['class'=>'checkbox-inline','onclick'=>'asigpermiso("ver_kardex_dinero")','checked'])!!}
+                @else
+                    {!!Form::checkbox('ver_kardex_dinero','ver_kardex_dinero',null,['class'=>'checkbox-inline','onclick'=>'asigpermiso("ver_kardex_dinero")'])!!}
+                @endif
+                </td>
+            <td>
+               {!!Form::checkbox('crear_empleados','crear_empleados',null,['class'=>'checkbox-inline','disabled'=>'disabled'])!!}
+                </td>
+        </tr>
     </tbody>
 </table>
 {!! Form::close() !!}

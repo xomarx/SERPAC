@@ -10,8 +10,8 @@
             <button  class="btn btn-dropbox dropdown-toggle" type="button" data-toggle="dropdown" id="btnexportar">EXPORTAR
             <span class="caret"></span></button>
             <ul class="dropdown-menu btn btn-github">
-                <li class="btn-dropbox"><a href="{{ url('/Acopio/ExcelRecepcion') }}">Exportar a Excel</a></li>
-                <li class="btn-dropbox" ><a href="{{ url('/Acopio/PdfRecepcion') }}">Exportar a PDF</a></li>        
+                <li class="btn-dropbox"><a href="javascript:void(0)" onclick="xportPdfExcel(2)">Exportar a Excel</a></li>
+                <li class="btn-dropbox" ><a href="javascript:void(0)" onclick="xportPdfExcel(1)">Exportar a PDF</a></li>        
             </ul>
         </div>         
          <div class="col-sm-2" style="float: right">
@@ -32,7 +32,7 @@
 @permission('crear fondos')
 
 <div id="myModal" class="modal fade" role="dialog">
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-primary">
     <!-- Modal content-->
     <div class="modal-content" id="error-modal">
       <div class="modal-header">
@@ -75,9 +75,44 @@
         activarForm(8);
     });
     $("#mes").change(function (){
-        activarForm(8);
-        
+        activarForm(8);        
     });
+    
+    var xportPdfExcel = function(ruta){
+        //
+        if($("#anio").val() !=0 && $("#mes").val() != 0){
+            if(ruta==1)             
+            document.location.href="{{ url('/Acopio/PdfRecepcion') }}/"+$("#anio").val()+"/"+$("#mes").val();
+        else        
+            document.location.href="{{ url('/Acopio/ExcelRecepcion') }}/"+$("#anio").val()+"/"+$("#mes").val();
+        }
+        else
+            alert('Seleccione un AÑO y un MES')                
+    };
+    
+    var RecepConform = function(id) {        
+        
+        var route = "/Acopio/Fondos-Acopio/"+id+"/edit";             
+                       
+        if($("#estado").val() == '')
+        {
+            $.alertable.alert("Seleccione si esta Conforme ó No Conforme");
+        }
+        else if ($("#estado").val() == 'CONFORME')
+        {
+            $.alertable.confirm("Esta Conforme la Recepcion de Fondoc de Acopio").then(function(){                
+              RegistroRec(id);
+            });
+        }
+        else if($("#estado").val() == 'NO CONFORME')
+        {         
+            $.get(route, function(data){                
+                $("#monto").val(data.monto)                
+            }); 
+            $("#id").val(id);
+            $("#myModal").modal();
+        }        
+    }
 </script>
 
 @stop

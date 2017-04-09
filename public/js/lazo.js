@@ -114,29 +114,6 @@ var cargardistrito = function (iddist,idsele) {
 
 //  recepcion de fondo
 
-var RecepConform = function(id) {        
-        //  cargar datos
-        var route = "/Acopio/Fondos-Acopio/"+id+"/edit";             
-            $.get(route, function(data){                
-                $("#monto").val(data.monto)                
-            });
-            
-        if($("#estado").val() == '')
-        {
-            $.alertable.alert("Seleccione si esta Conforme ó No Conforme");
-        }
-        else if ($("#estado").val() == 'CONFORME')
-        {
-            $.alertable.confirm("Esta Conforme la Recepcion de Fondoc de Acopio").then(function(){                
-              RegistroRec(id);
-            });
-        }
-        else if($("#estado").val() == 'NO CONFORME')
-        {         
-            $("#id").val(id);
-            $("#myModal").modal();
-        }        
-    }
     
     $("#RegRecepcion").click(function(){        
         RegistroRec($("#id").val());

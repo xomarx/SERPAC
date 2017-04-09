@@ -8,7 +8,7 @@
 <div class="box box-solid box-primary">
     <div class="box-header">
         @permission('crear compras')
-        <a id="nuevacompra" data-toggle='modal' data-target='#modalcompra' class="btn btn-dropbox btn-sm m-t-10" ><span class="glyphicon glyphicon-plus"data-toggle="tooltip" data-placement="top" title="COMPRAR GRANO"> COMPRAR</span></a>
+        <a id="nuevacompra"  class="btn btn-dropbox btn-sm" data-toggle="tooltip" data-placement="top" title="COMPRAR GRANO"><span class="glyphicon glyphicon-plus"> COMPRAR</span></a>
         @endpermission
     </div>
     <div class="box-body">
@@ -44,7 +44,7 @@
                     <td>{{$compra->sucursal }}</td>
                     <td>{{$compra->name }}</td>  
                     <td>
-                        <a href="javascript:void(0)" class="btn-xs btn-success" data-toggle="tooltip" data-placement="top" title="Imprimir Recibo"><span class="glyphicon glyphicon-print" ></span></a>
+                        <a href="" target="_blank" class="btn-xs btn-success" data-toggle="tooltip" data-placement="top" title="Imprimir Recibo"><span class="glyphicon glyphicon-print" ></span></a>
                         <a href="javascript:void(0)" onclick="AnulCompra('{{$compra->id}}','{{$nombre}}')" class="btn-xs btn-danger" data-toggle="tooltip" data-placement="top" title="Anular"><span  class="glyphicon glyphicon-remove"></span></a>
                     </td>
                 </tr>                            

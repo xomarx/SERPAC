@@ -8,14 +8,20 @@
             <!-- Optionally, you can add icons to the links -->                      
             <li class="treeview">
                 <a href="#"><i class='fa fa-users'></i> <span>Reporte de Socios</span> <i class="fa fa-angle-left pull-right"></i></a>
+                
                 <ul class="treeview-menu">
-                    <li class="active"><a href="{{ url('/Informes/Padron-Socios') }}">Padron de Socios</a></li>                    
+                    @permission('ver padron socios')
+                    <li class="active"><a href="{{ url('/Informes/Padron-Socios') }}">Padron de Socios</a></li>     
+                    @endpermission
                 </ul>
+                
             </li>            
-            <li class="treeview">
+            <li class="treeview" id="infoacopio">
                 <a href="#"><i class='glyphicon glyphicon-inbox'></i> <span>Reporte de Acopio</span> <i class="fa fa-angle-left pull-right"></i></a>
                 <ul class="treeview-menu">
-                    <li><a href="{{ url('/Acopio/Tara') }}">Kardex de Dinero</a></li>
+                    @permission('ver kardex dinero')
+                    <li id="subdinero"><a href="{{ url('Informes/Acopio/Grafica-Fondos') }}">Kardex de Dinero</a></li>
+                    @endpermission
                     <li><a href="{{ url('/Acopio/Transporte') }}">Kardex de Compra de Acopio</a></li>
                     <li><a href="{{ url('/Tesoreria/Tipos-egresos') }}">Reporte de Ingreso de Acopio</a></li>                    
                 </ul>

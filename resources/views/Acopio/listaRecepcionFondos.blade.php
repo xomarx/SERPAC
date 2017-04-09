@@ -24,8 +24,7 @@
                         {!! Form::select('estado',['CONFORME'=>'Conforme','NO CONFORME'=>'No Conforme'],null,['id'=>'estado','placeholder'=>$recepcion->estado,'disabled']) !!}
                         @endif
                     </td>
-                    <td>
-                        <a href="#"   data-toggle='modal' data-target='#myModal' class="btn-xs btn-success"><span class="glyphicon glyphicon-eye-open"data-toggle="tooltip" data-placement="top" title="Ver"></span></a>
+                    <td>                        
                         @permission('crear fondos')
                         @if($recepcion->estado == null)
                             <a OnClick='RecepConform({{$recepcion->id}});' class="btn-xs btn-primary" data-toggle="tooltip" data-placement="top" title="Grabar" ><span class="glyphicon glyphicon-saved"></span></a>

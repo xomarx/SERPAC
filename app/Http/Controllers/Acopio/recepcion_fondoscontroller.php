@@ -41,15 +41,7 @@ class recepcion_fondoscontroller extends Controller
         return view('Acopio.listaRecepcionFondos')->with('recepcions',$recepcions);
     }
 
-    public function excelrecepcion(){
-        \Maatwebsite\Excel\Facades\Excel::create('Recepcion Fondos',function($excel){
-            $excel->setTitle('recepcion de fondos');
-            $excel->sheet('Fondos',function($sheet){
-                $recepciones = Recepcion_fondo::listaRecepcio();
-                $sheet->loadView('Acopio.listaRecepcionFondos',['recepcions'=>$recepciones]);
-            });
-        })->export('xls');
-    }
+    
 
     /**
      * Show the form for creating a new resource.

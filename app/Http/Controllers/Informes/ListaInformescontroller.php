@@ -75,6 +75,34 @@ class ListaInformescontroller extends Controller
             'renunciante' => $renunciante, 'retirado' => $retirado];      
         return json_encode($data);
     }
+    
+    public function grafica_fondos(){   
+        if(!auth()->user()->can('ver kardex dinero'))
+            return response()->view('errors.403');
+        for ($i = 2016; $i <= \Carbon\Carbon::now()->format('Y'); $i++) {
+            $resul[$i] = $i;
+        }        
+//        $data = ['anios'=>$resul,'montos'=>$montos];
+        return response()->view('Reportes.Acopio.graficaRecepFondos',['anios'=>$resul]);        
+    }
+    
+    public function grafica_acopio_dinero($anio, $mes) {
+        if ($mes == 0) {
+            setlocale(LC_TIME, 'spanish');
+            for ($i = 1; $i <= 12; $i++) {
+                $resul[] = strftime("%B", mktime(0, 0, 0, $i, 1, 2016));
+                $montos[] = floatval(\App\Models\Acopio\Recepcion_fondo::montofechas($anio, $i,0)->monto);
+            }
+        } else {
+           for ($i = 1; $i <= date("t",mktime(0,0,0,$mes,1,$anio)); $i++){
+                $resul[] = $i;
+                $montos[] = floatval(\App\Models\Acopio\Recepcion_fondo::montofechas($anio,$mes ,$i)->monto);
+            }
+        }
+
+        $data = ['fechas' => $resul, 'montos' => $montos];
+        return json_encode($data);
+    }
 
     /**
      * Show the form for creating a new resource.
