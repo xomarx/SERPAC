@@ -70,15 +70,7 @@ class Caja_chica extends Model
                 ->paginate(10);                        
     }
     
-    public static function listNumCheque($idcheque,$numero){
-        return \Illuminate\Support\Facades\DB::table('mov_cheques')
-                ->join('cheques','mov_cheques.cheques_id','=','cheques.id')
-                ->where('mov_cheques.estado','<>','ANULADO')
-                ->where('cheques.id','=',$idcheque)
-                ->where('mov_cheques.num_cheque','like','%'.$numero.'%')
-                ->select('mov_cheques.num_cheque','mov_cheques.id')
-                ->take(5)->get();
-    }
+   
     
     public static function getCaja($id){
         return \Illuminate\Support\Facades\DB::table('caja_chicas')

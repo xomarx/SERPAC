@@ -12,7 +12,7 @@ class Distribucion extends Model
     protected $primarykey = 'id';
     public  $timestamps=false;
     protected  $fillable = [
-        'monto','fecha','tecnicos_empleados_empleadoId','sucursales_sucursalId','estado','motivo','users_id'
+        'monto','fecha','tecnicos_empleados_empleadoId','sucursales_sucursalId','estado','motivo','users_id','mov_cheques_id'
     ];
 
     public function recepcion_fondo()
@@ -30,15 +30,20 @@ class Distribucion extends Model
                     ->join('empleados', 'distribucions.tecnicos_empleados_empleadoId', '=', 'empleados.empleadoId')
                     ->join('personas', 'empleados.personas_dni', '=', 'personas.dni')
                     ->join('users', 'distribucions.users_id', '=', 'users.id')
+                    ->join('mov_cheques','distribucions.mov_cheques_id','=','mov_cheques.id')
+                    ->join('cheques','mov_cheques.cheques_id','=','cheques.id')
                     ->where(function($query)use($dato){
-                        $query->where('personas_dni','like','%'.$dato.'%')
+                        $query->where('empleados.personas_dni','like','%'.$dato.'%')
                             ->orwhere('sucursal', 'like', '%' . $dato . '%')
                             ->orwhere('monto', 'like', '%' . $dato . '%')
                             ->orwhere('fecha', 'like', '%' . $dato . '%')
                             ->orwhere('name', 'like', '%' . $dato . '%')
+                            ->orwhere('cheque', 'like', '%' . $dato . '%')
+                            ->orwhere('num_cheque', 'like', '%' . $dato . '%')
                             ->orwhere(DB::raw("concat(personas.paterno,' ',personas.materno,' ',personas.nombre)"), 'like', '%' . $dato . '%');
                     })
-                    ->select('monto','sucursal','paterno','materno','nombre','personas_dni','fecha','name','distribucions.id')
+                    ->select('monto','sucursal','paterno','materno','nombre','empleados.personas_dni','fecha','name',
+                            'cheque','num_cheque','distribucions.id')
                     ->orderby('fecha', 'desc')
                     ->paginate(8);
         else if ($mes == 0)
@@ -47,15 +52,20 @@ class Distribucion extends Model
                     ->join('empleados', 'distribucions.tecnicos_empleados_empleadoId', '=', 'empleados.empleadoId')
                     ->join('personas', 'empleados.personas_dni', '=', 'personas.dni')
                     ->join('users', 'distribucions.users_id', '=', 'users.id')
+                    ->join('mov_cheques','distribucions.mov_cheques_id','=','mov_cheques.id')
+                    ->join('cheques','mov_cheques.cheques_id','=','cheques.id')
                     ->where(function($query)use($dato){
-                        $query->where('personas_dni','like','%'.$dato.'%')
+                        $query->where('empleados.personas_dni','like','%'.$dato.'%')
                             ->orwhere('sucursal', 'like', '%' . $dato . '%')
                             ->orwhere('monto', 'like', '%' . $dato . '%')
                             ->orwhere('fecha', 'like', '%' . $dato . '%')
                             ->orwhere('name', 'like', '%' . $dato . '%')
+                            ->orwhere('cheque', 'like', '%' . $dato . '%')
+                            ->orwhere('num_cheque', 'like', '%' . $dato . '%')
                             ->orwhere(DB::raw("concat(personas.paterno,' ',personas.materno,' ',personas.nombre)"), 'like', '%' . $dato . '%');
                     })
-                    ->select('monto','sucursal','paterno','materno','nombre','personas_dni','fecha','name','distribucions.id')
+                    ->select('monto','sucursal','paterno','materno','nombre','empleados.personas_dni','fecha','name',
+                            'cheque','num_cheque','distribucions.id')
                     ->orderby('fecha', 'desc')
                     ->paginate(8);
         else
@@ -64,15 +74,20 @@ class Distribucion extends Model
                     ->join('empleados', 'distribucions.tecnicos_empleados_empleadoId', '=', 'empleados.empleadoId')
                     ->join('personas', 'empleados.personas_dni', '=', 'personas.dni')
                     ->join('users', 'distribucions.users_id', '=', 'users.id')
+                    ->join('mov_cheques','distribucions.mov_cheques_id','=','mov_cheques.id')
+                    ->join('cheques','mov_cheques.cheques_id','=','cheques.id')
                     ->where(function($query)use($dato){
-                        $query->where('personas_dni','like','%'.$dato.'%')
+                        $query->where('empleados.personas_dni','like','%'.$dato.'%')
                             ->orwhere('sucursal', 'like', '%' . $dato . '%')
                             ->orwhere('monto', 'like', '%' . $dato . '%')
                             ->orwhere('fecha', 'like', '%' . $dato . '%')
                             ->orwhere('name', 'like', '%' . $dato . '%')
+                            ->orwhere('cheque', 'like', '%' . $dato . '%')
+                            ->orwhere('num_cheque', 'like', '%' . $dato . '%')
                             ->orwhere(DB::raw("concat(personas.paterno,' ',personas.materno,' ',personas.nombre)"), 'like', '%' . $dato . '%');
                     })
-                    ->select('monto','sucursal','paterno','materno','nombre','personas_dni','fecha','name','distribucions.id')
+                    ->select('monto','sucursal','paterno','materno','nombre','empleados.personas_dni','fecha',
+                            'cheque','num_cheque','name','distribucions.id')
                     ->orderby('fecha', 'desc')
                     ->paginate(8);
             

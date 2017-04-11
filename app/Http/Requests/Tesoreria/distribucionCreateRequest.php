@@ -27,7 +27,9 @@ class distribucionCreateRequest extends Request
             'sucursal'=>'required',
             'tecnico'=>'required',
             'monto'=>'required|numeric',
-            'fecha'=>'required|date'
+            'fecha'=>'required|date',
+            'cheque'=>'required',
+                        'numero'=>'required|numeric'
         ];
     }
     
@@ -37,7 +39,9 @@ class distribucionCreateRequest extends Request
             'sucursal.required'=>'Seleccione un Centro de Acopio',
             'tecnico.required'=>'Seleccione un Tecnico',
             'monto.regex'=>'Solo Decimales',
-            'fecha.date'=>'La fecha no contiene el Formato correcto'
+            'fecha.date'=>'La fecha no contiene el Formato correcto',
+            'cheque'=>'required',
+                        'numero'=>'required|numeric'
         ];
     }
 }

@@ -12,10 +12,10 @@ class Caja_chicaController extends Controller
     public function autoNumCheque(Request $request,$idcheque){
         if($request->ajax()){
             $nombre = \Illuminate\Support\Facades\Input::get('term');
-            $cajas = \App\Models\Tesoreria\Caja_chica::listNumCheque($idcheque,$nombre);
+            $cajas = \App\Models\Tesoreria\Mov_cheque::AutoNumCheque($idcheque,$nombre);
             foreach ($cajas as $caja) 
             {
-                $result[] = ['id' => $caja->id, 'value' => $caja->num_cheque];
+                $result[] = ['id' => $caja->id, 'value' => $caja->num_cheque,'monto'=>$caja->importe];
             }
             return response()->json($result);
         }

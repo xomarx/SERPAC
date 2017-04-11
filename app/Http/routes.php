@@ -151,15 +151,16 @@ Route::group(['middleware' => ['auth']], function () {
     // **********************************   MODULO DE TESORERIA ************************************     
     route::get('Tesoreria/Distribucion/ReciboAcopio/{id}','Tesoreria\tesoreriacontroller@recibofondoAcopiador');//recibofondoAcopiador    
     route::resource('Tesoreria/Distribucion-Fondos/Fondos-Pdf','Informes\Reportecontroller@pdfDistribucionFondo');
-    route::resource('Tesoreria/Distribucion/Recibodistribucion','Tesoreria\tesoreriacontroller@recibofondoDistribucion');//recibofondoTecnicoo
+    route::resource('Tesoreria/Distribucion/Recibodistribucion','Tesoreria\tesoreriacontroller@recibofondoDistribucion');//recibofondoTecnicoo    
     route::get('Tesoreria/ListaDistribucion/{anio?}/{mes?}/{dato?}/{page?}','Tesoreria\tesoreriacontroller@listaDistribucion');
+    route::get('Tesoreria/MontoFondosCheque/{id?}','Tesoreria\tesoreriacontroller@MontoFondoCheque');
     route::resource('Tesoreria/Distribucion-Fondos','Tesoreria\tesoreriacontroller');
     
     route::get('Tesoreria/ListMovcheques/{anio?}/{mes?}/{dato?}/{page?}','Tesoreria\Mov_chequeController@listMovcheques');    
     route::resource('Tesoreria/headmovcheque','Tesoreria\Mov_chequeController@headmovcheque');
     route::resource('Tesoreria/modalmovcheque','Tesoreria\Mov_chequeController@movcheque');
     route::resource('Tesoreria/Cheques-Girados','Tesoreria\Mov_chequeController');
-    route::resource('uploadimage','Tesoreria\Mov_chequeController@uploadImage');//uploadImage
+    route::resource('uploadimage','Tesoreria\Mov_chequeController@uploadImage');//uploadImage    
     route::get('Tesoreria/numCheque/{id}','Tesoreria\Caja_chicaController@autoNumCheque');
     route::resource('Tesoreria/headcajachica','Tesoreria\Caja_chicaController@headcajachica');
     route::resource('Tesoreria/modalCaja','Tesoreria\Caja_chicaController@cajachica');

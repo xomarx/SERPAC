@@ -2,7 +2,8 @@
 <input type="hidden" name="_token" value="{{ csrf_token() }}" >
 <table class="table table-hover table-responsive tablesorter" id="tabledistribucion" >
                         <thead >
-                            
+                        <th style="border-bottom-color: #0089db; ">CHEQUE</th>
+                        <th style="border-bottom-color: #0089db; ">N° CHEQUE</th>
                         <th style="border-bottom-color: #0089db; " >DNI</th>
                         <th style="border-bottom-color: #0089db; ">TECNICO</th> 
                         <th style="border-bottom-color: #0089db; ">CENTRO DE ACOPIO</th>                            
@@ -15,7 +16,9 @@
                         <tbody>
                             @foreach($distribucions as $distribucion)
                             {{--*/ @$name = str_replace(' ','&nbsp;', $distribucion->sucursal) /*--}}
-                            <tr>                                                                                
+                            <tr>   
+                                <td>{{$distribucion->cheque}}</td>
+                                <td>{{$distribucion->num_cheque}}</td>
                                 <td>{{$distribucion->personas_dni}}</td>
                                 <td>{{$distribucion->paterno}} {{$distribucion->materno}} {{$distribucion->nombre}}</td>
                                 <td>{{$distribucion->sucursal}}</td>

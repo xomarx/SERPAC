@@ -39,13 +39,13 @@ class MovChequeRequest extends Request
                         'idurl'=>'required',
                         'concepto'=>'required',
                         'tipo'=>'required',
-                        'importe'=>'required|numeric'
+                        'importe'=>'required|numeric',
+                        
                     ];
                 }
             case 'PATCH':
             case 'PUT': {
-                    return [
-                        //
+                    return [                        
                         'cheque' => 'required',
                         'numero' => 'required|numeric|unique:mov_cheques,num_cheque',
                         'dato' => 'required',
@@ -53,7 +53,8 @@ class MovChequeRequest extends Request
                         'idurl'=>'required',
                         'concepto'=>'required',
                         'tipo'=>'required',
-                        'importe'=>'required|numeric'
+                        'importe'=>'required|numeric',
+                        
                     ];
                 }
             default : break;

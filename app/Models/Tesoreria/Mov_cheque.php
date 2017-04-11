@@ -18,6 +18,17 @@ class Mov_cheque extends Model
         'importe'
     ];
     
+public static function AutoNumCheque($idcheque,$numero){
+        return \Illuminate\Support\Facades\DB::table('mov_cheques')
+                ->join('cheques','mov_cheques.cheques_id','=','cheques.id')
+                ->where('mov_cheques.estado','<>','ANULADO')
+                ->where('cheques.id','=',$idcheque)
+                ->where('mov_cheques.num_cheque','like','%'.$numero.'%')
+                ->select('mov_cheques.num_cheque','mov_cheques.id','mov_cheques.importe')
+                ->take(5)->get();
+    
+}
+
     public static function scopelistachequesXanio($query,$anio,$mes,$dato){
         if($anio==0)
                 return $query->join('cheques', 'mov_cheques.cheques_id', '=', 'cheques.id')

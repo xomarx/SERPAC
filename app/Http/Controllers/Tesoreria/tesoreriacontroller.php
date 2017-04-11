@@ -38,8 +38,14 @@ class tesoreriacontroller extends Controller
         $pdf->loadHTML($dato);                        
         return $pdf->stream();
     }
+    
+    public function MontoFondoCheque($idgiro){
+        $monto = Distribucion::where('mov_cheques_id','=',$idgiro)->select(\Illuminate\Support\Facades\DB::raw('IFNULL(sum(monto),0) as monto'))->first();
+        $monto = floatval($monto->monto);
+        return response()->json($monto);
+    }
 
-        /**
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
@@ -50,11 +56,12 @@ class tesoreriacontroller extends Controller
             return response ()->view ('errors.403');
         $distribucions = Distribucion::listaDistribucion(0,0,'');
         $tecnicos = Distribucion::tecnicos();
+        $cheques = \App\Models\Tesoreria\Cheque::pluck('cheque', 'id');
         $result[]='AÑO';
         for ($i = 2016; $i <= Carbon::now()->format('Y');$i++){
             $result [$i]=$i;
         }
-        return view('Tesoreria.distribucion',['distribucions'=>$distribucions,'tecnicos'=>$tecnicos,'anios'=>$result]);
+        return view('Tesoreria.distribucion',['distribucions'=>$distribucions,'tecnicos'=>$tecnicos,'anios'=>$result,'cheques'=>$cheques]);
     }
 
     public function listaDistribucion($anio,$mes,$dato=''){                        
@@ -86,12 +93,14 @@ class tesoreriacontroller extends Controller
         {
             if(!auth()->user()->can('crear distribucion'))
                 return response ()->view ('errors.403-content',[],403);
+            $idmovcheque = \App\Models\Tesoreria\Mov_cheque::where('num_cheque','=',$request->numero)->where('cheques_id','=',$request->cheque)->select('id')->first();
             $distribucion = Distribucion::create([
                 'tecnicos_empleados_empleadoId'=>$request->tecnico,
                 'fecha'=>Carbon::parse($request->fecha),
                 'monto'=>$request->monto,
                 'sucursales_sucursalId'=>$request->sucursal,
                 'estado'=>'Entregado',
+                'mov_cheques_id'=>$idmovcheque->id,
                 'users_id'=>  \Illuminate\Support\Facades\Auth::user()->id
                 ]);
             $recepcion = Recepcion_fondo::create([
@@ -147,6 +156,7 @@ class tesoreriacontroller extends Controller
             $distribucion = Distribucion::FindOrFail($id);
             $distribucion->estado='ANULADO';
             $distribucion->motivo = $request->motivo;
+            $distribucion->monto = 0;
             $distribucion->save();
             $recepcion = Recepcion_fondo::FindOrFail($distribucion->id)->delete();
             if($recepcion)

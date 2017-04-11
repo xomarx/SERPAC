@@ -45,7 +45,7 @@
 //    })
 //});
 
-
+var temporal;
 $(document).ready(function() {
     $('#myTable').DataTable( {        
         responsive: true,
@@ -1118,7 +1118,8 @@ var EliFlora = function(id,name){
 // ***********************************************************************   CRUD CARGO DELEGADO  ******************************************************
 $("#nuevodelegado").click(function(event){ $("#RegDelegado").text("Registrar"); });
 
-$("#RegDelegado").click(function(event){                   
+$("#RegDelegado").click(function(event){
+    
             var fields = $("#formdelegados").serialize();
             var token = $("input[name=_token]").val(); 
             var type = "POST";
@@ -2039,7 +2040,7 @@ var AnulDistribucion = function(id,name){
    $.alertable.prompt('<h3>Motivo de la Anulacion ? </h3>'+"<span style='color:#ff0000'>"+name+"</span>").then(function(data){       
             var motivo = data.value;
             var route = "/Tesoreria/Distribucion-Fondos/"+id+"";            
-            var token = $("#token").val();            
+            var token = $("input[name=_token]").val();            
         $.ajax({
             url: route,
             headers: {'X-CSRF-TOKEN': token},
@@ -2050,10 +2051,10 @@ var AnulDistribucion = function(id,name){
             },
             success: function (data) {
 
-                if (data.success == 'true')
-                {
-                   document.location.reload();
-                }
+                if (data.success )
+                activarForm(9);
+                   
+                
             },
             
         });
@@ -2061,8 +2062,12 @@ var AnulDistribucion = function(id,name){
 };
     
 $("#RegDistribucion").click(function(){
-    
-      var fields = $("#formfondosdistri").serialize();
+    if($("#monto").val() > temporal){
+        $.alertable.alert("<span style='color:#ff0000'>EL MONTO SOBREPASA CON EL SALDO DEL CHEQUE</span>");
+//        $("#monto").val(temporal);
+        return;
+    }
+      var fields = $("#formfondosdistri").serialize();      
     var route = "/Tesoreria/Distribucion-Fondos";
       var token = $("input[name=_token]").val();       
       $.ajax({
@@ -2078,7 +2083,7 @@ $("#RegDistribucion").click(function(){
                 },
                 error: function (data)
                 {             
-                    if(data.status) $("#error-modal").html(data.responseText);
+                    if(data.status==403) $("#error-modal").html(data.responseText);
                     else{
                     $("#error_tecnico").html('');$("#error_sucursal").html('');$("#error_monto").html('');
                     $("#error_fecha").html('');                    
@@ -2087,7 +2092,9 @@ $("#RegDistribucion").click(function(){
                         if (index == 'tecnico')$("#error_tecnico").html(value);
                         else if (index == 'sucursal')$("#error_sucursal").html(value);
                         else if (index == 'fecha')$("#error_fecha").html(value);
-                        else if (index == 'monto')$("#error_monto").html(value);                        
+                        else if (index == 'monto')$("#error_monto").html(value);
+                        else if (index == 'cheque')$("#error-cheque").html(value);
+                        else if (index == 'numero')$("#error-numero").html(value);
                     }); 
                 }
                 }            
@@ -2964,7 +2971,7 @@ $(document).ready().on('click','#Pdfgirocheques',function(e){
 });
 
 $(document).ready().on('click','#ExcelGiroCheque',function(e){
-    if($("#anio").val() ==0) {alert('Seleccione el Año'); e.preventDefault(); }
+    if($("#anio").val() ==0) { $.alertable.alert("<span style='color:#ff0000'>SELECCIONE UN AÑO PARA PODER EXPORTAR EN EXCEL</span>"); e.preventDefault(); }
     $(this).attr('href','');
     var route = '/Tesoreria/Cheques-Girados/Excel-cheques/' + $("#anio").val()+'/'+$("#mes").val()+'/'+$("#buscar").val();
     $(this).attr('href',route);       
