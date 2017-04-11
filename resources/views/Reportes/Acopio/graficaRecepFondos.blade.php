@@ -44,18 +44,7 @@
         grafico_barra_k_Dinero($("#anio").val(),event.target.value);
     });
     
-    var meses = function(anio){  
-        var meses = new Array ("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre", "Diciembre");
-        var cont = 12;
-        if(anio == (new Date).getFullYear()){
-            cont = (new Date).getMonth() + 1;
-        }
-        var htm='<option value=0>Todo los Meses</option>';
-        for(var i = 1;i <= cont ; i++){
-                htm +='<option value='+i+'>'+meses[i-1]+'</option>';
-            }
-        $("#mes").html(htm);            
-    };
+    
 </script>
 
 @stop

@@ -14,5 +14,11 @@ class Cheque extends Model
         'cheque','num_cuenta','descripcion'
     ];
     
+    public function mov_cheque(){
+        return $this->hasOne(Mov_cheque::class);
+    }
+            
+
+
     
 }

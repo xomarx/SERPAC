@@ -19,20 +19,66 @@ class Distribucion extends Model
     {
         return $this->hasOne(\App\Models\Acopio\Recepcion_fondo::class);
     }
+    public function sucursal(){
+        return $this->hasOne(\App\Models\RRHH\Sucursal::class);
+    }
 
-        public static function listaDistribucion()
-    {
-        return DB::table('distribucions')
-                ->join('sucursales','distribucions.sucursales_sucursalId','=','sucursales.sucursalId')                
-                ->join('empleados','distribucions.tecnicos_empleados_empleadoId','=','empleados.empleadoId')
-                ->join('personas','empleados.personas_dni','=','personas.dni')
-                ->join('users','distribucions.users_id','=','users.id')
-                ->where('distribucions.estado','=','Entregado')
-                ->select('empleados.personas_dni','personas.paterno','personas.materno','personas.nombre',
-                        'sucursales.sucursal','distribucions.monto','distribucions.fecha','distribucions.id','users.name')
-                ->get();
+    public static function scopelistaDistribucion($query,$anio,$mes,$dato=''){
+            if($anio == 0)
+            return $query
+                    ->join('sucursales', 'distribucions.sucursales_sucursalId', '=', 'sucursales.sucursalId')
+                    ->join('empleados', 'distribucions.tecnicos_empleados_empleadoId', '=', 'empleados.empleadoId')
+                    ->join('personas', 'empleados.personas_dni', '=', 'personas.dni')
+                    ->join('users', 'distribucions.users_id', '=', 'users.id')
+                    ->where(function($query)use($dato){
+                        $query->where('personas_dni','like','%'.$dato.'%')
+                            ->orwhere('sucursal', 'like', '%' . $dato . '%')
+                            ->orwhere('monto', 'like', '%' . $dato . '%')
+                            ->orwhere('fecha', 'like', '%' . $dato . '%')
+                            ->orwhere('name', 'like', '%' . $dato . '%')
+                            ->orwhere(DB::raw("concat(personas.paterno,' ',personas.materno,' ',personas.nombre)"), 'like', '%' . $dato . '%');
+                    })
+                    ->select('monto','sucursal','paterno','materno','nombre','personas_dni','fecha','name','distribucions.id')
+                    ->orderby('fecha', 'desc')
+                    ->paginate(8);
+        else if ($mes == 0)
+            return $query->whereyear('fecha','=',$anio)
+                    ->join('sucursales', 'distribucions.sucursales_sucursalId', '=', 'sucursales.sucursalId')
+                    ->join('empleados', 'distribucions.tecnicos_empleados_empleadoId', '=', 'empleados.empleadoId')
+                    ->join('personas', 'empleados.personas_dni', '=', 'personas.dni')
+                    ->join('users', 'distribucions.users_id', '=', 'users.id')
+                    ->where(function($query)use($dato){
+                        $query->where('personas_dni','like','%'.$dato.'%')
+                            ->orwhere('sucursal', 'like', '%' . $dato . '%')
+                            ->orwhere('monto', 'like', '%' . $dato . '%')
+                            ->orwhere('fecha', 'like', '%' . $dato . '%')
+                            ->orwhere('name', 'like', '%' . $dato . '%')
+                            ->orwhere(DB::raw("concat(personas.paterno,' ',personas.materno,' ',personas.nombre)"), 'like', '%' . $dato . '%');
+                    })
+                    ->select('monto','sucursal','paterno','materno','nombre','personas_dni','fecha','name','distribucions.id')
+                    ->orderby('fecha', 'desc')
+                    ->paginate(8);
+        else
+            return $query->whereyear('fecha','=',$anio)->wheremonth('fecha', '=', $mes)
+                    ->join('sucursales', 'distribucions.sucursales_sucursalId', '=', 'sucursales.sucursalId')
+                    ->join('empleados', 'distribucions.tecnicos_empleados_empleadoId', '=', 'empleados.empleadoId')
+                    ->join('personas', 'empleados.personas_dni', '=', 'personas.dni')
+                    ->join('users', 'distribucions.users_id', '=', 'users.id')
+                    ->where(function($query)use($dato){
+                        $query->where('personas_dni','like','%'.$dato.'%')
+                            ->orwhere('sucursal', 'like', '%' . $dato . '%')
+                            ->orwhere('monto', 'like', '%' . $dato . '%')
+                            ->orwhere('fecha', 'like', '%' . $dato . '%')
+                            ->orwhere('name', 'like', '%' . $dato . '%')
+                            ->orwhere(DB::raw("concat(personas.paterno,' ',personas.materno,' ',personas.nombre)"), 'like', '%' . $dato . '%');
+                    })
+                    ->select('monto','sucursal','paterno','materno','nombre','personas_dni','fecha','name','distribucions.id')
+                    ->orderby('fecha', 'desc')
+                    ->paginate(8);
+            
     }
     
+
     public static function tecnicos()
     {
         return DB::table('tecnicos')
@@ -62,6 +108,10 @@ class Distribucion extends Model
                         ,'personas.dni','distribucions.fecha','distribucions.monto')
                 ->first();
     }
-            
+    
+    public static function getDistribucion(){
+        return DB::table('distribucions')
+                ->select(DB::raw('max(id) as id'))->first();
+    }
             
 }

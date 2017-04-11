@@ -23,14 +23,25 @@ class Mov_chequeController extends Controller
         else return response()->json(['success'=>false,'ruta'=>"No se cargo ninguna imagen"]);
     }
 
-        public function movcheque(){
-        $cheques = \App\Models\Tesoreria\Cheque::pluck('cheque','id');
-        return view('Tesoreria.movcheque',['cheques'=>$cheques]);
+    public function movcheque() {
+        $cheques = \App\Models\Tesoreria\Cheque::pluck('cheque', 'id');        
+        return view('Tesoreria.movcheque', ['cheques' => $cheques]);
     }
     
-    public function listMovcheques(){        
-        $movcheques = \App\Models\Tesoreria\Mov_cheque::listaMovCheques();
-        return view('Tesoreria.listaMovCheques')->with('cheques',$movcheques);
+    public function headmovcheque() {
+        $result[]='AÑOS';
+        for ($i = 2016; $i <= \Carbon\Carbon::now()->format('Y');$i++){
+            $result [$i]=$i;
+        }        
+        return view('Tesoreria.headMov_cheques', ['anios'=>$result]);
+    }
+    
+    public function listMovcheques($anio,$mes,$dato=''){
+        if(!auth()->user()->can('ver movimientos'))
+            return response ()->view ('errors.403-content');
+        $movcheques = \App\Models\Tesoreria\Mov_cheque::listaMovCheques($anio,$mes,$dato);
+                
+        return response()->view('Tesoreria.listaMovCheques',['cheques'=>$movcheques]);
     }
 
     /**
@@ -39,9 +50,15 @@ class Mov_chequeController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {        
-        $movcheques = \App\Models\Tesoreria\Mov_cheque::listaMovCheques();
-        return view('Tesoreria.cheques_girados')->with('cheques',$movcheques);
+    {       
+        if(!auth()->user()->can('ver movimientos'))
+            return response ()->view ('errors.403');
+        $movcheques = \App\Models\Tesoreria\Mov_cheque::listaMovCheques(0,0,'');
+        $result[]='AÑOS';
+        for ($i = 2016; $i <= \Carbon\Carbon::now()->format('Y');$i++){
+            $result [$i]=$i;
+        }
+        return response()->view('Tesoreria.cheques_girados',['cheques'=>$movcheques,'anios'=>$result]);
     }
 
     /**
@@ -63,6 +80,8 @@ class Mov_chequeController extends Controller
     public function store(Requests\Tesoreria\MovChequeRequest $request)
     {
         if($request->ajax()){
+            if(!auth()->user()->can('crear movimientos'))
+                return response ()->view ('errors.403-content',[],403);
             $movcheque = \App\Models\Tesoreria\Mov_cheque::create([
                 'num_cheque'=>$request->numero,
                 'concepto'=>  strtoupper($request->concepto),
@@ -109,9 +128,11 @@ class Mov_chequeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Requests\Tesoreria\MovChequeRequest $request, $id)
     {
         if($request->ajax()){
+            if(!auth()->user()->can('editar movimientos'))
+                return response ()->view ('errors.403-content',[],403);
             $movcheque = \App\Models\Tesoreria\Mov_cheque::FindOrFail($id);
             $movcheque->num_cheque=$request->numero;
             $movcheque->concepto= strtoupper($request->concepto);
@@ -129,11 +150,15 @@ class Mov_chequeController extends Controller
 
     public  function updateAnular(Request $request, $id){
         if($request->ajax()){
+            if(!auth()->user()->can('eliminar movimientos'))
+                return response ()->view ('errors.403-content',[],403);
             $movcheque = \App\Models\Tesoreria\Mov_cheque::FindOrFail($id);
             $movcheque->concepto = strtoupper($request->motivo);
             $movcheque->users_id=  auth()->id();
             $movcheque->estado = 'ANULADO';
+            $movcheque->importe = 0;
             $movcheque->save();
+            $caja = \App\Models\Tesoreria\Caja_chica::where('mov_cheques_id','=',$id)->delete();
             return response()->json(['success'=>true]);
         }
     }

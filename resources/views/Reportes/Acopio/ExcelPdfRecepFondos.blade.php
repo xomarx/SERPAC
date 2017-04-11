@@ -1,4 +1,4 @@
-
+<title>KARDEX DE DINERO</title>
 <table width="100%" border="1">
     <thead>
         <tr>    

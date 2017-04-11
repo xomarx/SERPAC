@@ -21,10 +21,18 @@ class Caja_chicaController extends Controller
         }
     }
 
-        public function cajachica(){
-        $cheques = \App\Models\Tesoreria\Cheque::pluck('cheque','id');
+    public function cajachica() {        
+        $cheques = \App\Models\Tesoreria\Cheque::pluck('cheque', 'id');
         $cont = \App\Models\Tesoreria\Caja_chica::all()->count() + 1;
-        return view('Tesoreria.cajaChica',['cheques'=>$cheques,'num'=>$cont]);
+        return response ()->view('Tesoreria.cajaChica', ['cheques' => $cheques, 'num' => $cont]);
+    }
+    
+    public function headcajachica() {
+        $result[]='AÑOS';
+        for ($i = 2016; $i <= \Carbon\Carbon::now()->format('Y');$i++){
+            $result [$i]=$i;
+        }
+        return view('Tesoreria.headerCaja_chica', ['anios'=>$result]);
     }
 
     /**
@@ -32,10 +40,11 @@ class Caja_chicaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-        //
-        $cajas = \App\Models\Tesoreria\Caja_chica::listaCaja_Chica();
+    public function index($anio,$mes,$dato='')
+    {        
+        if(!auth()->user()->can('ver movimientos'))
+            return response ()->view ('errors.403-content');        
+        $cajas = \App\Models\Tesoreria\Caja_chica::listaCaja_Chica($anio,$mes,$dato);
         return view('Tesoreria.listaCajaChica',['cajas'=>$cajas]);
     }
 
@@ -59,16 +68,19 @@ class Caja_chicaController extends Controller
     {
         //
         $this->validate($request, [
+            'caja'=>'required|unique:caja_chicas,num_caja',
            'lischeque'=>'required',
             'numero'=>'required|numeric|exists:mov_cheques,num_cheque',
             'importe'=>'required|numeric'
         ]);
-        $numero = \App\Models\Tesoreria\Caja_chica::all()->count() + 1;
-        $numero = "CAJA CHICA " . $numero;
+        if(!auth()->user()->can('crear movimientos'))
+            return response ()->view ('errors.403-content',[],403);
+        $movcheque = \App\Models\Tesoreria\Mov_cheque::where('num_cheque','=',$request->numero)
+                ->where('cheques_id','=',$request->lischeque)->select('id')->first();
         $caja = \App\Models\Tesoreria\Caja_chica::create([            
-            'num_caja'=>$numero,
+            'num_caja'=>$request->caja,
             'importe'=>$request->importe,
-            'mov_cheques_id'=>$request->lischeque,
+            'mov_cheques_id'=>$movcheque->id,
             'users_id'=>  auth()->id()
         ]);
         
@@ -117,6 +129,8 @@ class Caja_chicaController extends Controller
             'numero'=>'required|numeric|exists:mov_cheques,num_cheque',
             'importe'=>'required|numeric'
         ]);
+        if(!auth()->user()->can('editar movimientos'))
+            return response ()->view ('errors.403-content',[],403);
         $caja = \App\Models\Tesoreria\Caja_chica::FindOrFail($id);
         $caja->importe=$request->importe;
         $caja->mov_cheques_id=$request->lischeque;
@@ -135,6 +149,8 @@ class Caja_chicaController extends Controller
     public function destroy($id)
     {
         //
+        if(!auth()->user()->can('eliminar movimientos'))
+            return response ()->view ('errors.403-content',[],403);
         $caja = \App\Models\Tesoreria\Caja_chica::FindOrFail($id);
         $temp = str_split($caja->num_caja, 11);
         $numero = \App\Models\Tesoreria\Caja_chica::all()->count();          

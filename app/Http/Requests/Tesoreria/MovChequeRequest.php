@@ -13,7 +13,7 @@ class MovChequeRequest extends Request
      */
     public function authorize()
     {
-        return true;
+        return auth()->user()->can(['crear movimientos','editar movimientos']);
     }
 
     /**
@@ -47,9 +47,13 @@ class MovChequeRequest extends Request
                     return [
                         //
                         'cheque' => 'required',
-                        'numero' => 'required|numeric|unique:cheques,num_cuenta',
-                        'dato' => 'required|exists:personas,paterno'.' '.'materno'.' '.'nombre',
-                        'concepto'=>'required'
+                        'numero' => 'required|numeric|unique:mov_cheques,num_cheque',
+                        'dato' => 'required',
+                        'dni' => 'required|exists:personas,dni',
+                        'idurl'=>'required',
+                        'concepto'=>'required',
+                        'tipo'=>'required',
+                        'importe'=>'required|numeric'
                     ];
                 }
             default : break;

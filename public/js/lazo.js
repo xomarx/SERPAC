@@ -124,7 +124,8 @@ var cargardistrito = function (iddist,idsele) {
         var estado = $("#estado").val();
         var motivo = $("#motivo").val();     
         var route = '/Acopio/Fondos-Acopio/'+id;        
-        var token = $("input[name=_token]").val();                    
+        var token = $("input[name=_token]").val();   
+        
         $.ajax({
             url: route,
             headers: {'X-CSRF-TOKEN': token},
@@ -147,31 +148,64 @@ var cargardistrito = function (iddist,idsele) {
         });
     };
     
+    var meses = function(anio){  
+        var meses = new Array ("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre", "Diciembre");
+        var cont = 12;
+        if(anio == (new Date).getFullYear()){
+            cont = (new Date).getMonth() + 1;
+        }
+        var htm='<option value=0>Todo los Meses</option>';
+        for(var i = 1;i <= cont ; i++){
+                htm +='<option value='+i+'>'+meses[i-1]+'</option>';
+            }
+        $("#mes").html(htm);            
+    };
+    
 var activarForm = function(id){
         if(id == 1) {var route = 'ListaRoles'}
         else if(id == 2) {var route = 'headPermisos';}
-        else if(id == 3) {var route = 'Caja-Chica';}
-        else if(id == 4) {var route = 'ListMovcheques';}
+        else if(id == 3) {var route = 'Caja-Chica/'+$("#anioc").val()+'/'+$("#mesc").val()+'/'+$("#buscarc").val();}
+        else if(id == 4) {var route = 'ListMovcheques/'+$("#anio").val()+'/'+$("#mes").val()+'/'+$("#buscar").val();}
         else if(id == 5) {var route = 'ListUsuarios';}
         else if(id == 6) {var route = 'transferencias/newtransferencias';}
         else if(id == 7) {var route = 'ListaPlanillaSemanal';}
         else if(id == 8) {var route = 'listaRecepcionFondos/'+$("#anio").val()+'/'+$("#mes").val();}
-        else if(id == 9) {var route = 'ListaDistribucion';}
-        $.get(route,function(data){            
-            $("#contenidos-box").html(data);//                        
-        });
+        else if(id == 9) {var route = 'ListaDistribucion/'+$("#anio").val()+'/'+$("#mes").val()+'/'+$("#buscar").val();}
+        $.ajax({
+            type:'get',
+            url:route,
+            success:function(data){                
+                $("#contenidos-box").html(data);
+                
+            }            
+        })
     };
     
+var activarFormHead = function(head,body){
+    if(head==1) { var route = 'headmovcheque'; }
+    else if(head==2) { var route = 'headcajachica'; } 
+    $.ajax({
+       type:'get' ,
+       url:route,
+       success: function(data){ 
+           var tem = '<div class="box box-body" id="contenidos-box"></div>';
+           $("#conten-box").html(data+tem);
+            activarForm(body);
+       }
+    });
+    
+}
+
 var activarmodal = function(id){        
         if(id==1){ var route = 'RolUsuario';}
         else if(id==2){ var route = 'PermisoUser';}
         else if(id==3){ var route = 'modalcheque';}
-        else if(id==4){ var route = 'modalmovcheque';}
+        else if(id==4){ var route = '/Tesoreria/modalmovcheque';}
         else if(id==5){ var route = 'modalCaja';}
         else if(id==6){ var route = '/socios/modalsocio';}
         else if(id==0){ var route = '/error-403';}
         else if(id==7){ var route = 'modalempleado';}
-//        else if(id==8){ var route = 'modalcompras';}
+//        else if(id==8){ var route = 'modalcompras';}        
         $.get(route,function(data){            
             $("#conten-modal").html(data);
             $("#modal-form").modal();
@@ -2061,7 +2095,7 @@ $("#RegDistribucion").click(function(){
 });
 
 
-//  ***********************  CRUD DE RECIBOS  ***********************************************************************************************************
+//  *******************************************************************************  CRUD DE RECIBOS  ***************************************************
 $("#nuevorecibo").click(function(data){
     $("#RegRecibo").text("Registrar");$("#codigo").prop('readonly',false);
      $("#error_codigo").html('');$("#error_recibo").html('');
@@ -2138,7 +2172,7 @@ var EliRecibo = function(id,name){
     });
 };
 
-//  ************  CRUD COMPRAS  *************************************************************************************************************************
+//  ********************************************************************************  CRUD COMPRAS  *****************************************************
 
 $("#nuevacompra").click(function(){
 //    activarmodal(8);
@@ -2322,7 +2356,7 @@ var AnulCompra = function(id,name){
    });    
 };
 
-// ****************************  CRUD PERSONA JURIDICA  *************************************************************************************************
+// ***********************************************************************************  CRUD PERSONA JURIDICA  ******************************************
  
 $("#nuevoperjuridica").click(function(){
         $("#formjuridico")[0].reset();$("#error_ruc").html('');$("#error_telefono").html('');
@@ -2404,7 +2438,7 @@ var AnulJuridico = function(id,name){
     });
    };
    
-// *******************************  CRUD TIPO EGRESO  ***************************************************************************************************
+// *******************************************************************************************  CRUD TIPO EGRESO  ***************************************
 $("#nuevaegreso").click(function(){
     $("#formegresos")[0].reset();$("#RegtipoEgreso").text("Registrar");
     $("#error_tipo").html('');$("#error_descripcion").html('');
@@ -2477,7 +2511,7 @@ $("#RegtipoEgreso").click(function(){
        });
 });
 
-// ********************************  PAGOS **************************************************************************************************************
+// ********************************************************************************************  PAGOS **************************************************
 
 $("#RegEgresos").click(function(){        
         var route = "/Acopio/Gastos";
@@ -2532,7 +2566,7 @@ var EliGasto = function(id,nombre){
     });
    };
    
-   // ***************************   ROL *****************************************************************************************************************
+   // **************************************************************************************************   ROL ******************************************
         
    var regrol = function (id){
        var formu = $("#formrol").serialize();
@@ -2594,7 +2628,7 @@ var EliGasto = function(id,nombre){
        });
    };
                             
-   // ******************************************  CHEQUE *************************************************************************************************
+   // ******************************************************************************************************  CHEQUE *************************************
    
    var EdiCheque = function(id){     
      $.get('modalcheque',function(data){
@@ -2627,14 +2661,12 @@ var EliGasto = function(id,nombre){
     });
    };
    
-   //**************************************   MOV CHEQUE ************************************************************************************************
-   
-   var regmovCheque = function(){
-      
+   //***********************************************************************************************************   MOV CHEQUE ***************************
+   $(document).ready().on('click','#RegMovCheque',function (){             
        var token = $("input[name=_token]").val();
        var type="POST";
        var fields = $("#formmovcheque").serialize();
-       if($("#Regmodal").text() == "Actualizar") type = 'PUT';
+       if($("#RegMovCheque").text() == "Actualizar") type = 'PUT';       
       $.ajax({          
           url:'Cheques-Girados/'+$("#idmovcheque").val(),
           headers:{'X-CSRF-TOKEN':token},
@@ -2642,45 +2674,55 @@ var EliGasto = function(id,nombre){
           datatype:'json',
           data:fields,
           success:function(data){
-              $("#msj_rol").fadeIn();
-              if(data.success){
-                $("#txt_rol").html(data.message);                
-                document.location.reload();
-              }
-              else{
-                  $("#msj_rol").removeClass('alert-success');
-                  $("#msj_rol").addClass('alert-danger');
-                  $("#txt_rol").html(data.message);                                                
-              }
-              $("#msj_rol").fadeOut(1000);                  
+                mensajeRegistro(data,'formmovcheque')
+                activarForm(4);                                             
           },
-          error:function(data){
-              $("#error_concepto").html('');$("#error_img").html('');$("#error_dni").html('');$("#error_tipo").html('');
-              $("#error_dato").html('');$("#error_numero").html('');$("#error_cheque").html('');$("#error_importe").html('');
-              var errors =  $.parseJSON(data.responseText);
-              $.each(errors,function(index, value) {                      
-                            if(index == 'concepto')$("#error_concepto").html(value);
-                            else if(index == 'idurl')$("#error_img").html(value);
-                            else if(index == 'dni')$("#error_dni").html(value);                             
-                            else if(index == 'tipo')$("#error_tipo").html(value);
-                            else if(index == 'dato')$("#error_dato").html(value);
-                            else if(index == 'numero')$("#error_numero").html(value);                             
-                            else if(index == 'cheque')$("#error_cheque").html(value);
-                            else if(index == 'importe')$("#error_importe").html(value);
-                      });
-          }
-       });
-   };
+          error:function(data) {
+            if (data.status == 403)
+                $("#error-modal").empty().html(data.responseText);
+            else {
+                $("#error_concepto").html('');
+                $("#error_img").html('');
+                $("#error_dni").html('');
+                $("#error_tipo").html('');
+                $("#error_dato").html('');
+                $("#error_numero").html('');
+                $("#error_cheque").html('');
+                $("#error_importe").html('');
+                var errors = $.parseJSON(data.responseText);
+                $.each(errors, function (index, value) {
+                    if (index == 'concepto')
+                        $("#error_concepto").html(value);
+                    else if (index == 'idurl')
+                        $("#error_img").html(value);
+                    else if (index == 'dni')
+                        $("#error_dni").html(value);
+                    else if (index == 'tipo')
+                        $("#error_tipo").html(value);
+                    else if (index == 'dato')
+                        $("#error_dato").html(value);
+                    else if (index == 'numero')
+                        $("#error_numero").html(value);
+                    else if (index == 'cheque')
+                        $("#error_cheque").html(value);
+                    else if (index == 'importe')
+                        $("#error_importe").html(value);
+                });
+            }
+        }
+       });       
+   });
    
    var EdiMovCheque = function(id){
        $.get('modalmovcheque',function(data){
          $("#conten-modal").html(data);
      });
-     $.getJSON("Cheques-Girados/"+id+"/edit",function(data){              
+     $.getJSON("Cheques-Girados/"+id+"/edit",function(data){                  
          if(data.tipo) $("#tipos").attr('checked',true);
          else $("#tipoe").attr('checked',true);         
          $("#concepto").val(data.movcheque.concepto);
          $("#numero").val(data.movcheque.num_cheque);
+         
          $("#cheque").val(data.movcheque.cheques_id); 
          $("#importe").val(data.movcheque.importe);
          $("#idurl").val(data.movcheque.url_cheque);
@@ -2688,8 +2730,8 @@ var EliGasto = function(id,nombre){
          $("#dato").val(data.movcheque.paterno+ ' ' + data.movcheque.materno+' '+data.movcheque.nombre);
          $("#dni").val(data.movcheque.dni);
          $("#imgcheque").attr('src',data.movcheque.url_cheque); 
-         $("#Regmodal").text("Actualizar");
-         $("#modalrol").modal({show:'false'});
+         $("#RegMovCheque").text("Actualizar");
+         $("#modal-form").modal({show:'false'});
      });
    }
    
@@ -2704,10 +2746,12 @@ var EliGasto = function(id,nombre){
             type: 'PUT',
             dataType: 'json',
             data: { motivo:motivo },
-            success: function (data) {
-                if (data.success) document.location.reload();                
+            success: function (data) {                                
+                if(data.success) activarForm(4);
             },
-            
+            error:function(data){
+                if (data.status==403) activarmodal(0);
+            }
         });
     });
    }
@@ -2752,9 +2796,8 @@ var EliGasto = function(id,nombre){
        if($("#remcaja").text() == "Actualizar"){
            route = 'Caja-Chica/'+$("#idcaja").val();
            type = "PUT";
-       }
-       
-       var formu = $("#formcaja").serialize();
+       }       
+       var formu = $("#formcaja").serialize();       
        $.ajax({          
           url:route,
           headers:{'X-CSRF-TOKEN':token},
@@ -2762,43 +2805,37 @@ var EliGasto = function(id,nombre){
           datatype:'json',
           data:formu,
           success:function(data){
-              $("#msj_rol").fadeIn();
-              if(data.success){
-                $("#txt_rol").html(data.message);                   
-                activarForm(3);
-                $("#modalrol").modal("hide")
-              }
-              else{
-                  $("#msj_rol").removeClass('alert-success');
-                  $("#msj_rol").addClass('alert-danger');
-                  $("#txt_rol").html(data.message);                                                
-              }
-               $("#msj_rol").fadeOut(1000);                 
+              mensajeRegistro(data,'formcaja');
+              activarForm(3);                               
           },
           error:function(data){
-              $("#error_rol").html('');$("#error_tag").html('');$("#error_descripcion").html('');              
+              if(data.status==403) $("#error-modal").empty().html(data.responseText);
+              else{
+              $("#error_rol").html('');$("#error_tag").html('');$("#error_descripcion").html('');  $("#error-caja").html('');             
               var errors =  $.parseJSON(data.responseText);
               $.each(errors,function(index, value) {                      
                             if(index == 'lischeque' )$("#error_lischeque").html(value);
                             else if(index == 'numero' )$("#error_numero").html(value);
-                            else if(index == 'importe' || index == 'numero')$("#error_importe").html(value);                            
+                            else if(index == 'importe' || index == 'numero')$("#error_importe").html(value);  
+                            else if(index=='caja')$("#error-caja").html(value); 
                       });
+            }
           }
        });
    };
    
-   var EdiCajaChica = function(id){
+   var EdiCajaChica = function(id){       
        $.get('modalCaja',function(data){
          $("#conten-modal").html(data);
      });
-     $.getJSON("Caja-Chica/"+id+"/edit",function(data){                       
+     $.getJSON("Caja-Chica/"+id+"/edit",function(data){                    
          $("#numero").val(data.num_cheque);
-         $("#lischeque").val(data.mov_cheques_id); 
+         $("#caja").val(data.num_caja);
+         $("#lischeque").val(data.id); 
          $("#importe").val(data.importe);
-         $("#idcaja").val(data.id);
-         $("#title").html(data.num_caja)
+         $("#idcaja").val(id);         
          $("#remcaja").text("Actualizar");
-         $("#modalrol").modal({show:'false'});
+         $("#modal-form").modal();
      });
    };
       
@@ -2813,6 +2850,11 @@ var EliGasto = function(id,nombre){
         dataType: 'json',
         success: function(data){
         if (data.success) activarForm(3);        
+      },
+      error:function(data){
+          if(data.status==403) activarmodal(0);
+          else
+                    activarForm(3)
       }
       });          
     });
@@ -2913,7 +2955,30 @@ var EliGasto = function(id,nombre){
 
 });
       
-      
+// ************************************************************************ REPORTES **********************************************
+
+$(document).ready().on('click','#Pdfgirocheques',function(e){
+    $(this).attr('href','');
+    var route = '/Tesoreria/Cheques-Girados/Reporte-cheques/' + $("#anio").val()+'/'+$("#mes").val()+'/'+$("#buscar").val();
+    $(this).attr('href',route);       
+});
+
+$(document).ready().on('click','#ExcelGiroCheque',function(e){
+    if($("#anio").val() ==0) {alert('Seleccione el Año'); e.preventDefault(); }
+    $(this).attr('href','');
+    var route = '/Tesoreria/Cheques-Girados/Excel-cheques/' + $("#anio").val()+'/'+$("#mes").val()+'/'+$("#buscar").val();
+    $(this).attr('href',route);       
+});
+//$(document).ready().on('click','#Pdfgirocheques',function(e){
+//    var route = $(this).attr('href')+'/' + $("#anio").val()+'/'+$("#mes").val()+'/'+$("#buscar").val();
+//    $(this).attr('href',route);       
+//});
+   
+   
+        
+    
+    
+
   
       
    

@@ -26,9 +26,14 @@ class tesoreriacontroller extends Controller
         return $pdf->stream();
     }
     
-    public function recibofondoTecnicoo()
+    public function recibofondoDistribucion()
     {        
-        $dato = view('Reportes.socios.socio')->render();
+        $iddistribucion = Distribucion::getDistribucion()->id;
+        $monto =  new \App\Library\ConvertNumberToText();
+        $miMoneda = "PEN";        
+        $distribucion = Distribucion::getReciboAcopiador($iddistribucion);
+        $monto=$monto->to_word($distribucion->monto, $miMoneda);     
+        $dato = view('Reportes.Tesoreria.ReciboFondoAcopiador',['monto'=>$monto,'distribucion'=>$distribucion])->render();        
         $pdf = \Illuminate\Support\Facades\App::make('dompdf.wrapper');
         $pdf->loadHTML($dato);                        
         return $pdf->stream();
@@ -43,16 +48,20 @@ class tesoreriacontroller extends Controller
     {        
         if(!auth()->user()->can('ver distribucion'))
             return response ()->view ('errors.403');
-        $distribucions = Distribucion::listaDistribucion();
-        $tecnicos = Distribucion::tecnicos();        
-        return view('Tesoreria.distribucion',['distribucions'=>$distribucions,'tecnicos'=>$tecnicos]);
+        $distribucions = Distribucion::listaDistribucion(0,0,'');
+        $tecnicos = Distribucion::tecnicos();
+        $result[]='AÑO';
+        for ($i = 2016; $i <= Carbon::now()->format('Y');$i++){
+            $result [$i]=$i;
+        }
+        return view('Tesoreria.distribucion',['distribucions'=>$distribucions,'tecnicos'=>$tecnicos,'anios'=>$result]);
     }
 
-    public function listaDistribucion(){
-        $distribucions = Distribucion::listaDistribucion();           
+    public function listaDistribucion($anio,$mes,$dato=''){                        
+            $distribucions = Distribucion::listaDistribucion($anio,$mes,$dato);                           
         return view('Tesoreria.listaDistribucion',['distribucions'=>$distribucions]);
     }
-
+        
     /**
      * Show the form for creating a new resource.
      *

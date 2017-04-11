@@ -1,107 +1,120 @@
 @extends('tesoreria.mastertesoreria')
 @section('contentheader_title')
-    CAJA CHICAS
+    CHEQUES GIRADOS - CAJAS CHICAS
 @stop
 @section('main-content')
+@permission('ver movimientos')
 <div class="box box-solid box-primary">
-    <div class="box-header">
-        <a onclick="activarForm(4);" class="btn btn-dropbox" class="btn btn-dropbox" data-toggle="tooltip" data-placement="top" title="Nuevo Giro de Cheque"> GIRO DE CHEQUE <span class="fa fa-tasks"></span></a>
-        <a onclick="activarForm(3);" class="btn btn-dropbox" class="btn btn-dropbox" data-toggle="tooltip" data-placement="top" title="Lista de Caja Chica"> CAJA CHICA <span class="glyphicon glyphicon-tasks"></span></a>
+    <div class="box-header">   
+        <button  class="btn btn-dropbox dropdown-toggle" type="button" data-toggle="dropdown" id="btnexportar">EXPORTAR
+            <span class="caret"></span></button>
+        <ul class="dropdown-menu btn btn-github">
+            <li class="btn-dropbox"><a href="{{url('Tesoreria/Cheques-Girados/Excel-cheques')}}" target="_blank" id="ExcelGiroCheque">Exportar a Excel</a></li>
+            <li class="btn-dropbox" ><a href="{{url('Tesoreria/Cheques-Girados/Reporte-cheques')}}" target="_blank" id="Pdfgirocheques">Exportar a PDF</a></li>        
+        </ul>
+        <a onclick="activarFormHead(1,4);" class="btn btn-dropbox"  data-toggle="tooltip" data-placement="top" title="Lista de Giro de Cheque"> GIRO DE CHEQUE <span class="fa fa-tasks"></span></a>
+        <a onclick="activarFormHead(2, 3);" class="btn btn-dropbox"  data-toggle="tooltip" data-placement="top" title="Lista de Caja Chica"> CAJA CHICA <span class="glyphicon glyphicon-tasks"></span></a>
+
     </div>    
-    <div class="box-body" id="contenidos-box">
-    <a onclick="activarmodal(4);" class="btn btn-dropbox" class="btn btn-dropbox" data-toggle="tooltip" data-placement="top" title="Nuevo Giro de Cheque"> NUEVO GIRO <span class="fa fa-plus"></span></a>
-    <div class="box box-body">
-        <input id="token" type="hidden" name="_token" value="{{ csrf_token() }}" >
-        <table class="table table-hover table-responsive">
-            <thead>
-                <tr>
-                    <th>FECHA</th>
-                    <th>CHEQUE</th>
-                    <th>N° CHEQUE</th>
-                    <th>IMPORTE S/.</th>
-                    <th>APELLIDOS Y NOMBRES</th>
-                    <th>CONCEPTO</th>
-                    <th>USUARIO</th>
-                    <th>ACCION</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($cheques as $cheque)
-                {{--*/ @$name = '' /*--}}{{--*/ @$estado = '' /*--}}
-                @if($cheque->estado == 'ANULADO')
-                    {{--*/ @$name ='text-red' /*--}}
-                    {{--*/ @$estado ='disabled' /*--}}
-                    
-                @endif
-                <tr class="{{$name}}" >
-                    <td>{{$cheque->created_at}}</td>
-                    <td>{{$cheque->cheque}}</td>
-                    <td>{{$cheque->num_cheque}} </td>
-                    <td>{{$cheque->importe }}</td>
-                    <td>{{$cheque->paterno}} {{$cheque->materno}} {{$cheque->nombre}}</td>
-                    <td>{{$cheque->concepto}}</td>
-                    <td>{{$cheque->name}}</td>
-                    <td>
-                        @if($estado != 'disabled')
-                            {{--*/ @$evento =$cheque->id /*--}} {{--*/ @$numcheque =$cheque->num_cheque /*--}}
-                        @else
-                            {{--*/ @$evento =rand(1,100) /*--}} {{--*/ @$numcheque =rand(100,1000) /*--}}
-                        @endif
-                        <a onclick="EdiMovCheque('{{$evento}}')" class="btn btn-sm btn-primary {{$estado}}" style="cursor: pointer;"  data-toggle="tooltip" data-placement="top" title="Editar"><span class="glyphicon glyphicon-pencil" ></span></a>
-                        <a class="btn btn-sm btn-success {{$estado}}" style="cursor: pointer;" data-toggle="tooltip" data-placement="top" title="Generar Recibo"><span class="glyphicon glyphicon-print" ></span></a>
-                        <a onclick="AnulMovCheque('{{$evento}}','{{$cheque->cheque}}','{{$numcheque}}')" style="cursor: pointer;"  class= "btn btn-sm btn-danger {{$estado}}" data-toggle="tooltip" data-placement="top" title="Anular Cheque"><span  class="glyphicon glyphicon-remove"></span></a>
-                    </td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
+    <div class="box-body" id="conten-box">
+        @include('Tesoreria.headMov_cheques')
+        <div class="box box-body" id="contenidos-box">
+            @include('Tesoreria.listaMovCheques')
+        </div>
     </div>
 </div>
 <!--,'style'=>'display:none'-->
-<section id="conten-modal">
-    
-</section>
+<section id="conten-modal"></section>
+@endpermission
 @stop
 
-@section('script')
-<script>
-var clicktipo = function(id){       
-       if(id==1) {var route = '/socios/autopersonas'; var ruta = '/socios/autoDniSocios'}
-       else {var route = '/RRHH/autoempleado'; var ruta = '/RRHH/autoempleadoDni'}
-       $("#dato").autocomplete({     
-          minLength:1,           
-           autoFocus:true,
-           delay:1,
-           source: route,
-           select: function(event, ui){               
-               $("#dni").val(ui.item.id);
-           }
+    @section('script')
+    <script>
+        $(document).ready(function(){
+           $("#menutesoreria").addClass('active');
+           $("#submovcheque").addClass('active');
+           activarForm(4);
+        });
+        $(document).on('change','#anio',function(event){
+            meses(event.target.value);
+            activarForm(4);
+        });
+        $(document).on('click','.pagination li a',function(e){
+            e.preventDefault();
+            var url = $(this).attr('href');            
+            $.ajax({
+               type:'get',
+               url:url,
+               success:function(data){
+                   $("#contenidos-box").empty().html(data);
+               }
+            });
+        });
+        $(document).on('keyup','#buscar',function(){
+           activarForm(4); 
         });
         
-        $("#dni").autocomplete({     
-          minLength:1,           
-           autoFocus:true,
-           delay:1,
-           source: ruta,
-           select: function(event, ui){               
-               $("#dato").val(ui.item.id);
-           }
+        $(document).on('change','#mes',function(){
+            activarForm(4);
         });
-   };    
+        $(document).on('change','#anioc',function (event){
+            cargar_listames(event.target.value);            
+            activarForm(3);
+        });
+        $(document).on('change','#mesc',function(){
+            activarForm(3);
+        });
+        $(document).on('keyup','#buscarc',function(){
+           activarForm(3); 
+        });
+        var cargar_listames = function(anio){
+            
+        var meses = new Array ("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre", "Diciembre");
+        var cont = 12;
+        if(anio == (new Date).getFullYear()){
+            cont = (new Date).getMonth() + 1;
+        }
+        var htm='<option value=0>Todo los Meses</option>';
+        for(var i = 1;i <= cont ; i++){
+                htm +='<option value='+i+'>'+meses[i-1]+'</option>';
+            }
+        $("#mesc").html(htm);            
    
-   var changecheque = function(){       
-       var route = "{{ url('Tesoreria/numCheque') }}/"+$("#lischeque").val()+'';
-       console.log(route);
-       $("#numero").autocomplete({     
-          minLength:1,           
-           autoFocus:true,
-           delay:1,
-           source: route,
-           select: function(event, ui){               
-               console.log(ui.item);
-           }
+        };
+        
+        var clicktipo = function(id){
+        if (id == 1) {var route = '/socios/autopersonas'; var ruta = '/socios/autoDniSocios'}
+        else {var route = '/RRHH/autoempleado'; var ruta = '/RRHH/autoempleadoDni'}
+        $("#dato").autocomplete({
+        minLength:1,
+                autoFocus:true,
+                delay:1,
+                source: route,
+                select: function(event, ui){
+                $("#dni").val(ui.item.id);
+                }
         });
-   };
-</script>
+        $("#dni").autocomplete({
+        minLength:1,
+                autoFocus:true,
+                delay:1,
+                source: ruta,
+                select: function(event, ui){
+                $("#dato").val(ui.item.id);
+                }
+        });
+        };
+        var changecheque = function(){
+        var route = "{{ url('Tesoreria/numCheque') }}/" + $("#lischeque").val() + '';        
+        $("#numero").autocomplete({
+        minLength:1,
+                autoFocus:true,
+                delay:1,
+                source: route,
+                select: function(event, ui){                
+                }
+        });
+        };
+    </script>
 
 @stop

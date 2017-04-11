@@ -1,6 +1,6 @@
-<div class="modal fade" id="modalrol" role="dialog">
+<div class="modal fade" id="modal-form" role="dialog">
     <div class="modal-dialog modal-primary modal-lg">
-        <div class="modal-content">
+        <div class="modal-content" id="error-modal">
             <div class="modal-header">
                 <button type="button" class="close btn-sm" data-dismiss="modal">&times;</button>
                 <h3 class="modal-title">GIROS DE CHEQUES</h3>
@@ -69,8 +69,8 @@
             </div>
             <div class="modal-footer">    
                 <div class="col-md-12">
-                    <a onclick="regmovCheque()" id="Regmodal" class="btn btn-dropbox">Registrar</a>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <a id="RegMovCheque" class="btn btn-dropbox">Registrar</a>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Salir</button>
                 </div>
                 
             </div>                    

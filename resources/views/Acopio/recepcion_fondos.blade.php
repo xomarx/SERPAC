@@ -11,7 +11,7 @@
             <span class="caret"></span></button>
             <ul class="dropdown-menu btn btn-github">
                 <li class="btn-dropbox"><a href="javascript:void(0)" onclick="xportPdfExcel(2)">Exportar a Excel</a></li>
-                <li class="btn-dropbox" ><a href="javascript:void(0)" onclick="xportPdfExcel(1)">Exportar a PDF</a></li>        
+                <li class="btn-dropbox" ><a href="javascript:void(0)" target="_blank" onclick="xportPdfExcel(1)">Exportar a PDF</a></li>        
             </ul>
         </div>         
          <div class="col-sm-2" style="float: right">

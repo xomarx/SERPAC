@@ -147,28 +147,38 @@ Route::group(['middleware' => ['auth']], function () {
     route::resource('Acopio/Pdf','Acopio\planillacontroller@pdf');
     route::resource('Acopio/Gastos','Tesoreria\egresoscontroller');
     route::resource('Acopio/Persona-Juridica','Tesoreria\persona_juridicacontroller');
-     
-    route::get('Tesoreria/Distribucion/ReciboAcopio/{id}','Tesoreria\tesoreriacontroller@recibofondoAcopiador');//recibofondoAcopiador
-    route::resource('Tesoreria/Distribucion/ReciboTecnico','Tesoreria\tesoreriacontroller@recibofondoTecnico');//recibofondoTecnicoo
-    route::resource('Tesoreria/ListaDistribucion','Tesoreria\tesoreriacontroller@listaDistribucion');
+    
+    // **********************************   MODULO DE TESORERIA ************************************     
+    route::get('Tesoreria/Distribucion/ReciboAcopio/{id}','Tesoreria\tesoreriacontroller@recibofondoAcopiador');//recibofondoAcopiador    
+    route::resource('Tesoreria/Distribucion-Fondos/Fondos-Pdf','Informes\Reportecontroller@pdfDistribucionFondo');
+    route::resource('Tesoreria/Distribucion/Recibodistribucion','Tesoreria\tesoreriacontroller@recibofondoDistribucion');//recibofondoTecnicoo
+    route::get('Tesoreria/ListaDistribucion/{anio?}/{mes?}/{dato?}/{page?}','Tesoreria\tesoreriacontroller@listaDistribucion');
     route::resource('Tesoreria/Distribucion-Fondos','Tesoreria\tesoreriacontroller');
+    
+    route::get('Tesoreria/ListMovcheques/{anio?}/{mes?}/{dato?}/{page?}','Tesoreria\Mov_chequeController@listMovcheques');    
+    route::resource('Tesoreria/headmovcheque','Tesoreria\Mov_chequeController@headmovcheque');
+    route::resource('Tesoreria/modalmovcheque','Tesoreria\Mov_chequeController@movcheque');
+    route::resource('Tesoreria/Cheques-Girados','Tesoreria\Mov_chequeController');
+    route::resource('uploadimage','Tesoreria\Mov_chequeController@uploadImage');//uploadImage
+    route::get('Tesoreria/numCheque/{id}','Tesoreria\Caja_chicaController@autoNumCheque');
+    route::resource('Tesoreria/headcajachica','Tesoreria\Caja_chicaController@headcajachica');
+    route::resource('Tesoreria/modalCaja','Tesoreria\Caja_chicaController@cajachica');
+    route::resource('Tesoreria/Caja-Chica','Tesoreria\Caja_chicaController');
+    route::get('Tesoreria/Caja-Chica/{anio?}/{mes?}/{dato?}/{page?}','Tesoreria\Caja_chicaController@index');
+    
+    
     
     route::resource('Tesoreria/modalcheque','Tesoreria\ChequeController@cheque');//cheque  
     route::resource('Tesoreria/RegistrarCheques','Tesoreria\ChequeController@store');
     route::put('Tesoreria/ActualizarCheques/{id}','Tesoreria\ChequeController@update'); 
     route::delete('Tesoreria/deleteCheques/{id}','Tesoreria\ChequeController@destroy');
     route::resource('Tesoreria/Cheques','Tesoreria\ChequeController');
-        
+    
     route::put('Tesoreria/UpdateMovCheque/{id}','Tesoreria\Mov_chequeController@updateAnular');
 //    route::resource('Tesoreria/NewMovCheque','Tesoreria\Mov_chequeController');
-    route::resource('Tesoreria/ListMovcheques','Tesoreria\Mov_chequeController@listMovcheques');
-    route::resource('Tesoreria/modalmovcheque','Tesoreria\Mov_chequeController@movcheque');
-    route::resource('Tesoreria/Cheques-Girados','Tesoreria\Mov_chequeController');
-    route::resource('uploadimage','Tesoreria\Mov_chequeController@uploadImage');//uploadImage
     
-    route::get('Tesoreria/numCheque/{id}','Tesoreria\Caja_chicaController@autoNumCheque');
-    route::resource('Tesoreria/modalCaja','Tesoreria\Caja_chicaController@cajachica');
-    route::resource('Tesoreria/Caja-Chica','Tesoreria\Caja_chicaController');
+    
+    
                
     route::resource('Tesoreria/Tipos-egresos','Tesoreria\tipo_egresoscontroller');
             
@@ -179,13 +189,18 @@ Route::group(['middleware' => ['auth']], function () {
     // *******************  REPORTES O INFORMES GRAFICAS ******************************** 
     route::get('Acopio/PdfRecepcion/{an?}/{mes?}','Informes\Reportecontroller@pdfrecepcion');
     route::get('Acopio/ExcelRecepcion/{an?}/{mes?}','Informes\Reportecontroller@excelrecepcion');
+    
+    route::get('Tesoreria/Cheques-Girados/Reporte-cheques/{an?}/{mes?}/{dato?}','Informes\Reportecontroller@pdfGiroCheques');
+    route::get('Tesoreria/Cheques-Girados/Excel-cheques/{an?}/{mes?}/{dato?}','Informes\Reportecontroller@ExcelGiroCheques');
+    
+    route::resource('ReporpadronSocios','Informes\Reportecontroller@ReporpadronSocios');
+    
     route::get('Informes/Acopio/Fondos-Acopio/{a?}/{mes?}','Informes\ListaInformescontroller@grafica_acopio_dinero');
     route::resource('Informes/Acopio/Grafica-Fondos','Informes\ListaInformescontroller@grafica_fondos');
-    route::get('Informes/grafica-socios/{a?}/{mes?}','Informes\ListaInformescontroller@grafico_socios');
-    
+    route::get('Informes/grafica-socios/{a?}/{mes?}','Informes\ListaInformescontroller@grafico_socios');    
     route::resource('Informes/Padron-Socios','Informes\ListaInformescontroller@padronsocios');
     route::resource('Informes','Informes\ListaInformescontroller');
-    route::resource('ReporpadronSocios','Informes\Reportecontroller@ReporpadronSocios');
+    
         
     route::get('codrecibos/{id}','Configuracion\tipo_documentoController@getnumerodocumento');
     route::resource('codrecibos','Configuracion\tipo_documentoController@autoCompleteCodRecibo');//

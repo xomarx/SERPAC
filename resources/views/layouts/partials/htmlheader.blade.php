@@ -23,6 +23,7 @@
     <link href="{{ asset('/plugins/select2/select2.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('/css/bootstrap-duallistbox.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('/css/jquery-ui.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('/css/theme.default.min.css') }}" rel="stylesheet" type="text/css" />
     <!-- iCheck -->
     <link href="{{ asset('/plugins/iCheck/square/blue.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('/plugins/datepicker/datepicker3.css') }}" rel="stylesheet" type="text/css" />

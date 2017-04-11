@@ -30,6 +30,11 @@ class Sucursal extends Model
         return $this->hasMany(Egreso::class);
     }
     
+    public function distribucions(){
+        return $this->hasMany(\App\Models\Tesoreria\Distribucion::class);
+    }
+
+
     public static  function listaSucursales()
     {
         return DB::table('sucursales')
