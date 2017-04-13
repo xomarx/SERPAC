@@ -11,7 +11,7 @@ class Tipo_documento extends Model
     protected $primarykey = 'codigo';
     public  $timestamps=false;
     protected  $fillable = [
-        'codigo','tipo_documento'
+        'codigo','tipo_documento','enlace'
     ]; 
     
     public  function documentos()

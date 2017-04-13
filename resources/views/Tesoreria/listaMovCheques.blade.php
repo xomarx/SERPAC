@@ -26,7 +26,7 @@
                         <td>{{$cheque->created_at}}</td>
                         <td>{{$cheque->cheque}}</td>
                         <td>{{$cheque->num_cheque}} </td>
-                        <td>{{$cheque->importe }}</td>
+                        <td>{{number_format($cheque->importe,2) }}</td>
                         <td>{{$cheque->paterno}} {{$cheque->materno}} {{$cheque->nombre}}</td>
                         <td>{{$cheque->concepto}}</td>
                         <td>{{$cheque->name}}</td>

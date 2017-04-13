@@ -83,13 +83,79 @@ class Reportecontroller extends Controller
     
     //******************************************************  TESORERIA ***************************************
     
-    public function pdfDistribucionFondo(){
-        $dato = view('Reportes.Tesoreria.ExcelPdfDistribucionFondos')->render();         
-        $pdf = \Illuminate\Support\Facades\App::make('dompdf.wrapper');        
-            $pdf->loadHTML(utf8_decode($dato))->setPaper('a4', 'portrait')->setWarnings(false); //portrait          
+    
+    public function pdfDistribucionFondo($anio, $mes, $dato = '') {
+
+        $anios = \App\Models\Tesoreria\Distribucion::ListaAnioDistriReport($anio, $mes, $dato);
+//        dd($anios[0]->fecha);
+        if (count($anios)) {            
+            foreach ($anios as $ani) {
+                $meses = \App\Models\Tesoreria\Distribucion::ListaMesesDistriReport($ani->fecha, $mes, $dato);    
+//                dd($meses[0]->mes);
+                foreach ($meses as $me) {                    
+                    $movcheques = \App\Models\Tesoreria\Distribucion::ListaDistribucReportMovCheques($ani->fecha, $me->mes, $dato);
+//                    dd($movcheques);                    
+                    foreach ($movcheques as $movcheque) {
+                        $distribucions = \App\Models\Tesoreria\Distribucion::ListaReportDistribucions($ani->fecha, $me->mes, $dato, $movcheque->id);
+//                        dd($distribucions);
+                        $lista[] = ['cheque' => $movcheque, 'listas' => $distribucions];
+                    }
+                    
+                    $lista1[] = ['meses' => $me->mes, 'lista1' => $lista];
+                    unset($lista);
+//                   dd($lista1);
+                }                                
+                $lista2[] = ['anios' => $ani->fecha, 'lista2' => $lista1];  
+//                dd($lista2);
+                unset($lista1);                
+            }
+//            dd($lista2);
+            $dato = view('Reportes.Tesoreria.ExcelPdfDistribucionFondos', ['listas' => $lista2])->render();
+        } else {
+            $dato = view('Reportes.NoFoundPdfExcel')->with('titulo', 'REPORTE DE DISTRIBUCION DE ACOPIO');
+        }
+        $pdf = \Illuminate\Support\Facades\App::make('dompdf.wrapper');
+        $pdf->loadHTML(utf8_decode($dato))->setPaper('a4', 'portrait')->setWarnings(false); //portrait          
         return $pdf->stream();
     }
     
+    public function excelDistribucionFondo($anio, $mes, $dato = ''){
+        
+        $anios = \App\Models\Tesoreria\Distribucion::ListaAnioDistriReport($anio, $mes, $dato);        
+        if (count($anios) > 0) {                        
+            foreach ($anios as $ani) {
+                //crea archivo                
+                \Maatwebsite\Excel\Facades\Excel::create('REPORTE DE DISTRIBUCION DE FONDOS DEL '.$ani->fecha, function($excel) use($ani,$mes,$dato){
+                    $meses = \App\Models\Tesoreria\Distribucion::ListaMesesDistriReport($ani->fecha, $mes, $dato); 
+                    
+                    foreach ($meses as $me) {
+                        //crea hoja                             
+                        $excel->sheet('FONDOS', function($sheet) use($ani,$me,$dato){                              
+                            $movcheques = \App\Models\Tesoreria\Distribucion::ListaDistribucReportMovCheques($ani->fecha, $me->mes, $dato);                            
+                            foreach ($movcheques as $movcheque) {
+                                $distribucions = \App\Models\Tesoreria\Distribucion::ListaReportDistribucions($ani->fecha, $me->mes, $dato, $movcheque->id);
+                                $lista[] = ['cheque' => $movcheque, 'listas' => $distribucions];
+                            }                              
+                            $lista1[] = ['meses' => $me->mes, 'lista1' => $lista];
+                            unset($lista);                            
+                        //termina de crear hoja
+                        $sheet->setAutoSize(true);
+                        $sheet->loadView('Reportes.Tesoreria.ExcelDistFondos',['listas'=>$lista1]);
+                        });
+                    }
+                })->export('xls');//xlsx
+            }
+        }
+        else{
+            
+             \Maatwebsite\Excel\Facades\Excel::create('REPORTE DE DISTRIBUCION DE FONDOS ', function($excel){   
+                 $excel->sheet('FONDOS', function($sheet){ 
+                    $sheet->loadView('Reportes.NoFoundPdfExcel',['titulo'=>"REPORTE"]);  
+                    });
+        })->export('xls');//xlsx
+        }
+    }
+
     public function pdfGiroCheques($anio,$mes,$dato=''){
         
         $cheques = \App\Models\Tesoreria\Mov_cheque::listachequesXanio($anio,$mes,$dato);
@@ -120,7 +186,7 @@ class Reportecontroller extends Controller
         
         $cheques = \App\Models\Tesoreria\Mov_cheque::listachequesXanio($anio,$mes,$dato);
         if (count($cheques) > 0) {
-            $anios = \App\Models\Tesoreria\Mov_cheque::ListaExcelAnios($anio, $dato);            
+            $anios = \App\Models\Tesoreria\Mov_cheque::ListaExcelAnios($anio, $dato);               
             foreach ($anios as $ani) {
                 //crea archivo                
                 \Maatwebsite\Excel\Facades\Excel::create('REPORTE DE CHEQUES GIRADOS '.$ani->fecha, function($excel)use($ani,$mes,$dato){

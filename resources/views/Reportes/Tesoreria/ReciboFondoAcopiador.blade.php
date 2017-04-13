@@ -18,14 +18,15 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td style="font-size: 16; border: #007fff solid;" align="center">18</td>
-                            <td style="font-size: 16; border: #007fff solid;" align="center">02</td>
-                            <td style="font-size: 16; border: #007fff solid;" align="center">2017</td>
+                            <td style="font-size: 16; border: #007fff solid;" align="center"><?php $date=date_create($distribucion->fecha);
+                            echo date_format($date,"d")  ?></td>
+                            <td style="font-size: 16; border: #007fff solid;" align="center"><?php echo date_format($date,"m")  ?>  </td>
+                            <td style="font-size: 16; border: #007fff solid;" align="center"><?php echo date_format($date,"Y")  ?></td>
                         </tr>
                     </tbody>
                     <tfoot>
                         <tr>
-                            <th colspan="3" style="font-size: 16; border: #007fff solid; border-radius: 10px;" align="center">S/ {{$distribucion->monto }}</th>
+                            <th colspan="3" style="font-size: 16; border: #007fff solid; border-radius: 10px;" align="center">S/ {{number_format($distribucion->monto,2) }}</th>
                         </tr>
                     </tfoot>
                 </table>
@@ -34,8 +35,8 @@
     </thead>
     <tbody>
           <tr>
-            <td colspan="1" style="font-size: 12;">RECIBO DE DISTRIBUCION DE FONDOS PARA ACOPIO</td>
-            <td align="center" style="color: red" >N° 030116</td>
+            <td colspan="1" style="font-size: 12;">{{$distribucion->tipo_documento}}</td>
+            <td align="center" style="color: red" >N° {{$distribucion->enumeracion}}</td>
         </tr>                  
     </tbody>       
 </table> 
@@ -47,43 +48,53 @@
                 </thead>
                 <tbody style="font-size: 10;">
                     <tr>
-                        <td><b>Cantidad de: </b>&nbsp;&nbsp;</td>
-                        <td style="border: #007fff solid; border-radius: 10px;" width="63%" colspan="2">{{$monto}}</td>
+                        <td width="20%"><b>Cantidad de: </b>&nbsp;&nbsp;</td>
+                        <td colspan="2" style="border: #007fff solid; border-radius: 10px;" width='50%'  >{{$monto}}</td>
                     </tr>
                     <tr>
-                        <td colspan="2"><b>Para acopiar cacao y entregar al Amacen de Acopagro</b></td>
-                        <td rowspan="3" align="center" width='20%' style="border: #007fff solid; border-radius: 10px;" >               
+                        <td colspan="2"  ><b>Para acopiar cacao y entregar al Amacen de Acopagro</b></td>
+                        <td rowspan="3" align="center"  style="border: #007fff solid; border-radius: 10px; " >               
                         </td>
                     </tr>
                     <tr>
                         <td><b>Lugar: </b></td>
-                        <td style="border: #007fff solid; border-radius: 10px;" width="63%">{{$distribucion->sucursal}} - {{$distribucion->comite_local }}</td>
+                        <td width="100%" style="border: #007fff solid; border-radius: 10px;"  >{{$distribucion->sucursal}} - {{$distribucion->comite_local }}</td>
                     </tr>
                     <tr>
                         <td colspan="2"><br><br><br></td>
                     </tr>   
-                    <tr >
-                        <td align='center' style="border-top: hidden; font-size: 7" width="25%">
-                            <hr width='100%'>
-                            LUZMILA DEL AGUILA CARRION
-                            <br><b style="font-size: 12">Tesoreria</b>
-                        </td>
-                        <td align='center' style=" border-left: hidden; border-top: hidden;" width="50%">
-                            <hr width='70%'>
-                            FIRMA ACOPIADOR
-                        </td>
-                        <td align="center">HUELLA</td>
-                    </tr>
                     <tr>
-                        <td></td>
-                        <td colspan="2"><b>NOMBRE: </b>{{$distribucion->paterno }} {{$distribucion->materno }} {{$distribucion->nombre }}</td>
-                    </tr>
-                    <tr>
-                        <td></td>
-                        <td colspan="2"><b>D.N.I.: </b>{{$distribucion->dni }}</td>
+                        <td colspan="3">
+                            <table width="100%" >
+                                <tbody style="font-size: 10;">
+                                    <tr >
+                                        <td align='center' style="border-top: hidden;" width="70%">
+                                            <hr width='100%'>
+                                            LUZMILA DEL AGUILA CARRION
+                                            <br><b style="font-size: 12">Tesoreria</b>
+                                        </td>
+                                        <td align='center' style=" border-left: hidden; border-top: hidden;" width="100%">
+                                            <hr width='50%'>
+                                            FIRMA ACOPIADOR
+                                        </td>
+                                        <td align="center" width="40%">HUELLA</td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td colspan="2"><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; NOMBRE: &nbsp;&nbsp;</b>{{$distribucion->paterno }} {{$distribucion->materno }} {{$distribucion->nombre }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td colspan="2"><b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; D.N.I.: &nbsp;&nbsp;</b>{{$distribucion->dni }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>                        
                     </tr>
                 </tbody>
             </table>
+<br>
+
 
 
 

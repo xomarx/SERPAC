@@ -22,8 +22,7 @@ class Documento extends Model
     public static function enumeracionDoc($idrecibo){
         return \Illuminate\Support\Facades\DB::table('documentos')
                 ->where('tipo_documentos_cod','=',$idrecibo) 
-                ->select( 'enumeracion')
-                ->orderby('enumeracion','DESC')                
+                ->select(\Illuminate\Support\Facades\DB::raw('IFNULL(max(enumeracion),0) as enumeracion'))                
                 ->first();
     }
 }

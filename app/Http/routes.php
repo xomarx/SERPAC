@@ -150,7 +150,8 @@ Route::group(['middleware' => ['auth']], function () {
     
     // **********************************   MODULO DE TESORERIA ************************************     
     route::get('Tesoreria/Distribucion/ReciboAcopio/{id}','Tesoreria\tesoreriacontroller@recibofondoAcopiador');//recibofondoAcopiador    
-    route::resource('Tesoreria/Distribucion-Fondos/Fondos-Pdf','Informes\Reportecontroller@pdfDistribucionFondo');
+    route::get('Tesoreria/Distribucion-Fondos/Distribucion-Pdf/{anio?}/{mes?}/{dato?}','Informes\Reportecontroller@pdfDistribucionFondo');
+    route::get('Tesoreria/Distribucion-Fondos/Distribucion-Excel/{anio?}/{mes?}/{dato?}','Informes\Reportecontroller@excelDistribucionFondo');
     route::resource('Tesoreria/Distribucion/Recibodistribucion','Tesoreria\tesoreriacontroller@recibofondoDistribucion');//recibofondoTecnicoo    
     route::get('Tesoreria/ListaDistribucion/{anio?}/{mes?}/{dato?}/{page?}','Tesoreria\tesoreriacontroller@listaDistribucion');
     route::get('Tesoreria/MontoFondosCheque/{id?}','Tesoreria\tesoreriacontroller@MontoFondoCheque');

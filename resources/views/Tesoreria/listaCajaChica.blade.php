@@ -18,7 +18,7 @@
         <tr class="{{$name}}" >
             <td>{{$caja->created_at}}</td>
             <td>{{$caja->num_caja}}</td>
-            <td>S/. {{$caja->importe}} </td>
+            <td>S/. {{number_format($caja->importe,2)}} </td>
             <td>{{$caja->cheque }}</td>
             <td>{{$caja->num_cheque}}</td>                    
             <td>{{$caja->name}}</td>

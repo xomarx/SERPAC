@@ -42,10 +42,11 @@ class documentoController extends Controller
         if($request->ajax()){
             $tipo = \App\Models\Configuracion\Tipo_documento::create([
                 'codigo'=>  strtoupper($request->codigo),
-                'tipo_documento'=>  strtoupper($request->recibo)
+                'tipo_documento'=>  strtoupper($request->recibo),
+                'enlace'=>  strtoupper($request->enlace)
             ]);
-            if($tipo) return response ()->json (['success'=>'true','message'=>'Se registro correctamente']);
-            else return response ()->json (['success'=>'false','message'=>'No se registro']);
+            if($tipo) return response ()->json (['success'=>true,'message'=>'Se registro correctamente']);
+            else return response ()->json (['success'=>false,'message'=>'No se registro']);
         }
             
     }

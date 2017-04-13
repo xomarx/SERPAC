@@ -18,6 +18,7 @@ class Mov_cheque extends Model
         'importe'
     ];
     
+                
 public static function AutoNumCheque($idcheque,$numero){
         return \Illuminate\Support\Facades\DB::table('mov_cheques')
                 ->join('cheques','mov_cheques.cheques_id','=','cheques.id')
@@ -99,6 +100,7 @@ public static function AutoNumCheque($idcheque,$numero){
                             ->select('cheque','cheques.id','num_cuenta')->get();
     }
 
+    //paginacion
     public static function scopelistaMovCheques($query,$anio,$mes,$dato=''){
             if($anio==0)
                 return $query->join('cheques', 'mov_cheques.cheques_id', '=', 'cheques.id')
@@ -301,4 +303,9 @@ public static function AutoNumCheque($idcheque,$numero){
                         ,'personas.materno','mov_cheques.importe','mov_cheques.cheques_id','mov_cheques.url_cheque','personas.dni')
                 ->first();
     }
+    
+    
+    
+    
+            
 }

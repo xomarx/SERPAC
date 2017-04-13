@@ -62,14 +62,14 @@
                 <td>{{$list->nombre}} {{$list->paterno}} {{$list->materno }}</td>
                 <td>{{$list->estado}}</td>
                 <td>{{$list->concepto}}</td>
-                <td>S/. {{$list->importe}}</td>
+                <td>S/. {{number_format($list->importe,2)}}</td>
             </tr>           
 @endforeach
 </tbody>
 <tfoot>
     <tr>
         <td colspan="5" style="text-align: right">Total </td>
-        <th>S/. {{$total}}</th>
+        <th>S/. {{number_format($total,2)}}</th>
     </tr>
 </tfoot>
 </table><br>

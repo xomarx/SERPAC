@@ -1,218 +1,23 @@
 <?php
-
 namespace App\Library;
 
-class ConvertNumberToText {
-    private $UNIDADES = array(
-        '',
-        'UNO ',
-        'DOS ',
-        'TRES ',
-        'CUATRO ',
-        'CINCO ',
-        'SEIS ',
-        'SIETE ',
-        'OCHO ',
-        'NUEVE ',
-        'DIEZ ',
-        'ONCE ',
-        'DOCE ',
-        'TRECE ',
-        'CATORCE ',
-        'QUINCE ',
-        'DIECISEIS ',
-        'DIECISIETE ',
-        'DIECIOCHO ',
-        'DIECINUEVE ',
-        'VEINTE '
-  );
-  private $DECENAS = array(
-        'VENTI',
-        'TREINTA ',
-        'CUARENTA ',
-        'CINCUENTA ',
-        'SESENTA ',
-        'SETENTA ',
-        'OCHENTA ',
-        'NOVENTA ',
-        'CIEN '
-  );
-  private $CENTENAS = array(
-        'CIENTO ',
-        'DOSCIENTOS ',
-        'TRESCIENTOS ',
-        'CUATROCIENTOS ',
-        'QUINIENTOS ',
-        'SEISCIENTOS ',
-        'SETECIENTOS ',
-        'OCHOCIENTOS ',
-        'NOVECIENTOS '
-  );
-  private $MONEDAS = array(
-    array('country' => 'Colombia', 'currency' => 'COP', 'singular' => 'PESO COLOMBIANO', 'plural' => 'PESOS COLOMBIANOS', 'symbol'=> '$'),
-    array('country' => 'Estados Unidos', 'currency' => 'USD', 'singular' => 'DÓLAR', 'plural' => 'DÓLARES', 'symbol'=> 'US$'),
-    array('country' => 'Europa', 'currency' => 'EUR', 'singular' => 'EURO', 'plural' => 'EUROS', 'symbol'=> '€'),
-    array('country' => 'México', 'currency' => 'MXN', 'singular' => 'PESO MEXICANO', 'plural' => 'PESOS MEXICANOS', 'symbol'=> '$'),
-    array('country' => 'Perú', 'currency' => 'PEN', 'singular' => 'NUEVO SOL', 'plural' => 'NUEVOS SOLES', 'symbol'=> 'S/'),
-    array('country' => 'Reino Unido', 'currency' => 'GBP', 'singular' => 'LIBRA', 'plural' => 'LIBRAS', 'symbol'=> '£'),
-    array('country' => 'Argentina', 'currency' => 'ARS', 'singular' => 'PESO', 'plural' => 'PESOS', 'symbol'=> '$')
-  );
-    private $separator = ',';
-    private $decimal_mark = '.';
-    private $glue = 'CON ';
-    private $moneda ='';
-    /**
-     * Evalua si el número contiene separadores o decimales
-     * formatea y ejecuta la función conversora
-     * @param $number número a convertir
-     * @param $miMoneda clave de la moneda
-     * @return string completo
-     */
-    public function to_word($number, $miMoneda = null) {
-        // numeros enteros
-        
-        if (strpos($number, $this->decimal_mark) === FALSE) {
-          $convertedNumber = array(
-            $this->convertNumber($number, $miMoneda, 'entero',count($number))
-          );
-        } 
-        // numero con decimales
-        else {//explode separa en array
-            $number = round($number, 2);
-            $number = explode($this->decimal_mark, strval($number));
-//            return $number;
-            if (count($number) == 1) {
-                $convertedNumber = array(
-                    $this->convertNumber($number[0], $miMoneda, 'entero', 2),
-                    $this->convertNumber(00, $miMoneda, 'decimal',2),
-                );
-            } else {
-                $convertedNumber = array(
-                    $this->convertNumber($number[0], $miMoneda, 'entero', count($number)),
-                    $this->convertNumber($number[1], $miMoneda, 'decimal', count($number)),
-                );
-            }
-        }
-        return implode($this->glue, array_filter($convertedNumber));
-    }
-    /**
-     * Convierte número a letras
-     * @param $number
-     * @param $miMoneda
-     * @param $type tipo de dígito (entero/decimal)
-     * @return $converted string convertido
-     */
-    private function convertNumber($number, $miMoneda = null, $type,$cant) {   
-        
-        $converted = '';
-        if ($miMoneda !== null) {
-            try {
-                
-                $moneda = array_filter($this->MONEDAS, function($m) use ($miMoneda) {
-                    return ($m['currency'] == $miMoneda);
-                });
-                $moneda = array_values($moneda);
-                if (count($moneda) <= 0) {
-                    throw new Exception("Tipo de moneda inválido");
-                    return;
-                }
-//                ($number < 2 ? $moneda = $moneda[0]['singular'] : $moneda = $moneda[0]['plural']);
-                if($cant == 1 && $number == 1) $moneda = $moneda[0]['singular'];
-                else
-                $moneda = $moneda[0]['plural'];
-            } catch (Exception $e) {
-                echo $e->getMessage();
-                return;
-            }
-        }else{
-            $this->$moneda = '';
-        }
-        
-        if  ($type == 'entero') {
-            
-            if (($number < 0) || ($number > 999999999)) {
-                return false;
-            }
-            $numberStr = (string) $number;
-            $numberStrFill = str_pad($numberStr, 9, '0', STR_PAD_LEFT);
-            $millones = substr($numberStrFill, 0, 3);
-            $miles = substr($numberStrFill, 3, 3);
-            $cientos = substr($numberStrFill, 6);
-            if (intval($millones) > 0) {
-                if ($millones == '001') {
-                    $converted .= 'UN MILLON ';
-                } else if (intval($millones) > 0) {
-                    $converted .= sprintf('%sMILLONES ', $this->convertGroup($millones));
-                }
-            }
-
-            if (intval($miles) > 0) {
-                if ($miles == '001') {
-                    $converted .= 'MIL ';
-                } else if (intval($miles) > 0) {
-                    $converted .= sprintf('%sMIL ', $this->convertGroup($miles));
-                }
-            }
-            if (intval($cientos) > 0) {
-                if ($cientos == '001') {
-                   if($cant==1) $converted .= 'UN ';
-                   else $converted .= 'UNO ';
-                } else if (intval($cientos) > 0) {
-                    $converted .= sprintf('%s ', $this->convertGroup($cientos));
-                }
-            }
-            if($cant==1)
-                $converted .= $moneda;
-            return $converted;
-        } else {
-            if(strlen($number) == 1)  $number = $number * 10;
-            $converted=  $number.'/100 '.$moneda; //strtoupper($this->convertir_a_letras($number)).' CENTIMOS';
-            return $converted;
-        }
-        
-    }
-    /**
-     * Define el tipo de representación decimal (centenas/millares/millones)
-     * @param $n
-     * @return $output
-     */
-    private function convertGroup($n) {
-        $output = '';
-        if ($n == '100') {
-            $output = "CIEN ";
-        } else if ($n[0] !== '0') {
-            $output = $this->CENTENAS[$n[0] - 1];   
-        }
-        $k = intval(substr($n,1));
-        if ($k <= 20) {
-            $output .= $this->UNIDADES[$k];
-        } else {
-            if(($k > 30) && ($n[2] !== '0')) {
-                $output .= sprintf('%sY %s', $this->DECENAS[intval($n[1]) - 2], $this->UNIDADES[intval($n[2])]);
-            } else {
-                $output .= sprintf('%s%s', $this->DECENAS[intval($n[1]) - 2], $this->UNIDADES[intval($n[2])]);
-            }
-        }
-        return $output;
-    }
-    
-    
-    // centimos 
-    
- private function centimos() {
+class MonConvertNumberToText{
+    // FUNCIONES DE CONVERSION DE NUMEROS A LETRAS.
+ 
+function centimos() {
         global $importe_parcial;
 
-//        $importe_parcial = number_format($importe_parcial, 2, ".", "") * 100;
+        $importe_parcial = number_format($importe_parcial, 2, ".", "") * 100;
 
         if ($importe_parcial > 0)
-            $num_letra = " con " . $this->decena_centimos($importe_parcial);
+            $num_letra = " con " . decena_centimos($importe_parcial);
         else
             $num_letra = "";
 
         return $num_letra;
     }
 
-private function unidad_centimos($numero) {
+function unidad_centimos($numero) {
         switch ($numero) {
             case 9: {
                     $num_letra = "nueve céntimos";
@@ -254,7 +59,7 @@ private function unidad_centimos($numero) {
         return $num_letra;
     }
 
-private function decena_centimos($numero) {
+function decena_centimos($numero) {
         if ($numero >= 10) {
             if ($numero >= 90 && $numero <= 99) {
                 if ($numero == 90)
@@ -346,7 +151,7 @@ private function decena_centimos($numero) {
             return unidad_centimos($numero);
     }
 
-private function unidad($numero) {
+function unidad($numero) {
         switch ($numero) {
             case 9: {
                     $num = "nueve";
@@ -388,54 +193,54 @@ private function unidad($numero) {
         return $num;
     }
 
-private function decena($numero) {
+function decena($numero) {
         if ($numero >= 90 && $numero <= 99) {
             $num_letra = "noventa ";
 
             if ($numero > 90)
-                $num_letra = $num_letra . "y " . $this->unidad($numero - 90);
+                $num_letra = $num_letra . "y " . unidad($numero - 90);
         }
         else if ($numero >= 80 && $numero <= 89) {
             $num_letra = "ochenta ";
 
             if ($numero > 80)
-                $num_letra = $num_letra . "y " .$this-> unidad($numero - 80);
+                $num_letra = $num_letra . "y " . unidad($numero - 80);
         }
         else if ($numero >= 70 && $numero <= 79) {
             $num_letra = "setenta ";
 
             if ($numero > 70)
-                $num_letra = $num_letra . "y " .$this-> unidad($numero - 70);
+                $num_letra = $num_letra . "y " . unidad($numero - 70);
         }
         else if ($numero >= 60 && $numero <= 69) {
             $num_letra = "sesenta ";
 
             if ($numero > 60)
-                $num_letra = $num_letra . "y " . $this->unidad($numero - 60);
+                $num_letra = $num_letra . "y " . unidad($numero - 60);
         }
         else if ($numero >= 50 && $numero <= 59) {
             $num_letra = "cincuenta ";
 
             if ($numero > 50)
-                $num_letra = $num_letra . "y " . $this->unidad($numero - 50);
+                $num_letra = $num_letra . "y " . unidad($numero - 50);
         }
         else if ($numero >= 40 && $numero <= 49) {
             $num_letra = "cuarenta ";
 
             if ($numero > 40)
-                $num_letra = $num_letra . "y " . $this->unidad($numero - 40);
+                $num_letra = $num_letra . "y " . unidad($numero - 40);
         }
         else if ($numero >= 30 && $numero <= 39) {
             $num_letra = "treinta ";
 
             if ($numero > 30)
-                $num_letra = $num_letra . "y " .$this-> unidad($numero - 30);
+                $num_letra = $num_letra . "y " . unidad($numero - 30);
         }
         else if ($numero >= 20 && $numero <= 29) {
             if ($numero == 20)
                 $num_letra = "veinte ";
             else
-                $num_letra = "veinti" . $this->unidad($numero - 20);
+                $num_letra = "veinti" . unidad($numero - 20);
         }
         else if ($numero >= 10 && $numero <= 19) {
             switch ($numero) {
@@ -481,12 +286,12 @@ private function decena($numero) {
                     }
             }
         } else
-            $num_letra = $this->unidad($numero);
+            $num_letra = unidad($numero);
 
         return $num_letra;
     }
 
-private function centena($numero) {
+function centena($numero) {
         if ($numero >= 100) {
             if ($numero >= 900 & $numero <= 999) {
                 $num_letra = "novecientos ";
@@ -522,33 +327,33 @@ private function centena($numero) {
                 $num_letra = "cuatrocientos ";
 
                 if ($numero > 400)
-                    $num_letra = $num_letra . $this->decena($numero - 400);
+                    $num_letra = $num_letra . decena($numero - 400);
             }
             else if ($numero >= 300 && $numero <= 399) {
                 $num_letra = "trescientos ";
 
                 if ($numero > 300)
-                    $num_letra = $num_letra . $this->decena($numero - 300);
+                    $num_letra = $num_letra . decena($numero - 300);
             }
             else if ($numero >= 200 && $numero <= 299) {
                 $num_letra = "doscientos ";
 
                 if ($numero > 200)
-                    $num_letra = $num_letra . $this->decena($numero - 200);
+                    $num_letra = $num_letra . decena($numero - 200);
             }
             else if ($numero >= 100 && $numero <= 199) {
                 if ($numero == 100)
                     $num_letra = "cien ";
                 else
-                    $num_letra = "ciento " .  $this->decena($numero - 100);
+                    $num_letra = "ciento " . decena($numero - 100);
             }
         } else
-            $num_letra = $this->decena($numero);
+            $num_letra = decena($numero);
 
         return $num_letra;
     }
 
-private function cien() {
+function cien() {
         global $importe_parcial;
 
         $parcial = 0;
@@ -567,12 +372,12 @@ private function cien() {
         $parcial = substr($importe_parcial, 0, $car);
         $importe_parcial = substr($importe_parcial, $car);
 
-        $num_letra = $this->centena($parcial) . $this->centimos();
+        $num_letra = centena($parcial) . centimos();
 
         return $num_letra;
     }
 
-private function cien_mil() {
+function cien_mil() {
         global $importe_parcial;
 
         $parcial = 0;
@@ -601,7 +406,7 @@ private function cien_mil() {
         return $num_letra;
     }
 
-private function millon() {
+function millon() {
         global $importe_parcial;
         $parcial = 0;
         $car = 0;
@@ -626,18 +431,18 @@ private function millon() {
         return $num_letras;
     }
 
-private function convertir_a_letras($numero) {
+function convertir_a_letras($numero) {
         global $importe_parcial;
 
         $importe_parcial = $numero;
 
         if ($numero < 1000000000) {
             if ($numero >= 1000000 && $numero <= 999999999.99)
-                $num_letras = $this->millon() . cien_mil() . cien();
+                $num_letras = millon() . cien_mil() . cien();
             else if ($numero >= 1000 && $numero <= 999999.99)
-                $num_letras = $this->cien_mil() . cien();
+                $num_letras = cien_mil() . cien();
             else if ($numero >= 1 && $numero <= 999.99)
-                $num_letras = $this->cien();
+                $num_letras = cien();
             else if ($numero >= 0.01 && $numero <= 0.99) {
                 if ($numero == 0.01)
                     $num_letras = "un céntimo";
@@ -647,10 +452,5 @@ private function convertir_a_letras($numero) {
         }
         return $num_letras;
     }
-    
-    
-    
-    
-    
-}
 
+}

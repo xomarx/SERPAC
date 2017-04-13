@@ -217,13 +217,15 @@ var mensajeRegistro = function(data,formu){
               if(data.success){
                 $("#alert-txt").html(data.message);                
                 $("#"+formu)[0].reset();
+                var tiempo = 2000;
               }
               else{
                   $("#alert-msj").removeClass('alert-success');
                   $("#alert-msj").addClass('alert-danger');
-                  $("#alert-txt").html(data.message);                                                
+                  $("#alert-txt").html(data.message);   
+                  tiempo = 7000;
               }
-              $("#alert-msj").fadeOut(1000);
+              $("#alert-msj").fadeOut(tiempo);
 };
 //  ******************************************************************  CRUD SOCIOS   *******************************************************************
 $("#nuevosocio").click(function (){
@@ -2035,8 +2037,7 @@ var EliSucursal = function(id,name){
         
 
 // **********************************************************************************     DISTRIBUCION FONDOS DE ACOPIO *********************************
-var AnulDistribucion = function(id,name){             
-    // ALERT JQUERY     
+var AnulDistribucion = function(id,name){
    $.alertable.prompt('<h3>Motivo de la Anulacion ? </h3>'+"<span style='color:#ff0000'>"+name+"</span>").then(function(data){       
             var motivo = data.value;
             var route = "/Tesoreria/Distribucion-Fondos/"+id+"";            
@@ -2050,15 +2051,18 @@ var AnulDistribucion = function(id,name){
                 motivo:motivo
             },
             success: function (data) {
-
-                if (data.success )
-                activarForm(9);
-                   
-                
+                if (data.success)
+                    activarForm(9);
+                else
+                    $.alertable.alert("<span style='color:#ff0000'>"+data.message+"</span>")                                   
             },
-            
+            error:function(data){
+                if(data.status==403) activarmodal(0);
+                else
+                    activarForm(9);
+            }
         });
-   },function(){});    
+   });    
 };
     
 $("#RegDistribucion").click(function(){
@@ -2077,9 +2081,15 @@ $("#RegDistribucion").click(function(){
                 datatype: 'json',                
                 data: fields,
                 success: function (data)
-                {
+                {                    
                     mensajeRegistro(data,'formfondosdistri');
-                    activarForm(9);
+                    activarForm(9);                    
+                    $.alertable.confirm("<span style='color:#000'>¿Deseas Imprimir el Recibo?</span>").then(function(){
+                        var route = $("#printdelivery").attr('href');
+                        var route = route +"/"+data.id;
+                        $("#printdelivery").attr('href',route);
+                        document.getElementById('printdelivery').click();                        
+                      });
                 },
                 error: function (data)
                 {             
@@ -2976,49 +2986,16 @@ $(document).ready().on('click','#ExcelGiroCheque',function(e){
     var route = '/Tesoreria/Cheques-Girados/Excel-cheques/' + $("#anio").val()+'/'+$("#mes").val()+'/'+$("#buscar").val();
     $(this).attr('href',route);       
 });
-//$(document).ready().on('click','#Pdfgirocheques',function(e){
-//    var route = $(this).attr('href')+'/' + $("#anio").val()+'/'+$("#mes").val()+'/'+$("#buscar").val();
-//    $(this).attr('href',route);       
-//});
-   
-   
-        
-    
-    
 
+$(document).ready().on('click','#pdfdistribucion',function(e){    
+    $(this).attr('href','');
+    var route = '/Tesoreria/Distribucion-Fondos/Distribucion-Pdf/' + $("#anio").val()+'/'+$("#mes").val()+'/'+$("#buscar").val();
+    $(this).attr('href',route);       
+});
   
-      
-   
-//   $(function(){
-//      $("#filecheque").on('change',function(){
-//         alert('cambio') ;
-//      }); 
-//   });
-//    $(document).on('submit','.form_rol',function(e){
-//       
-//       e.preventDefault();
-//       
-//   });
-   
-
-//var cargarForm = function(idform)
-//{
-//    var cadena = "@section('contentheader_title')Parientes y Beneficiario @stop";
-//    if(idform == 1) var url="/socios/parientes";
-//    
-//    $.get(url,function(resul){
-//        $("#titulo-content").empty();
-//        $("#titulo-content").append("PARIENTES");
-////        var tablinks = document.getElementsByid("linksocio");
-////        for (i = 0; i < tablinks.length; i++) {
-////        tablinks[i].className = tablinks[i].className.replace(" active", "");        
-////        }
-//      $("#main-content").html(resul);
-////      evt.currentTarget.className += " active";
-//    })
-//    
-//}
-
-
- 
- 
+  $(document).ready().on('click','#exceldelivery',function(e){
+      if($("#anio").val() ==0){ $.alertable.alert("<span style='color:#ff0000'>SELECCIONE UNA FECHA PARA PODER EXPORTAR EN EXCEL</span>");e.preventDefault();}
+    $(this).attr('href','');
+    var route = '/Tesoreria/Distribucion-Fondos/Distribucion-Excel/' + $("#anio").val()+'/'+$("#mes").val()+'/'+$("#buscar").val();
+    $(this).attr('href',route);       
+});
