@@ -19,7 +19,7 @@
     </thead>
     <tbody>
         <tr>
-            <th ><h4><b>Modulo de Informes o Reportes</b></h4></th>
+            <th ><h4><b>INFORME DE SOCIOS</b></h4></th>
             <th><b>CREAR</b></th>
             <th><b>EDITAR</b></th>
             <th><b>VER</b></th>
@@ -44,6 +44,13 @@
                 </td>
         </tr>
         <tr>
+            <th ><h4><b>INFORME DE ACOPIO</b></h4></th>
+            <th><b>CREAR</b></th>
+            <th><b>EDITAR</b></th>
+            <th><b>VER</b></th>
+            <th><b>ELIMINAR</b></th>                
+        </tr>
+        <tr>
             <td>Grafico - Kardex Dinero </td>
             <td>                
                 {!!Form::checkbox('crear_empleados','crear_empleados',null,['class'=>'checkbox-inline','disabled'=>'disabled'])!!}
@@ -59,6 +66,49 @@
                 </td>
             <td>
                {!!Form::checkbox('crear_empleados','crear_empleados',null,['class'=>'checkbox-inline','disabled'=>'disabled'])!!}
+                </td>
+        </tr>
+        <tr>
+            <th ><h4><b>INFORME DE TESORERIA</b></h4></th>
+            <th><b>CREAR</b></th>
+            <th><b>EDITAR</b></th>
+            <th><b>VER</b></th>
+            <th><b>ELIMINAR</b></th>                
+        </tr>
+        <tr>
+            <td>Grafico - Giro de Cheques </td>
+            <td>                
+                {!!Form::checkbox('movimiento_cheques','crear_empleados',null,['class'=>'checkbox-inline','disabled'=>'disabled'])!!}
+            </td>
+            <td>
+               {!!Form::checkbox('movimiento_cheques','crear_empleados',null,['class'=>'checkbox-inline','disabled'=>'disabled'])!!}
+            <td>
+                @if(in_array('ver_movimiento_cheques',$permisos) )
+                    {!!Form::checkbox('ver_movimiento_cheques','ver_movimiento_cheques',null,['class'=>'checkbox-inline','onclick'=>'asigpermiso("ver_movimiento_cheques")','checked'])!!}
+                @else
+                    {!!Form::checkbox('ver_movimiento_cheques','ver_movimiento_cheques',null,['class'=>'checkbox-inline','onclick'=>'asigpermiso("ver_movimiento_cheques")'])!!}
+                @endif
+                </td>
+            <td>
+               {!!Form::checkbox('movimiento_cheques','movimiento_cheques',null,['class'=>'checkbox-inline','disabled'=>'disabled'])!!}
+                </td>
+        </tr>
+        <tr>
+            <td>Grafico - Distribucion de Fondos para Acopio </td>
+            <td>                
+                {!!Form::checkbox('movimiento_cheques','crear_empleados',null,['class'=>'checkbox-inline','disabled'=>'disabled'])!!}
+            </td>
+            <td>
+               {!!Form::checkbox('movimiento_cheques','crear_empleados',null,['class'=>'checkbox-inline','disabled'=>'disabled'])!!}
+            <td>
+                @if(in_array('ver_distribucion_fondos',$permisos) )
+                    {!!Form::checkbox('ver_distribucion_fondos','ver_distribucion_fondos',null,['class'=>'checkbox-inline','onclick'=>'asigpermiso("ver_distribucion_fondos")','checked'])!!}
+                @else
+                    {!!Form::checkbox('ver_distribucion_fondos','ver_distribucion_fondos',null,['class'=>'checkbox-inline','onclick'=>'asigpermiso("ver_distribucion_fondos")'])!!}
+                @endif
+                </td>
+            <td>
+               {!!Form::checkbox('movimiento_cheques','movimiento_cheques',null,['class'=>'checkbox-inline','disabled'=>'disabled'])!!}
                 </td>
         </tr>
     </tbody>

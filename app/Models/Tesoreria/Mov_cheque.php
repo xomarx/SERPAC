@@ -29,6 +29,36 @@ public static function AutoNumCheque($idcheque,$numero){
                 ->take(5)->get();
     
 }
+    
+    public static function scopeListaDiasXmes($query,$anio,$mes){
+        return $query
+                ->whereyear('created_at','=',$anio)
+                ->wheremonth('created_at','=',$mes)
+                ->select(\Illuminate\Support\Facades\DB::raw('day(created_at) as day'))
+                ->groupby(\Illuminate\Support\Facades\DB::raw('day(created_at)'))
+                ->orderby(\Illuminate\Support\Facades\DB::raw('day(created_at)'),'asc')
+                ->get();
+    }
+
+    public static function scopeGrafica_Giros($query,$anio,$mes,$dia,$idcheque){
+//    return $idcheque;
+    if($dia==0)
+        return  $query
+            ->whereyear('created_at','=',$anio)
+            ->wheremonth('created_at','=',$mes)            
+            ->where('cheques_id','=',$idcheque)            
+            ->select(\Illuminate\Support\Facades\DB::raw('IFNULL(sum(importe),0) as monto'))            
+//            ->groupby('cheques_id')            
+            ->first();
+    else
+        return  $query
+            ->whereyear('created_at','=',$anio)
+            ->wheremonth('created_at','=',$mes)
+            ->whereday('created_at','=',$dia)
+            ->where('cheques_id','=',$idcheque)            
+            ->select(\Illuminate\Support\Facades\DB::raw('IFNULL(sum(importe),0) as monto'))
+            ->first();            
+}
 
     public static function scopelistachequesXanio($query,$anio,$mes,$dato){
         if($anio==0)
@@ -81,7 +111,15 @@ public static function AutoNumCheque($idcheque,$numero){
                             ->select('cheque','cheques.id','num_cuenta')->get();
                 
     }
-    
+
+    public static function scopeListaMesesXanio($query,$anio){
+        return $query->whereyear('created_at','=',$anio)
+                ->select(\Illuminate\Support\Facades\DB::raw('month(created_at) as mes'))
+                ->groupby(\Illuminate\Support\Facades\DB::raw('month(created_at)'))
+                ->orderby(\Illuminate\Support\Facades\DB::raw('month(created_at)'),'asc')
+                ->get();
+    }
+
     public static function scopelistacheques($query,$anio,$dato=''){
         return $query->whereyear('mov_cheques.created_at','=',$anio)
                     ->join('cheques', 'mov_cheques.cheques_id', '=', 'cheques.id') 
@@ -295,7 +333,7 @@ public static function AutoNumCheque($idcheque,$numero){
                             ->get();
     }
     
-        public static function getMovCheque($id){
+   public static function getMovCheque($id){
         return \Illuminate\Support\Facades\DB::table('mov_cheques')
                 ->join('personas','mov_cheques.personas_dni','=','personas.dni')
                 ->where('mov_cheques.id','=',$id)
@@ -303,9 +341,5 @@ public static function AutoNumCheque($idcheque,$numero){
                         ,'personas.materno','mov_cheques.importe','mov_cheques.cheques_id','mov_cheques.url_cheque','personas.dni')
                 ->first();
     }
-    
-    
-    
-    
-            
+       
 }

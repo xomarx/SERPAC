@@ -6,7 +6,7 @@
 <div class="box box-primary ">
     <div class="box-header">
         <a class="btn btn-dropbox">GRAFICOS <i class="glyphicon glyphicon-stats"></i></a>
-        <a href="{{url('ReporpadronSocios')}}" class="btn btn-dropbox">PADRON SOCIOS <i class="fa fa-file-pdf-o"></i></a>
+        <a href="{{url('ReporpadronSocios')}}" class="btn btn-dropbox" target="_blank">PADRON SOCIOS <i class="fa fa-file-pdf-o"></i></a>
     </div>
     <div class="box box-body box-primary">
         <div class="col-md-12">

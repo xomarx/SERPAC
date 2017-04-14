@@ -67,7 +67,37 @@ function cargar_barras($an,$mes) {
             name: 'Renunciante',            
             data: datos.renunciante
         }
-    ]        
+    ],
+    responsive: {
+        rules: [{
+            condition: {
+                maxWidth: 500
+            },
+            chartOptions: {
+                legend: {
+                    align: 'center',
+                    verticalAlign: 'bottom',
+                    layout: 'horizontal'
+                },
+                yAxis: {
+                    labels: {
+                        align: 'left',
+                        x: 0,
+                        y: -5
+                    },
+                    title: {
+                        text: null
+                    }
+                },
+                subtitle: {
+                    text: null
+                },
+                credits: {
+                    enabled: false
+                }
+            }
+        }]
+    }
     }
     chart = new Highcharts.Chart(options);
 //        $.each(datos.anios, function (index, value) {
@@ -78,12 +108,10 @@ function cargar_barras($an,$mes) {
     });                       
 }
 
-
 function grafico_barra_k_Dinero($an,$mes){
     
     $.get('Fondos-Acopio/'+$an+'/'+$mes, function (data) {
-       var datos = jQuery.parseJSON(data);
-        console.log(datos.montos);
+       var datos = jQuery.parseJSON(data);        
                                 
          var options = {        
 	 chart: {
@@ -133,9 +161,142 @@ function grafico_barra_k_Dinero($an,$mes){
             name: 'Montos S/. ',            
             data: datos.montos
               }
-    ]        
+    ],
+    responsive: {
+        rules: [{
+            condition: {
+                maxWidth: 500
+            },
+            chartOptions: {
+                legend: {
+                    align: 'center',
+                    verticalAlign: 'bottom',
+                    layout: 'horizontal'
+                },
+                yAxis: {
+                    labels: {
+                        align: 'left',
+                        x: 0,
+                        y: -5
+                    },
+                    title: {
+                        text: null
+                    }
+                },
+                subtitle: {
+                    text: null
+                },
+                credits: {
+                    enabled: false
+                }
+            }
+        }]
+    }
     }
     chart = new Highcharts.Chart(options);
 
     });                       
 };
+
+// *******************************  TESORERIA *******************************
+
+function grafico_barra_delivery_money($anio,$mes){       
+    $.get('Grafica-giros/'+$anio+'/'+$mes, function (data) {        
+    var datos = jQuery.parseJSON(data);                         
+    var seriesx =[];
+    $.each(datos.cheques,function( index,value){
+            var cars = {name:value,data:datos.montos[index]};
+           seriesx.push(cars);
+       });              
+         var options = {   
+    chart: {
+                 renderTo: 'div-graficas',
+        type: 'column'
+    },
+    title: {
+        text: 'GRAFICA DE GIROS DE CHEQUES'
+    },
+    subtitle: {
+        text: 'ACOPAGRO'
+    },
+    legend: {
+        align: 'right',
+        verticalAlign: 'middle',
+        layout: 'vertical'
+    },
+    tooltip: {
+            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+            '<td style="padding:0"><b>S/. {point.y:.1f}</b></td></tr>',
+        footerFormat: '</table>',
+        shared: true,
+        useHTML: true
+        },
+    plotOptions: {
+            column: {
+            pointPadding: 0.2,
+            borderWidth: 0
+        
+        }
+        },
+    xAxis: {
+        categories: datos.fechas,
+        title: {
+                text: 'FECHAS'
+            },
+            crosshair: true
+    },
+    yAxis: {
+        allowDecimals: false,
+        title: {
+            text: 'MONTO EN S/. '
+        }
+    },
+    series: seriesx,             
+    responsive: {
+        rules: [{
+            condition: {
+                maxWidth: 500
+            },
+            chartOptions: {
+                legend: {
+                    align: 'center',
+                    verticalAlign: 'bottom',
+                    layout: 'horizontal'
+                },
+                yAxis: {
+                    labels: {
+                        align: 'left',
+                        x: 0,
+                        y: -5
+                    },
+                    title: {
+                        text: null
+                    }
+                },
+                subtitle: {
+                    text: null
+                },
+                credits: {
+                    enabled: false
+                }
+            }
+        }]
+    }    
+    }
+    chart = new Highcharts.Chart(options);
+    });
+}
+
+/*
+ 
+ 
+ 
+ 
+ 
+ * 
+ * 
+ * 
+ */
+
+ 

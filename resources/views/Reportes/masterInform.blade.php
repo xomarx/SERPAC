@@ -11,7 +11,7 @@
                 
                 <ul class="treeview-menu">
                     @permission('ver padron socios')
-                    <li class="active"><a href="{{ url('/Informes/Padron-Socios') }}">Padron de Socios</a></li>     
+                    <li ><a href="{{ url('/Informes/Padron-Socios') }}">Padron de Socios</a></li>     
                     @endpermission
                 </ul>
                 
@@ -26,11 +26,15 @@
                     <li><a href="{{ url('/Tesoreria/Tipos-egresos') }}">Reporte de Ingreso de Acopio</a></li>                    
                 </ul>
             </li>
-            <li class="treeview">
+            <li class="treeview" id="infotesoreria">
                 <a href="#"><i class='fa fa-link'></i> <span>Reporte de Tesoreria</span> <i class="fa fa-angle-left pull-right"></i></a>
                 <ul class="treeview-menu">
-                    <li><a href="{{ url('/Acopio/Tara') }}">Distribucion de Fondos</a></li>
-                    <li><a href="{{ url('/Acopio/Transporte') }}">Giros de Cheques</a></li>                    
+                    @permission('ver movimiento cheques')
+                    <li id="subgiros"><a href="{{ url('/Informes/Tesoreria/Giro-Cheques') }}">Giros de Cheques</a></li>
+                    @endpermission
+                    @permission('ver distribucion fondos')
+                        <li id="subdistribucion"><a href="{{ url('/Acopio/Tara') }}">Distribucion de Fondos</a></li>
+                    @endpermission                 
                 </ul>
             </li>
         </ul><!-- /.sidebar-menu -->

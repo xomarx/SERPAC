@@ -103,6 +103,54 @@ class ListaInformescontroller extends Controller
         $data = ['fechas' => $resul, 'montos' => $montos];
         return json_encode($data);
     }
+    
+    //***********************************  TESORERIA **********************************************
+    public function Giro_cheques(){
+        
+        if(!auth()->user()->can('ver movimiento cheques'))
+            return response ()->view ('errors.403');
+        for ($i = 2016; $i <= \Carbon\Carbon::now()->format('Y'); $i++) {
+            $resul[$i] = $i;
+        }
+        return response()->view('Reportes.Tesoreria.GraficoGiroCheques',['anios'=>$resul]);
+    }
+    
+    public function  grafica_Giro_cheques($anio,$mes){
+        
+        $cheques = \App\Models\Tesoreria\Mov_cheque::listachequesXanio($anio,$mes,'');        
+//        dd($meses[0]->mes);//4
+        if ($mes == 0) {//lista de meses
+            $meses = \App\Models\Tesoreria\Mov_cheque::ListaMesesXanio($anio);
+            foreach ($cheques as $cheque){
+                setlocale(LC_TIME, 'spanish');
+                foreach ($meses as $mes){                    
+                    $lista[] = floatval(\App\Models\Tesoreria\Mov_cheque::Grafica_Giros($anio,$mes->mes,0,$cheque->id)->monto);
+                }                
+                $listcheque[] = $cheque->cheque; $lista2[] = $lista;
+                unset($lista);
+            }
+            foreach ($meses as $me){
+                $fecha[] = strtoupper(strftime("%B", mktime(0, 0, 0, $me->mes, 1, 2016)));
+            }
+        } else {
+            $days = \App\Models\Tesoreria\Mov_cheque::ListaDiasXmes($anio,$mes);            
+            foreach ($cheques as $cheque){
+                setlocale(LC_TIME, 'spanish');
+                foreach ($days as $dia){                    
+                    $lista[] = floatval(\App\Models\Tesoreria\Mov_cheque::Grafica_Giros($anio,$mes,$dia->day,$cheque->id)->monto);
+                }                
+                $listcheque[] = $cheque->cheque; $lista2[] = $lista;
+                unset($lista);
+            }
+            foreach ($days as $dia){
+                $fecha [] = $dia->day;
+            }
+           
+        }
+        $data = ['fechas' => $fecha, 'cheques' => $listcheque,'montos'=>$lista2];
+        return json_encode($data);
+    }
+//    GraficoGiroCheques.blade
 
     /**
      * Show the form for creating a new resource.
