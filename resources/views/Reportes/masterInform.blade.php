@@ -33,7 +33,7 @@
                     <li id="subgiros"><a href="{{ url('/Informes/Tesoreria/Giro-Cheques') }}">Giros de Cheques</a></li>
                     @endpermission
                     @permission('ver distribucion fondos')
-                        <li id="subdistribucion"><a href="{{ url('/Acopio/Tara') }}">Distribucion de Fondos</a></li>
+                        <li id="subdistribucion"><a href="{{ url('Informes/Tesoreria/Distribucion-Fondos') }}">Distribucion de Fondos</a></li>
                     @endpermission                 
                 </ul>
             </li>

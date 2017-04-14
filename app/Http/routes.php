@@ -201,6 +201,9 @@ Route::group(['middleware' => ['auth']], function () {
     route::resource('Informes/Acopio/Grafica-Fondos','Informes\ListaInformescontroller@grafica_fondos');
     route::get('Informes/Tesoreria/Grafica-giros/{a?}/{mes?}','Informes\ListaInformescontroller@grafica_Giro_cheques');
     route::resource('Informes/Tesoreria/Giro-Cheques','Informes\ListaInformescontroller@Giro_cheques');
+    route::get('Informes/Tesoreria/Grafica-Distribucion/{tecnico?}/{a?}/{mes?}','Informes\ListaInformescontroller@grafica_distribucion_fondos');
+    route::resource('Informes/Tesoreria/Distribucion-Fondos','Informes\ListaInformescontroller@distribucion_fondos');
+    
     route::get('Informes/grafica-socios/{a?}/{mes?}','Informes\ListaInformescontroller@grafico_socios');    
     route::resource('Informes/Padron-Socios','Informes\ListaInformescontroller@padronsocios');
     route::resource('Informes','Informes\ListaInformescontroller');

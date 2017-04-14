@@ -23,6 +23,78 @@ class Distribucion extends Model
         return $this->hasOne(\App\Models\RRHH\Sucursal::class);
     }
 
+    public static function scopeListTechnicalXmonth($query,$tecnico,$anio,$mes){
+        if($mes==0)
+        return $query
+                ->whereyear('fecha','=',$anio)
+                ->where('tecnicos_empleados_empleadoId','=',$tecnico)
+                ->select(DB::raw('month(fecha) as mes'))
+                ->groupby(DB::raw('month(fecha)'))
+                ->orderby(DB::raw('month(fecha)'),'asc')
+                ->get();
+        else
+            return $query
+                ->whereyear('fecha','=',$anio)
+                ->wheremonth('fecha','=',$mes)
+                ->where('tecnicos_empleados_empleadoId','=',$tecnico)
+                ->select(DB::raw('day(fecha) as mes'))
+                ->groupby(DB::raw('day(fecha)'))
+                ->orderby(DB::raw('day(fecha)'),'asc')
+                ->get();
+    }
+
+    public static function scopeListWarehouseXmonth($query,$anio,$mes,$tecnico){
+      
+        if($mes==0)
+            return $query 
+                    ->whereyear('fecha','=',$anio)                    
+                    ->where('tecnicos_empleados_empleadoId','=',$tecnico)
+                    ->join('sucursales', 'distribucions.sucursales_sucursalId', '=', 'sucursales.sucursalId')
+                    ->select('sucursal','sucursalId')
+                    ->groupby('sucursal')
+                    ->orderby('sucursal','asc')
+                    ->get();
+        else
+            return $query 
+                    ->whereyear('fecha','=',$anio)
+                    ->wheremonth('fecha','=',$mes)
+                    ->where('tecnicos_empleados_empleadoId','=',$tecnico)
+                    ->join('sucursales', 'distribucions.sucursales_sucursalId', '=', 'sucursales.sucursalId')
+                    ->select('sucursal','sucursalId')
+                    ->groupby('sucursal')
+                    ->orderby('sucursal','asc')
+                    ->get();
+    }
+    
+    public static function scopeListMoneyWarehouse($query,$tecnico,$anio,$mes,$idsucursal,$estadomes){
+
+        if($estadomes == 0)
+            $monto = $query
+                    ->whereyear('fecha','=',$anio)
+                    ->wheremonth('fecha','=',$mes)
+                    ->where('tecnicos_empleados_empleadoId','=',$tecnico)
+                    ->where('sucursales_sucursalId','=',$idsucursal)
+                    ->select(\Illuminate\Support\Facades\DB::raw('IFNULL(sum(monto),0) as monto'))
+                    ->groupby('sucursales_sucursalId')
+                    ->first();
+        else
+            $monto = $query
+                    ->whereyear('fecha','=',$anio)
+                    ->wheremonth('fecha','=',$estadomes)
+                    ->whereday('fecha','=',$mes)
+                    ->where('tecnicos_empleados_empleadoId','=',$tecnico)
+                    ->where('sucursales_sucursalId','=',$idsucursal)
+                    ->select(\Illuminate\Support\Facades\DB::raw('IFNULL(sum(monto),0) as monto'))
+                    ->groupby('sucursales_sucursalId')
+                    ->first();
+        if(count($monto) > 0)
+            return $monto->monto;
+        else
+            return '0.0';
+//        else
+//            return monot
+    }
+
     public static function scopeListaAnioDistriReport($query,$anio,$mes,$dato=''){
         if($anio == 0)
             return $query->where('distribucions.estado','=','Entregado')

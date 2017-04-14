@@ -220,9 +220,10 @@ function grafico_barra_delivery_money($anio,$mes){
         text: 'ACOPAGRO'
     },
     legend: {
-        align: 'right',
-        verticalAlign: 'middle',
-        layout: 'vertical'
+//        align: 'right',
+//        verticalAlign: 'middle',
+//        layout: 'vertical'
+        enabled: true
     },
     tooltip: {
             headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
@@ -288,15 +289,92 @@ function grafico_barra_delivery_money($anio,$mes){
     });
 }
 
-/*
- 
- 
- 
- 
- 
- * 
- * 
- * 
- */
-
- 
+function grafico_distribucion($tecnico,$anio,$mes){
+    $.get('Grafica-Distribucion/'+$tecnico+'/'+$anio+'/'+$mes, function (data) {        
+    var datos = jQuery.parseJSON(data);         
+    var seriesx =[];
+    console.log(datos.montos)
+    $.each(datos.almacenes,function( index,value){        
+            var cars = {name:value,data:datos.montos[index]};            
+           seriesx.push(cars);
+       });       
+         var options = {   
+    chart: {
+                 renderTo: 'div-graficas',
+        type: 'column'
+    },
+    title: {
+        text: 'GRAFICA DE DISTRIBUCION DE FONDOS POR EXTENSIONISTAS'
+    },
+    subtitle: {
+        text: 'ACOPAGRO'
+    },
+    legend: {
+//        align: 'right',
+//        verticalAlign: 'middle',
+//        layout: 'vertical'
+            enabled: true
+    },
+    tooltip: {
+            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+            '<td style="padding:0"><b>S/. {point.y:.1f}</b></td></tr>',
+        footerFormat: '</table>',
+        shared: true,
+        useHTML: true
+        },
+    plotOptions: {
+            column: {
+            pointPadding: 0.2,
+            borderWidth: 0
+        
+        }
+        },
+    xAxis: {
+        categories: datos.fechas,
+        title: {
+                text: 'FECHAS'
+            },
+            crosshair: true
+    },
+    yAxis: {
+        allowDecimals: false,
+        title: {
+            text: 'MONTO EN S/. '
+        }
+    },
+    series: seriesx,             
+    responsive: {
+        rules: [{
+            condition: {
+                maxWidth: 500
+            },
+            chartOptions: {
+                legend: {
+                    align: 'center',
+                    verticalAlign: 'bottom',
+                    layout: 'horizontal'
+                },
+                yAxis: {
+                    labels: {
+                        align: 'left',
+                        x: 0,
+                        y: -5
+                    },
+                    title: {
+                        text: null
+                    }
+                },
+                subtitle: {
+                    text: null
+                },
+                credits: {
+                    enabled: false
+                }
+            }
+        }]
+    }    
+    }
+    chart = new Highcharts.Chart(options);
+    });
+}

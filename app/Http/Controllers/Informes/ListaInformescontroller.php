@@ -118,11 +118,12 @@ class ListaInformescontroller extends Controller
     public function  grafica_Giro_cheques($anio,$mes){
         
         $cheques = \App\Models\Tesoreria\Mov_cheque::listachequesXanio($anio,$mes,'');        
-//        dd($meses[0]->mes);//4
+        if(count($cheques) > 0){
+            
         if ($mes == 0) {//lista de meses
             $meses = \App\Models\Tesoreria\Mov_cheque::ListaMesesXanio($anio);
             foreach ($cheques as $cheque){
-                setlocale(LC_TIME, 'spanish');
+                
                 foreach ($meses as $mes){                    
                     $lista[] = floatval(\App\Models\Tesoreria\Mov_cheque::Grafica_Giros($anio,$mes->mes,0,$cheque->id)->monto);
                 }                
@@ -147,9 +148,53 @@ class ListaInformescontroller extends Controller
             }
            
         }
-        $data = ['fechas' => $fecha, 'cheques' => $listcheque,'montos'=>$lista2];
+            $data = ['fechas' => $fecha, 'cheques' => $listcheque,'montos'=>$lista2];
+        }else
+            $data = ['fechas' => [], 'cheques' => [],'montos'=>[]];        
         return json_encode($data);
     }
+    
+    public function distribucion_fondos(){
+        if(!auth()->user()->can('ver distribucion fondos'))
+            return response ()->view ('errors.403');
+        $tecnicos = \App\Models\Tesoreria\Distribucion::tecnicos();
+        for ($i = 2016; $i <= \Carbon\Carbon::now()->format('Y'); $i++) {
+            $resul[$i] = $i;
+        }
+        return response()->view('Reportes.Tesoreria.GraficDeliveryMoney',['tecnicos'=>$tecnicos,'anios'=>$resul]);
+    }
+    
+    public function Grafica_distribucion_fondos($tecnico,$anio,$mes){        
+        $fechas = \App\Models\Tesoreria\Distribucion::ListTechnicalXmonth($tecnico,$anio,$mes);        
+        if(count($fechas) > 0){            
+            $almacenes = \App\Models\Tesoreria\Distribucion::ListWarehouseXmonth($anio,$mes,$tecnico);
+            foreach ($almacenes as $almacen){                
+                foreach ($fechas as $fecha){
+                    setlocale(LC_TIME, 'spanish');
+                    $lista[] = floatval(\App\Models\Tesoreria\Distribucion::ListMoneyWarehouse($tecnico,$anio,$fecha->mes,$almacen->sucursalId,$mes));
+                }
+            $lista2[] = $lista;
+            $listaAlmacen[]=$almacen->sucursal;
+            unset($lista);
+        }
+        if($mes==0)
+        foreach ($fechas as $me){
+              $listafecha[] = strtoupper(strftime("%B", mktime(0, 0, 0, $me->mes, 1, 2016)));
+            }
+            else
+            foreach ($fechas as $fecha){
+                $listafecha[] = $fecha->mes;
+            }                
+//            dd($listafecha);
+                
+            $data = ['fechas' => $listafecha, 'almacenes' => $listaAlmacen,'montos'=>$lista2];
+            
+                
+        }else
+            $data = ['fechas' => [], 'almacenes' => [],'montos'=>[]];
+            return json_encode($data);
+    }
+    
 //    GraficoGiroCheques.blade
 
     /**
