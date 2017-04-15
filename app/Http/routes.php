@@ -128,8 +128,8 @@ Route::group(['middleware' => ['auth']], function () {
     route::resource('RRHH/Tecnicos/Tecnico-Local','RRHH\tecnicoscontroller@listaSectorAsignados');//listaSectorAsignados
     route::resource('RRHH/modaltecnicos','RRHH\tecnicoscontroller@modalTecnicos');
     route::resource('RRHH/Tecnicos','RRHH\tecnicoscontroller');
-    
-    route::get('Acopio/listaRecepcionFondos/{an?}/{mes?}','Acopio\recepcion_fondoscontroller@recepcionfondos');    
+    // **********************************  ACOPIO **********************************************
+    route::get('Acopio/listaRecepcionFondos/{an?}/{mes?}/{dato?}','Acopio\recepcion_fondoscontroller@recepcionfondos'); 
     route::resource('Acopio/Fondos-Acopio','Acopio\recepcion_fondoscontroller');
 //    route::resource('Acopio/PlanillaSemanal/{id}','Acopio\planillacontroller@planillasemanal');
     route::resource('Acopio/ListaPlanillaSemanal','Acopio\planillacontroller@ListaSemanal');
@@ -189,8 +189,8 @@ Route::group(['middleware' => ['auth']], function () {
     route::resource('Configuracion','Configuracion\documentoController');
     
     // *******************  REPORTES O INFORMES GRAFICAS ******************************** 
-    route::get('Acopio/PdfRecepcion/{an?}/{mes?}','Informes\Reportecontroller@pdfrecepcion');
-    route::get('Acopio/ExcelRecepcion/{an?}/{mes?}','Informes\Reportecontroller@excelrecepcion');
+    route::get('Acopio/Fondos-Acopio/Report-Fondos-Acopio/{an?}/{mes?}/{dato?}','Informes\Reportecontroller@pdfrecepcion');
+    route::get('Acopio/Fondos-Acopio/excel-Fondos-Acopio/{an?}/{mes?}','Informes\Reportecontroller@excelrecepcion');
     
     route::get('Tesoreria/Cheques-Girados/Reporte-cheques/{an?}/{mes?}/{dato?}','Informes\Reportecontroller@pdfGiroCheques');
     route::get('Tesoreria/Cheques-Girados/Excel-cheques/{an?}/{mes?}/{dato?}','Informes\Reportecontroller@ExcelGiroCheques');

@@ -89,10 +89,16 @@ class AuthController extends Controller
         return view('auth.register',['empleados'=>$empleados]);
     }
 
-
     public function listUsers(){        
         $usuarios = \App\User::usuarios();
         return view('Configuracion.usuarios',['usuarios'=>$usuarios]);        
     }
     
+//    public function listUsers() {
+//        $usuarios = \App\User::usuarios();
+//        return view('Configuracion.usuarios', ['usuarios' => $usuarios]);
+//    }
+
+    
 }
+    

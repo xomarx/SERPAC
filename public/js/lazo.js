@@ -113,41 +113,7 @@ var cargardistrito = function (iddist,idsele) {
  };
 
 //  recepcion de fondo
-
-    
-    $("#RegRecepcion").click(function(){        
-        RegistroRec($("#id").val());
-    });
-    
-    function RegistroRec (id){
-        var monto = $("#monto").val();
-        var estado = $("#estado").val();
-        var motivo = $("#motivo").val();     
-        var route = '/Acopio/Fondos-Acopio/'+id;        
-        var token = $("input[name=_token]").val();   
-        
-        $.ajax({
-            url: route,
-            headers: {'X-CSRF-TOKEN': token},
-            type: 'PUT',
-            dataType: 'json',
-            data: {
-                monto:monto,
-                estado:estado,
-                motivo:motivo
-            },
-            success: function (data) {
-                if (data.success)                
-                   document.location.reload();                
-            },
-            error:function(data){
-                if ($("#estado").val() == 'CONFORME') activarmodal(0);
-                else if(data.status==403) $("#error-modal").html(data.responseText);
-                    
-      }
-        });
-    };
-    
+          
     var meses = function(anio){  
         var meses = new Array ("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre", "Diciembre");
         var cont = 12;
@@ -169,7 +135,7 @@ var activarForm = function(id){
         else if(id == 5) {var route = 'ListUsuarios';}
         else if(id == 6) {var route = 'transferencias/newtransferencias';}
         else if(id == 7) {var route = 'ListaPlanillaSemanal';}
-        else if(id == 8) {var route = 'listaRecepcionFondos/'+$("#anio").val()+'/'+$("#mes").val();}
+        else if(id == 8) {var route = 'listaRecepcionFondos/'+$("#anio").val()+'/'+$("#mes").val()+'/'+$("#buscar").val();}
         else if(id == 9) {var route = 'ListaDistribucion/'+$("#anio").val()+'/'+$("#mes").val()+'/'+$("#buscar").val();}
         $.ajax({
             type:'get',
@@ -2971,6 +2937,60 @@ var EliGasto = function(id,nombre){
 
 
 });
+
+// *******************************************************************  RECEPCION FONDOS *************************************************************
+
+var ConforRecep = function(event,id,monto){
+        var sel = event.parentNode.parentNode.getElementsByTagName('select');
+        if(sel[0].value=='') $.alertable.alert("Seleccione si esta Conforme ó No Conforme");
+        else if(sel[0].value=='CONFORME'){
+            $.alertable.confirm("Esta Conforme la Recepcion de Fondoc de Acopio").then(function(){                
+                RegistroRec(id,sel[0].value,monto);
+            });
+        }
+        else{
+            $("#valortemp").val(sel[0].value);
+            $("#monto").val(monto);
+            $("#id").val(id);
+            $("#modal-form").modal()
+        }                                
+    }
+
+ $("#RegRecepcion").click(function(){        
+        RegistroRec($("#id").val(),$("#valortemp").val(),0);
+    });
+    
+    function RegistroRec (id,estado,monto){
+        if(monto == 0)
+            var monto = $("#monto").val();
+        var estado = estado;
+        var motivo = $("#motivo").val();     
+        var route = '/Acopio/Fondos-Acopio/'+id;        
+        var token = $("input[name=_token]").val();           
+        $.ajax({
+            url: route,
+            headers: {'X-CSRF-TOKEN': token},
+            type: 'PUT',
+            dataType: 'json',
+            data: {
+                monto:monto,
+                estado:estado,
+                motivo:motivo
+            },
+            success: function (data) {
+                mensajeRegistro(data,'formrecepcionfondos')
+                activarForm(8);
+                                  
+            },
+            error:function(data){
+                if(data.status==403) activarmodal(0);
+                else{
+                if ($("#estado").val() == 'CONFORME') activarmodal(0);
+                else if(data.status==403) $("#error-modal").html(data.responseText);
+            } 
+      }
+        });
+    };
       
 // ************************************************************************ REPORTES **********************************************
 
@@ -2998,4 +3018,19 @@ $(document).ready().on('click','#pdfdistribucion',function(e){
     $(this).attr('href','');
     var route = '/Tesoreria/Distribucion-Fondos/Distribucion-Excel/' + $("#anio").val()+'/'+$("#mes").val()+'/'+$("#buscar").val();
     $(this).attr('href',route);       
+});
+
+$(document).ready().on('click','#excelMoney',function(e){    
+    if($("#anio").val() ==0){ $.alertable.alert("<span style='color:#ff0000'>SELECCIONE UNA FECHA PARA PODER EXPORTAR EN EXCEL</span>");e.preventDefault();}    
+    $(this).attr('href','');
+    var route = '/Acopio/Fondos-Acopio/excel-Fondos-Acopio/' + $("#anio").val()+'/'+$("#mes").val()+'/'+$("#buscar").val();
+    $(this).attr('href',route);
+});
+
+$(document).ready().on('click','#pdfMoney',function(e){
+    if($("#anio").val() ==0 && $("#mes").val() ==0) 
+        { $.alertable.alert("<span style='color:#ff0000'>SELECCIONE UNA FECHA PARA PODER EXPORTAR EN PDF</span>");e.preventDefault();}
+    $(this).attr('href','');
+    var route = '/Acopio/Fondos-Acopio/Report-Fondos-Acopio/' + $("#anio").val()+'/'+$("#mes").val()+'/'+$("#buscar").val();
+    $(this).attr('href',route);
 });

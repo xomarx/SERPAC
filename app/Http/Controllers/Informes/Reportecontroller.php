@@ -40,49 +40,78 @@ class Reportecontroller extends Controller
         return $pdf->stream();
     }
     //*****************************************************   ACOPIO *********************************
-    public function excelrecepcion($anio,$me){
-        \Maatwebsite\Excel\Facades\Excel::create('Recepcion Fondos', function($excel) use($anio,$me){
-            $excel->setTitle('recepcion de fondos');
-            $excel->sheet('Fondos', function($sheet) use($anio,$me){
-          $fondos = \App\Models\Acopio\Recepcion_fondo::ExportingExcelPdf($anio,$me);
-                setlocale(LC_TIME, 'spanish');
-                $mes = date('m', strtotime($fondos[0]->fecha));
-                $dias = date("t", mktime(0, 0, 0, $mes, 1, $anio));
-                $mes = strftime("%B", mktime(0, 0, 0, $mes, 1, 2000));
-                $mes = strtoupper($mes);
-
-                foreach ($fondos as $fondo) {
-                    $pagos = \App\Models\Acopio\Recepcion_fondo::listapagosRec($fondo->empleados_empleadoId, $anio, $me);
-                    $lista[] = ['fondos' => $fondo, 'pagos' => $pagos];
+    public function excelrecepcion($anio,$me,$dato=''){        
+        $meses = \App\Models\Acopio\Recepcion_fondo::ListMonth($anio,$me,$dato);
+//        dd($meses);
+        if(count($meses) > 0){
+        setlocale(LC_TIME, 'spanish');
+//        dd($me);
+         \Maatwebsite\Excel\Facades\Excel::create('KARDEX DE DINERO '.$anio, function($excel) use($anio,$meses,$dato){
+             
+        foreach ($meses as $mes){
+                $excel->sheet('KARDEX', function($sheet) use($anio,$mes,$dato){
+               
+                $acopiadores = \App\Models\Acopio\Recepcion_fondo::ListAcopiadores($anio,$mes->mes,$dato);
+//                dd($acopiadores[0]);
+                foreach ($acopiadores as $acopiador){
+                    $dias = \App\Models\Acopio\Recepcion_fondo::ListDays($anio,$mes->mes,$acopiador->empleadoId);
+//                    dd($dias);
+                    $listadias = [];
+                    foreach ($dias as $dia){
+                        $monto = \App\Models\Acopio\Recepcion_fondo::ExportingExcelPdf($anio,$mes->mes,$dia->dia,$acopiador->empleadoId);
+//                        dd($monto->monto);
+                        $listadias[] = ['dias'=>$dia->dia,'monto'=>$monto->monto];                        
+                    }
+                    $lista2[]=['dias'=>$listadias,'acopiador'=>$acopiador];
+                    unset($listadias);
                 }
-                $sheet->loadView('Reportes.Acopio.ExcelPdfRecepFondos', ['listas'=>$lista,'mes'=>$mes,'dias'=>$dias  ]);
+                $m=strtoupper(strftime("%B", mktime(0, 0, 0, $mes->mes, 1, 2000)));
+                $dias=date("t",mktime(0,0,0,$mes->mes,1,$anio));
+                $datos [] = ['meses'=>$m,'acopiadores'=>$lista2,'dias'=>$dias];
+                unset($lista2);
+                $sheet->loadView('Reportes.Acopio.ExcelRecepFondos', ['listas'=>$datos]);
             });
-        })->export('xls');
+        }
+         })->export('xls');
+        }
+        else
+            $dato = view('Reportes.NoFoundPdfExcel')->with('titulo', 'KARDEX DE DINERO DE ACOPIO');                        
     }
 
-    public function pdfrecepcion($anio,$me){
-        $fondos = \App\Models\Acopio\Recepcion_fondo::ExportingExcelPdf($anio,$me);
-        setlocale(LC_TIME, 'spanish');
-        $mes = date('m', strtotime($fondos[0]->fecha));
-        $dias=date("t",mktime(0,0,0,$mes,1,$anio));
-        $mes = strftime("%B", mktime(0, 0, 0, $mes, 1, 2000));
-        $mes=strtoupper($mes);
-        
-        foreach ($fondos as $fondo){
-            $pagos = \App\Models\Acopio\Recepcion_fondo::listapagosRec($fondo->empleados_empleadoId,$anio,$me);
-            $lista[]=['fondos'=>$fondo,'pagos'=>$pagos];
+    public function pdfrecepcion($anio,$me,$dato=''){
+
+        $meses = \App\Models\Acopio\Recepcion_fondo::ListMonth($anio,$me,$dato);
+        if(count($meses) > 0){
+        setlocale(LC_TIME, 'spanish');        
+        foreach ($meses as $mes){
+            $acopiadores = \App\Models\Acopio\Recepcion_fondo::ListAcopiadores($anio,$mes->mes,$dato);
+            foreach ($acopiadores as $acopiador){
+                $dias = \App\Models\Acopio\Recepcion_fondo::ListDays($anio,$mes->mes,$acopiador->empleadoId);
+                $listadias = [];
+                foreach ($dias as $dia){
+                    $monto = \App\Models\Acopio\Recepcion_fondo::ExportingExcelPdf($anio,$mes->mes,$dia->dia,$acopiador->empleadoId);                    
+                    $listadias[] = ['dias'=>$dia->dia,'monto'=>$monto->monto];
+                }
+                $lista2[]=['dias'=>$listadias,'acopiador'=>$acopiador];
+                unset($listadias);
+            }
+            $m=strtoupper(strftime("%B", mktime(0, 0, 0, $mes->mes, 1, 2000)));
+            $dias=date("t",mktime(0,0,0,$mes->mes,1,$anio));
+            $datos [] = ['meses'=>$m,'acopiadores'=>$lista2,'dias'=>$dias];
+            unset($lista2);                
         }
-//        dd($lista[0]['pagos']->count);
-        $dato = view('Reportes.Acopio.ExcelPdfRecepFondos',['listas'=>$lista,'mes'=>$mes,'dias'=>$dias  ])->render(); 
+        $dato = view('Reportes.Acopio.ExcelPdfRecepFondos',['listas'=>$datos])->render(); 
+        }
+        else
+            $dato = view('Reportes.NoFoundPdfExcel')->with('titulo', 'KARDEX DE DINERO DE ACOPIO');
         
         $pdf = \Illuminate\Support\Facades\App::make('dompdf.wrapper');        
             $pdf->loadHTML(utf8_decode($dato))->setPaper('a3', 'landscape')->setWarnings(false); //portrait          
         return $pdf->stream();
     }
-
     
     //******************************************************  TESORERIA ***************************************
-    
+//    
     
     public function pdfDistribucionFondo($anio, $mes, $dato = '') {
 

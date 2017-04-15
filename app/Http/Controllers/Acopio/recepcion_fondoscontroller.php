@@ -20,24 +20,18 @@ class recepcion_fondoscontroller extends Controller
         //
         if(!auth()->user()->can('ver fondos'))
             return response ()->view ('errors.403');
-        $recepcions = Recepcion_fondo::listaRecepcio();
-        $anios = \App\Models\Socios\Socio::orderby('fec_asociado', 'asc')->first();
+        $recepcions = Recepcion_fondo::ListRecepMoney(0,0,'');        
         $resul[] = 'Todo los Años';
         for ($i = 2016; $i <= \Carbon\Carbon::now()->format('Y'); $i++) {
             $resul[$i] = $i;                                                   
-        }
-        setlocale(LC_TIME, 'spanish');
-        $meses[] = 'Todo los Meses';
-        for ($i = 1; $i <= 12; $i++) {
-            $meses[] = strftime("%B", mktime(0, 0, 0, $i, 1, 2000));
-        }
-        return view('Acopio.recepcion_fondos',  ['recepcions'=>$recepcions,'anios'=>$resul,'meses'=>$meses]);
+        }        
+        return view('Acopio.recepcion_fondos',  ['recepcions'=>$recepcions,'anios'=>$resul]);
     }
     
-    public function recepcionfondos($anio,$mes){
+    public function recepcionfondos($anio,$mes,$dato=''){
         if(!auth()->user()->can('ver fondos'))
-            return response ()->view ('errors.403');
-        $recepcions = Recepcion_fondo::listaRecFondos($anio,$mes);
+            return response ()->view ('errors.403-content');
+        $recepcions = Recepcion_fondo::ListRecepMoney($anio,$mes,$dato);
         return view('Acopio.listaRecepcionFondos')->with('recepcions',$recepcions);
     }
 
@@ -109,11 +103,11 @@ class recepcion_fondoscontroller extends Controller
             $recepcio->save();
             if($recepcio)
             {
-                return response()->json(['success'=>true]);
+                return response()->json(['success'=>true,'message'=>'Se Actualizo el estado de Recepcion']);
             }
             else
             {
-                return response()->json(['success'=>false]);
+                return response()->json(['success'=>false,'message'=>'No se produjo ningun cambio']);
             }
         }
     }
