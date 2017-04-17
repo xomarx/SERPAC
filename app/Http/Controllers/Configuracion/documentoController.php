@@ -16,8 +16,7 @@ class documentoController extends Controller
      */
     public function index()
     {
-        $recibos = \App\Models\Configuracion\Tipo_documento::all();
-        return view('Configuracion.Recibos',['recibos'=>$recibos]);
+        
     }
 
     /**
@@ -39,15 +38,7 @@ class documentoController extends Controller
     public function store(Requests\Configuracion\tipo_documentoCreateRequest $request)
     {
         //
-        if($request->ajax()){
-            $tipo = \App\Models\Configuracion\Tipo_documento::create([
-                'codigo'=>  strtoupper($request->codigo),
-                'tipo_documento'=>  strtoupper($request->recibo),
-                'enlace'=>  strtoupper($request->enlace)
-            ]);
-            if($tipo) return response ()->json (['success'=>true,'message'=>'Se registro correctamente']);
-            else return response ()->json (['success'=>false,'message'=>'No se registro']);
-        }
+        
             
     }
 
@@ -70,8 +61,7 @@ class documentoController extends Controller
      */
     public function edit($id)
     {        
-        $tipo = \App\Models\Configuracion\Tipo_documento::where('codigo','=',$id)->first();
-        return response()->json($tipo);
+        
     }
 
     /**
@@ -84,14 +74,7 @@ class documentoController extends Controller
     public function update(Requests\Configuracion\tipo_documentoUpdateRequest $request, $id)
     {
         //
-        if($request->ajax()){
-            $tipo = \App\Models\Configuracion\Tipo_documento::where('codigo','=',$id)
-                    ->update(['tipo_documento'=>  strtoupper($request->recibo)]);
-            if($tipo)
-                return response()->json(['success'=>'true','message'=>'Se actualizaron correctamente los datos']);
-            else return response()->json(['success'=>'false','message'=>'No se actualizaron datos']);
         
-        }
             
     }
 

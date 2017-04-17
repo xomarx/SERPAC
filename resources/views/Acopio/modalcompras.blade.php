@@ -4,8 +4,9 @@
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal">&times;</button>
           <center><h4 class="modal-title">COMPRA DE GRANO DE CACAO</h4></center>
-        </div>{!! Form::open(['id'=>'formcompras']) !!}
+        </div>
         <div class="modal-body form-group-sm">
+            {!! Form::open(['id'=>'formcompras']) !!}
             @include('mensajes.mensaje')
             <input type="hidden" id="id">
             <div class="col-md-12">
@@ -22,15 +23,11 @@
                     {!! Form::text('acopio',null,['id'=>'acopio','class'=>'form-control','placeholder'=>'Codigo Almacen','autofocus'])!!}
                     <div class="text-danger" id="error_acopio"></div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-5">
                     {!! Form::label('codigo','Centro de Acopio:',['class' => 'control-label'])!!}
                     {!! Form::text('sucursal',null,['id'=>'sucursal','class'=>'form-control','placeholder'=>'Centro de Acopio','disabled'])!!}                    
                 </div>
-                <div class="col-md-2">
-                    {!! Form::label('codrecibo','Codigo Recibo:',['class' => 'control-label'])!!}                    
-                    {!! Form::text('codrecibo',null,['id'=>'codrecibo','class'=>'form-control','placeholder'=>' R-CC'])!!}
-                    <div class="text-danger" id="error_codrecibo"></div>
-                </div>
+                
                 <div class="col-md-2">
                     {!! Form::label('numero','N° Recibo:',['class' => 'control-label'])!!}                    
                     {!! Form::text('numero',null,['id'=>'numero','class'=>'form-control','placeholder'=>'N° de Recibo','style'=>"text-align: center;"])!!}
@@ -48,7 +45,7 @@
                     {!! Form::text('materno',null,['id'=>'materno','class'=>'form-control autocomplete-suggestion','placeholder'=>'Apellido Materno'])!!}
                     <div class="text-danger" id="error_materno"></div>
                 </div>
-                <div class="col-md-3 ">
+                <div class="col-md-3">
                     {!! Form::label('nombre','Nombres:',['class' => 'control-label'])!!}                    
                     {!! Form::text('nombres',null,['id'=>'nombres','class'=>'form-control autocomplete-suggestion','placeholder'=>'Nombre completo'])!!}
                     <div class="text-danger" id="error_nombres"></div>
@@ -121,13 +118,14 @@
                     <div class="text-danger" id="error_fecha"></div>
                 </div>                             
             </div>
-        </div> {!! Form::close() !!} 
-        <div class="modal-footer">
+            <div class="modal-footer">
             <div class="col-md-12">
              {!!link_to('#', $title='Registrar', $attributes = ['id'=>'RegCompras', 'class'=>'btn btn-dropbox'])!!}
           <button type="button" class="btn btn-default" data-dismiss="modal">Salir</button>
           </div>
         </div>
+            {!! Form::close() !!}
+        </div>          
       </div>
     </div>
   </div>

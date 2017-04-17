@@ -36,8 +36,7 @@ class ComprasCreateRequest extends Request
             'condicion'=>'required',
             'precio'=>'required|numeric',
             'kilos'=>'required|numeric',
-            'fecha'=>'required',
-            'codrecibo'=>'required|exists:tipo_documentos,codigo'
+            'fecha'=>'required'            
         ];
     }
     
@@ -58,8 +57,7 @@ class ComprasCreateRequest extends Request
             'condicion.required'=>'Sleccione una Condicion',
             'precio.numeric'=>'Solo se permiten Numeros y punto',
             'kilos.numeric'=>'Solo se permiten Numeros y punto',
-            'fecha.required'=>'Es obligatorio la Fecha',
-            'codrecibo.exists'=>'El Codigo del Recibo no existe'
+            'fecha.required'=>'Es obligatorio la Fecha'
         ];
     }
 }

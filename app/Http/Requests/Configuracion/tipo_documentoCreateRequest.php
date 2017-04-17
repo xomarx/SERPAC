@@ -21,15 +21,32 @@ class tipo_documentoCreateRequest extends Request
      *
      * @return array
      */
-    public function rules()
-    {
-        return [
-            //
-            'recibo'=>'required|unique:tipo_documentos,tipo_documento',
-            'codigo'=>'required|unique:tipo_documentos,codigo',
-        ];
+    public function rules() {
+        switch ($this->method()) {
+            case 'GET':
+            case 'DELETE': {
+                    return [];
+                }
+            case 'POST': {
+                    return [
+                        //
+                        'recibo' => 'required|unique:tipo_documentos,tipo_documento',
+                        'codigo' => 'required|unique:tipo_documentos,codigo',
+                        'enlace' => 'required|unique:tipo_documentos,enlace'
+                    ];
+                }
+            case 'PATCH':
+            case 'PUT': {
+                    return [
+                        'recibo' => 'required',
+                        'codigo' => 'required|exists:tipo_documentos,codigo',
+                        'enlace' => 'required|unique:tipo_documentos,enlace'
+                    ];
+                }
+            default : break;
+        }
     }
-    
+
     public function messages() {
         parent::messages();
         return [

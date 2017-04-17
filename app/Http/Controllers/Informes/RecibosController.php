@@ -9,6 +9,18 @@ use App\Http\Controllers\Controller;
 
 class RecibosController extends Controller
 {
+    public function ReciboCompras($idcompra){
+        
+        $compra = \App\Models\Acopio\Compra::GetReciCompra($idcompra);
+        
+        
+        $dato = view('Reportes.Acopio.ReciboCompras',['compras'=>$compra])->render();        
+        $pdf = \Illuminate\Support\Facades\App::make('dompdf.wrapper');        
+            $pdf->loadHTML(utf8_decode($dato))->setPaper('a4', 'portrait')->setWarnings(false); //landscape  
+        
+        return $pdf->stream();
+    }
+
     /**
      * Display a listing of the resource.
      *

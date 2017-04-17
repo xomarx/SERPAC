@@ -10,47 +10,12 @@
         @permission('crear compras')
         <a id="nuevacompra"  class="btn btn-dropbox btn-sm" data-toggle="tooltip" data-placement="top" title="COMPRAR GRANO"><span class="glyphicon glyphicon-plus"> COMPRAR</span></a>
         @endpermission
+        <div class="col-sm-3 form-group-sm" style="float: right">            
+            {!! Form::text('buscar',null,['id'=>'buscar','class'=>'form-control','placeholder'=>'Buscar..'])!!}
+        </div>
     </div>
-    <div class="box-body">
-        <table class="table table-responsive" id="myTable" >
-            <thead>
-            <th>FECHA</th>
-            <th>CONDICION</th> 
-            <th>KG</th>                            
-            <th>COSTO</th>
-            <th>TOTAL</th>
-            <th>SOCIOS/NO SOCIOS</th>                        
-            <th>ALMACEN</th>
-            <th>USUARIO</th>
-            <th>ACCIONES</th>
-            </thead>
-            <tbody>
-                @foreach ($compras as $compra )
-                {{--*/ @$nombre = str_replace(' ','&nbsp;', $compra->socios_codigo) /*--}}
-                {{--*/ @$total = str_replace(' ','&nbsp;', round( ($compra->kilos*$compra->precio),2)) /*--}}
-                <tr>
-                    <td>{{$compra->fecha }}</td>
-                    <td>{{$compra->condicion }}</td>
-                    <td>{{$compra->kilos }}</td>
-                    <td>{{$compra->precio }}</td>
-                    <td>{{$total}}</td>
-                    <td>
-                        @if ( $compra->socios_codigo == '')
-                        {{$compra->npaterno}} {{$compra->nmaterno}} {{$compra->nnombres}}
-                        @else
-                        {{$compra->paterno}} {{$compra->materno}} {{$compra->nombre}}
-                        @endif
-                    </td>                                
-                    <td>{{$compra->sucursal }}</td>
-                    <td>{{$compra->name }}</td>  
-                    <td>
-                        <a href="" target="_blank" class="btn-xs btn-success" data-toggle="tooltip" data-placement="top" title="Imprimir Recibo"><span class="glyphicon glyphicon-print" ></span></a>
-                        <a href="javascript:void(0)" onclick="AnulCompra('{{$compra->id}}','{{$nombre}}')" class="btn-xs btn-danger" data-toggle="tooltip" data-placement="top" title="Anular"><span  class="glyphicon glyphicon-remove"></span></a>
-                    </td>
-                </tr>                            
-                @endforeach
-            </tbody>
-        </table>
+    <div class="box-body" id="contenidos-box">
+        @include('Acopio.ListCompras')
     </div>
 </div>
 <section id="conten-modal"></section>
@@ -85,10 +50,14 @@
        })
    }
    
+   $("#buscar").keyup(function(event){
+       activarForm(10);
+   });
             
    $(document).ready(function (){
       $("#menuacopio").addClass('active');
       $("#subcompras").addClass('active');
+      activarForm(10);
    });
 
 </script>

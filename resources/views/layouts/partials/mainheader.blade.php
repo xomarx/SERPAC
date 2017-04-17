@@ -36,7 +36,7 @@
                     <li id="menutesoreria"><a href="{{ url('/Tesoreria/Distribucion-Fondos') }}">Tesoreria</a></li>
                     <li id="menucontabilidad"><a href="{{ url('/Creditos/Contabilidad') }}">Contabilidad</a></li>
                     <li id="menuinformes" ><a href="{{ url('/Informes') }}">Informes <i class="glyphicon glyphicon-stats"></i></a></li>
-                    <li id="menuconfiguracion"><a href="{{url('Configuracion') }}">Configuracion</a></li>
+                    <li id="menuconfiguracion"><a href="{{url('Configuracion/Documentos') }}">Configuracion</a></li>
                 </ul>                                                                       
                 <ul class="navbar-custom-menu">
                     <ul class="nav navbar-nav">   

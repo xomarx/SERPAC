@@ -69,17 +69,7 @@
        activarForm(8);
     });
     
-    $(document).on('click','.pagination li a',function(e){
-     e.preventDefault();
-     var url = $(this).attr('href');     
-     $.ajax({
-        type:'get',
-        url:url,
-        success:function(data){
-            $("#contenidos-box").empty().html(data);
-        }
-     });
-  });
+    
     
     $("#anio").change(function(event){          
       meses(event.target.value);

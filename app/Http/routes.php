@@ -54,7 +54,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('provincias/{id}','socios\provinciacontroller@getprovincias');
     Route::get('distritos/{id}','socios\distritocontroller@getdistritos');   
 //    route::post('socios/{codigo}','socios\sociocontroller@update');   
-        
+    //*******************************************************************       SOCIOS ******************************************************************
     route::resource('socios/asignacion-delegados','socios\cargodelegadosociocontroller');
     route::resource('socios/asignacion-directivos','socios\cargodirectivosociocontroller');
     
@@ -110,7 +110,7 @@ Route::group(['middleware' => ['auth']], function () {
     
     
     route::get('PadronSocio/{idsocio}','socios\sociocontroller@verPadronsocio');
-     
+   //  *********************************************************   RRHH  ************************************************************************
     route::resource('RRHH/Sucursalsearch','RRHH\sucursalescontroller@autocomplete');//autocomplete
     route::resource('RRHH/Sucursales','RRHH\sucursalescontroller@autocompletesucursal');//autocompletesucursal  
     
@@ -139,7 +139,10 @@ Route::group(['middleware' => ['auth']], function () {
     
     
     route::resource('nosocios','Acopio\comprascontroller@autoCompleteNosocios');
+    
+    route::get('Acopio/Compra-Grano/Recibo-Compra/{id?}','Informes\RecibosController@ReciboCompras');
     route::resource('Acopio/modalcompras','Acopio\comprascontroller@modalCompras');
+    route::get('Acopio/Compra-Grano/ListaCompras/{page?}','Acopio\comprascontroller@ListCompras');
     route::resource('Acopio/Compra-Grano','Acopio\comprascontroller');
     route::resource('Acopio/Tara','Acopio\tarascontroller');
     route::resource('Acopio/Transporte','Acopio\transportecontroller');
@@ -185,8 +188,9 @@ Route::group(['middleware' => ['auth']], function () {
     route::resource('Tesoreria/Tipos-egresos','Tesoreria\tipo_egresoscontroller');
             
     route::resource('Creditos/Creditos-Financieros','Creditos\prestamoscontroller');
+    //********************************   CONDIGURACION *******************************************************************************
             
-    route::resource('Configuracion','Configuracion\documentoController');
+    route::resource('Configuracion/Documentos','Configuracion\tipo_documentoController');
     
     // *******************  REPORTES O INFORMES GRAFICAS ******************************** 
     route::get('Acopio/Fondos-Acopio/Report-Fondos-Acopio/{an?}/{mes?}/{dato?}','Informes\Reportecontroller@pdfrecepcion');

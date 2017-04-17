@@ -1,7 +1,7 @@
 @if(count($recepcions) > 0)
 <input id="token" type="hidden" name="_token" value="{{ csrf_token() }}" >
 
-<table class="table table-hover table-responsive tablesorter" id="tableRecepcion" >    
+<table class="table table-hover table-responsive tablesorter" id="tableRecepcion" >
             <thead>
                 <th style="border-bottom-color: #0089db; ">RECEPCION</th>
                 <th style="border-bottom-color: #0089db; ">MONTO S/.</th>

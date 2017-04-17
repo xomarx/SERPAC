@@ -39,7 +39,10 @@ class tipo_documentoController extends Controller
      */
     public function index()
     {
-        //
+        if(!auth()->user()->can(['crear documentos','ver documentos']))
+                return response ()->view ('errors.403');
+        $recibos = \App\Models\Configuracion\Tipo_documento::all();
+        return view('Configuracion.Recibos',['recibos'=>$recibos]);
     }
 
     /**
@@ -58,9 +61,19 @@ class tipo_documentoController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Requests\Configuracion\tipo_documentoCreateRequest $request)
     {
-        //
+        if($request->ajax()){
+            if(!auth()->user()->can('crear documentos'))
+                return response ()->view ('errors.403-content',[],403);
+            $tipo = \App\Models\Configuracion\Tipo_documento::create([
+                'codigo'=>  strtoupper($request->codigo),
+                'tipo_documento'=>  strtoupper($request->recibo),
+                'enlace'=>  strtoupper($request->enlace)
+            ]);
+            if($tipo) return response ()->json (['success'=>true,'message'=>'Se registro correctamente']);
+            else return response ()->json (['success'=>false,'message'=>'No se registro']);
+        }
     }
 
     /**
@@ -83,7 +96,8 @@ class tipo_documentoController extends Controller
      */
     public function edit($id)
     {
-        //
+        $tipo = \App\Models\Configuracion\Tipo_documento::where('codigo','=',$id)->first();
+        return response()->json($tipo);
     }
 
     /**
@@ -93,9 +107,19 @@ class tipo_documentoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Requests\Configuracion\tipo_documentoCreateRequest $request, $id)
     {
-        //
+        if($request->ajax()){
+            if(!auth()->user()->can('editar documentos'))
+                return response ()->view ('errors.403-content',[],403);
+            $tipo = \App\Models\Configuracion\Tipo_documento::where('codigo','=',$id)
+                    ->update(['tipo_documento'=>  strtoupper($request->recibo),
+                        'enlace'=>  strtoupper($request->enlace)]);
+            if($tipo)
+                return response()->json(['success'=>true,'message'=>'Se actualizaron correctamente los datos']);
+            else return response()->json(['success'=>false,'message'=>'No se actualizaron datos']);
+        
+        }
     }
 
     /**
@@ -106,6 +130,10 @@ class tipo_documentoController extends Controller
      */
     public function destroy($id)
     {
-        //
+        if(!auth()->user()->can('eliminar documentos'))
+            return response ()->view ('errors.403-content',[],403);
+        $tipo = \App\Models\Configuracion\Tipo_documento::where('codigo','=',$id)->delete();
+        if($tipo) return response ()->json (['success'=>true,'message'=>'Se elimino Correctamente']);
+        else return response ()->json (['success'=>false,'message'=>'No se puede Eliminar el Registro']);
     }
 }

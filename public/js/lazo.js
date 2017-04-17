@@ -127,6 +127,18 @@ var cargardistrito = function (iddist,idsele) {
         $("#mes").html(htm);            
     };
     
+    $(document).ready().on('click','.pagination li a',function(e){        
+     e.preventDefault();
+     var url = $(this).attr('href');     
+     $.ajax({
+        type:'get',
+        url:url,
+        success:function(data){
+            $("#contenidos-box").empty().html(data);
+        }
+     });
+  });
+    
 var activarForm = function(id){
         if(id == 1) {var route = 'ListaRoles'}
         else if(id == 2) {var route = 'headPermisos';}
@@ -137,6 +149,7 @@ var activarForm = function(id){
         else if(id == 7) {var route = 'ListaPlanillaSemanal';}
         else if(id == 8) {var route = 'listaRecepcionFondos/'+$("#anio").val()+'/'+$("#mes").val()+'/'+$("#buscar").val();}
         else if(id == 9) {var route = 'ListaDistribucion/'+$("#anio").val()+'/'+$("#mes").val()+'/'+$("#buscar").val();}
+        else if(id == 10) {var route = '/Acopio/Compra-Grano/ListaCompras/'+$("#buscar").val();}
         $.ajax({
             type:'get',
             url:route,
@@ -181,6 +194,8 @@ var activarmodal = function(id){
 var mensajeRegistro = function(data,formu){
     $("#alert-msj").fadeIn();
               if(data.success){
+                $("#alert-msj").removeClass('alert-danger');
+                  $("#alert-msj").addClass('alert-success');
                 $("#alert-txt").html(data.message);                
                 $("#"+formu)[0].reset();
                 var tiempo = 2000;
@@ -2034,7 +2049,6 @@ var AnulDistribucion = function(id,name){
 $("#RegDistribucion").click(function(){
     if($("#monto").val() > temporal){
         $.alertable.alert("<span style='color:#ff0000'>EL MONTO SOBREPASA CON EL SALDO DEL CHEQUE</span>");
-//        $("#monto").val(temporal);
         return;
     }
       var fields = $("#formfondosdistri").serialize();      
@@ -2086,9 +2100,9 @@ $("#nuevorecibo").click(function(data){
 
 $("#RegRecibo").click(function(){
     var fields = $("#formrecibo").serialize();
-    var token = $("#token").val();var type = "POST"; var route = "/Configuracion";
+    var token = $("input[name=_token]").val();var type = "POST"; var route = "/Configuracion/Documentos";
     if($("#RegRecibo").text() == "Actualizar"){
-        type="PUT";route="/Configuracion/"+$("#codigo").val();
+        type="PUT";route="/Configuracion/Documentos/"+$("#codigo").val();
     }
     $.ajax({
         url: route,
@@ -2098,26 +2112,18 @@ $("#RegRecibo").click(function(){
                 data: fields,
                 success: function (data)
                 {
-                    if (data.success)
-                    {
-                        mensajeRegistro(data.message);
-                        document.location.reload();
-                    }
-                    else{
-                        var msj = "<h4>"+data.message+"</h4>";
-                        $("#succesrecibo").html(msj);
-                        $("#msj-inforecibo").fadeIn();
-                        $("#msj-inforecibo").fadeOut(500);
-                    }
+                    mensajeRegistro(data,'formrecibo');
+                    document.location.reload();
                 },
-                error: function (data){
-                    if(data,status==403) $("#error-modal").html(data.responseText);
+                error: function (data){                    
+                    if(data.status==403) activarmodal(0);
                     else {
-                    $("#error_codigo").html('');$("#error_recibo").html('');
+                    $("#error_codigo").html('');$("#error_recibo").html('');$("#error-enlace").html('');
                     var errors =  $.parseJSON(data.responseText);      
                     $.each(errors,function(index, value) {                          
                             if(index == 'codigo')$("#error_codigo").html(value);
-                            else if(index == 'recibo')$("#error_recibo").html(value);                            
+                            else if(index == 'recibo')$("#error_recibo").html(value);
+                            else if(index == 'enlace') $("#error-enlace").html(value);
                       }); 
                   }
                 }
@@ -2126,21 +2132,21 @@ $("#RegRecibo").click(function(){
 
 var EditRecibo = function (idrecibo){
     $("#RegRecibo").text("Actualizar");
-    var route = "/Configuracion/"+idrecibo+"/edit";      
+    var route = "/Configuracion/Documentos/"+idrecibo+"/edit";      
     $.getJSON(route,
             function(data){                
                 $("#recibo").val(data.tipo_documento);
                 $("#codigo").val(data.codigo);
                 $("#codigo").prop('readonly',true);
+                $("#enlace").val(data.enlace);
             }
-            );
+   );
 };
 
 var EliRecibo = function(id,name){      
    $.alertable.confirm("<span style='color:#000'>¿Está seguro de eliminar el registro?</span>"+"<br><strong><span style='color:#ff0000'>"+name+"</span></strong></br>").then(function() {  
-      var route = "/Configuracion/"+id+"";
-      var token = $("#token").val();
-
+      var route = "/Configuracion/Documentos/"+id+"";
+      var token = $("input[name=_token]").val();
       $.ajax({
         url: route,
         headers: {'X-CSRF-TOKEN': token},
@@ -2149,7 +2155,11 @@ var EliRecibo = function(id,name){
         success: function(data){
         if (data.success)        
             document.location.reload();
-        
+        else
+            mensajeRegistro(data,'formrecibo');
+      },
+      error: function(data){
+          if(data.status==403) activarmodal(0);
       }
       });          
     });
@@ -2157,15 +2167,13 @@ var EliRecibo = function(id,name){
 
 //  ********************************************************************************  CRUD COMPRAS  *****************************************************
 
-$("#nuevacompra").click(function(){
-//    activarmodal(8);
-var route = 'modalcompras';
+    $("#nuevacompra").click(function(){
+    var route = 'modalcompras';
         $.get(route,function(data){            
             $("#conten-modal").html(data);
             loadcompras();
             $("#modal-form").modal();
-        });
-    
+        });    
 });
 
     var loadcompras = function () {
@@ -2201,7 +2209,6 @@ var route = 'modalcompras';
         delay: 1,
         source: "/codrecibos",
         select: function (event, ui) {
-//               $("#numero").val(ui.item.value);
             numerorecibo(ui.item.value);
         }
     });
@@ -2243,11 +2250,14 @@ var route = 'modalcompras';
             $("#total").val('S/. ' + monto);
         }
     });
-    $("#RegCompras").click(function () {
-
+    
+};
+$(document).ready().on('click','#RegCompras',function(){
+    
         var fields = $("#formcompras").serialize();
         var route = "/Acopio/Compra-Grano";
         var token = $("input[name=_token]").val();
+        console.log(fields)
         $.ajax({
             url: route,
             headers: {'X-CSRF-TOKEN': token},
@@ -2255,11 +2265,14 @@ var route = 'modalcompras';
             datatype: 'json',
             data: fields,
             success: function (data)
-            {
-
+            {                
                 mensajeRegistro(data, 'formcompras');
-                document.location.reload();
-
+                activarForm(10);
+                if(data.success){
+                    $.alertable.confirm("<span style='color:#ff0000'>Su Saldo restante es: S/. "+data.saldo+" </span><br><span style='color:#000'>¿Deseas Imprimir el Recibo?</span>").then(function(){
+                        
+                    });
+                  }                                                      
             },
             error: function (data) {
                 if (data.status == 403)
@@ -2310,10 +2323,9 @@ var route = 'modalcompras';
                 }
             }
         });
-    });
-};
+});
 
-var AnulCompra = function(id,name){                 
+    var AnulCompra = function(id,name){                 
    $.alertable.prompt('<h3>Motivo de la Anulacion ? </h3>'+"<span style='color:#ff0000'>"+name+"</span>").then(function(data){       
             var motivo = data.value;
             var route = "/Acopio/Compra-Grano/"+id+"";            
@@ -2326,13 +2338,13 @@ var AnulCompra = function(id,name){
             data: {
                 motivo:motivo
             },
-            success: function (data) {
-
+            success: function (data) {                    
                 if (data.success)                
-                   document.location.reload();
-                
+                    activarForm(10);                
             },
-            
+            error:function(data){                
+                if(data.status==403) activarmodal(0);
+            }
         });
    },function(){
        console.log('Cancelado'); 
