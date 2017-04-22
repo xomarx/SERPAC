@@ -132,7 +132,8 @@ Route::group(['middleware' => ['auth']], function () {
     route::get('Acopio/listaRecepcionFondos/{an?}/{mes?}/{dato?}','Acopio\recepcion_fondoscontroller@recepcionfondos'); 
     route::resource('Acopio/Fondos-Acopio','Acopio\recepcion_fondoscontroller');
 //    route::resource('Acopio/PlanillaSemanal/{id}','Acopio\planillacontroller@planillasemanal');
-    route::resource('Acopio/ListaPlanillaSemanal','Acopio\planillacontroller@ListaSemanal');
+    
+    route::get('Acopio/Planilla-Semanal/ListaSemanal/{page?}','Acopio\planillacontroller@ListaSemanal');
     route::resource('Acopio/newplanillasemanal','Acopio\planillacontroller@newPlanillaSemanal');
     route::resource('Acopio/Planilla-Semanal','Acopio\planillacontroller');
     route::resource('Acopio/Planilla-Mensual','Acopio\planillacontroller@cierremensual');//cierremensual

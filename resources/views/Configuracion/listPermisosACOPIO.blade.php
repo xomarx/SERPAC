@@ -130,26 +130,24 @@
                 @endif
                 </td>
             <td>
-                @if(in_array('editar_semana',$permisos) )
-                {!!Form::checkbox('editar_semana','editar_semana',null,['class'=>'checkbox-inline','onclick'=>'asigpermiso("editar_semana")','checked'])!!}
+                
+                {!!Form::checkbox('editar_semanal','editar_semanal',null,['class'=>'checkbox-inline','disabled'=>'disabled'])!!}
+               
+                </td>
+            <td>
+                @if(in_array('ver_semanal',$permisos) )
+                {!!Form::checkbox('ver_semanal','ver_semanal',null,['class'=>'checkbox-inline','onclick'=>'asigpermiso("ver_semanal")','checked'])!!}
                 @else
-                {!!Form::checkbox('editar_semana','editar_semana',null,['class'=>'checkbox-inline','onclick'=>'asigpermiso("editar_semana")'])!!}
+                {!!Form::checkbox('ver_semanal','ver_semanal',null,['class'=>'checkbox-inline','onclick'=>'asigpermiso("ver_semanal")'])!!}
                 @endif
                 </td>
             <td>
-                @if(in_array('ver_semana',$permisos) )
-                {!!Form::checkbox('ver_semana','ver_semana',null,['class'=>'checkbox-inline','onclick'=>'asigpermiso("ver_semana")','checked'])!!}
+                @if(in_array('eliminar_semanal',$permisos) )
+                {!!Form::checkbox('eliminar_semanal','eliminar_semanal',null,['class'=>'checkbox-inline','onclick'=>'asigpermiso("eliminar_semanal")','checked'])!!}
                 @else
-                {!!Form::checkbox('ver_semana','ver_semana',null,['class'=>'checkbox-inline','onclick'=>'asigpermiso("ver_semana")'])!!}
+                {!!Form::checkbox('eliminar_semanal','eliminar_semanal',null,['class'=>'checkbox-inline','onclick'=>'asigpermiso("eliminar_semanal")'])!!}
                 @endif
-                </td>
-            <td>
-                @if(in_array('eliminar_semana',$permisos) )
-                {!!Form::checkbox('eliminar_semana','eliminar_semana',null,['class'=>'checkbox-inline','onclick'=>'asigpermiso("eliminar_semana")','checked'])!!}
-                @else
-                {!!Form::checkbox('eliminar_semana','eliminar_semana',null,['class'=>'checkbox-inline','onclick'=>'asigpermiso("eliminar_semana")'])!!}
-                @endif
-                </td>
+            </td>
         </tr>
         <tr>
             <td>Sub modulo de Planilla Mensual</td>

@@ -3,11 +3,15 @@
     PLANILLA SEMANAL
 @stop
 @section('main-content')
-
+@permission('ver semanal')
 <div class="box box-primary box-solid">
     <div class="box-header">
+        @permission(['crear semanal','ver semanal'])
         {!!link_to('#',$title='NUEVO', $attributes = ['id'=>'nuevaplanilla', 'class'=>'btn btn-dropbox'])!!} 
-        {!!link_to('#',$title='REGISTRAR', $attributes = ['id'=>'RegPlanilla', 'class'=>'btn btn-dropbox','style'=>"display: none;"])!!}        
+        @endpermission
+        @permission('crear semanal')
+        {!!link_to('#',$title='REGISTRAR', $attributes = ['id'=>'RegPlanilla', 'class'=>'btn btn-dropbox','style'=>"display: none;"])!!}
+        @endpermission
         <button  class="btn btn-dropbox dropdown-toggle" type="button" data-toggle="dropdown" style="display: none;" id="btnexportar">EXPORTAR
             <span class="caret"></span></button>
             <ul class="dropdown-menu btn btn-github">
@@ -15,11 +19,11 @@
                 <li class="btn-dropbox"><a href="{{ url('/Acopio/Pdf') }}">Exportar a PDF</a></li>        
             </ul>
     </div>
-    <div class="box-body" id="contenidos-box" >
+    <div class="box-body" id="contenidos-box">
         @include('Acopio.listaPlanillasemanal')
     </div>
 </div>
-
+@endpermission
 
 @stop
 
@@ -27,57 +31,17 @@
 
 <script>
     
-   var loadSemanal = function(){
-        
-        
-          
-        $("#RegPlanilla").click(function(){
-        var fields = $("#formsemanal").serialize();        
-        var route = "/Acopio/Planilla-Semanal";  
-        var token = $("#token").val();
-       $.ajax({
-        url: route,
-                headers: {'X-CSRF-TOKEN': token},
-                type: 'POST',
-                datatype: 'json',                
-                data: fields,
-                success: function (data)
-                {
-                    mensajeRegistro(data,'formsemanal');
-                    document.location.reload();
-                },
-                error: function(data){
-                    $("#error-lote").html('');$("#error-planilla").html('');
-                    $("#error-almacen").html('');$("#error-fecha").html('');
-                    var errors =  $.parseJSON(data.responseText);      
-                    $.each(errors,function(index, value) {                      
-                            if(index == 'lote')$("#error-lote").html(value);
-                            else if(index == 'planilla')$("#error-planilla").html(value);
-                            else if(index == 'almacen')$("#error-almacen").html(value);
-                            else if(index == 'fecha')$("#error-fecha").html(value);
-                      });  
-                    
-                }
-            });
-    });
-    };   
-      
-      $("#cerrarplanilla").click(function(){
-          actOdes();
-      });
-       
-       
-   
-                   
+                                    
    var clickplanilla = function(){
-       if(!$("#almacen").val()) $("#tablaplanilla tbody").remove();
-       else cargarplanilla($("#almacen").val());
+       $("#tablaplanilla tbody").remove();       
+       cargarplanilla($("#almacencod").val());
    }
    
    function cargarplanilla(sucursal)   {         
        var fields = $("#formsemanal").serialize();        
        var route = "{{url('Acopio/Planilla-Semanal')}}/"+sucursal;  
-       var token = $("#token").val();
+       var token = $("input[name=_token]").val();
+       
        $.ajax({
         url: route,
                 headers: {'X-CSRF-TOKEN': token},
@@ -85,8 +49,8 @@
                 datatype: 'json',                
                 data: fields,
                 success: function (data)
-                {
-                    console.log(data);
+                {         
+                    
                     $("#tablaplanilla tbody").remove();
                     var totalkilos=0;
                     var totalprecios=0;
@@ -107,14 +71,12 @@
                         totalprecios +=parseFloat(value.precio);
                         totalgeneral +=parseFloat(value.precio * value.kilos);
                     });                                       
-                    bodytable += "<tr><td colspan='5' align='center'><b>TOTAL</b></td><td>"+totalkilos+ "</td><td>"+totalprecios+ "</td><td>"+totalgeneral+ "</td></tr>";                    
+                    bodytable += "<tr><td colspan='5' align='center' style='border-top: #000000 solid'><b>TOTAL</b></td><td style='border-top: #000000 solid' >"+totalkilos+ "</td><td style='border-top: #000000 solid'>"+totalprecios+ "</td><td style='border-top: #000000 solid'>"+totalgeneral+ "</td></tr>";                    
                     $("#tablaplanilla").append(bodytable);                                                    
                 }                
     });      
    };
-   
-   
-      
+            
    var EliPlanilla = function(id,name){       
     $.alertable.confirm("<span style='color:#000'>¿Está seguro de eliminar la planilla N° ?</span>"+"<br><strong><span style='color:#ff0000'>"+name+"</span></strong></br>").then(function() {  
       var route = "/Acopio/Planilla-Semanal/"+id+"";
@@ -125,11 +87,12 @@
         type: 'DELETE',
         dataType: 'json',
         success: function(data){
-        if (data.success)
-        {           
-            document.location.reload();
-        }
-      }
+        if (data.success)        
+            activarForm(11);
+      },
+      error:function(data){
+          if(data.status == 403) activarmodal(0);
+      }   
       });          
     });
    };
@@ -138,6 +101,7 @@
       $("#menuacopio").addClass('active');
       $("#subplanillas").addClass('active');
       $("#subsemanal").addClass('active');
+      activarForm(11);
    });
 </script>
 

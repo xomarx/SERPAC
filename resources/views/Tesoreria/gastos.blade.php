@@ -51,43 +51,44 @@
             <div class="modal-header">
                 <h3 class="modal-title">REGISTRO DE PAGOS</h3>
             </div>
-            {!! Form::open(['id'=>'formegresos']) !!}
-            <div class="modal-body form-group-sm">                                
-                <input type="hidden" name="id" id="idegresos"/>                
-                <div class="col-md-12">
-                    <div class="col-md-3">
-                        {!! Form::label('fecha','Fecha:',['class' => 'control-label'])!!}
-                        <input type="date" name="fecha" id="fecha" class="form-control" value="{{date('m/d/Y') }}" placeholder="mm/dd/yyyy" />
-                        <div class="text-danger" id="error-fecha"></div>
-                    </div>
-                    <div class="col-md-3">
-                        {!! Form::label('monto','Monto:',['class' => 'control-label'])!!}
-                        <input type="number" class="form-control" placeholder="S/. 0.00" name="monto" id="monto" min="0"/>
-                        <div class="text-danger" id="error-monto"></div>
-                    </div>
-                    <div class="col-md-6">
-                        {!! Form::label('pagos','Pagos:',['class' => 'control-label'])!!}
-                        {!! Form::select('egresos',$tipo_egresos,null,['id'=>'egresos','class'=>'form-control','placeholder'=>'Selecciona un Egreso']) !!}
-                        <div class="text-danger" id="error-egresos"></div>
-                    </div>
+            <div class="modal-body form-group-sm">   
+                {!! Form::open(['id'=>'formegresos']) !!}
+                @include('mensajes.mensaje')
+                <input type="hidden" name="id" id="idegresos"/>                                
+                <div class="col-md-4">
+                    {!! Form::label('fecha','Fecha:',['class' => 'control-label'])!!}
+                    <input type="date" name="fecha" id="fecha" class="form-control" />
+                    <div class="text-danger" id="error-fecha"></div>
                 </div>
+                <div class="col-md-3">
+                    {!! Form::label('monto','Monto:',['class' => 'control-label'])!!}
+                    <input type="number" class="form-control" placeholder="S/. 0.00" name="monto" id="monto" min="0"/>
+                    <div class="text-danger" id="error-monto"></div>
+                </div>
+                <div class="col-md-5">
+                    {!! Form::label('pagos','Pagos:',['class' => 'control-label'])!!}
+                    {!! Form::select('egresos',$tipo_egresos,null,['id'=>'egresos','class'=>'form-control','placeholder'=>'Selecciona un Egreso']) !!}
+                    <div class="text-danger" id="error-egresos"></div>
+                </div>
+
                 <div class="col-md-6">
                     {!! Form::label('almacen','Almacenes:',['class' => 'control-label'])!!}                    
                     {!! Form::select('almacen',$almacenes,null,['id'=>'almacen','placeholder'=>'Selecciona un almacen']) !!}
                     <div class="text-danger" id="error-almacen"></div>
                 </div>
                 <div class="col-md-6">
-                        {!! Form::label('motivo','Motivos:',['class' => 'control-label'])!!}
-                        {!! Form::textarea('motivo',null,['id'=>'motivo','class'=>'form-control','placeholder'=>'Motivo del pago','rows'=>3,'cols'=>38])!!}
-                </div>                                
-            </div>
-            
-            <div class="modal-footer">                
-                {!!link_to('#', $title='Registrar', $attributes = ['id'=>'RegEgresos', 'class'=>'btn btn-dropbox btn-sm m-t-10'])!!}
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            </div>
-            {!! Form::close() !!}
-        </div>
+                    {!! Form::label('motivo','Motivos:',['class' => 'control-label'])!!}
+                    {!! Form::textarea('motivo',null,['id'=>'motivo','class'=>'form-control','placeholder'=>'Motivo del pago','rows'=>'3'])!!}
+                </div> 
+                <div class="modal-footer">   
+                    <div class="col-md-12">
+                        {!!link_to('#', $title='Registrar', $attributes = ['id'=>'RegEgresos', 'class'=>'btn btn-dropbox'])!!}
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Salir</button>
+                    </div>  
+                </div>
+                {!! Form::close() !!}
+            </div>    
+        </div>         
     </div>
 </div>
 @endpermission

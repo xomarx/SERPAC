@@ -85,9 +85,11 @@ var cargardistrito = function (iddist,idsele) {
         }
     }); 
  };
+ 
  var district = function(){
      cargarcomite_central($("#distrito").val(),'comite_central')
  };
+ 
   var cargarcomite_central = function (idcomitecentral,idselec) {
      var route = "/comites_centrales/"+ idcomitecentral; 
      $.get(route,function(response){           
@@ -98,9 +100,11 @@ var cargardistrito = function (iddist,idsele) {
         }
     }); 
  };
+ 
  var central_committe = function(){
      cargarComitelocal($("#comite_central").val(),'comite_local');
  };
+ 
  var cargarComitelocal = function (idcomitelocal,idselec) {
      var route = "/comite_locales/"+idcomitelocal;        
     $.get(route,function(response){        
@@ -112,8 +116,7 @@ var cargardistrito = function (iddist,idsele) {
     }); 
  };
 
-//  recepcion de fondo
-          
+//  recepcion de fondo          
     var meses = function(anio){  
         var meses = new Array ("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre", "Diciembre");
         var cont = 12;
@@ -138,7 +141,7 @@ var cargardistrito = function (iddist,idsele) {
         }
      });
   });
-    
+  
 var activarForm = function(id){
         if(id == 1) {var route = 'ListaRoles'}
         else if(id == 2) {var route = 'headPermisos';}
@@ -150,6 +153,7 @@ var activarForm = function(id){
         else if(id == 8) {var route = 'listaRecepcionFondos/'+$("#anio").val()+'/'+$("#mes").val()+'/'+$("#buscar").val();}
         else if(id == 9) {var route = 'ListaDistribucion/'+$("#anio").val()+'/'+$("#mes").val()+'/'+$("#buscar").val();}
         else if(id == 10) {var route = '/Acopio/Compra-Grano/ListaCompras/'+$("#buscar").val();}
+        else if(id == 11) {var route = '/Acopio/Planilla-Semanal/ListaSemanal';}
         $.ajax({
             type:'get',
             url:route,
@@ -264,7 +268,7 @@ var RegSocio = function(){
           }) 
 };
       
-   var EditSocio = function(codigo){     
+var EditSocio = function(codigo){     
     
     
     var route = "/socios/"+codigo+"/edit";  
@@ -702,6 +706,8 @@ $("#nuevatrans").click(function(){
     else {activarForm(6); $("#nuevatrans").text("LISTA TRANSFERENCIA"); }
 });
       
+      //****************************************************************************        TRANSFERENCIAS ********************************************
+      
 var RegTransferencia = function (){
            
             var fields = $("#formtransferencia").serialize();
@@ -883,8 +889,7 @@ var EliArea = function(id,name){
 // ******************************************************************************  CRUD FAUNA  ********************************************************
 $("#nuefauna").click(function(event){$("#RegFauna").text("Registrar");});
 
-$("#RegFauna").click(function (event)
-{
+$("#RegFauna").click(function (event) {
     var fields = $("#formfauna").serialize();
     var token = $("#token").val();
     var type = "POST";
@@ -1643,10 +1648,7 @@ var cargarZonas = function(){
             $.each(data.lista, function (index, value) {
                 datos += "<option value='" + index+"'>"+ value+"</option>"; 
             });
-            $("#zona_inicial").html(datos);
-//            $.each(data.lista, function (index, value) {
-//                $("#zona_inicial ").find('option[value="' + value.comites_locales_id + '"]').remove();
-//            });                        
+            $("#zona_inicial").html(datos);                       
         }); 
 };
 
@@ -2091,7 +2093,6 @@ $("#RegDistribucion").click(function(){
             });
 });
 
-
 //  *******************************************************************************  CRUD DE RECIBOS  ***************************************************
 $("#nuevorecibo").click(function(data){
     $("#RegRecibo").text("Registrar");$("#codigo").prop('readonly',false);
@@ -2252,6 +2253,7 @@ var EliRecibo = function(id,name){
     });
     
 };
+
 $(document).ready().on('click','#RegCompras',function(){
     
         var fields = $("#formcompras").serialize();
@@ -2920,11 +2922,45 @@ var EliGasto = function(id,nombre){
    
    //****************************************************************** **********************  PLANILLA SEMANAL ****************************************
    
-   $("#nuevaplanilla").click(function () { 
-            if ($("#nuevaplanilla").text() == "NUEVO") {
+   $("#RegPlanilla").click(function(){
+        var fields = $("#formsemanal").serialize();        
+        var route = "/Acopio/Planilla-Semanal";  
+        var token = $("input[name=_token]").val();
+       $.ajax({
+        url: route,
+                headers: {'X-CSRF-TOKEN': token},
+                type: 'POST',
+                datatype: 'json',                
+                data: fields,
+                success: function (data)
+                {
+                    mensajeRegistro(data,'formsemanal');
+                    activarForm(11);
+                },
+                error: function(data){
+                    if(data.status == 403)
+                        activarmodal(0);
+                    else{
+                    $("#error-lote").html('');$("#error-planilla").html('');
+                    $("#error-almacen").html('');$("#error-fecha").html('');
+                    var errors =  $.parseJSON(data.responseText);      
+                    $.each(errors,function(index, value) {                      
+                            if(index == 'lote')$("#error-lote").html(value);
+                            else if(index == 'planilla')$("#error-planilla").html(value);
+                            else if(index == 'almacen')$("#error-almacen").html(value);
+                            else if(index == 'fecha')$("#error-fecha").html(value);
+                      });  
+                    
+                }
+            }
+            });
+    });
+    
+   
+   $("#nuevaplanilla").click(function () {
+    if ($("#nuevaplanilla").text() == "NUEVO") {
         $("#nuevaplanilla").text("LISTA")
-        $("#btnexportar").show();
-        $("#RegPlanilla").show();
+        $("#btnexportar").show();$("#RegPlanilla").show();
         var route = 'newplanillasemanal';
         $.get(route, function (data) {
             $("#contenidos-box").html(data);// 
@@ -2933,21 +2969,19 @@ var EliGasto = function(id,nombre){
                 autoFocus: true,
                 delay: 1,
                 source: "/RRHH/Sucursalsearch",
-                select: function (event, ui) {
-                    console.log(ui.item);
+                select: function (event, ui) {                    
                     $("#firmaacopiador").html(ui.item.acopiador);
                     $("#firmatecnico").html(ui.item.tecnico);
                     cargarplanilla(ui.item.value);
                 }
             });
-        });
-        loadSemanal();
-    } else {       
-        document.location.reload();
+        });        
+    } else {        
+        activarForm(11);
+        $("#btnexportar").hide();
+        $("#RegPlanilla").hide();
+        $("#nuevaplanilla").text("NUEVO")
     }
-
-
-
 });
 
 // *******************************************************************  RECEPCION FONDOS *************************************************************

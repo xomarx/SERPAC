@@ -1,7 +1,6 @@
 <div class="box box-body form-group" id="boxplanilla">
     <button type="button" class="close" id="cerrarplanilla">&times;</button>
-    {!! Form::open(['id'=>'formsemanal']) !!}
-    <input id="token" type="hidden" name="_token" value="{{ csrf_token() }}" >
+    {!! Form::open(['id'=>'formsemanal']) !!}    
     <div class="col-md-3">
         <img src="{{ url('img/acopagro.png')}}" class="img-responsive" >
     </div>
@@ -27,7 +26,7 @@
     </div>
     <div class="col-md-3" >
         {!!Form::label('fecha','Fecha' )!!}
-        {!! Form::date('fecha',date('m/d/Y'),['class'=>'forma-control','id'=>'fecha','placeholder'=>'mes/dia/año'])!!}
+        {!! Form::date('fecha',null,['class'=>'forma-control','id'=>'fecha'])!!}
         <div class="text-danger" id="error-fecha"></div>
     </div>
     <div class="col-md-12">
@@ -36,10 +35,10 @@
                 {!!  Form::radio('condicion',$condicion->id, null, ['class' => 'forma-control','id'=>'condicion','checked']) !!} {{$condicion->condicion }}</label>                
         @endforeach
     </div>
-    <table border='1' class="table table-responsive table-hover" id="tablaplanilla" >
+    <table border='1' class="table table-responsive table-hover" id="tablaplanilla"  >
         <thead>
-            <tr>
-                <th>FECHA</th>
+            <tr style="border-bottom: #000000 solid;">
+                <th >FECHA</th>
                 <th>CODIGO SOCIO</th>
                 <th>APELLIDOS Y NOMBRES</th>
                 <th>GRADO I</th>

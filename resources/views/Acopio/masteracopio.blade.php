@@ -15,13 +15,17 @@
             @permission('ver pagos')
                 <li id="subpagos"><a href="{{ url('Acopio/Gastos') }}"><i class='glyphicon glyphicon-compressed'></i> <span>Pagos</span></a></li>
             @endpermission
+            @permission(['ver semanal'])
             <li class="treeview" id="subplanillas">
                 <a href="#"><i class='glyphicon glyphicon-folder-close'></i> <span>Planillas</span> <i class="fa fa-angle-left pull-right"></i></a>
                 <ul class="treeview-menu">
+                    @permission('ver semanal')
                     <li id="subsemanal"><a href="{{ url('/Acopio/Planilla-Semanal') }}">Planilla Semanal</a></li>
+                    @endpermission
                     <li id="submensual"><a href="{{ url('/Acopio/Planilla-Mensual') }}">Planilla Mensual</a></li>                                     
                 </ul>
             </li>
+            @endpermission
             <li class="treeview">
                 <a href="#"><i class='fa fa-link'></i> <span>Ventas</span> <i class="fa fa-angle-left pull-right"></i></a>
                 <ul class="treeview-menu">

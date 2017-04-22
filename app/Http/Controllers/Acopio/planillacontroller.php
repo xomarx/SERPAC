@@ -67,11 +67,15 @@ class planillacontroller extends Controller
      */
     public function index()
     {        
+        if(!auth()->user()->can('ver semanal'))
+            return response ()->view ('errors.403');
         $planillas = \App\Models\Acopio\Planilla::listaPlanilla();        
         return view('Acopio.planillasemanal',['planillas'=>$planillas]);
     }
     
     public function ListaSemanal(){
+        if(!auth()->user()->can('ver semanal'))
+            return response ()->view ('errors.403-content');
         $planillas = \App\Models\Acopio\Planilla::listaPlanilla();        
         return response()->view('Acopio.listaPlanillasemanal',['planillas'=>$planillas]);
     }
@@ -107,6 +111,8 @@ class planillacontroller extends Controller
     public function store(Requests\Acopio\PlanillaSemanalCreateRequest $request)
     {        
         if($request->ajax()){
+            if(!auth()->user()->can('crear semanal'))
+            return response ()->view ('errors.403-content');
             $planilla = \App\Models\Acopio\Planilla::create([
                 'numero'=>$request->planilla,
                 'fecha'=>  Carbon::parse($request->fecha),
@@ -118,7 +124,8 @@ class planillacontroller extends Controller
                             'planillas_id' => $planilla->id
                 ]);
             }
-            if($planilla) return response()->json(['success'=>true,]);
+            if($planilla) return response()->json(['success'=>true,'message'=>'Se registro correctamente la planilla semanal']);
+            else return response()->json(['success'=>false,'message'=>'no se puedo registrar la planilla semanal']);
         }
     }
 
@@ -166,8 +173,11 @@ class planillacontroller extends Controller
      */
     public function destroy($id)
     {
-        $result = \App\Models\Acopio\Planilla::FindOrFail($id)->delete();
+        if(!auth()->user()->can('eliminar semanal'))
+            return response ()->view ('errors.403-content',[],403);
+        $planilla = \App\Models\Acopio\Planilla::FindOrFail($id)->delete();
         $planilla = \App\Models\Acopio\Compras_has_planilla::where('planillas_id','=',$id)->delete();
         if($planilla) return response ()->json (['success'=>true]);
+        else return response ()->json (['success'=>false]);
     }
 }

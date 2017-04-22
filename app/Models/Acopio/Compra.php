@@ -95,6 +95,7 @@ class Compra extends Model
     
     public static function listaPlanillaSemanal($sucursal,$fecha,$condicion)
     {
+        if($fecha != '')
         return DB::table('compras')
                 ->leftJoin('compras_has_planillas','compras.id','=','compras_has_planillas.compras_id')                
                 ->leftJoin('socios','compras.socios_codigo','=','socios.codigo')
@@ -102,7 +103,7 @@ class Compra extends Model
                 ->leftJoin('personas','socios.dni','=','personas.dni')
                 ->where('compras_has_planillas.compras_id')
                 ->where('compras.estado','=','CANCELADO')
-                ->where('compras.fecha','<=',  \Carbon\Carbon::parse($fecha))
+                ->wheredate('compras.fecha','<=',  \Carbon\Carbon::parse($fecha))
                 ->where('compras.condicions_id','=',$condicion)
                 ->where('compras.sucursales_sucursalId','=',$sucursal)                
                 ->select('compras.fecha','compras.socios_codigo','compras.tipocacao','compras.kilos','compras.precio','compras.id'

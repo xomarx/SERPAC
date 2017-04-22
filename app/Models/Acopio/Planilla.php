@@ -27,6 +27,6 @@ class Planilla extends Model
                     ->where('compras.estado','=','CANCELADO')
                     ->groupby('compras_has_planillas.planillas_id')
                     ->select('planillas.fecha','planillas.numero','sucursales.sucursalId','sucursales.sucursal','users.name','planillas.id')
-                    ->get();
+                    ->paginate(10);
         }
 }
