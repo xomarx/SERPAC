@@ -11,13 +11,8 @@
         @endpermission
         @permission('crear semanal')
         {!!link_to('#',$title='REGISTRAR', $attributes = ['id'=>'RegPlanilla', 'class'=>'btn btn-dropbox','style'=>"display: none;"])!!}
-        @endpermission
-        <button  class="btn btn-dropbox dropdown-toggle" type="button" data-toggle="dropdown" style="display: none;" id="btnexportar">EXPORTAR
-            <span class="caret"></span></button>
-            <ul class="dropdown-menu btn btn-github">
-                <li class="btn-dropbox"><a href="{{ url('/Acopio/Excel') }}">Exportar a Excel</a></li>
-                <li class="btn-dropbox"><a href="{{ url('/Acopio/Pdf') }}">Exportar a PDF</a></li>        
-            </ul>
+        @endpermission  
+        <a href="Acopio/Planilla-Semanal/PDF" target="_blank" id="pdfsemanal"></a>
     </div>
     <div class="box-body" id="contenidos-box">
         @include('Acopio.listaPlanillasemanal')

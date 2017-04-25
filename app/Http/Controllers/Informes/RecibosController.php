@@ -9,6 +9,23 @@ use App\Http\Controllers\Controller;
 
 class RecibosController extends Controller
 {
+    // planilla semanal PDF
+    public  function PlanillaSemanalPDF($idplanilla){
+        $planillas = \App\Models\Acopio\Planilla::PlanillaSemanal($idplanilla);
+        $compras = \App\Models\Acopio\Planilla::Planillacompra($idplanilla);
+        $dato = view('Reportes.Acopio.planillaSemanalPDF',['planillas'=>$planillas,'compras'=>$compras])->render();        
+        $pdf = \Illuminate\Support\Facades\App::make('dompdf.wrapper');        
+            $pdf->loadHTML(utf8_decode($dato))->setPaper('a4', 'landscape')->setWarnings(false); //landscape  
+        
+        return $pdf->stream();
+    }
+
+    
+    /*
+     * Recibo de  Compras 
+     * @paramet idcompras
+     * @return pdf compras
+     */
     public function ReciboCompras($idcompra){
         
         $compra = \App\Models\Acopio\Compra::GetReciCompra($idcompra);

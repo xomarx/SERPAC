@@ -128,7 +128,7 @@ Route::group(['middleware' => ['auth']], function () {
     route::resource('RRHH/Tecnicos/Tecnico-Local','RRHH\tecnicoscontroller@listaSectorAsignados');//listaSectorAsignados
     route::resource('RRHH/modaltecnicos','RRHH\tecnicoscontroller@modalTecnicos');
     route::resource('RRHH/Tecnicos','RRHH\tecnicoscontroller');
-    // **********************************  ACOPIO **********************************************
+    // *************************************************************************************  ACOPIO **********************************************
     route::get('Acopio/listaRecepcionFondos/{an?}/{mes?}/{dato?}','Acopio\recepcion_fondoscontroller@recepcionfondos'); 
     route::resource('Acopio/Fondos-Acopio','Acopio\recepcion_fondoscontroller');
 //    route::resource('Acopio/PlanillaSemanal/{id}','Acopio\planillacontroller@planillasemanal');
@@ -136,6 +136,8 @@ Route::group(['middleware' => ['auth']], function () {
     route::get('Acopio/Planilla-Semanal/ListaSemanal/{page?}','Acopio\planillacontroller@ListaSemanal');
     route::resource('Acopio/newplanillasemanal','Acopio\planillacontroller@newPlanillaSemanal');
     route::resource('Acopio/Planilla-Semanal','Acopio\planillacontroller');
+    route::resource('Acopio/Planilla-Semanal/PDF','Informes\RecibosController@PlanillaSemanalPDF');
+    
     route::resource('Acopio/Planilla-Mensual','Acopio\planillacontroller@cierremensual');//cierremensual
     
     

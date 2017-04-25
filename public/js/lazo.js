@@ -2877,8 +2877,7 @@ var EliGasto = function(id,nombre){
           type:'POST',
           datatype:'json',
           data:{rol:$("#rol").val(),usuario:$("#title-user").html()},
-          success:function(data){
-              console.log(data);
+          success:function(data){              
               $("#msj_rol").fadeIn();
               if(data.success){
                 $("#txt_rol").html(data.message);
@@ -2935,7 +2934,16 @@ var EliGasto = function(id,nombre){
                 success: function (data)
                 {
                     mensajeRegistro(data,'formsemanal');
-                    activarForm(11);
+                    if(data.success){
+                        activarForm(11);
+                        $.alertable.confirm("<span style='color:#000'>¿Deseas Exportar a PDF?</span></strong></br>").then(function() {                                                        
+                           $("#pdfsemanal").attr('href','Planilla-Semanal/PDF/'+data.id);                           
+                           document.getElementById('pdfsemanal').click();
+                         });
+                            $("#RegPlanilla").hide();
+                            $("#nuevaplanilla").text("NUEVO");
+                    }
+                    
                 },
                 error: function(data){
                     if(data.status == 403)
@@ -2977,10 +2985,9 @@ var EliGasto = function(id,nombre){
             });
         });        
     } else {        
-        activarForm(11);
-        $("#btnexportar").hide();
+        activarForm(11);        
         $("#RegPlanilla").hide();
-        $("#nuevaplanilla").text("NUEVO")
+        $("#nuevaplanilla").text("NUEVO");
     }
 });
 

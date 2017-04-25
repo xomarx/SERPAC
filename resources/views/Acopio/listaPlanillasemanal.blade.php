@@ -20,9 +20,8 @@
                     <td>{{$planilla->sucursalId }}</td>
                     <td>{{$planilla->sucursal}}</td>
                     <td>{{$planilla->name}}</td>
-                    <td>
-                        <a class="btn btn-xs btn-success" data-toggle="tooltip" data-placement="top" title="Excel"><span class="fa fa-file-excel-o" ></span></a>
-                        <a class="btn btn-xs btn-success" data-toggle="tooltip" data-placement="top" title="Pdf"><span class="fa fa-file-pdf-o" ></span></a>
+                    <td>                        
+                        <a href="{{url('Acopio/Planilla-Semanal/PDF')}}/{{$planilla->id}}" target="_blank" class="btn btn-xs btn-success" data-toggle="tooltip" data-placement="top" title="Pdf"><span class="fa fa-file-pdf-o" ></span></a>
                         @permission('eliminar semanal')
                         <a class="btn btn-xs btn-danger" onclick="EliPlanilla('{{$planilla->id}}','{{$planilla->numero }}')" ><span data-toggle="tooltip" data-placement="top" title="Anular" class="glyphicon glyphicon-remove"></span></a>
                         @endpermission

@@ -15,50 +15,9 @@ use Dompdf\Adapter\PDFLib;
 class planillacontroller extends Controller
 {
  
-    public function excel() {
-        $date = Carbon::now()->format('m-d-Y');
-        Excel::create('Planilla-Semanal-' . $date, function($excel) {
-            $excel->sheet('Compras', function($sheet) {
-                
-                $sheet->mergeCells('A1:H1');
-                $sheet->row(1,['COMPRA DE GRANO DE CACAO DEL CENTRO DE ACOPIO DE ']);
-                $sheet->row(2,['FECHA','CODIGO SOCIO','APELLIDOS Y NOMBRES','GRADO I','GRADO II','KG','P. UNITARIO S/.','TOTAL A PAGAR']);                
-                $planillas = Compra::planillasemanal('ABC-05', Carbon::now(), 2);
-                foreach ($planillas as $planilla)
-                {
-                    $row = [];
-                    $row[0] = $planilla->fecha;
-                    $row[1] = $planilla->socios_codigo;
-                    $row[2] = $planilla->paterno.' '.$planilla->materno.' '.$planilla->nombre ;
-                    if($planilla->tipocacao == 'GRADO I')
-                    {    $row[3] = $planilla->tipocacao;
-                        $row[4] = '';
-                    }
-                    else if($planilla->tipocacao == 'GRADO II')
-                    {
-                        $row[3] = '';
-                        $row[4] = $planilla->tipocacao;
-                    }
-                    $row[5] = $planilla->kilos;
-                    $row[6] = $planilla->precio;
-                    $row[7] = $planilla->kilos * $planilla->precio;
-                    $sheet->appendRow($row);
-                }
-//            $sheet->loadView('Acopio.formexcel');                
-                
-            });
-        })->export('pdf');
-    }
+    
 
-    public function pdf() {
-        
-        $dato = view('Acopio.formExcel')->render();
-        $pdf = \Illuminate\Support\Facades\App::make('dompdf.wrapper');
-        //$pdf->loadHTML($dato);                                                             
-        $pdf->isHtml5ParserEnabled = true;
-        $pdf->loadview('Acopio.formExcel');
-        return $pdf->stream();
-    }
+    
         
     /**
      * Display a listing of the resource.
@@ -112,9 +71,11 @@ class planillacontroller extends Controller
     {        
         if($request->ajax()){
             if(!auth()->user()->can('crear semanal'))
-            return response ()->view ('errors.403-content');
+                return response ()->view ('errors.403-content');
+            $cadena = (string)($request->planilla);
+            $cadena = str_pad($cadena, 6, '0', STR_PAD_LEFT);
             $planilla = \App\Models\Acopio\Planilla::create([
-                'numero'=>$request->planilla,
+                'numero'=>$cadena,
                 'fecha'=>  Carbon::parse($request->fecha),
                 'users_id'=>  \Illuminate\Support\Facades\Auth::user()->id]);
             $compras = Compra::listaPlanillaSemanal($request->almacen,$request->fecha,$request->condicion);
@@ -124,7 +85,7 @@ class planillacontroller extends Controller
                             'planillas_id' => $planilla->id
                 ]);
             }
-            if($planilla) return response()->json(['success'=>true,'message'=>'Se registro correctamente la planilla semanal']);
+            if($planilla) return response()->json(['success'=>true,'message'=>'Se registro correctamente la planilla semanal','id'=>$planilla->id]);
             else return response()->json(['success'=>false,'message'=>'no se puedo registrar la planilla semanal']);
         }
     }
