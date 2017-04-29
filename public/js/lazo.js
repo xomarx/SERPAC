@@ -4,46 +4,6 @@
  * and open the template in the editor.
  */
 
-//  *****************************************************  LOAD **************************************************************************************
-
-//$(document).ready(function (){
-//    console.log(window.location.pathname);
-//    console.log($(".sidebar ul li a").text());
-//    var cambio = false;
-//    $(".sidebar ul li").removeClass('active');
-//    $(".sidebar ul li").each(function( index,value ) {
-//            console.log(this.baseURI);            
-//            console.log(document.location.href);
-//            if(this.baseURI == document.location.href){
-//                
-//                $(this).addClass('active');
-//                var $this = $(this);
-//                $this.closest('ul').children('li').removeClass('active');
-//                $this.parent().className = 'active';
-//                console.log($this);
-//                return false; 
-//            }            
-//            
-//        }
-//        
-//       if(this.href.trim() == window.location){
-//           
-//           $(this).parent().addClass('active');
-//           cambio = true;
-////           console.log(this.href.trim());
-////           console.log(window.location);
-//           $(".sidebar ul li:first").addClass('active');
-//       } 
-//    });
-//    if(!cambio){
-//        $(".sidebar ul li:first").addClass('active');
-//    }
-//    $(".sidebar ul li").on('click',function(){
-//        $("li.active").removeClass('active');
-//        $(this).addClass('active');
-//        console.log('cambio');
-//    })
-//});
 
 var temporal;
 $(document).ready(function() {
@@ -132,11 +92,12 @@ var cargardistrito = function (iddist,idsele) {
     
     $(document).ready().on('click','.pagination li a',function(e){        
      e.preventDefault();
-     var url = $(this).attr('href');     
+     var url = $(this).attr('href');   
+     
      $.ajax({
         type:'get',
         url:url,
-        success:function(data){
+        success:function(data){            
             $("#contenidos-box").empty().html(data);
         }
      });
@@ -154,6 +115,7 @@ var activarForm = function(id){
         else if(id == 9) {var route = 'ListaDistribucion/'+$("#anio").val()+'/'+$("#mes").val()+'/'+$("#buscar").val();}
         else if(id == 10) {var route = '/Acopio/Compra-Grano/ListaCompras/'+$("#buscar").val();}
         else if(id == 11) {var route = '/Acopio/Planilla-Semanal/ListaSemanal';}
+        else if(id == 12) {var route = 'ListaCheques/'+$("#buscar").val();}
         $.ajax({
             type:'get',
             url:route,
@@ -2637,7 +2599,7 @@ var EliGasto = function(id,nombre){
          $("#descripcion").val(data.descripcion); 
          $("#idcheque").val(data.id);
          $("#Regmodal").text("Actualizar");         
-         $("#modalrol").modal({show:'false'});
+         $("#modal-form").modal();
      });
    };
    

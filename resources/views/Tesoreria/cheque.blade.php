@@ -1,4 +1,4 @@
-<div class="modal fade" id="modalrol" role="dialog">
+<div class="modal fade" id="modal-form" role="dialog">
     <div class="modal-dialog modal-primary">
         <div class="modal-content">
             <div class="modal-header">
@@ -26,7 +26,7 @@
             </div>
             <div class="modal-footer">                              
                 <a onclick="regrol(3)" id="Regmodal" class="btn btn-dropbox" data-toggle="tooltip" data-placement="top" title="Rol de Usuarios">Registrar</a>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Salir</button>
             </div>                    
         </div>
     </div>

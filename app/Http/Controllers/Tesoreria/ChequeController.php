@@ -19,11 +19,16 @@ class ChequeController extends Controller
      */
     public function index()
     {        
-        $cheques = \App\Models\Tesoreria\Cheque::all();
-        return view('Tesoreria.listacheques')->with('cheques',$cheques);
+        if(!auth()->user()->can('ver cheques'))
+                return response ()->view ('errors.403');
+        $cheques = \App\Models\Tesoreria\Cheque::ListaCheques('');
+        return view('Tesoreria.ChequeView')->with('cheques',$cheques);
     }
 
-    
+    public function listaCheque($dato=''){
+        $cheques = \App\Models\Tesoreria\Cheque::ListaCheques($dato);
+        return response()->view('Tesoreria.listacheques',['cheques'=>$cheques]);
+    }
 
     /**
      * Show the form for creating a new resource.
@@ -45,6 +50,8 @@ class ChequeController extends Controller
     {
         //
         if($request->ajax()){
+            if(!auth()->user()->can('crear cheques'))
+                return response ()->view ('errors.403-content',[],403);
             $cheque = \App\Models\Tesoreria\Cheque::create([
                 'cheque'=>  strtoupper($request->cheque),
                 'num_cuenta'=>$request->numero,
@@ -87,13 +94,19 @@ class ChequeController extends Controller
      */
     public function update(Requests\Tesoreria\ChequeRequest $request, $id)
     {
-        $cheque = \App\Models\Tesoreria\Cheque::FindOrFail($id);
-        $cheque->cheque = strtoupper($request->cheque);
-        $cheque->num_cuenta = $request->numero;
-        $cheque->descripcion = $request->descripcion;
-        $cheque->save();
-        if($cheque)  return response ()->json (['success'=>true,'message'=>'Se actualizaron correctamente']);
-        else   return response ()->json (['success'=>false,'message'=>'No se actualizaron datos']);
+        if($request->ajax()) {
+            if(!auth()->user()->can('editar cheques'))
+                return response ()->view ('errors.403-content',[],403);
+            $cheque = \App\Models\Tesoreria\Cheque::FindOrFail($id);
+            $cheque->cheque = strtoupper($request->cheque);
+            $cheque->num_cuenta = $request->numero;
+            $cheque->descripcion = $request->descripcion;
+            $cheque->save();
+            if ($cheque)
+                return response()->json(['success' => true, 'message' => 'Se actualizaron correctamente']);
+            else
+                return response()->json(['success' => false, 'message' => 'No se actualizaron datos']);
+        }
     }
 
     /**
@@ -104,6 +117,8 @@ class ChequeController extends Controller
      */
     public function destroy($id)
     {
+        if(!auth()->user()->can('eliminar cheques'))
+                return response ()->view ('errors.403-content',[],403);
         $cheque = \App\Models\Tesoreria\Cheque::FindOrFail($id)->delete();
         if($cheque) return response ()->json (true);
         else return response ()->json (false);

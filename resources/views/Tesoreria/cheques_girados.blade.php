@@ -1,6 +1,6 @@
 @extends('tesoreria.mastertesoreria')
 @section('contentheader_title')
-    CHEQUES GIRADOS - CAJAS CHICAS
+    CHEQUES GIRADOS
 @stop
 @section('main-content')
 @permission('ver movimientos')

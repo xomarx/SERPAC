@@ -179,7 +179,8 @@ Route::group(['middleware' => ['auth']], function () {
     route::resource('Tesoreria/modalcheque','Tesoreria\ChequeController@cheque');//cheque  
     route::resource('Tesoreria/RegistrarCheques','Tesoreria\ChequeController@store');
     route::put('Tesoreria/ActualizarCheques/{id}','Tesoreria\ChequeController@update'); 
-    route::delete('Tesoreria/deleteCheques/{id}','Tesoreria\ChequeController@destroy');
+    route::delete('Tesoreria/deleteCheques/{id}','Tesoreria\ChequeController@destroy');        
+    route::get('Tesoreria/ListaCheques/{buscar?}/{page?}','Tesoreria\ChequeController@listaCheque');
     route::resource('Tesoreria/Cheques','Tesoreria\ChequeController');
     
     route::put('Tesoreria/UpdateMovCheque/{id}','Tesoreria\Mov_chequeController@updateAnular');

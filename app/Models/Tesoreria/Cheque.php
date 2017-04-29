@@ -18,7 +18,16 @@ class Cheque extends Model
         return $this->hasOne(Mov_cheque::class);
     }
             
-
+    public static function scopeListaCheques($query, $dato=''){
+        return  $query
+                ->where(function($query)use($dato){
+                    $query->where('cheque','like','%'.$dato.'%')
+                            ->orwhere('num_cuenta','like','%'.$dato.'%')
+                            ->orwhere('descripcion','like','%'.$dato.'%');
+                })
+                ->select()->paginate(10);
+                
+    }
 
     
 }
