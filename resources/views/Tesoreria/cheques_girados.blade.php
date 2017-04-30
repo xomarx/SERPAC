@@ -35,21 +35,20 @@
            $("#submovcheque").addClass('active');
            activarForm(4);
         });
+        $(document).on('change','#cheque',function(event){
+            $.ajax({
+                type:'get',
+                url:'Cheques-Girados/numeroCheque/'+event.target.value,
+                success:function(data){                   
+                    $("#numero").val(data.numero.numero + 1);
+                }
+            });
+        });
+                
         $(document).on('change','#anio',function(event){
             meses(event.target.value);
             activarForm(4);
-        });
-        $(document).on('click','.pagination li a',function(e){
-            e.preventDefault();
-            var url = $(this).attr('href');            
-            $.ajax({
-               type:'get',
-               url:url,
-               success:function(data){
-                   $("#contenidos-box").empty().html(data);
-               }
-            });
-        });
+        });       
         $(document).on('keyup','#buscar',function(){
            activarForm(4); 
         });
@@ -67,19 +66,17 @@
         $(document).on('keyup','#buscarc',function(){
            activarForm(3); 
         });
-        var cargar_listames = function(anio){
-            
-        var meses = new Array ("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre", "Diciembre");
-        var cont = 12;
-        if(anio == (new Date).getFullYear()){
-            cont = (new Date).getMonth() + 1;
-        }
-        var htm='<option value=0>Todo los Meses</option>';
-        for(var i = 1;i <= cont ; i++){
+        var cargar_listames = function(anio){            
+            var meses = new Array ("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre", "Diciembre");
+            var cont = 12;
+            if(anio == (new Date).getFullYear()){
+                cont = (new Date).getMonth() + 1;
+            }
+            var htm='<option value=0>Todo los Meses</option>';
+            for(var i = 1;i <= cont ; i++){
                 htm +='<option value='+i+'>'+meses[i-1]+'</option>';
             }
-        $("#mesc").html(htm);            
-   
+            $("#mesc").html(htm); 
         };
         
         var clicktipo = function(id){

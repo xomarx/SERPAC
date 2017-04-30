@@ -120,8 +120,7 @@ var activarForm = function(id){
             type:'get',
             url:route,
             success:function(data){                
-                $("#contenidos-box").html(data);
-                
+                $("#contenidos-box").html(data);                
             }            
         })
     };

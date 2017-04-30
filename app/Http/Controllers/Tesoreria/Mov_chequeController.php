@@ -22,6 +22,12 @@ class Mov_chequeController extends Controller
         if($path) return response()->json(['success'=>true,'ruta'=>"/storage/app/cheques/".$nombre]);
         else return response()->json(['success'=>false,'ruta'=>"No se cargo ninguna imagen"]);
     }
+    
+    public function numCheque($idcheque){
+        $numero = \App\Models\Tesoreria\Mov_cheque::select(\Illuminate\Support\Facades\DB::raw('max(num_cheque) as numero'))
+                ->where('cheques_id','=',$idcheque)->first();
+        return response()->json(['numero'=>$numero]);
+    }
 
     public function movcheque() {
         $cheques = \App\Models\Tesoreria\Cheque::pluck('cheque', 'id');        

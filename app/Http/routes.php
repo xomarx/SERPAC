@@ -167,6 +167,7 @@ Route::group(['middleware' => ['auth']], function () {
     route::resource('Tesoreria/headmovcheque','Tesoreria\Mov_chequeController@headmovcheque');
     route::resource('Tesoreria/modalmovcheque','Tesoreria\Mov_chequeController@movcheque');
     route::resource('Tesoreria/Cheques-Girados','Tesoreria\Mov_chequeController');
+    route::resource('Tesoreria/Cheques-Girados/numeroCheque','Tesoreria\Mov_chequeController@numCheque');
     route::resource('uploadimage','Tesoreria\Mov_chequeController@uploadImage');//uploadImage    
     route::get('Tesoreria/numCheque/{id}','Tesoreria\Caja_chicaController@autoNumCheque');
     route::resource('Tesoreria/headcajachica','Tesoreria\Caja_chicaController@headcajachica');
@@ -174,13 +175,12 @@ Route::group(['middleware' => ['auth']], function () {
     route::resource('Tesoreria/Caja-Chica','Tesoreria\Caja_chicaController');
     route::get('Tesoreria/Caja-Chica/{anio?}/{mes?}/{dato?}/{page?}','Tesoreria\Caja_chicaController@index');
     
-    
-    
+        
     route::resource('Tesoreria/modalcheque','Tesoreria\ChequeController@cheque');//cheque  
     route::resource('Tesoreria/RegistrarCheques','Tesoreria\ChequeController@store');
     route::put('Tesoreria/ActualizarCheques/{id}','Tesoreria\ChequeController@update'); 
     route::delete('Tesoreria/deleteCheques/{id}','Tesoreria\ChequeController@destroy');        
-    route::get('Tesoreria/ListaCheques/{buscar?}/{page?}','Tesoreria\ChequeController@listaCheque');
+    route::get('Tesoreria/ListaCheques/{buscar?}/{page?}','Tesoreria\ChequeController@listaCheque');   
     route::resource('Tesoreria/Cheques','Tesoreria\ChequeController');
     
     route::put('Tesoreria/UpdateMovCheque/{id}','Tesoreria\Mov_chequeController@updateAnular');
