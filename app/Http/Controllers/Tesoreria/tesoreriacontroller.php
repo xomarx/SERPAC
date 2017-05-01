@@ -93,9 +93,8 @@ class tesoreriacontroller extends Controller
             $tipodocumento = \App\Models\Configuracion\Tipo_documento::where('enlace','=','DISTRIBUCION')->select('codigo')->first();
             if(count($tipodocumento)==0)
                 return response()->json(['success'=>false,'message'=>'No esta enlazado a un Documento.<br> '
-                    . 'Registre o enlace el documento con el nombre de "DISTRIBUCION"']);
-            $numero = \App\Models\Configuracion\Documento::enumeracionDoc($tipodocumento->codigo);             
-            $cadena = (string)($numero->enumeracion+1);
+                    . 'Registre o enlace el documento con el nombre de "DISTRIBUCION"']);            
+            $cadena = (string)($request->recibo);
             $cadena = str_pad($cadena, 6, '0', STR_PAD_LEFT);                                    
             $documento = \App\Models\Configuracion\Documento::create([
                 'enumeracion'=>$cadena,

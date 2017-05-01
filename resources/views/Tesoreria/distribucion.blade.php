@@ -58,16 +58,21 @@
                     </div>
                 </div>                                    
                 <div class="col-md-12">
-                    <div class="col-sm-9">
+                    <div class="col-sm-6">
                         {!! Form::label('texnicos','Extensionistas: ',['class'=>'control-label ']) !!}<br>
                         {!! Form::select ('tecnico',$tecnicos,null,['id'=>'tecnico','required','placeholder'=>'selecciona un Extensionista']) !!} 
                         <div class="text-danger" id="error_tecnico"></div>
                     </div>
                     <div class="col-md-3">
+                        {!! Form::label('numero','N° de Recibo: ',['class'=>'control-label'])!!}
+                        {!! Form::text('recibo',null,['id'=>'recibo','class'=>'form-control col-md-6','placeholder'=>'N° de Recibo'])!!}
+                        <div class="text-red" id="error-recibo"></div>
+                    </div>
+                    <div class="col-md-3">
                         {!! Form::label('monto','Monto:',['class' => 'control-label'])!!}  
                         {!! Form::text('monto',null,['id'=>'monto','class'=>'form-control','placeholder'=>'S/. 0.00'])!!}
                         <div class="text-danger" id="error_monto"></div>
-                    </div>
+                    </div>                    
                 </div>
                 <div class="col-md-12">
                     <div class="col-sm-9">
@@ -75,15 +80,18 @@
                         {!! Form::select('sucursal',[],null,['id'=>'sucursal','placeholder'=>'selecciona un Centro de Acopio']) !!}
                         <div class="text-danger" id="error_sucursal"></div>
                     </div>
-                    <div class="col-md-3">                        
+                    <div class="col-md-3">    
+                        {!! Form::label('saldo','Saldo:',['class' => 'control-label'])!!}
+                        {!! Form::text('saldo',null,['id'=>'saldo','class'=>'form-control','disabled'=>'true','placeholder'=>'S/. 0.00','style'=>"text-align: center"])!!}
                     </div>
-                </div>                                                                                                                                                                                                  
+                </div>                    
                 {!! Form::close() !!}
-                 <div class="modal-footer">
+                <div class="modal-footer">                             
                      <a id="printdelivery"  class="btn btn-dropbox" href="{{url('Tesoreria/Distribucion/ReciboAcopio')}}" target="_blank" style="display: none;">Imprimir</a>                
                 {!!link_to('#', $title='Registrar', $attributes = ['id'=>'RegDistribucion', 'class'=>'btn btn-dropbox'])!!}
                 <button type="button" class="btn btn-default" data-dismiss="modal">Salir</button>
             </div>
+                 
             </div>
            
         </div>
@@ -113,17 +121,7 @@
       activarForm(9);
   });
   
-  $(document).on('click','.pagination li a',function(e){
-     e.preventDefault();
-     var url = $(this).attr('href');     
-     $.ajax({
-        type:'get',
-        url:url,
-        success:function(data){
-            $("#contenidos-box").empty().html(data);
-        }
-     });
-  });
+  
   
 $("#fecha").datepicker({
         autoclose: true,
@@ -176,5 +174,12 @@ var changecheque = function(){
                 }
         });
         };
+        
+        
+        $("#monto").keyup(function(event){
+            console.log(temporal - event.target.value)
+            var monto = temporal - event.target.value;
+            $("#saldo").val('S/. ' + monto);
+        });
 </script>
 @stop

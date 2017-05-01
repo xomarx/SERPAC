@@ -5,7 +5,7 @@
  */
 
 
-var temporal;
+var temporal=0;
 $(document).ready(function() {
     $('#myTable').DataTable( {        
         responsive: true,
@@ -2038,8 +2038,8 @@ $("#RegDistribucion").click(function(){
                 {             
                     if(data.status==403) $("#error-modal").html(data.responseText);
                     else{
-                    $("#error_tecnico").html('');$("#error_sucursal").html('');$("#error_monto").html('');
-                    $("#error_fecha").html('');                    
+                    $("#error_tecnico").html('');$("#error_sucursal").html('');$("#error_fecha").html('');
+                    $("#error_monto").html('');$("#error-recibo").html('');$("#error-cheque").html('');$("#error-numero").html('');
                     var errors = $.parseJSON(data.responseText);
                     $.each(errors, function (index, value) {
                         if (index == 'tecnico')$("#error_tecnico").html(value);
@@ -2048,6 +2048,7 @@ $("#RegDistribucion").click(function(){
                         else if (index == 'monto')$("#error_monto").html(value);
                         else if (index == 'cheque')$("#error-cheque").html(value);
                         else if (index == 'numero')$("#error-numero").html(value);
+                        else if (index == 'recibo')$("#error-recibo").html(value);
                     }); 
                 }
                 }            
