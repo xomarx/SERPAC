@@ -148,8 +148,8 @@ var activarmodal = function(id){
         else if(id==5){ var route = 'modalCaja';}
         else if(id==6){ var route = '/socios/modalsocio';}
         else if(id==0){ var route = '/error-403';}
-        else if(id==7){ var route = 'modalempleado';}
-//        else if(id==8){ var route = 'modalcompras';}        
+        else if(id==7){ var route = 'modalempleado';} 
+            
         $.get(route,function(data){            
             $("#conten-modal").html(data);
             $("#modal-form").modal();
@@ -3006,7 +3006,32 @@ var ConforRecep = function(event,id,monto){
       }
         });
     };
-      
+    
+// *********************************************************************************       CAJA       ************************************************        
+    $(document).ready().on('click','#RegCaja',function(event){
+        $.ajax({
+           url:'Caja',
+           headers: {'X-CSRF-TOKEN': $("input[name=_token]").val()},
+           type: 'POST',
+           dataType: 'json',
+           data:$("#formcaja").serialize(),
+           success: function(data){
+               mensajeRegistro(data,'formcaja');
+               document.location.reload();               
+           },
+           error:function(data){
+               if(data.status==403) $("#error-modal").empty().html(data.responseText);
+               else {
+                   $("#error-monto").html('');
+                   var errors =  $.parseJSON(data.responseText);      
+                    $.each(errors,function(index, value) {                      
+                            if(index == 'monto')$("#error-monto").html(value);                            
+                      });
+               }
+           }
+        });
+    });
+          
 // ************************************************************************ REPORTES **********************************************
 
 $(document).ready().on('click','#Pdfgirocheques',function(e){

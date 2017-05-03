@@ -155,6 +155,12 @@ Route::group(['middleware' => ['auth']], function () {
     route::resource('Acopio/Persona-Juridica','Tesoreria\persona_juridicacontroller');
     
     // **********************************   MODULO DE TESORERIA ************************************     
+    route::resource('Tesoreria/Caja/Apertura-Cierre-Caja','Tesoreria\CajaController@Caja');
+    route::resource('Tesoreria/Caja/Lista-caja','Tesoreria\CajaController@listacaja');
+    route::resource('Tesoreria/Caja/Datos-Caja','Tesoreria\CajaController@DatoCaja');
+    route::resource('Tesoreria/Caja','Tesoreria\CajaController');
+    
+    
     route::get('Tesoreria/Distribucion/ReciboAcopio/{id}','Tesoreria\tesoreriacontroller@recibofondoAcopiador');//recibofondoAcopiador    
     route::get('Tesoreria/Distribucion-Fondos/Distribucion-Pdf/{anio?}/{mes?}/{dato?}','Informes\Reportecontroller@pdfDistribucionFondo');
     route::get('Tesoreria/Distribucion-Fondos/Distribucion-Excel/{anio?}/{mes?}/{dato?}','Informes\Reportecontroller@excelDistribucionFondo');

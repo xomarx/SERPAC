@@ -42,6 +42,11 @@ class User extends Authenticatable
         return $this->belongsToMany(Role::class);
     }
     
+    public function caja(){
+        return $this->belongsTo(Models\Tesoreria\Caja::class);
+    }
+
+
     public static function usuarios(){
         return \Illuminate\Support\Facades\DB::table('users')
                 ->join('empleados','users.empleados_empleadoId','=','empleados.empleadoId')

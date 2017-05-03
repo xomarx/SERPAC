@@ -14,8 +14,13 @@
 
 <script src="{{ asset('/plugins/select2/select2.js') }}" type="text/javascript"></script>
 <script src="{{ asset('/plugins/datepicker/bootstrap-datepicker.js') }}" type="text/javascript"></script>
-<script src="{{ asset('/plugins/datepicker/locales/bootstrap-datepicker.es.js') }}" type="text/javascript"></script>
 
+<!--<script src="{{ asset('/plugins/fullcalendar-3.4.0/lib/jquery.min.js') }}" type="text/javascript"></script>-->
+<script src="{{ asset('/plugins/fullcalendar-3.4.0/lib/moment.min.js') }}" type="text/javascript"></script>
+<script src="{{ asset('/plugins/fullcalendar-3.4.0/fullcalendar.min.js') }}" type="text/javascript"></script>
+<script src="{{ asset('/plugins/fullcalendar-3.4.0/locale/es.js') }}" type="text/javascript"></script>
+
+<script src="{{ asset('/plugins/datepicker/locales/bootstrap-datepicker.es.js') }}" type="text/javascript"></script>
 <script src="{{ asset('/js/highcharts.js') }}" type="text/javascript"></script>
 <script src="{{ asset('/js/graficas.js') }}" type="text/javascript"></script>
 <script src="{{ asset('/js/jquery.tablesorter.js') }}" type="text/javascript"></script>
@@ -23,6 +28,7 @@
 <script src="{{ asset('/plugins/pace/pace.js') }}" type="text/javascript"></script>
 <script src="{{ asset('/plugins/pace/pace.min.js') }}" type="text/javascript"></script>
 <script src="{{ asset('/js/jquery-alertable-master/jquery.alertable.js') }}" type="text/javascript"></script>
+
 
 <!-- Optionally, you can add Slimscroll and FastClick plugins.
       Both of these plugins are recommended to enhance the

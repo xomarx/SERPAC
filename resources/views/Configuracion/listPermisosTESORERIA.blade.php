@@ -26,6 +26,29 @@
             <th><b>ELIMINAR</b></th>                
         </tr>
         <tr>
+            <td>Sub modulo de Apertura - Cierre de Caja </td>
+            <td>
+                @if(in_array('crear_caja',$permisos) )
+                    {!!Form::checkbox('crear_caja','crear_caja',null,['class'=>'checkbox-inline','onclick'=>'asigpermiso("crear_caja")','checked'])!!}
+                @else
+                    {!!Form::checkbox('crear_caja','crear_caja',null,['class'=>'checkbox-inline','onclick'=>'asigpermiso("crear_caja")'])!!}
+                @endif
+                </td>
+            <td>                
+                {!!Form::checkbox('editar','editar_distribucion',null,['class'=>'checkbox-inline','disabled'=>'disabled'])!!}                
+            </td>
+            <td>
+                 @if(in_array('ver_caja',$permisos) )
+                    {!!Form::checkbox('ver_caja','ver_caja',null,['class'=>'checkbox-inline','onclick'=>'asigpermiso("ver_caja")','checked'])!!}
+                @else
+                    {!!Form::checkbox('ver_caja','ver_caja',null,['class'=>'checkbox-inline','onclick'=>'asigpermiso("ver_caja")'])!!}
+                @endif
+                </td>
+            <td>
+                 {!!Form::checkbox('eliminar','editar_distribucion',null,['class'=>'checkbox-inline','disabled'=>'disabled'])!!}
+                </td>
+        </tr>
+        <tr>
             <td>Sub modulo de Distribucion de Acopio </td>
             <td>
                 @if(in_array('crear_distribucion',$permisos) )
@@ -86,12 +109,12 @@
         </tr>
         
         <tr>
-            <td>Sub modulo de Adelanto de Sueldo de Empleados</td>
+            <td>Sub modulo de Movimiento de Dinero</td>
             <td>
-                @if(in_array('crear_adelantos',$permisos) )
-                {!!Form::checkbox('crear_adelantos','crear_adelantos',null,['class'=>'checkbox-inline','onclick'=>'asigpermiso("crear_adelantos")','checked'])!!}
+                @if(in_array('crear_mov_dinero',$permisos) )
+                {!!Form::checkbox('crear_mov_dinero','crear_mov_dinero',null,['class'=>'checkbox-inline','onclick'=>'asigpermiso("crear_mov_dinero")','checked'])!!}
                 @else
-                {!!Form::checkbox('crear_adelantos','crear_adelantos',null,['class'=>'checkbox-inline','onclick'=>'asigpermiso("crear_adelantos")'])!!}
+                {!!Form::checkbox('crear_mov_dinero','crear_mov_dinero',null,['class'=>'checkbox-inline','onclick'=>'asigpermiso("crear_mov_dinero")'])!!}
                 @endif
                 </td>
             <td>
