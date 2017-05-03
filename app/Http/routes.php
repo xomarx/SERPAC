@@ -159,8 +159,7 @@ Route::group(['middleware' => ['auth']], function () {
     route::resource('Tesoreria/Caja/Lista-caja','Tesoreria\CajaController@listacaja');
     route::resource('Tesoreria/Caja/Datos-Caja','Tesoreria\CajaController@DatoCaja');
     route::resource('Tesoreria/Caja','Tesoreria\CajaController');
-    
-    
+        
     route::get('Tesoreria/Distribucion/ReciboAcopio/{id}','Tesoreria\tesoreriacontroller@recibofondoAcopiador');//recibofondoAcopiador    
     route::get('Tesoreria/Distribucion-Fondos/Distribucion-Pdf/{anio?}/{mes?}/{dato?}','Informes\Reportecontroller@pdfDistribucionFondo');
     route::get('Tesoreria/Distribucion-Fondos/Distribucion-Excel/{anio?}/{mes?}/{dato?}','Informes\Reportecontroller@excelDistribucionFondo');
@@ -181,6 +180,8 @@ Route::group(['middleware' => ['auth']], function () {
     route::resource('Tesoreria/Caja-Chica','Tesoreria\Caja_chicaController');
     route::get('Tesoreria/Caja-Chica/{anio?}/{mes?}/{dato?}/{page?}','Tesoreria\Caja_chicaController@index');
     
+    route::resource('Tesoreria/Mov-Dinero/Modal-Dinero','Tesoreria\Mov_dineroController@modalDinero');
+    route::resource('Tesoreria/Mov-Dinero','Tesoreria\Mov_dineroController');
         
     route::resource('Tesoreria/modalcheque','Tesoreria\ChequeController@cheque');//cheque  
     route::resource('Tesoreria/RegistrarCheques','Tesoreria\ChequeController@store');

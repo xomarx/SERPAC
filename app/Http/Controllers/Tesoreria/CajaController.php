@@ -11,6 +11,8 @@ class CajaController extends Controller
 {
     
     public function Caja($fecha){   
+        if(!auth()->user()->can('crear caja'))
+                return response ()->view ('errors.403-modal');
         $caja = \App\Models\Tesoreria\Caja::wheredate('fecha','=',$fecha)->select()->count();
         if($caja)
             $titulo = "CERRAR - CAJA";
@@ -36,7 +38,7 @@ class CajaController extends Controller
         //                     
         if(!auth()->user()->can('ver caja'))
                 return response ()->view ('errors.403',[],403);
-        return response()->view('Tesoreria.caja');        
+        return response()->view('Tesoreria.CajaAC');        
     }
     
     public function listacaja(){

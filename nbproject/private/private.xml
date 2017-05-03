@@ -3,13 +3,9 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/xampp/htdocs/SERPAC/app/Models/Tesoreria/Caja.php</file>
             <file>file:/C:/xampp/htdocs/SERPAC/resources/views/Tesoreria/caja.blade.php</file>
-            <file>file:/C:/xampp/htdocs/SERPAC/resources/views/Tesoreria/CajaModal.blade.php</file>
             <file>file:/C:/xampp/htdocs/SERPAC/app/Http/routes.php</file>
-            <file>file:/C:/xampp/htdocs/SERPAC/app/Http/Controllers/Tesoreria/CajaController.php</file>
             <file>file:/C:/xampp/htdocs/SERPAC/public/js/lazo.js</file>
-            <file>file:/C:/xampp/htdocs/SERPAC/public/js/graficas.js</file>
         </group>
     </open-files>
 </project-private>

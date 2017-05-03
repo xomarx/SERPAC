@@ -149,6 +149,7 @@ var activarmodal = function(id){
         else if(id==6){ var route = '/socios/modalsocio';}
         else if(id==0){ var route = '/error-403';}
         else if(id==7){ var route = 'modalempleado';} 
+        else if(id==8){ var route = 'Mov-Dinero/Modal-Dinero';} 
             
         $.get(route,function(data){            
             $("#conten-modal").html(data);
@@ -3031,6 +3032,9 @@ var ConforRecep = function(event,id,monto){
            }
         });
     });
+    
+    // ****************************************************************  MOV DINERO **************************************************************
+   
           
 // ************************************************************************ REPORTES **********************************************
 
