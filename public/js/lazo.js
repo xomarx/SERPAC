@@ -116,6 +116,8 @@ var activarForm = function(id){
         else if(id == 10) {var route = '/Acopio/Compra-Grano/ListaCompras/'+$("#buscar").val();}
         else if(id == 11) {var route = '/Acopio/Planilla-Semanal/ListaSemanal';}
         else if(id == 12) {var route = 'ListaCheques/'+$("#buscar").val();}
+        else if(id == 13) {var route = '/Tesoreria/Mov-Dinero/Con-Documento';}
+        
         $.ajax({
             type:'get',
             url:route,
@@ -3034,8 +3036,122 @@ var ConforRecep = function(event,id,monto){
     });
     
     // ****************************************************************  MOV DINERO **************************************************************
+   $(document).ready().on('click','#RegMovDineroE',function(event){       
+       grabarSD('formDineroE');
+   });
+   $(document).ready().on('click','#RegMovDineroS',function(event){       
+       grabarSD('formDineroS');
+   });
+   $(document).ready().on('click','#RegMovDineroG',function(event){       
+       grabarSD('formDineroG');
+   });
+   $(document).ready().on('click','#RegMovDineroF',function(event){       
+       grabarSD('formDineroF');
+   });
    
-          
+   var GenComp = function(e,id,tipo,tabla,monto){
+//       parentNode.parentNode.rowIndex         
+        
+       if(document.getElementById('tipoE').checked || document.getElementById('tipoI').checked )
+        {   
+            if(tabla == 'tablaxportacion')
+                var total = document.getElementById('totalE').innerHTML;
+            
+            var pos = total.lastIndexOf(',');            
+            var reemplazo = total.substring(0,pos) + '' + total.substring(pos+1)
+//            total = parseFloat(reemplazo);
+            total = reemplazo - monto;
+            document.getElementById('totalE').innerHTML = total;
+            var tot = parseFloat(document.getElementById('totalcomprobante').innerHTML);
+            document.getElementById('totalcomprobante').innerHTML = tot + monto;
+            if(document.getElementById('tipoE').checked){
+                if($("#tipoE").val() == tipo){
+                    var tds= "<tr>"
+                            +"<td>"+e.parentNode.parentNode.getElementsByTagName('td')[0].innerHTML+"</td>"
+                            +"<td>"+e.parentNode.parentNode.getElementsByTagName('td')[1].innerHTML+"</td>"
+                            +"<td>"+e.parentNode.parentNode.getElementsByTagName('td')[2].innerHTML+"</td>"
+                            +"<td><input type='text' class='form-control' name='totalC' id='totalC' value="+e.parentNode.parentNode.getElementsByTagName('td')[3].innerHTML+"></td>"
+                            +"<td><a class='btn-xs' style='cursor: pointer' onclick='delegasto(this,"+tabla+","+monto+","+id+")'><i class='glyphicon glyphicon-remove'></i></a></td></tr>"
+                    $("#tablacomprobante").append(tds);                    
+                    document.getElementById(tabla).deleteRow(e.parentNode.parentNode.rowIndex);
+                }
+                else
+                    $.alertable.alert("<span>Solo tipo Egresos</span>");
+            }
+            if(document.getElementById('tipoI').checked){
+                if($("#tipoI").val() == tipo){
+                    var tds= "<tr>"
+                            +"<td>"+e.parentNode.parentNode.getElementsByTagName('td')[0].innerHTML+"</td>"
+                            +"<td>"+e.parentNode.parentNode.getElementsByTagName('td')[1].innerHTML+"</td>"
+                            +"<td>"+e.parentNode.parentNode.getElementsByTagName('td')[2].innerHTML+"</td>"
+                            +"<td><input type='text' class='form-control' name='totalC' id='totalC' value="+e.parentNode.parentNode.getElementsByTagName('td')[3].innerHTML+"></td>"
+                            +"<td><a class='btn-xs' style='cursor: pointer' onclick='delegasto(this,"+tabla+")'><i class='glyphicon glyphicon-remove'></i></a></td></tr>"
+                    $("#tablacomprobante").append(tds);
+                    document.getElementById('tablaxportacion').deleteRow(e.parentNode.parentNode.rowIndex);
+                }
+                else
+                    $.alertable.alert("<span>Solo tipo Ingresos</span>");
+            }
+                
+        }
+        else
+            $.alertable.alert("<span>Seleccione un Ingreso o Egreso</span>");          
+              
+   };
+   
+   var tipoevent = function(event){
+       
+       $("#tablacomprobante tbody").remove();
+   };
+    
+    var delegasto = function(e,tabla,monto,id){
+                
+        if(document.getElementById('tipoE').checked)
+            var btn = "<td><a class='btn-xs btn'  id='btnEI' onclick='GenComp(this,"+id+",0,'"+tabla.id+"',"+monto+") ><i class='glyphicon glyphicon-export'></i></a></td>"
+        else
+            var btn = "<td><a class='btn-xs btn'  id='btnEI' onclick='GenComp(this,"+id+",1,'"+tabla.id+"',"+monto+") ><i class='glyphicon glyphicon-import'></i></a></td>"                
+        var tds= "<tr>"
+                    +"<td>"+e.parentNode.parentNode.getElementsByTagName('td')[0].innerHTML+"</td>"
+                    +"<td>"+e.parentNode.parentNode.getElementsByTagName('td')[1].innerHTML+"</td>"
+                    +"<td>"+e.parentNode.parentNode.getElementsByTagName('td')[2].innerHTML+"</td>"
+                    +"<td>"+monto+"</td>"
+                    +btn
+                    $("#"+tabla.id).append(tds);
+                    var tot = parseFloat(document.getElementById('totalcomprobante').innerHTML);
+                    document.getElementById('totalcomprobante').innerHTML = tot - monto;
+                    document.getElementById('tablacomprobante').deleteRow(e.parentNode.parentNode.rowIndex);                    
+    }
+   
+   var grabarSD = function(formulario){
+       $.ajax({
+           url:'/Tesoreria/Mov-Dinero/DineroSD',
+           headers: {'X-CSRF-TOKEN': $("input[name=_token]").val()},
+           type: 'POST',
+           dataType: 'json',
+           data:$("#"+formulario+"").serialize(),
+           success: function(data){
+               mensajeRegistro(data,formulario);
+               document.getElementById('SDdocumento').click();
+           },
+           error:function(data){
+               if(data.status==403){}
+               else{
+                   $("#error-fecha").html('');$("#error-monto").html('');$("#error-dni").html('');
+                   $("#error-detalle").html('');$("#error-tipo").html('');
+                   var errors =  $.parseJSON(data.responseText);      
+                    $.each(errors,function(index, value) {                      
+                            if(index == 'fecha')$("#error-fecha").html(value);
+                            else if(index == 'monto')$("#error-monto").html(value);
+                            else if(index == 'dni')$("#error-dni").html(value);
+                            else if(index == 'detalle')$("#error-detalle").html(value);
+                            else if(index == 'tipo')$("#error-tipo").html(value);
+                      });
+               }
+           }           
+       });
+   }
+   
+
 // ************************************************************************ REPORTES **********************************************
 
 $(document).ready().on('click','#Pdfgirocheques',function(e){

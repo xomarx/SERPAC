@@ -154,7 +154,7 @@ Route::group(['middleware' => ['auth']], function () {
     route::resource('Acopio/Gastos','Tesoreria\egresoscontroller');
     route::resource('Acopio/Persona-Juridica','Tesoreria\persona_juridicacontroller');
     
-    // **********************************   MODULO DE TESORERIA ************************************     
+    // *********************************************************************************   MODULO DE TESORERIA ************************************     
     route::resource('Tesoreria/Caja/Apertura-Cierre-Caja','Tesoreria\CajaController@Caja');
     route::resource('Tesoreria/Caja/Lista-caja','Tesoreria\CajaController@listacaja');
     route::resource('Tesoreria/Caja/Datos-Caja','Tesoreria\CajaController@DatoCaja');
@@ -180,6 +180,9 @@ Route::group(['middleware' => ['auth']], function () {
     route::resource('Tesoreria/Caja-Chica','Tesoreria\Caja_chicaController');
     route::get('Tesoreria/Caja-Chica/{anio?}/{mes?}/{dato?}/{page?}','Tesoreria\Caja_chicaController@index');
     
+    route::resource('Tesoreria/Mov-Dinero/DineroSD','Tesoreria\Mov_dineroController@StoreSinDocumentos');
+    route::resource('Tesoreria/Mov-Dinero/Sin-Documento','Tesoreria\Mov_dineroController@MDSinDocumento');
+    route::resource('Tesoreria/Mov-Dinero/Con-Documento','Tesoreria\Mov_dineroController@MDConDocumento');
     route::resource('Tesoreria/Mov-Dinero/Modal-Dinero','Tesoreria\Mov_dineroController@modalDinero');
     route::resource('Tesoreria/Mov-Dinero','Tesoreria\Mov_dineroController');
         

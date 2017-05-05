@@ -95,8 +95,7 @@
         $("#fauna option:selected").remove();
     };
     
-    var AgregInmueble = function(){
-        console.log('hola mundo');
+    var AgregInmueble = function(){        
         var tds = "<tr>";
         var tds = '<tr>';var idcul = $("#inmueble").val();
         tds += "{{--*/ @$idinmueble = str_replace(' ','&nbsp;',"idcul") /*--}}"

@@ -1,4 +1,4 @@
-<a class="btn btn-dropbox" id="nuevoMovDinero" onclick="activarmodal(8);">NUEVO MOVIMIENTO</a>
+<a class="btn btn-dropbox" id="nuevoMovDinero" >NUEVO MOVIMIENTO</a>
 <div class="box"></div>
 <table class="table table-hover table-responsive table-condensed">
     <thead>

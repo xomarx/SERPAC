@@ -168,6 +168,7 @@ return [
         Yajra\Datatables\DatatablesServiceProvider::class,
         Khill\Lavacharts\Laravel\LavachartsServiceProvider::class,
         MaddHatter\LaravelFullcalendar\ServiceProvider::class,
+        Artisaninweb\SoapWrapper\ServiceProvider::class
     ],
 
     /*
@@ -226,6 +227,7 @@ return [
         'Datatables' =>Yajra\Datatables\Facades\Datatables::class,
         'Lava' => Khill\Lavacharts\Laravel\LavachartsFacade::class,
         'Calendar' => MaddHatter\LaravelFullcalendar\Facades\Calendar::class,
+        'SoapWrapper' => Artisaninweb\SoapWrapper\Facade::class
     ],
 
 ];

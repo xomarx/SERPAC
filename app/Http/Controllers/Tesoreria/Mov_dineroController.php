@@ -6,10 +6,44 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use SoapClient;
 
 class Mov_dineroController extends Controller
 {
     
+    public function StoreSinDocumentos(Requests\Tesoreria\DineroSinDocRquest $reques){
+        if($reques->ajax()){            
+            $idempleado = \App\Models\RRHH\Empleado::where('personas_dni','=',$reques->dni)->select('empleadoId')->first();
+            $dinero = \App\Models\Tesoreria\Dinero_sin_documento::create([
+                'fecha'=>$reques->fecha,
+                'detalle'=> strtoupper($reques->detalle),
+                'monto'=>$reques->monto,
+                'tipoGasto'=>$reques->gasto,
+                'estado'=>$reques->tipo,
+                'users_id'=>  auth()->user()->id,
+                'empleados_empleadoId'=>$idempleado->empleadoId,
+            ]);
+            if($dinero) return response ()->json (['success'=>true,'message'=>'Se registro Corectamente']);
+            else return response ()->json (['success'=>false,'message'=>'No se registro ningun dato']);
+        }
+    }
+
+
+    public function MDSinDocumento(){        
+//        $servicio = new SoapClient("https://www.sunat.gob.pe:443/ol-ad-itseida-ws/ReceptorService.htm?wsdl");
+        
+//        dd($wsdl);
+        $SDdinero = \App\Models\Tesoreria\Dinero_sin_documento::listaSD();
+        return response()->view('Tesoreria.movDineroSDList',['dineros'=>$SDdinero]);
+    }
+    
+    public function MDConDocumento(){        
+//        $servicio = new SoapClient("https://www.sunat.gob.pe:443/ol-ad-itseida-ws/ReceptorService.htm?wsdl");
+        
+//        dd($wsdl);        
+        return response()->view('Tesoreria.movDineroList');
+    }
+
     public function modalDinero(){
         return response()->view('Tesoreria.movDineroModal');
     }
