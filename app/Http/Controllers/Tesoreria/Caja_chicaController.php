@@ -28,11 +28,11 @@ class Caja_chicaController extends Controller
     }
     
     public function headcajachica() {
-        $result[]='AÑOS';
-        for ($i = 2016; $i <= \Carbon\Carbon::now()->format('Y');$i++){
-            $result [$i]=$i;
-        }
-        return view('Tesoreria.headerCaja_chica', ['anios'=>$result]);
+//        $result[]='AÑOS';
+//        for ($i = 2016; $i <= \Carbon\Carbon::now()->format('Y');$i++){
+//            $result [$i]=$i;
+//        }
+//        return view('Tesoreria.headerCaja_chica', ['anios'=>$result]);
     }
 
     /**
@@ -40,12 +40,16 @@ class Caja_chicaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($anio,$mes,$dato='')
+    public function index()
     {        
         if(!auth()->user()->can('ver movimientos'))
-            return response ()->view ('errors.403-content');        
-        $cajas = \App\Models\Tesoreria\Caja_chica::listaCaja_Chica($anio,$mes,$dato);
-        return view('Tesoreria.listaCajaChica',['cajas'=>$cajas]);
+            return response ()->view ('errors.403-content');  
+        $result[]='AÑOS';
+        for ($i = 2016; $i <= \Carbon\Carbon::now()->format('Y');$i++){
+            $result [$i]=$i;
+        }
+        $cajas = \App\Models\Tesoreria\Caja_chica::listaCaja_Chica(0,0,'');
+        return view('Tesoreria.movCajaChica',['anios'=>$result,'cajas'=>$cajas]);
     }
 
     /**

@@ -176,8 +176,9 @@ Route::group(['middleware' => ['auth']], function () {
     route::resource('uploadimage','Tesoreria\Mov_chequeController@uploadImage');//uploadImage    
     route::get('Tesoreria/numCheque/{id}','Tesoreria\Caja_chicaController@autoNumCheque');
     route::resource('Tesoreria/headcajachica','Tesoreria\Caja_chicaController@headcajachica');
+    
     route::resource('Tesoreria/modalCaja','Tesoreria\Caja_chicaController@cajachica');
-    route::resource('Tesoreria/Caja-Chica','Tesoreria\Caja_chicaController');
+    route::resource('Tesoreria/Mov-Caja-Chica','Tesoreria\Caja_chicaController');
     route::get('Tesoreria/Caja-Chica/{anio?}/{mes?}/{dato?}/{page?}','Tesoreria\Caja_chicaController@index');
     
     route::resource('Tesoreria/Mov-Dinero/DineroSD','Tesoreria\Mov_dineroController@StoreSinDocumentos');
@@ -185,7 +186,9 @@ Route::group(['middleware' => ['auth']], function () {
     route::resource('Tesoreria/Mov-Dinero/Con-Documento','Tesoreria\Mov_dineroController@MDConDocumento');
     route::resource('Tesoreria/Mov-Dinero/Modal-Dinero','Tesoreria\Mov_dineroController@modalDinero');
     route::resource('Tesoreria/Mov-Dinero','Tesoreria\Mov_dineroController');
-        
+    
+    route::resource('Tesoreria/Mov-Bancario','Tesoreria\Mov_bancarioController');
+    
     route::resource('Tesoreria/modalcheque','Tesoreria\ChequeController@cheque');//cheque  
     route::resource('Tesoreria/RegistrarCheques','Tesoreria\ChequeController@store');
     route::put('Tesoreria/ActualizarCheques/{id}','Tesoreria\ChequeController@update'); 

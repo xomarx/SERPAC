@@ -11,16 +11,24 @@
         <ul class="dropdown-menu btn btn-github">
             <li class="btn-dropbox"><a href="{{url('Tesoreria/Cheques-Girados/Excel-cheques')}}" target="_blank" id="ExcelGiroCheque">Exportar a Excel</a></li>
             <li class="btn-dropbox" ><a href="{{url('Tesoreria/Cheques-Girados/Reporte-cheques')}}" target="_blank" id="Pdfgirocheques">Exportar a PDF</a></li>        
-        </ul>
-        <a onclick="activarFormHead(1,4);" class="btn btn-dropbox"  data-toggle="tooltip" data-placement="top" title="Lista de Giro de Cheque"> GIRO DE CHEQUE <span class="fa fa-tasks"></span></a>
-        <a onclick="activarFormHead(2, 3);" class="btn btn-dropbox"  data-toggle="tooltip" data-placement="top" title="Lista de Caja Chica"> CAJA CHICA <span class="glyphicon glyphicon-tasks"></span></a>
+        </ul>        
+        @permission('crear movimientos')
+        <a onclick="activarmodal(4);" class="btn btn-dropbox" class="btn btn-dropbox" data-toggle="tooltip" data-placement="top" title="Nuevo Giro de Cheque"> NUEVO GIRO <span class="fa fa-plus"></span></a>
+        @endpermission
+        <div class=" col-sm-4" style="float: right">            
+            {!! Form::text('buscar',null,['id'=>'buscar','class'=>'form-control ','placeholder'=>'Buscar..'])!!}
+        </div>
+        <div class="form-group-sm" style="float: right">
+            {!! Form::select('mes',['Seleccione el Mes'],null,['id'=>'mes','class'=>'form-control']) !!} 
+        </div>   
+        <div class=" form-group-sm" style="float: right">           
+            {!! Form::select('anio',$anios,null,['id'=>'anio','class'=>'form-control col-md-1']) !!} 
+        </div>
 
     </div>    
-    <div class="box-body" id="conten-box">
-        @include('Tesoreria.headMov_cheques')
-        <div class="box box-body" id="contenidos-box">
-            @include('Tesoreria.listaMovCheques')
-        </div>
+    <div class="box-body" id="conten-box">        
+        
+            @include('Tesoreria.listaMovCheques')        
     </div>
 </div>
 <!--,'style'=>'display:none'-->

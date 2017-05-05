@@ -117,18 +117,7 @@
                     }
                 });
                
-               $("#comprobante").change(function(event){                   
-                   if(event.target.value == 'VOUCHER' || event.target.value == 'RECIBO' || event.target.value == 'TICKET'){
-                       $("#divruc").hide();
-                       $("#divdireccion").hide();
-                   }
-                   else{
-                       $("#divruc").show();
-                       $("#divdireccion").show();
-                   }
-                       
-                       
-               });
+               
             }            
         })
    });

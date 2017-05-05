@@ -3051,19 +3051,52 @@ var ConforRecep = function(event,id,monto){
    
    var GenComp = function(e,id,tipo,tabla,monto){
 //       parentNode.parentNode.rowIndex         
-        
+        if(tabla == 'tablaxportacion' || tabla == 'tablagastos' || tabla == 'tablagerencia' || tabla == 'tablafactura')
+            var table = tabla;
+        else
+            var table = tabla.id;
        if(document.getElementById('tipoE').checked || document.getElementById('tipoI').checked )
         {   
-            if(tabla == 'tablaxportacion')
+            if(table == 'tablaxportacion'){
                 var total = document.getElementById('totalE').innerHTML;
+                var pos = total.lastIndexOf(',');            
+                var reemplazo = total.substring(0,pos) + '' + total.substring(pos+1);
+                total = reemplazo - monto;
+                document.getElementById('totalE').innerHTML = total;
+                var tot = parseFloat(document.getElementById('totalcomprobante').innerHTML);
+                document.getElementById('totalcomprobante').innerHTML = tot + monto;
+            }
+            else if(table == 'tablagastos'){
+                var total = document.getElementById('totalG').innerHTML;
+                var pos = total.lastIndexOf(',');            
+                var reemplazo = total.substring(0,pos) + '' + total.substring(pos+1);
+                total = reemplazo - monto;
+                document.getElementById('totalG').innerHTML = total;
+                var tot = parseFloat(document.getElementById('totalcomprobante').innerHTML);
+                document.getElementById('totalcomprobante').innerHTML = tot + monto;
+            }
+            else if(table == 'tablagerencia'){
+                var total = document.getElementById('totalGE').innerHTML;
+                var pos = total.lastIndexOf(',');            
+                var reemplazo = total.substring(0,pos) + '' + total.substring(pos+1);
+                total = reemplazo - monto;
+                document.getElementById('totalGE').innerHTML = total;
+                var tot = parseFloat(document.getElementById('totalcomprobante').innerHTML);
+                document.getElementById('totalcomprobante').innerHTML = tot + monto;
+            }
+            else if(table == 'tablafactura'){
+                var total = document.getElementById('totalF').innerHTML;
+                var pos = total.lastIndexOf(',');            
+                var reemplazo = total.substring(0,pos) + '' + total.substring(pos+1);
+                total = reemplazo - monto;
+                document.getElementById('totalF').innerHTML = total;
+                var tot = parseFloat(document.getElementById('totalcomprobante').innerHTML);
+                document.getElementById('totalcomprobante').innerHTML = tot + monto;
+            }
             
-            var pos = total.lastIndexOf(',');            
-            var reemplazo = total.substring(0,pos) + '' + total.substring(pos+1)
+            
 //            total = parseFloat(reemplazo);
-            total = reemplazo - monto;
-            document.getElementById('totalE').innerHTML = total;
-            var tot = parseFloat(document.getElementById('totalcomprobante').innerHTML);
-            document.getElementById('totalcomprobante').innerHTML = tot + monto;
+            
             if(document.getElementById('tipoE').checked){
                 if($("#tipoE").val() == tipo){
                     var tds= "<tr>"
@@ -3071,9 +3104,9 @@ var ConforRecep = function(event,id,monto){
                             +"<td>"+e.parentNode.parentNode.getElementsByTagName('td')[1].innerHTML+"</td>"
                             +"<td>"+e.parentNode.parentNode.getElementsByTagName('td')[2].innerHTML+"</td>"
                             +"<td><input type='text' class='form-control' name='totalC' id='totalC' value="+e.parentNode.parentNode.getElementsByTagName('td')[3].innerHTML+"></td>"
-                            +"<td><a class='btn-xs' style='cursor: pointer' onclick='delegasto(this,"+tabla+","+monto+","+id+")'><i class='glyphicon glyphicon-remove'></i></a></td></tr>"
+                            +"<td><a class='btn-xs' style='cursor: pointer' onclick='delegasto(this,"+table+","+monto+","+id+")'><i class='glyphicon glyphicon-remove'></i></a></td></tr>"
                     $("#tablacomprobante").append(tds);                    
-                    document.getElementById(tabla).deleteRow(e.parentNode.parentNode.rowIndex);
+                    document.getElementById(table).deleteRow(e.parentNode.parentNode.rowIndex);
                 }
                 else
                     $.alertable.alert("<span>Solo tipo Egresos</span>");
@@ -3085,9 +3118,9 @@ var ConforRecep = function(event,id,monto){
                             +"<td>"+e.parentNode.parentNode.getElementsByTagName('td')[1].innerHTML+"</td>"
                             +"<td>"+e.parentNode.parentNode.getElementsByTagName('td')[2].innerHTML+"</td>"
                             +"<td><input type='text' class='form-control' name='totalC' id='totalC' value="+e.parentNode.parentNode.getElementsByTagName('td')[3].innerHTML+"></td>"
-                            +"<td><a class='btn-xs' style='cursor: pointer' onclick='delegasto(this,"+tabla+")'><i class='glyphicon glyphicon-remove'></i></a></td></tr>"
+                            +"<td><a class='btn-xs' style='cursor: pointer' onclick='delegasto(this,"+table+")'><i class='glyphicon glyphicon-remove'></i></a></td></tr>"
                     $("#tablacomprobante").append(tds);
-                    document.getElementById('tablaxportacion').deleteRow(e.parentNode.parentNode.rowIndex);
+                    document.getElementById(table).deleteRow(e.parentNode.parentNode.rowIndex);
                 }
                 else
                     $.alertable.alert("<span>Solo tipo Ingresos</span>");
@@ -3100,16 +3133,31 @@ var ConforRecep = function(event,id,monto){
    };
    
    var tipoevent = function(event){
-       
+       if(document.getElementById('tipoI').checked){
+           document.getElementById('comprobante').value = 'RECIBO'
+           $("#comprobante").prop('disabled','disabled');  
+           $("#divdireccion").hide();
+            $("#divtelefono").hide();
+            document.getElementById('lruc').innerHTML = 'D.N.I.:';
+            document.getElementById('lrazon').innerHTML = 'Apellidos y Nombres:';
+       }
+       else   {
+           document.getElementById('comprobante').value = 'FACTURA';
+           document.getElementById('lruc').innerHTML = 'R.U.C.:';
+            document.getElementById('lrazon').innerHTML = 'Razon Social:';
+           $("#divdireccion").show();
+            $("#divtelefono").show();
+            $("#comprobante").prop('disabled',false);
+       }        
        $("#tablacomprobante tbody").remove();
    };
     
     var delegasto = function(e,tabla,monto,id){
                 
         if(document.getElementById('tipoE').checked)
-            var btn = "<td><a class='btn-xs btn'  id='btnEI' onclick='GenComp(this,"+id+",0,'"+tabla.id+"',"+monto+") ><i class='glyphicon glyphicon-export'></i></a></td>"
+            var btn = "<td><a class='btn-xs btn'  id='btnEI' onclick='GenComp(this,"+id+",0,"+tabla.id+","+monto+")'><i class='glyphicon glyphicon-export'></i></a></td>"
         else
-            var btn = "<td><a class='btn-xs btn'  id='btnEI' onclick='GenComp(this,"+id+",1,'"+tabla.id+"',"+monto+") ><i class='glyphicon glyphicon-import'></i></a></td>"                
+            var btn = "<td><a class='btn-xs btn'  id='btnEI' onclick='GenComp(this,"+id+",1,"+tabla.id+","+monto+")'><i class='glyphicon glyphicon-import'></i></a></td>"        
         var tds= "<tr>"
                     +"<td>"+e.parentNode.parentNode.getElementsByTagName('td')[0].innerHTML+"</td>"
                     +"<td>"+e.parentNode.parentNode.getElementsByTagName('td')[1].innerHTML+"</td>"
@@ -3118,7 +3166,37 @@ var ConforRecep = function(event,id,monto){
                     +btn
                     $("#"+tabla.id).append(tds);
                     var tot = parseFloat(document.getElementById('totalcomprobante').innerHTML);
-                    document.getElementById('totalcomprobante').innerHTML = tot - monto;
+                    document.getElementById('totalcomprobante').innerHTML = tot - monto;         
+                    if(tabla.id == 'tablaxportacion') {                        
+                        var total = document.getElementById('totalE').innerHTML;
+                        var pos = total.lastIndexOf(',');
+                        var reemplazo = total.substring(0, pos) + '' + total.substring(pos + 1);
+                        total = parseFloat(reemplazo) + monto;
+                        document.getElementById('totalE').innerHTML = total;                                                
+                    }
+                    else if(tabla.id == 'tablagastos') {
+                        
+                        var total = document.getElementById('totalG').innerHTML;
+                        var pos = total.lastIndexOf(',');
+                        var reemplazo = total.substring(0, pos) + '' + total.substring(pos + 1);
+                        total = parseFloat(reemplazo) + monto;
+                        document.getElementById('totalG').innerHTML = total;                                                
+                    }
+                    else if(tabla.id == 'tablagerencia') {
+               
+                        var total = document.getElementById('totalGE').innerHTML;
+                        var pos = total.lastIndexOf(',');
+                        var reemplazo = total.substring(0, pos) + '' + total.substring(pos + 1);
+                        total = parseFloat(reemplazo) + monto;
+                        document.getElementById('totalGE').innerHTML = total;                                                
+                    }
+                    else if(tabla.id == 'tablafactura') {
+                        var total = document.getElementById('totalF').innerHTML;
+                        var pos = total.lastIndexOf(',');
+                        var reemplazo = total.substring(0, pos) + '' + total.substring(pos + 1);
+                        total = parseFloat(reemplazo) + monto;
+                        document.getElementById('totalF').innerHTML = total;                                                
+                    }
                     document.getElementById('tablacomprobante').deleteRow(e.parentNode.parentNode.rowIndex);                    
     }
    
@@ -3151,6 +3229,55 @@ var ConforRecep = function(event,id,monto){
        });
    }
    
+   $(document).ready().on('change','#comprobante',function(event){
+                          
+        if(event.target.value == 'VOUCHER' || event.target.value == 'RECIBO' || event.target.value == 'TRANSFERENCIA'){
+            
+            $("#divdireccion").hide();
+            $("#divtelefono").hide();
+        }
+        else{            
+            $("#divdireccion").show();
+            $("#divtelefono").show();
+        }                                                     
+   });
+      
+   $(document).ready().on('click','#RegmovDoc',function(event){
+       $.ajax({
+          url:'/Tesoreria/Mov-Dinero',
+           headers: {'X-CSRF-TOKEN': $("input[name=_token]").val()},
+           type: 'POST',
+           dataType: 'json',
+           data:$("#formDinero").serialize(),
+           success: function(data){
+               mensajeRegistro(data,'formDinero');
+                        
+           },
+           error:function(data){
+               if(data.status==403) $("#error-modal").empty().html(data.responseText);
+               else {
+                   $("#error-monto").html('');$("#error-tipo").html(''); $("#error-comprobante").html(''); $("#error-fecha").html(''); 
+                   $("#error-ruc").html('');$("#error-razon").html('');$("#error-direccion").html('');$("#error-telefono").html('');
+                   $("#error-concepto").html('');$("#error-numero").html('');
+                   var errors =  $.parseJSON(data.responseText);      
+                    $.each(errors,function(index, value) {                      
+                            if(index == 'monto')$("#error-monto").html(value);
+                            else if(index == 'numero')$("#error-numero").html(value); 
+                            else if(index == 'tipo')$("#error-tipo").html(value); 
+                            else if(index == 'comprobante')$("#error-comprobante").html(value); 
+                            else if(index == 'fecha')$("#error-fecha").html(value); 
+                            else if(index == 'ruc')$("#error-ruc").html(value); 
+                            else if(index == 'razon')$("#error-razon").html(value); 
+                            else if(index == 'direccion')$("#error-direccion").html(value); 
+                            else if(index == 'telefono')$("#error-telefono").html(value); 
+                            else if(index == 'concepto')$("#error-concepto").html(value); 
+                            
+                            
+                      });
+               }
+           }
+       });
+   });
 
 // ************************************************************************ REPORTES **********************************************
 

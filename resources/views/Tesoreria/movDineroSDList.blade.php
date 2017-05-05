@@ -39,12 +39,12 @@
                     </div>
                 
                 <div class="col-md-4" id="divruc">
-                        {!! Form::label('ruc','Ruc: ',['class'=>'control-label'])!!}
+                        {!! Form::label('ruc','R.U.C.: ',['class'=>'control-label','id'=>'lruc'])!!}
                         {!! Form::text('ruc',null,['id'=>'ruc','class'=>'form-control','placeholder'=>'R.U.C'])!!}
                     <div class="text-red" id="error-ruc"></div>
                     </div>
                     <div class="col-md-12">
-                        {!! Form::label('razon','Razon Social: ',['class'=>'control-label'])!!}
+                        {!! Form::label('razon','Razon Social: ',['class'=>'control-label','id'=>'lrazon'])!!}
                         {!! Form::text('razon',null,['id'=>'razon','class'=>'form-control','placeholder'=>'Razon Social'])!!}
                         <div class="text-red" id="error-razon"></div>
                     </div>
@@ -205,7 +205,7 @@
         <div class="box-body" style="display: block;">
             <!-- Conversations are loaded here -->
             <div class="direct-chat-messages">
-                <table width='100%' border='1' class="table-hover table-responsive">
+                <table width='100%' border='1' class="table-hover table-responsive" id="tablagastos">
                     <thead>
                         <tr >
                             <th >FECHA</th>
@@ -226,9 +226,9 @@
                             <td>{{$dinero->detalle}}</td>
                             <td>{{number_format($dinero->monto,2)}}</td>
                             @if($dinero->estado == 0)
-                            <td><a class="btn-xs btn " data-toggle="tooltip" title="EGRESOS" ><i class="glyphicon glyphicon-export"></i></a></td>
+                            <td><a class="btn-xs btn "  id="btnEI" onclick="GenComp(this,{{$dinero->id}},{{$dinero->estado}},'tablagastos',{{$dinero->monto}})" ><i class="glyphicon glyphicon-export"></i></a></td>
                             @else
-                            <td><a class="btn-xs btn " data-toggle="tooltip" title="INGRESOS"><i class="glyphicon glyphicon-import"></i></a></td>
+                            <td><a  class="btn-xs btn "  id="btnEI" onclick="GenComp(this,{{$dinero->id}},{{$dinero->estado}},'tablagastos',{{$dinero->monto}})"><i class="glyphicon glyphicon-import"></i></a></td>
                             @endif
                         </tr>
                         @endif
@@ -237,7 +237,7 @@
                     <tfoot>
                         <tr>
                             <td colspan="3" align='center'>TOTAL</td>                            
-                            <td>{{number_format($total,2)}}</td>
+                            <td id="totalG">{{number_format($total,2)}}</td>
                         </tr>
                     </tfoot>
                 </table>
@@ -315,7 +315,7 @@
         <div class="box-body" style="display: block;">
             <!-- Conversations are loaded here -->
             <div class="direct-chat-messages">
-                <table width='100%' border='1' class="table-hover table-responsive">
+                <table width='100%' border='1' class="table-hover table-responsive" id="tablagerencia">
                     <thead>
                         <tr >
                             <th >FECHA</th>
@@ -336,9 +336,9 @@
                             <td>{{$dinero->detalle}}</td>
                             <td>{{number_format($dinero->monto,2)}}</td>
                             @if($dinero->estado == 0)
-                            <td><a class="btn-xs btn " data-toggle="tooltip" title="EGRESOS" ><i class="glyphicon glyphicon-export"></i></a></td>
+                            <td><a class="btn-xs btn "  id="btnEI" onclick="GenComp(this,{{$dinero->id}},{{$dinero->estado}},'tablagerencia',{{$dinero->monto}})" ><i class="glyphicon glyphicon-export"></i></a></td>
                             @else
-                            <td><a class="btn-xs btn " data-toggle="tooltip" title="INGRESOS"><i class="glyphicon glyphicon-import"></i></a></td>
+                            <td><a  class="btn-xs btn "  id="btnEI" onclick="GenComp(this,{{$dinero->id}},{{$dinero->estado}},'tablagerencia',{{$dinero->monto}})"><i class="glyphicon glyphicon-import"></i></a></td>
                             @endif
                         </tr>
                         @endif
@@ -347,7 +347,7 @@
                     <tfoot>
                         <tr>
                             <td colspan="3" align='center'>TOTAL</td>                            
-                            <td>{{number_format($total,2)}}</td>
+                            <td id="totalGE">{{number_format($total,2)}}</td>
                         </tr>
                     </tfoot>
                 </table>
@@ -424,7 +424,7 @@
         <div class="box-body" style="display: block;">
             <!-- Conversations are loaded here -->
             <div class="direct-chat-messages">
-                <table width='100%' border='1' class="table-hover table-responsive">
+                <table width='100%' border='1' class="table-hover table-responsive" id="tablafactura">
                     <thead>
                         <tr >
                             <th >FECHA</th>
@@ -445,9 +445,9 @@
                             <td>{{$dinero->detalle}}</td>
                             <td>{{number_format($dinero->monto,2)}}</td>
                             @if($dinero->estado == 0)
-                            <td><a class="btn-xs btn " data-toggle="tooltip" title="EGRESOS" ><i class="glyphicon glyphicon-export"></i></a></td>
+                            <td><a class="btn-xs btn "  id="btnEI" onclick="GenComp(this,{{$dinero->id}},{{$dinero->estado}},'tablafactura',{{$dinero->monto}})" ><i class="glyphicon glyphicon-export"></i></a></td>
                             @else
-                            <td><a class="btn-xs btn " data-toggle="tooltip" title="INGRESOS"><i class="glyphicon glyphicon-import"></i></a></td>
+                            <td><a  class="btn-xs btn "  id="btnEI" onclick="GenComp(this,{{$dinero->id}},{{$dinero->estado}},'tablafactura',{{$dinero->monto}})"><i class="glyphicon glyphicon-import"></i></a></td>
                             @endif
                         </tr>
                         @endif
@@ -456,7 +456,7 @@
                     <tfoot>
                         <tr>
                             <td colspan="3" align='center'>TOTAL</td>                            
-                            <td>{{number_format($total,2)}}</td>
+                            <td id="totalF">{{number_format($total,2)}}</td>
                         </tr>
                     </tfoot>
                 </table>

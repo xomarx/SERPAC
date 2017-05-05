@@ -74,9 +74,11 @@ class Mov_dineroController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Requests\Tesoreria\MovDineroRequest $request)
     {
-        //
+        if($request->ajax()){
+            
+        }
     }
 
     /**
