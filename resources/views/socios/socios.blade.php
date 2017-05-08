@@ -9,6 +9,9 @@
         @permission('crear socios')
         <a id="nuevosocio" class="btn btn-dropbox btn-sm m-t-10" data-toggle="tooltip" data-placement="top" title="Nuevo Socio">NUEVO  <span class="glyphicon glyphicon-plus"></span></a>
         @endpermission
+        <div class="col-sm-3 form-group-sm" style="float: right">            
+            {!! Form::text('buscar',null,['id'=>'buscar','class'=>'form-control','placeholder'=>'Buscar..'])!!}
+        </div>
     </div>
     <div class="box-body box-content" id="contenidos-box">
         <table class="table table-hover table-responsive" id="myTable" >

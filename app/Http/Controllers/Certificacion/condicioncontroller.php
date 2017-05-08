@@ -9,14 +9,20 @@ use App\Http\Controllers\Controller;
 
 class condicioncontroller extends Controller
 {
-    /**
+    public function Certificacion(){
+                
+        return response()->view('Certificacion.masterCertificacion');
+    }
+
+        /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        //
+        $condicion = \App\Models\Certificacion\Condicion::all();
+        return response()->view('Certificacion.condicion',['condicions'=>$condicion]);
     }
 
     /**

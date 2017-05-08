@@ -115,9 +115,7 @@
                     select: function(event, ui){                        
                         $("#dniF").val(ui.item.id);
                     }
-                });
-               
-               
+                });                              
             }            
         })
    });

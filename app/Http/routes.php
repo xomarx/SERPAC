@@ -142,7 +142,6 @@ Route::group(['middleware' => ['auth']], function () {
     
     route::resource('Acopio/Planilla-Mensual','Acopio\planillacontroller@cierremensual');//cierremensual
     
-    
     route::resource('nosocios','Acopio\comprascontroller@autoCompleteNosocios');
     
     route::get('Acopio/Compra-Grano/Recibo-Compra/{id?}','Informes\RecibosController@ReciboCompras');
@@ -214,7 +213,7 @@ Route::group(['middleware' => ['auth']], function () {
             
     route::resource('Configuracion/Documentos','Configuracion\tipo_documentoController');
     
-    // *******************  REPORTES O INFORMES GRAFICAS ******************************** 
+    // ******************************************************************  REPORTES O INFORMES GRAFICAS ******************************** 
     route::get('Acopio/Fondos-Acopio/Report-Fondos-Acopio/{an?}/{mes?}/{dato?}','Informes\Reportecontroller@pdfrecepcion');
     route::get('Acopio/Fondos-Acopio/excel-Fondos-Acopio/{an?}/{mes?}','Informes\Reportecontroller@excelrecepcion');
     
@@ -237,6 +236,9 @@ Route::group(['middleware' => ['auth']], function () {
         
     route::get('codrecibos/{id}','Configuracion\tipo_documentoController@getnumerodocumento');
     route::resource('codrecibos','Configuracion\tipo_documentoController@autoCompleteCodRecibo');//
+    //*****************************************************************     CERTIFICACION *************************************************************
     
+    route::resource('Certificacion/Condicion','Certificacion\condicioncontroller');
+    route::resource('Certificacion','Certificacion\condicioncontroller@certificacion');    
     
 });

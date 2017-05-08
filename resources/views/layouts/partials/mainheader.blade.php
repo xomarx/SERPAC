@@ -32,7 +32,7 @@
                     <li id="menuRRHH"><a href="{{ url('/RRHH/empleados') }}">RRHH</a></li>
                     <li id="menuacopio"><a href="{{ url('/Acopio/Fondos-Acopio') }}">Acopio</a></li>
                     <li id="menucreditos"><a href="{{ url('/Creditos/Creditos-Financieros') }}">Creditos</a></li>
-                    <li id="menucertificacion"><a href="{{ url('/Creditos/Certificacion') }}">Certificacion</a></li>
+                    <li id="menucertificacion"><a href="{{ url('/Certificacion') }}">Certificacion</a></li>
                     <li id="menutesoreria"><a href="{{ url('/Tesoreria/Distribucion-Fondos') }}">Tesoreria</a></li>
                     <li id="menucontabilidad"><a href="{{ url('/Creditos/Contabilidad') }}">Contabilidad</a></li>
                     <li id="menuinformes" ><a href="{{ url('/Informes') }}">Informes <i class="glyphicon glyphicon-stats"></i></a></li>
