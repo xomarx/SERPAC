@@ -116,7 +116,8 @@ var activarForm = function(id){
         else if(id == 10) {var route = '/Acopio/Compra-Grano/ListaCompras/'+$("#buscar").val();}
         else if(id == 11) {var route = '/Acopio/Planilla-Semanal/ListaSemanal';}
         else if(id == 12) {var route = 'ListaCheques/'+$("#buscar").val();}
-        else if(id == 13) {var route = '/Tesoreria/Mov-Dinero/Con-Documento';}
+        else if(id == 13) {var route = '/Tesoreria/Mov-Dinero/Con-Documento';}        
+        else if(id == 14) {var route = '/Tesoreria/Mov-Caja-Chica/Crear-Caja';}
         
         $.ajax({
             type:'get',
@@ -147,11 +148,12 @@ var activarmodal = function(id){
         else if(id==2){ var route = 'PermisoUser';}
         else if(id==3){ var route = 'modalcheque';}
         else if(id==4){ var route = '/Tesoreria/modalmovcheque';}
-        else if(id==5){ var route = 'modalCaja';}
+        else if(id==5){ var route = 'Mov-Caja-Chica/modalCaja';}
         else if(id==6){ var route = '/socios/modalsocio';}
         else if(id==0){ var route = '/error-403';}
         else if(id==7){ var route = 'modalempleado';} 
         else if(id==8){ var route = 'Mov-Dinero/Modal-Dinero';} 
+        else if(id==9){ var route = '/Acopio/Adelantos-Acopio/Modal-Adelanto';} 
             
         $.get(route,function(data){            
             $("#conten-modal").html(data);
@@ -3092,13 +3094,7 @@ var ConforRecep = function(event,id,monto){
                 document.getElementById('totalF').innerHTML = total;
                 var tot = parseFloat(document.getElementById('totalcomprobante').innerHTML);
                 document.getElementById('totalcomprobante').innerHTML = tot + monto;
-            }
-            
-            
-//            total = parseFloat(reemplazo);
-            
-            if(document.getElementById('tipoE').checked){
-                if($("#tipoE").val() == tipo){
+            }                                                
                     var tds= "<tr>"
                             +"<td>"+e.parentNode.parentNode.getElementsByTagName('td')[0].innerHTML+"</td>"
                             +"<td>"+e.parentNode.parentNode.getElementsByTagName('td')[1].innerHTML+"</td>"
@@ -3106,26 +3102,7 @@ var ConforRecep = function(event,id,monto){
                             +"<td><input type='text' class='form-control' name='totalC' id='totalC' value="+e.parentNode.parentNode.getElementsByTagName('td')[3].innerHTML+"></td>"
                             +"<td><a class='btn-xs' style='cursor: pointer' onclick='delegasto(this,"+table+","+monto+","+id+")'><i class='glyphicon glyphicon-remove'></i></a></td></tr>"
                     $("#tablacomprobante").append(tds);                    
-                    document.getElementById(table).deleteRow(e.parentNode.parentNode.rowIndex);
-                }
-                else
-                    $.alertable.alert("<span>Solo tipo Egresos</span>");
-            }
-            if(document.getElementById('tipoI').checked){
-                if($("#tipoI").val() == tipo){
-                    var tds= "<tr>"
-                            +"<td>"+e.parentNode.parentNode.getElementsByTagName('td')[0].innerHTML+"</td>"
-                            +"<td>"+e.parentNode.parentNode.getElementsByTagName('td')[1].innerHTML+"</td>"
-                            +"<td>"+e.parentNode.parentNode.getElementsByTagName('td')[2].innerHTML+"</td>"
-                            +"<td><input type='text' class='form-control' name='totalC' id='totalC' value="+e.parentNode.parentNode.getElementsByTagName('td')[3].innerHTML+"></td>"
-                            +"<td><a class='btn-xs' style='cursor: pointer' onclick='delegasto(this,"+table+")'><i class='glyphicon glyphicon-remove'></i></a></td></tr>"
-                    $("#tablacomprobante").append(tds);
-                    document.getElementById(table).deleteRow(e.parentNode.parentNode.rowIndex);
-                }
-                else
-                    $.alertable.alert("<span>Solo tipo Ingresos</span>");
-            }
-                
+                    document.getElementById(table).deleteRow(e.parentNode.parentNode.rowIndex);                                                                    
         }
         else
             $.alertable.alert("<span>Seleccione un Ingreso o Egreso</span>");          

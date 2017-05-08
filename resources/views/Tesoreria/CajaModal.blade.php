@@ -20,7 +20,7 @@
                     {!! Form::textarea('observacion',null,['id'=>'observacion','class'=>'form-control','placeholder'=>'Observacion de Caja','rows'=>'3'])!!}
                     <div class="text-red" id="error_descripcion"></div>
                     </div>
-                                
+                    {!!Form::close()!!}            
                      <div class="modal-footer">                              
                 <a id="RegCaja" class="btn btn-dropbox" data-toggle="tooltip" data-placement="top" title="Rol de Usuarios">Registrar</a>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Salir</button>

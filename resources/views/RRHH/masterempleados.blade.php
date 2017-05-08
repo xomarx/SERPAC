@@ -20,6 +20,7 @@
             @permission('ver almacen')
             <li id="subalmacen"><a href="{{ url('RRHH/Sucursal') }}"><i class='fa fa-hospital-o'></i> <span>Almacen</span></a></li>
             @endpermission
+            <li id="subempresa"><a href="{{ url('RRHH/Empresas') }}"><i class='fa fa-institution'></i> <span>Empresa</span></a></li>
         </ul><!-- /.sidebar-menu -->
     </section>
 @stop

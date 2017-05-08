@@ -11,8 +11,8 @@ class Egreso extends Model
     protected $primarykey = 'id';
     public  $timestamps=false;
     protected  $fillable = [
-        'fecha','monto','descripcion','tipo_egresos_id',
-        'sucursales_sucursalId','estado','motivo','persona_juridica_id','users_id'
+        'fecha','monto','concepto','comprobante',
+        'sucursales_sucursalId','estado','num_comprobante','persona_juridica_id','users_id'
     ];
     
     
@@ -31,13 +31,12 @@ class Egreso extends Model
         return $this->belongsTo(Persona_juridicas::class);
     }
     
-    public static function listaEgresos(){
-        return \Illuminate\Support\Facades\DB::table('egresos')
-                ->join('sucursales','egresos.sucursales_sucursalId','=','sucursales.sucursalId')
-                ->join('tipo_egresos','egresos.tipo_egresos_id','=','tipo_egresos.id')
+    public static function scopelistaEgresos($query){
+        return $query
+                ->join('sucursales','egresos.sucursales_sucursalId','=','sucursales.sucursalId')                
                 ->join('users','egresos.users_id','=','users.id')
-                ->where('egresos.estado','=','CANCELADO')
-                ->select('egresos.fecha','tipo_egresos.tipo_egreso','sucursales.sucursal','egresos.monto','users.name','egresos.id')
+                ->where('egresos.estado','=',0)
+                ->select('egresos.fecha','concepto','comprobante','num_comprobante','sucursales.sucursal','monto','users.name','egresos.id')
                 ->get();
     }
 }

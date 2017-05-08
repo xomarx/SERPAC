@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\Tesoreria;
+namespace App\Http\Controllers\Acopio;
 
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-class egresoscontroller extends Controller
+class EgresosController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -18,10 +18,9 @@ class egresoscontroller extends Controller
     {
         if(!auth()->user()->can('ver pagos'))
             return response ()->view ('errors.403');
-        $egresos = \App\Models\Tesoreria\Egreso::listaEgresos();
-        $tipo_egresos = \App\Models\Tesoreria\Tipo_egreso::pluck('tipo_egreso','id');
+        $egresos = \App\Models\Tesoreria\Egreso::listaEgresos();        
         $almacenes = \App\Models\RRHH\Sucursal::pluck('sucursal','sucursalId');
-        return view('Tesoreria.gastos',['egresos'=>$egresos,'tipo_egresos'=>$tipo_egresos,'almacenes'=>$almacenes]);
+        return view('Acopio.gastos',['egresos'=>$egresos,'almacenes'=>$almacenes]);
     }
 
     /**
@@ -114,6 +113,6 @@ class egresoscontroller extends Controller
      */
     public function destroy($id)
     {
-        //        
+        //
     }
 }

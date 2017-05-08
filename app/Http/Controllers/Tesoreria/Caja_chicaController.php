@@ -24,7 +24,7 @@ class Caja_chicaController extends Controller
     public function cajachica() {        
         $cheques = \App\Models\Tesoreria\Cheque::pluck('cheque', 'id');
         $cont = \App\Models\Tesoreria\Caja_chica::all()->count() + 1;
-        return response ()->view('Tesoreria.cajaChica', ['cheques' => $cheques, 'num' => $cont]);
+        return response ()->view('Tesoreria.CajaChicaModal', ['cheques' => $cheques, 'num' => $cont]);
     }
     
     public function headcajachica() {
@@ -60,6 +60,9 @@ class Caja_chicaController extends Controller
     public function create()
     {
         //
+        $cheques = \App\Models\Tesoreria\Cheque::pluck('cheque', 'id');
+        $cont = \App\Models\Tesoreria\Caja_chica::all()->count() + 1;
+        return response ()->view('Tesoreria.CajaChica', ['cheques' => $cheques, 'num' => $cont]);
     }
 
     /**

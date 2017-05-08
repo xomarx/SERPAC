@@ -1,44 +1,20 @@
 @extends('Acopio.masteracopio')
 @section('contentheader_title')
-    PAGOS 
+    GASTOS DE ALMACEN 
 @stop
 @section('main-content')
 @permission('ver pagos')
 <div class="box box-solid box-primary">
     <div class="box-header">
         @permission('crear pagos')
-        <a  class="btn btn-sm btn-dropbox" data-toggle='modal' data-target='#modalegresos' >NUEVO  <span class="glyphicon glyphicon-plus" data-toggle="tooltip" data-placement="top" title="Nuevos Gastos"></span></a>
+        <a  class="btn btn-dropbox" data-toggle='modal' data-target='#modalegresos' >NUEVO GASTO  <span class="glyphicon glyphicon-plus" data-toggle="tooltip" data-placement="top" title="Nuevos Gastos"></span></a>
         @endpermission
+        <div class="col-sm-3 form-group-sm" style="float: right">            
+            {!! Form::text('buscar',null,['id'=>'buscar','class'=>'form-control','placeholder'=>'Buscar..'])!!}
+        </div>
     </div>
-    <div class="box-body">
-        <input type="hidden" name="_token" value="{{ csrf_token() }}" id="token">
-        <table class="table table-hover" id="myTable">
-            <thead>
-                <tr>
-                    <th>FECHA</th>
-                    <th>GASTOS</th>
-                    <th>ALMACEN</th>
-                    <th>MONTO</th>
-                    <th>USUARIO</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($egresos as $egreso)
-                <tr>
-                    <td>{{$egreso->fecha }}</td>
-                    <td>{{$egreso->tipo_egreso }}</td>
-                    <td>{{$egreso->sucursal }}</td>
-                    <td>{{$egreso->name }}</td>
-                    <td>
-                        <a class="btn btn-xs btn-success" ><span class="glyphicon glyphicon-print"></span></a>
-                        @permission('eliminar pagos')
-                        <a class="btn btn-xs btn-danger" onclick="EliGasto('{{$egreso->id}}','{{$egreso->tipo_egreso }}');" ><span class="glyphicon glyphicon-remove"></span></a>
-                        @endpermission
-                    </td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
+    <div class="box-body" id="contenidos-box">
+        @include('Acopio.gastosList')
     </div>
 </div>
 <section id="conten-modal"></section>
@@ -49,37 +25,59 @@
     <div class="modal-dialog modal-primary">
         <div class="modal-content" id="error-modal">
             <div class="modal-header">
-                <h3 class="modal-title">REGISTRO DE PAGOS</h3>
+                <h3 class="modal-title">GASTOS DE ALMACEN</h3>
             </div>
-            <div class="modal-body form-group-sm">   
+            <div class="modal-body form-group">   
                 {!! Form::open(['id'=>'formegresos']) !!}
                 @include('mensajes.mensaje')
-                <input type="hidden" name="id" id="idegresos"/>                                
+                <input type="hidden" name="id" id="idegresos"/>    
+                
+                <div class="col-md-8">
+                    {!! Form::label('almacen','Almacenes:',['class' => 'control-label'])!!} <br>                   
+                    {!! Form::select('almacen',$almacenes,null,['id'=>'almacen','placeholder'=>'Seleccione el Almacen']) !!}
+                    <div class="text-danger" id="error-almacen"></div>
+                </div>
                 <div class="col-md-4">
                     {!! Form::label('fecha','Fecha:',['class' => 'control-label'])!!}
                     <input type="date" name="fecha" id="fecha" class="form-control" />
                     <div class="text-danger" id="error-fecha"></div>
                 </div>
                 <div class="col-md-3">
+                    {!! Form::label('comprobante','Comprobante:',['class' => 'control-label'])!!}
+                    {!! Form::select('comprobante',['RECIBO'=>'Recibo','FACTURA'=>'Factura','BOLETA'=>'Boleta'
+                        ],null,['id'=>'comprobante','class' =>'form-control','placeholder'=>'Seleccione']) !!}
+                    <div class="text-danger" id="error-comprobante"></div>
+                </div>
+                <div class="col-md-3">
+                    {!! Form::label('numero','N° Comprobante:',['class' => 'control-label'])!!}
+                    <input type="text" class="form-control" placeholder="N° " name="numero" id="numero" />
+                    <div class="text-danger" id="error-numero"></div>
+                </div> 
+                <div class="col-md-3" id="divruc">
+                        {!! Form::label('ruc','R.U.C.: ',['class'=>'control-label','id'=>'lruc'])!!}
+                        {!! Form::text('ruc',null,['id'=>'ruc','class'=>'form-control','placeholder'=>'R.U.C'])!!}
+                    <div class="text-red" id="error-ruc"></div>
+                    </div>
+                <div class="col-md-3">
                     {!! Form::label('monto','Monto:',['class' => 'control-label'])!!}
                     <input type="number" class="form-control" placeholder="S/. 0.00" name="monto" id="monto" min="0"/>
                     <div class="text-danger" id="error-monto"></div>
                 </div>
-                <div class="col-md-5">
-                    {!! Form::label('pagos','Pagos:',['class' => 'control-label'])!!}
-                    {!! Form::select('egresos',$tipo_egresos,null,['id'=>'egresos','class'=>'form-control','placeholder'=>'Selecciona un Egreso']) !!}
-                    <div class="text-danger" id="error-egresos"></div>
-                </div>
-
-                <div class="col-md-6">
-                    {!! Form::label('almacen','Almacenes:',['class' => 'control-label'])!!}                    
-                    {!! Form::select('almacen',$almacenes,null,['id'=>'almacen','placeholder'=>'Selecciona un almacen']) !!}
-                    <div class="text-danger" id="error-almacen"></div>
-                </div>
-                <div class="col-md-6">
-                    {!! Form::label('motivo','Motivos:',['class' => 'control-label'])!!}
-                    {!! Form::textarea('motivo',null,['id'=>'motivo','class'=>'form-control','placeholder'=>'Motivo del pago','rows'=>'3'])!!}
-                </div> 
+                    <div class="col-md-12" >
+                        {!! Form::label('razon','Razon Social: ',['class'=>'control-label','id'=>'lrazon'])!!}
+                        {!! Form::text('razon',null,['id'=>'razon','class'=>'form-control','placeholder'=>'Razon Social'])!!}
+                        <div class="text-red" id="error-razon"></div>
+                    </div>
+                    <div class="col-md-12" id="divdireccion">
+                        {!! Form::label('direccion','Direccion: ',['class'=>'control-label'])!!}
+                        {!! Form::text('direccion',null,['id'=>'direccion','class'=>'form-control','placeholder'=>'Direccion'])!!}
+                        <div class="text-red" id="error-direccion"></div>
+                    </div>
+                <div class="col-md-12" style="padding-bottom: 10px">
+                        {!! Form::label('concepto','Concepto: ',['class'=>'control-label'])!!}
+                        {!! Form::text('concepto',null,['id'=>'concepto','class'=>'form-control','placeholder'=>'Direccion'])!!}
+                        <div class="text-red" id="error-direccion"></div>
+                    </div>                                                                  
                 <div class="modal-footer">   
                     <div class="col-md-12">
                         {!!link_to('#', $title='Registrar', $attributes = ['id'=>'RegEgresos', 'class'=>'btn btn-dropbox'])!!}
@@ -95,8 +93,7 @@
 @stop
 @section('script')
 <script>
-    
-    
+        
     $("#almacen").select2({alloClear:true});
     
     $(document).ready(function(){

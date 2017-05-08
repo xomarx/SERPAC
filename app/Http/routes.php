@@ -128,6 +128,8 @@ Route::group(['middleware' => ['auth']], function () {
     route::resource('RRHH/Tecnicos/Tecnico-Local','RRHH\tecnicoscontroller@listaSectorAsignados');//listaSectorAsignados
     route::resource('RRHH/modaltecnicos','RRHH\tecnicoscontroller@modalTecnicos');
     route::resource('RRHH/Tecnicos','RRHH\tecnicoscontroller');
+    
+    route::resource('RRHH/Empresas','RRHH\EmpresaController');
     // *************************************************************************************  ACOPIO **********************************************
     route::get('Acopio/listaRecepcionFondos/{an?}/{mes?}/{dato?}','Acopio\recepcion_fondoscontroller@recepcionfondos'); 
     route::resource('Acopio/Fondos-Acopio','Acopio\recepcion_fondoscontroller');
@@ -151,7 +153,9 @@ Route::group(['middleware' => ['auth']], function () {
     route::resource('Acopio/Transporte','Acopio\transportecontroller');
     route::resource('Acopio/Excel','Acopio\planillacontroller@excel');
     route::resource('Acopio/Pdf','Acopio\planillacontroller@pdf');
-    route::resource('Acopio/Gastos','Tesoreria\egresoscontroller');
+    route::resource('Acopio/Gastos-Almacen','Acopio\EgresosController');
+    route::resource('Acopio/Adelantos-Acopio/Modal-Adelanto','Acopio\AdelantoAcopioController@adelantoacopio');
+    route::resource('Acopio/Adelantos-Acopio','Acopio\AdelantoAcopioController');
     route::resource('Acopio/Persona-Juridica','Tesoreria\persona_juridicacontroller');
     
     // *********************************************************************************   MODULO DE TESORERIA ************************************     
@@ -177,9 +181,10 @@ Route::group(['middleware' => ['auth']], function () {
     route::get('Tesoreria/numCheque/{id}','Tesoreria\Caja_chicaController@autoNumCheque');
     route::resource('Tesoreria/headcajachica','Tesoreria\Caja_chicaController@headcajachica');
     
-    route::resource('Tesoreria/modalCaja','Tesoreria\Caja_chicaController@cajachica');
+    route::resource('Tesoreria/Mov-Caja-Chica/modalCaja','Tesoreria\Caja_chicaController@cajachica');
+    route::resource('Tesoreria/Mov-Caja-Chica/Crear-Caja','Tesoreria\Caja_chicaController@create');
     route::resource('Tesoreria/Mov-Caja-Chica','Tesoreria\Caja_chicaController');
-    route::get('Tesoreria/Caja-Chica/{anio?}/{mes?}/{dato?}/{page?}','Tesoreria\Caja_chicaController@index');
+    route::get('Tesoreria/Mov-Caja-Chica/{anio?}/{mes?}/{dato?}/{page?}','Tesoreria\Caja_chicaController@index');
     
     route::resource('Tesoreria/Mov-Dinero/DineroSD','Tesoreria\Mov_dineroController@StoreSinDocumentos');
     route::resource('Tesoreria/Mov-Dinero/Sin-Documento','Tesoreria\Mov_dineroController@MDSinDocumento');
