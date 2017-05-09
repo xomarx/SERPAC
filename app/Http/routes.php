@@ -33,7 +33,7 @@ Route::group(['middleware' => ['auth']], function () {
     route::resource('Auxiliar/dniSocios','Configuracion\AuxiliarController@autoDNISocios');
     route::resource('Auxiliar/dniParientesSocios','Configuracion\AuxiliarController@autoDNIParientesSocios');
     route::resource('Auxiliar/dnipersonas','Configuracion\AuxiliarController@autoDNIPersonas');
-    
+    route::resource('Auxiliar/datosPersonas','Configuracion\AuxiliarController@autoDatosPersonas');
     
     Route::get('sign-out', 'Auth\AuthController@getsignOut');
     
@@ -62,7 +62,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('distritos/{id}','socios\distritocontroller@getdistritos');   
 //    route::post('socios/{codigo}','socios\sociocontroller@update');   
     //*******************************************************************       SOCIOS ******************************************************************
-    route::resource('socios/asignacion-delegados','socios\cargodelegadosociocontroller');
+    route::get('socios/Asignacion-Delegados/ListaAsigDelegados/{dato?}/{page?}','socios\cargodelegadosociocontroller@listaAsigDelegados');
+    route::resource('socios/Asignacion-Delegados','socios\cargodelegadosociocontroller');
     route::resource('socios/asignacion-directivos','socios\cargodirectivosociocontroller');
     
     route::resource('socios/transferencias/newtransferencias','socios\transferenciacontroller@NewTransferencia');
@@ -91,14 +92,9 @@ Route::group(['middleware' => ['auth']], function () {
     
     route::resource('socios/autopersonas','socios\sociocontroller@autoSociosPersonas');    
     route::resource('socios/autoDniSocios','socios\sociocontroller@autoSociosDni');
-    
-    
+        
     //autocompletados
-    
-    
-    
-    
-    
+                    
     route::get('socios/fundos/Listfundos/{data?}/{page?}','socios\fundoscontroller@ListaFundos');
     route::resource('socios/eliminarpropiedades','socios\fundoscontroller@EliminarPropiedadesFundo');//EliminarPropiedadesFundo
     route::resource('socios/modalfundo','socios\fundoscontroller@ModalFundo');

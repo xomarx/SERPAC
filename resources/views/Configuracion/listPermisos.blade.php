@@ -140,31 +140,31 @@
         <tr>
             <td>Sub modulo de Asignacion de Delegados</td>
             <td>
-                @if(in_array('crear_asigDelegados',$permisos) )
-                {!!Form::checkbox('crear_asigDelegados','crear_asigDelegados',null,['class'=>'checkbox-inline','disabled'=>'disabled','onclick'=>'asigpermiso("crear_asigDelegados")','checked'])!!}
+                @if(in_array('crear_asig_Delegados',$permisos) )
+                {!!Form::checkbox('crear_asig_Delegados','crear_asig_Delegados',null,['class'=>'checkbox-inline','onclick'=>'asigpermiso("crear_asig_Delegados")','checked'])!!}
                 @else
-                {!!Form::checkbox('crear_asigDelegados','crear_asigDelegados',null,['class'=>'checkbox-inline','disabled'=>'disabled','onclick'=>'asigpermiso("crear_asigDelegados")'])!!}
+                {!!Form::checkbox('crear_asig_Delegados','crear_asig_Delegados',null,['class'=>'checkbox-inline','onclick'=>'asigpermiso("crear_asig_Delegados")'])!!}
                 @endif
                 </td>
             <td>
-                @if(in_array('editar_asigDelegados',$permisos) )
-                {!!Form::checkbox('editar_asigDelegados','editar_asigDelegados',null,['class'=>'checkbox-inline','disabled'=>'disabled','onclick'=>'asigpermiso("editar_asigDelegados")','checked'])!!}
+                @if(in_array('editar_asig_Delegados',$permisos) )
+                {!!Form::checkbox('editar_asig_Delegados','editar_asig_Delegados',null,['class'=>'checkbox-inline','onclick'=>'asigpermiso("editar_asig_Delegados")','checked'])!!}
                 @else
-                {!!Form::checkbox('editar_asigDelegados','editar_asigDelegados',null,['class'=>'checkbox-inline','disabled'=>'disabled','onclick'=>'asigpermiso("editar_asigDelegados")'])!!}
+                {!!Form::checkbox('editar_asig_Delegados','editar_asig_Delegados',null,['class'=>'checkbox-inline','onclick'=>'asigpermiso("editar_asig_Delegados")'])!!}
                 @endif
                 </td>
             <td>
-                @if(in_array('ver_asigDelegados',$permisos) )
-                {!!Form::checkbox('ver_asigDelegados','ver_asigDelegados',null,['class'=>'checkbox-inline','disabled'=>'disabled','onclick'=>'asigpermiso("ver_asigDelegados")','checked'])!!}
+                @if(in_array('ver_asig_Delegados',$permisos) )
+                {!!Form::checkbox('ver_asig_Delegados','ver_asig_Delegados',null,['class'=>'checkbox-inline','onclick'=>'asigpermiso("ver_asig_Delegados")','checked'])!!}
                 @else
-                {!!Form::checkbox('ver_asigDelegados','ver_asigDelegados',null,['class'=>'checkbox-inline','disabled'=>'disabled','onclick'=>'asigpermiso("ver_asigDelegados")'])!!}
+                {!!Form::checkbox('ver_asig_Delegados','ver_asig_Delegados',null,['class'=>'checkbox-inline','onclick'=>'asigpermiso("ver_asig_Delegados")'])!!}
                 @endif
                 </td>
             <td>
-                @if(in_array('eliminar_asigDelegados',$permisos) )
-                {!!Form::checkbox('eliminar_asigDelegados','eliminar_asigDelegados',null,['class'=>'checkbox-inline','disabled'=>'disabled','onclick'=>'asigpermiso("eliminar_asigDelegados")','checked'])!!}
+                @if(in_array('eliminar_asig_Delegados',$permisos) )
+                {!!Form::checkbox('eliminar_asig_Delegados','eliminar_asig_Delegados',null,['class'=>'checkbox-inline','onclick'=>'asigpermiso("eliminar_asig_Delegados")','checked'])!!}
                 @else
-                {!!Form::checkbox('eliminar_asigDelegados','eliminar_asigDelegados',null,['class'=>'checkbox-inline','disabled'=>'disabled','onclick'=>'asigpermiso("eliminar_asigDelegados")'])!!}
+                {!!Form::checkbox('eliminar_asig_Delegados','eliminar_asig_Delegados',null,['class'=>'checkbox-inline','onclick'=>'asigpermiso("eliminar_asig_Delegados")'])!!}
                 @endif
                 </td>
         </tr>
@@ -172,30 +172,30 @@
             <td>Sub modulo de Asignacion Directivos</td>
             <td>
                 @if(in_array('crear_asigDirectivos',$permisos) )
-                {!!Form::checkbox('crear_asigDirectivos','crear_asigDirectivos',null,['class'=>'checkbox-inline','disabled'=>'disabled','onclick'=>'asigpermiso("crear_asigDirectivos")','checked'])!!}
+                {!!Form::checkbox('crear_asigDirectivos','crear_asigDirectivos',null,['class'=>'checkbox-inline','onclick'=>'asigpermiso("crear_asigDirectivos")','checked'])!!}
                 @else
-                {!!Form::checkbox('crear_asigDirectivos','crear_asigDirectivos',null,['class'=>'checkbox-inline','disabled'=>'disabled','onclick'=>'asigpermiso("crear_asigDirectivos")'])!!}
+                {!!Form::checkbox('crear_asigDirectivos','crear_asigDirectivos',null,['class'=>'checkbox-inline','onclick'=>'asigpermiso("crear_asigDirectivos")'])!!}
                 @endif
                 </td>
             <td>
                 @if(in_array('editar_asigDirectivos',$permisos) )
-                {!!Form::checkbox('editar_asigDirectivos','editar_asigDirectivos',null,['class'=>'checkbox-inline','disabled'=>'disabled','onclick'=>'asigpermiso("editar_asigDirectivos")','checked'])!!}
+                {!!Form::checkbox('editar_asigDirectivos','editar_asigDirectivos',null,['class'=>'checkbox-inline','onclick'=>'asigpermiso("editar_asigDirectivos")','checked'])!!}
                 @else
-                {!!Form::checkbox('editar_asigDirectivos','editar_asigDirectivos',null,['class'=>'checkbox-inline','disabled'=>'disabled','onclick'=>'asigpermiso("editar_asigDirectivos")'])!!}
+                {!!Form::checkbox('editar_asigDirectivos','editar_asigDirectivos',null,['class'=>'checkbox-inline','onclick'=>'asigpermiso("editar_asigDirectivos")'])!!}
                 @endif
                 </td>
             <td>
                 @if(in_array('ver_asigDirectivos',$permisos) )
-                {!!Form::checkbox('ver_asigDirectivos','ver_asigDirectivos',null,['class'=>'checkbox-inline','disabled'=>'disabled','onclick'=>'asigpermiso("ver_asigDirectivos")','checked'])!!}
+                {!!Form::checkbox('ver_asigDirectivos','ver_asigDirectivos',null,['class'=>'checkbox-inline','onclick'=>'asigpermiso("ver_asigDirectivos")','checked'])!!}
                 @else
-                {!!Form::checkbox('ver_asigDirectivos','ver_asigDirectivos',null,['class'=>'checkbox-inline','disabled'=>'disabled','onclick'=>'asigpermiso("ver_asigDirectivos")'])!!}
+                {!!Form::checkbox('ver_asigDirectivos','ver_asigDirectivos',null,['class'=>'checkbox-inline','onclick'=>'asigpermiso("ver_asigDirectivos")'])!!}
                 @endif
                 </td>
             <td>
                 @if(in_array('eliminar_asigDirectivos',$permisos) )
-                {!!Form::checkbox('eliminar_asigDirectivos','eliminar_asigDirectivos',null,['class'=>'checkbox-inline','disabled'=>'disabled','onclick'=>'asigpermiso("eliminar_asigDirectivos")','checked'])!!}
+                {!!Form::checkbox('eliminar_asigDirectivos','eliminar_asigDirectivos',null,['class'=>'checkbox-inline','onclick'=>'asigpermiso("eliminar_asigDirectivos")','checked'])!!}
                 @else
-                {!!Form::checkbox('eliminar_asigDirectivos','eliminar_asigDirectivos',null,['class'=>'checkbox-inline','disabled'=>'disabled','onclick'=>'asigpermiso("eliminar_asigDirectivos")'])!!}
+                {!!Form::checkbox('eliminar_asigDirectivos','eliminar_asigDirectivos',null,['class'=>'checkbox-inline','onclick'=>'asigpermiso("eliminar_asigDirectivos")'])!!}
                 @endif
                 </td>
         </tr>

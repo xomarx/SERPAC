@@ -125,6 +125,7 @@ var activarForm = function(id){
         else if(id == 14) {var route = '/Tesoreria/Mov-Caja-Chica/Crear-Caja';}
         else if(id == 15) {var route = '/socios/ListaSocios/'+$("#buscar").val();}
         else if(id == 16) {var route = '/socios/parientes/ListaParientes/'+$("#buscar").val();}
+        else if(id == 17) {var route = '/socios/Asignacion-Delegados/ListaAsigDelegados/'+$("#buscar").val();}
         $.ajax({
             type:'get',
             url:route,
@@ -197,13 +198,14 @@ $(document).ready().on('keyup','#dni',function(event){
                 $("#paterno").val(data.paterno);
                 $("#nombre").val(data.nombre);
                 $("#materno").val(data.materno);
+//                $("#datos").val(data.paterno+ ' ' + data.materno + ' ' + data.nombre);
             }
         });
         
 //        var next = document.getElementById("dni").tabIndex;
 //        next++;
-//        console.log(next)
-//        document.forms[0].elements[next].focus(); 
+//        console.log(next)        
+//        document.forms[0].elements[2].focus(); 
         
     }            
 });
@@ -3341,14 +3343,84 @@ var ConforRecep = function(event,id,monto){
                             else if(index == 'razon')$("#error-razon").html(value); 
                             else if(index == 'direccion')$("#error-direccion").html(value); 
                             else if(index == 'telefono')$("#error-telefono").html(value); 
-                            else if(index == 'concepto')$("#error-concepto").html(value); 
-                            
-                            
+                            else if(index == 'concepto')$("#error-concepto").html(value);                                                         
                       });
                }
            }
        });
    });
+
+//**********************************************************************  ASIGNAR DELEGADOS  **********************************************
+var  EditAsigDelegado = function(id){
+    $.getJSON("Asignacion-Delegados/"+id+"/edit",function(data){                    
+         $("#dni").val(data.dni);
+         $("#datos").val(data.datos);
+         $("#delegado").val(data.cargos_delegados_id);
+         $("#estado").val(data.estado);
+         $("#inicio").val(data.fecha_inicio);
+         $("#final").val(data.fecha_final);
+         $("#id").val(id);
+         $("#RegAsigDelegado").text('Actualizar');         
+     });
+};
+
+var ElimAsigDelegado = function(id,nombre){
+    $.alertable.confirm("<span style='color:#000'>¿Está seguro de eliminar el registro del DNI: ?</span><br><strong><span style='color:#ff0000'>"
+           +nombre+"</span></strong></br>").then(function() {  
+      var route = "Asignacion-Delegados/"+id+"";
+      var token = $("input[name=_token]").val();
+      $.ajax({
+        url: route,
+        headers: {'X-CSRF-TOKEN': token},
+        type: 'DELETE',
+        dataType: 'json',
+        success: function(data){
+            if(data) activarForm(17);
+      },
+      error:function(data){
+          if(data.status==403) activarmodal(0);
+      }
+      });          
+    });
+}
+
+$("#RegAsigDelegado").click(function(event){
+    console.log(event.target.text);
+    var type='POST';
+    if(event.target.text=='Actualizar'){
+        type='PUT';
+    }
+    
+    $.ajax({
+       url:'Asignacion-Delegados/'+$("#id").val(),
+       headers: {'X-CSRF-TOKEN': $("input[name=_token]").val()},
+       dataType: 'json',
+       type:type,
+       data:$("#formAsigDele").serialize(),
+       success:function(data){
+            mensajeRegistro(data,'formAsigDele');
+            activarForm(17);
+       },
+       error:function(data){
+           if(data.status==403) $("#error-modal").html(data.responseText);
+           else{
+                   $("#error-dni").html(''); $("#error-estado").html(''); $("#error-inicio").html(''); 
+                   $("#error-final").html('');$("#error-cargo").html('');
+                   var errors =  $.parseJSON(data.responseText);      
+                    $.each(errors,function(index, value) {                      
+                            if(index == 'dni')$("#error-dni").html(value);                            
+                            else if(index == 'estado')$("#error-estado").html(value); 
+                            else if(index == 'inicio')$("#error-inicio").html(value); 
+                            else if(index == 'final')$("#error-final").html(value); 
+                            else if(index == 'delegado')$("#error-cargo").html(value);                                                                                 
+                      });
+               
+           }
+           
+       }
+    });
+});
+
 
 // ************************************************************************ REPORTES **********************************************
 

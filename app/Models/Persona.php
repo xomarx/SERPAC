@@ -79,6 +79,16 @@ class Persona extends Model
               ->take(7)->get();
     }
     
+    public static function scopeautoDatosPersonas($query,$dato){
+        return $query
+                ->where (DB::raw("concat(paterno,' ',materno,' ',nombre)"),'like','%'.$dato.'%')
+              ->select('paterno','materno','nombre','fec_nac'
+                     ,'dni')
+              ->take(7)->get();
+    }
+
+
+    
     public static function getdatonuevosocio($dni)
     {
         return DB::table('personas')

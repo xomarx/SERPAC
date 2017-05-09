@@ -18,8 +18,12 @@
             @permission('ver fundos')
             <li id="subfundos"><a href="{{ url('/socios/fundos') }}"><i class='fa fa-home'></i> <span>Fundos</span></a></li>
             @endpermission
-            <li id="subasigdelegados"><a href="{{ url('socios/asignacion-delegados') }}"><i class='fa fa-cubes'></i> <span>Asig. Delegados</span></a></li>
-            <li id="subasigdirectivos"><a href="{{ url('socios/asignacion-directivos') }}"><i class='fa fa-sitemap'></i> <span>Asig. Directivos</span></a></li>
+            @permission('ver asig delegados')
+            <li id="subasigdelegados"><a href="{{ url('socios/Asignacion-Delegados') }}"><i class='fa fa-cubes'></i> <span>Asignacion de Delegados</span></a></li>
+            @endpermission
+            @permission('ver asigDirectivos')
+            <li id="subasigdirectivos"><a href="{{ url('socios/asignacion-directivos') }}"><i class='fa fa-sitemap'></i> <span>Asignacion de Directivos</span></a></li>
+            @endpermission
             @permission(['ver delegados','ver directivos','ver floras','ver faunas','ver inmuebles'])
             <li class="treeview" id="subbasicos">
                 <a href="#"><i class='fa fa-link'></i> <span>Reg. Basico</span> <i class="fa fa-angle-left pull-right"></i></a>

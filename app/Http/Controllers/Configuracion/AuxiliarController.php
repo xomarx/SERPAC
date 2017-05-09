@@ -81,9 +81,21 @@ class AuxiliarController extends Controller
             return response()->json($result);
         }
     }
+    
+    public function autoDatosPersonas(Request $request){
+        if($request->ajax())
+        {
+            $nombre = Input::get('term');            
+            $personas = \App\Models\Persona::autoDatosPersonas($nombre);            
+            foreach ($personas as $persona) 
+            {
+                $result[] = ['id' => $persona->dni, 'value' => $persona->paterno. ' '.$persona->materno.' '.$persona->nombre,'fecha'=>$persona->fec_nac];
+            }
+            return response()->json($result);
+        }
+    }
 
     
-
 
 
 
