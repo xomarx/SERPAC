@@ -7,10 +7,8 @@ use Illuminate\Support\Facades\DB;
 
 class Transferencia extends Model
 {
-    //
-    protected $table = 'transferencias';
-    protected $increments = 'id';    
-    public  $timestamps=false;
+    //      
+    public  $timestamps=true;
     protected  $fillable  = [
         'socios_codigo','motivo','fecha','dniantiguo','dninuevo','users_id','beneficiario_antiguo'
         ];

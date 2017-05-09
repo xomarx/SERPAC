@@ -114,7 +114,7 @@ var activarForm = function(id){
         else if(id == 3) {var route = 'Caja-Chica/'+$("#anioc").val()+'/'+$("#mesc").val()+'/'+$("#buscarc").val();}
         else if(id == 4) {var route = 'ListMovcheques/'+$("#anio").val()+'/'+$("#mes").val()+'/'+$("#buscar").val();}
         else if(id == 5) {var route = 'ListUsuarios';}
-        else if(id == 6) {var route = 'transferencias/newtransferencias';}
+//        else if(id == 6) {var route = 'transferencias/newtransferencias';}
         else if(id == 7) {var route = 'ListaPlanillaSemanal';}
         else if(id == 8) {var route = 'listaRecepcionFondos/'+$("#anio").val()+'/'+$("#mes").val()+'/'+$("#buscar").val();}
         else if(id == 9) {var route = 'ListaDistribucion/'+$("#anio").val()+'/'+$("#mes").val()+'/'+$("#buscar").val();}
@@ -753,7 +753,19 @@ var EliminarFundo = function(id,name){
       
 $("#nuevatrans").click(function(){
     if($("#nuevatrans").text() == "LISTA TRANSFERENCIA") document.location.reload();
-    else {activarForm(6); $("#nuevatrans").text("LISTA TRANSFERENCIA"); }
+    else {
+        var route = 'transferencias/newtransferencias';
+        $.ajax({
+            type:'get',
+            url:route,
+            success:function(data){                
+                $("#contenidos-box").html(data);   
+                $("#nuevatrans").text("LISTA TRANSFERENCIA"); 
+                autocompletes();
+            }            
+        })
+        
+    }
 });
       
 var RegTransferencia = function (){
@@ -770,7 +782,7 @@ var RegTransferencia = function (){
             success:function(data)
             {
                 mensajeRegistro(data,'formtransferencia');
-                if(data.success) activarForm(6);                
+                if(data.success) document.location.reload();//activarForm(6);                
             },
             error:function(data)
             {                

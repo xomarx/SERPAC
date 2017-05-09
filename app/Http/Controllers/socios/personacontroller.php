@@ -11,19 +11,7 @@ use Illuminate\Support\Facades\Input;
 class personacontroller extends Controller
 {
     
-    public function autoCompleteDniPersona(Request $request)
-    {
-        if($request->ajax()){
-            $nombre = Input::get('term');
-            $personas = \App\Models\Persona::dnipersonaAutocomplete($nombre);
-            foreach ($personas as $persona) 
-            {
-                $result[] = ['id' => $persona->paterno, 'value' => $persona->dni,'local'=>$persona->comite_local,'materno'=>$persona->materno,
-                        'nombre'=>$persona->nombre,'fecha'=>$persona->fec_nac];
-            }
-            return response()->json($result);
-        }
-    }
+    
     
     /**
      * Display a listing of the resource.

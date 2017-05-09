@@ -6,22 +6,45 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Input;
 
 class AuxiliarController extends Controller
 {
     
-    public function PersonDNI($dni){
-        
+    public function PersonDNI($dni){        
             $personas = \App\Models\Persona::DNIPersonas($dni);            
             return response()->json($personas);        
     }
 
-
-    
-    public function autocompleteDniSocio(Request $request) {
+    public function autoDatoSocios (Request $request) {
         if($request->ajax()){
             $nombre = Input::get('term');
-            $socios = Socio::DNISocioautocomplete($nombre);
+            $socios = \App\Models\Socios\Socio::Socioautocomplete($nombre);
+            foreach ($socios as $socio) 
+            {
+                $result[] = ['id' => $socio->codigo, 'value' => $socio->fullname,'local'=>$socio->comite_local,'dni'=>$socio->dni];
+            }
+            return response()->json($result);
+        }
+    }
+    
+    public function autoCodigoSocios(Request $request){
+        if($request->ajax()){
+            $nombre = Input::get('term');
+            $socios = \App\Models\Socios\Socio::CodigoSocioautocomplete($nombre);
+            foreach ($socios as $socio) 
+            {
+                $result[] = ['id' => $socio->dni, 'value' => $socio->codigo,'local'=>$socio->comite_local,'socio'=>$socio->fullname];
+            }
+            return response()->json($result);
+        }
+    }
+
+    
+    public function autoDNISocios(Request $request) {
+        if($request->ajax()){
+            $nombre = Input::get('term');
+            $socios = \App\Models\Socios\Socio::DNISocioautocomplete($nombre);
             foreach ($socios as $socio) 
             {
                 $result[] = ['id' => $socio->codigo, 'value' => $socio->dni,'local'=>$socio->comite_local,'socio'=>$socio->fullname];
@@ -30,25 +53,30 @@ class AuxiliarController extends Controller
         }
     }
     
-    public function autocompleteCodigoSocio(Request $request){
+    public function autoDNIParientesSocios(Request $request)
+    {
         if($request->ajax()){
             $nombre = Input::get('term');
-            $socios = Socio::CodigoSocioautocomplete($nombre);
-            foreach ($socios as $socio) 
+            $personas = \App\Models\Persona::dniParientesSocios($nombre);
+            foreach ($personas as $persona) 
             {
-                $result[] = ['id' => $socio->dni, 'value' => $socio->codigo,'local'=>$socio->comite_local,'socio'=>$socio->fullname];
+                $result[] = ['id' => $persona->paterno, 'value' => $persona->dni,'local'=>$persona->comite_local,'materno'=>$persona->materno,
+                        'nombre'=>$persona->nombre,'fecha'=>$persona->fec_nac];
             }
             return response()->json($result);
         }
     }
     
-    public function autocomplete (Request $request) {
-        if($request->ajax()){
+    public function autoDNIPersonas(Request $request)
+    {
+        if($request->ajax())
+        {
             $nombre = Input::get('term');
-            $socios = Socio::Socioautocomplete($nombre);
-            foreach ($socios as $socio) 
+            $parientes = \App\Models\Persona::AutodniPersonas($nombre);
+            foreach ($parientes as $pariente) 
             {
-                $result[] = ['id' => $socio->codigo, 'value' => $socio->fullname,'local'=>$socio->comite_local,'dni'=>$socio->dni];
+                $result[] = ['id' => $pariente->paterno, 'value' => $pariente->dni,'local'=>$pariente->comite_local,'materno'=>$pariente->materno,
+                        'nombre'=>$pariente->nombre,'fecha'=>$pariente->fec_nac];
             }
             return response()->json($result);
         }

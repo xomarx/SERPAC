@@ -58,9 +58,9 @@ class Persona extends Model
     }
 
 
-    public static function dnipersonaAutocomplete($dni)
+    public static function scopedniParientesSocios($query,$dni)
     {
-      return $socio = DB::table('personas')
+      return $socio = $query
               ->join('parientes','personas.dni','=','parientes.personas_dni')
               ->join('comites_locales','personas.comites_locales_id','=','comites_locales.id')
               ->where ('personas.dni','like','%'.$dni.'%')
@@ -69,9 +69,9 @@ class Persona extends Model
               ->take(7)->get();
     }
     
-    public static function dnibeneficiarioAutocomplete($dni)
+    public static function scopeAutodniPersonas($query,$dni)
     {
-      return DB::table('personas')              
+      return $query             
               ->join('comites_locales','personas.comites_locales_id','=','comites_locales.id')
               ->where ('personas.dni','like','%'.$dni.'%')
               ->select('personas.paterno','personas.materno','personas.nombre','personas.fec_nac'
@@ -89,7 +89,7 @@ class Persona extends Model
                         ,'personas.fec_nac','comites_locales.comite_local')
                 ->first();
     }
-    
+            
     public static function getdatopersona($dni)
     {
         return DB::table('personas')                

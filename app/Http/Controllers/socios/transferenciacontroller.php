@@ -50,10 +50,11 @@ class transferenciacontroller extends Controller
         $fundos = \App\Models\Socios\Fundo::getDatoFundo($transferencia->socios_codigo);
         $socioa = \App\Models\Persona::getdatopersona($transferencia->dniantiguo);
         $socio = \App\Models\Persona::getdatopersona($transferencia->dninuevo);
-        $beneficiarioa = \App\Models\Socios\Pariente::getDatosbeneficiario($transferencia->beneficiario_antiguo);
+        $beneficiarioa = \App\Models\Persona::getdatopersona($transferencia->beneficiario_antiguo);
         $beneficiario = \App\Models\Socios\Pariente::getbeneficiario($transferencia->socios_codigo);
+//        dd($transferencia->motivo);
         $dato = view('Reportes.socios.fichatransferencia',['fundos'=>$fundos,'socio'=>$socio,
-            'socioa'=>$socioa,'beneficiarioa'=>$beneficiarioa,'beneficiario'=>$beneficiario])->render();      
+            'socioa'=>$socioa,'beneficiarioa'=>$beneficiarioa,'beneficiario'=>$beneficiario,'transferencia'=>$transferencia])->render();      
         $pdf = \Illuminate\Support\Facades\App::make('dompdf.wrapper');
         $pdf->loadHTML($dato);                        
         return $pdf->stream();        
@@ -99,7 +100,9 @@ class transferenciacontroller extends Controller
         {
             if(!auth()->user()->can('crear transferencias'))
                 return response ()->view ('errors.403-content',[],403);
-            $beneficiario = \App\Models\Socios\Pariente::getbeneficiario($request->codigo);                    
+            $beneficiario = \App\Models\Socios\Pariente::getbeneficiario($request->codigo);
+            if(count($beneficiario) == 0)
+                return response()->json(['success'=>false,'message'=>'No Tiene Ningun Beneficiario Principal']);
             $transferencia = \App\Models\Socios\Transferencia::create([
                 'socios_codigo'=>$request->codigo,
                 'motivo'=>$request->motivo,

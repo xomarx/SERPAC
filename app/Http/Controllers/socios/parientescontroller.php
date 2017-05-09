@@ -21,20 +21,7 @@ class parientescontroller extends Controller
      * @return \Illuminate\Http\Response
      */
     
-    public function autocompleteDNIpariente(Request $request)
-    {
-        if($request->ajax())
-        {
-            $nombre = Input::get('term');
-            $parientes = \App\Models\Persona::dnibeneficiarioAutocomplete($nombre);
-            foreach ($parientes as $pariente) 
-            {
-                $result[] = ['id' => $pariente->paterno, 'value' => $pariente->dni,'local'=>$pariente->comite_local,'materno'=>$pariente->materno,
-                        'nombre'=>$pariente->nombre,'fecha'=>$pariente->fec_nac];
-            }
-            return response()->json($result);
-        }
-    }
+    
            
     public function index(){
         if(!auth()->user()->can('ver parientes'))

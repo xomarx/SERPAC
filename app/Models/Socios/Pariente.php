@@ -100,16 +100,5 @@ class Pariente extends Model
                 ->first();
     }
     
-    public static function getDatosbeneficiario($dni)
-    {
-        return DB::table('parientes')
-                ->join('personas','parientes.personas_dni','=','personas.dni')
-                ->join('comites_locales','personas.comites_locales_id','=','comites_locales.id')
-                ->join('comites_centrales','comites_locales.comites_centrales_id','=','comites_centrales.id')
-                ->where('parientes.personas_dni','=',$dni)                
-                ->select('personas.dni','personas.paterno','personas.materno','personas.nombre'
-                        ,'personas.fec_nac','parientes.tipo_pariente'                        
-                        ,'comites_centrales.comite_central','comites_locales.comite_local')
-                ->first();
-    }
+    
 }

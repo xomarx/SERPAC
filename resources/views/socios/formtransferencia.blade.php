@@ -3,8 +3,8 @@
     <button id="cerrartransferencia" type="button" class="close fa fa-close btn-sm" data-toggle="tooltip" data-placement="top" title="Salir del Registro">&times;</button>
     <center> <h3 class="box-title">REGISTRO DE TRANSFERENCIA - SOCIO</h3></center>
 </div> 
-<div class="box-body">
-    {!! Form::open(['id'=>'formtransferencia'])!!}  
+<div class="box-body">    
+    {!! Form::open(['id'=>'formtransferencia'])!!}
     @include('mensajes.mensaje')
     <div class="col-lg-5">
         <div class="box box-solid box-primary content">
@@ -15,18 +15,18 @@
                 <div class="col-lg-12 ">                       
                     <div class=" col-sm-6 form-group">       
                         {!! Form::label('codigo','Codigo',['class'=>'control-label']) !!}
-                        {!! Form::text('codigo',null,['id'=>'codigo','class'=>'form-control col-sm-2','placeholder'=>'ACO-00000','onkeyup'=>'autocomplet()'])!!}
+                        {!! Form::text('codigo',null,['id'=>'codigo','class'=>'form-control col-sm-2','placeholder'=>'ACO-00000'])!!}
                         <div class="text-danger" id="error-codigo"></div>
                     </div>                     
                     <div class=" col-sm-6 form-group">
                         {!!Form::label('dni','D.N.I.',['class'=>'control-label'])!!}
-                        {!! Form::text('dni_socio',null,['id'=>'dni_socio','class'=>'form-control','placeholder'=>'N° DNI','onkeyup'=>'autocomplet()'])!!}
+                        {!! Form::text('dni_socio',null,['id'=>'dni_socio','class'=>'form-control','placeholder'=>'N° DNI'])!!}
                         <div class="text-danger" id="error-dni_socio"></div>
                     </div>                                       
                 </div>
                 <div class=" col-sm-12 form-group">
                     {!!Form::label('socio','SOCIO',['class'=>'control-label'])!!}
-                    {!! Form::text('socio',null,['id'=>'socio','class'=>'form-control','placeholder'=>'Apellidos y Nombres','onkeyup'=>'autocomplet()'])!!}
+                    {!! Form::text('socio',null,['id'=>'socio','class'=>'form-control','placeholder'=>'Apellidos y Nombres'])!!}
                     <div class="text-danger" id="error-socio"></div>
                 </div>                
                 <div class="col-lg-12" id="motivo" style="display: none">
@@ -100,7 +100,7 @@
             <div class="box-body">
                 <div class=" col-sm-12 form-group" id="divnuevosocio">
                     {!!Form::label('dni','D.N.I.',['class'=>'control-label'])!!}
-                    {!! Form::text('dni_nuevo_socio',null,['id'=>'dni_nuevo_socio','class'=>'form-control','placeholder'=>'N° DNI Nuevo Socio','disabled'=>'true'])!!}
+                    {!! Form::text('dni_nuevo_socio',null,['id'=>'dni_nuevo_socio','class'=>'form-control','placeholder'=>'N° DNI Nuevo Socio','disabled'=>'true','maxlength'=>'8'])!!}
                     <div class="text-danger" id="error-dni_nuevo_socio"></div>
                 </div>
                 <table class="table table-responsive table-hover table-striped" id="tablanuevosocio" style="display: none" >
@@ -143,8 +143,7 @@
                 <div class=" col-sm-12 form-group">
                     {!!Form::label('dni','D.N.I.',['class'=>'control-label'])!!}
                     {!! Form::text('dni_beneficiario',null,['id'=>'dni_beneficiario','class'=>'form-control','placeholder'=>'N° DNI Nuevo Beneficiario','disabled'=>'true'])!!}
-                    <div class="text-danger" id="error-dni_beneficiario"></div>
-                    <a href='#' data-toggle='modal' data-target='#pariente' id='idlinkbeneficiario' style="display: none"><span data-toggle='tooltip' data-placement='top' title='Registrar Pariente'>Registrar Pariente</span></a>
+                    <div class="text-danger" id="error-dni_beneficiario"></div>                    
                 </div>    
                 <table class="table table-responsive table-hover table-striped" id="tablabeneficiario" style="display: none">
                     <thead>

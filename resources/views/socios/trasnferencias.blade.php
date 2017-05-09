@@ -96,41 +96,13 @@ var  cargartransfer = function(id){
         $("#listatransferencia").hide();
         $("#registrotransferencia").show();
 };
-    
-$(function(){              
-        $("#socio").autocomplete({     
-           minLength:2,           
-           autoFocus:true,
-           delay:1,
-           source: "{{url('socios/search')}}",
-           select: function(event, ui){
-               $("#socio").val(ui.item.value);  
-               $("#codigo").val(ui.item.id);
-               $("#dni_socio").val(ui.item.dni);                             
-               rellenardatossocio(ui.item.id);
-           }
-        });
-   });      
-       var autocomplet = function(){
-           
-           $("#codigo").autocomplete({     
-           minLength:1,           
-           autoFocus:true,
-           delay:1,
-           source: "{{url('socios/codigo')}}",
-           select: function(event, ui){
-               $("#socio").val(ui.item.socio);  
-               $("#codigo").val(ui.item.value);
-               $("#dni_socio").val(ui.item.id);               
-               rellenardatossocio(ui.item.value);
-           }
-        });
-        
+   
+    var autocompletes = function(){
         $("#dni_socio").autocomplete({     
            minLength:1,           
            autoFocus:true,
            delay:1,
-           source: "{{url('socios/dni')}}",
+           source: "{{url('Auxiliar/dniSocios')}}",
            select: function(event, ui){
                $("#socio").val(ui.item.socio);  
                $("#codigo").val(ui.item.id);
@@ -139,15 +111,28 @@ $(function(){
            }
         });
         
-        $("#socio").autocomplete({
-            minLength:1,           
+        $("#codigo").autocomplete({     
+           minLength:1,           
            autoFocus:true,
            delay:1,
-           source: "{{url('socios/searchsocio')}}",
+           source: "{{url('Auxiliar/codigoSocios')}}",
+           select: function(event, ui){
+               $("#socio").val(ui.item.socio);  
+               $("#codigo").val(ui.item.value);
+               $("#dni_socio").val(ui.item.id);               
+               rellenardatossocio(ui.item.value);
+           }
+        });
+        
+        $("#socio").autocomplete({     
+           minLength:2,           
+           autoFocus:true,
+           delay:1,
+           source: "{{url('Auxiliar/datoSocios')}}",
            select: function(event, ui){
                $("#socio").val(ui.item.value);  
                $("#codigo").val(ui.item.id);
-               $("#dni_socio").val(ui.item.dni);
+               $("#dni_socio").val(ui.item.dni);                             
                rellenardatossocio(ui.item.id);
            }
         });
@@ -156,7 +141,7 @@ $(function(){
            minLength:1,           
            autoFocus:true,
            delay:1,
-           source: "{{url('socios/dnipersona')}}",           
+           source: "{{url('Auxiliar/dniParientesSocios')}}",           
            select: function(event, ui){               
                $("#dni_nuevo_socio").val(ui.item.value);
                validarnuevosocio(ui.item.value);
@@ -167,20 +152,21 @@ $(function(){
            minLength:1,           
            autoFocus:true,
            delay:1,
-           source: "{{url('socios/dnibeneficiario')}}",
+           source: "{{url('Auxiliar/dnipersonas')}}",
            select: function(event, ui){               
                $("#dni_beneficiario").val(ui.item.value);
                validarbeneficiario(ui.item.value);
            }
         });
-       };
+    }
+    
                     
-   var validarnuevosocio = function(dninuevo) {              
+   var validarnuevosocio = function(dninuevo) {
+       
        $.get("/socios/transferencias/nuevo/{term}",        
         {dni:dninuevo},
         function(data){
-            $("#error_nuevo_socio").empty();
-            $("#idlinkpariente").empty();
+            $("#error-dni_nuevo_socio").empty();
              if($("#codigo").val() == data.codigo.socios_codigo)
              {
                 $("#dni_beneficiario").prop('disabled',false);
@@ -190,14 +176,12 @@ $(function(){
                 $("#dninuevo").append(data.persona.dni);
                 $("#fechanuevo").append(data.persona.fec_nac);
                 $("#sectornuevo").append(data.persona.comite_local);
-             }
+            }
              else
-             {
+            {
                  $("#tablanuevosocio").hide();
-                $("#error_nuevo_socio").append("El nuevo Socio no es Pariente del Socio "+$("#codigo").val()+". Tienes que Registrarlo como pariente");
-                $("#divnuevosocio").append("<a href='#' data-toggle='modal' data-target='#pariente' id='idlinkpariente'><span data-toggle='tooltip' data-placement='top' title='Registrar Pariente'>Registrar Pariente</span></a>");
-                $("#dni_1").val($("#dni_nuevo_socio").val());
-             }             
+                $("#error-dni_nuevo_socio").html("El nuevo Socio no es Pariente del Socio "+$("#codigo").val()+". Tienes que Registrarlo como pariente");
+            }             
         });
    };
       
@@ -206,10 +190,7 @@ $(function(){
        $.get("/socios/transferencias/persona/{term}",        
         {dni:dnibeneficiario,codigo:codigo},
         function(data){
-            $("#error_dni_beneficiario").empty();
-            $("#idlinkbeneficiario").hide();
-            console.log(data);
-            console.log(data.codigo);
+            $("#error-dni_beneficiario").empty();                       
             if(data.codigo == null)
             {   if(data.persona.dni == $("#dni_socio").val())
                 {
@@ -221,11 +202,9 @@ $(function(){
                 }
                 else
                 {
-                    $("#error_dni_beneficiario").append("No es Pariente del Socio: " + $("#codigo").val());
-                    $("#idlinkbeneficiario").show();
-                    $("#tablabeneficiario").hide();
-                    console.log($("#dni_beneficiario").val());
-                    $("#dni_1").val($("#dni_beneficiario").val());
+                    $("#error-dni_beneficiario").append("No es Pariente del Socio: " + $("#codigo").val());                    
+                    $("#tablabeneficiario").hide();                    
+                    
                 }
             }
             else
@@ -243,8 +222,7 @@ $(function(){
                 {
                     $("#error_dni_beneficiario").append("No es Pariente del Socio: " + $("#codigo").val());
                     $("#idlinkbeneficiario").show();
-                    $("#tablabeneficiario").hide();
-                    console.log($("#dni_beneficiario").val());
+                    $("#tablabeneficiario").hide();                    
                     $("#dni_1").val($("#dni_beneficiario").val());
                 }
                 

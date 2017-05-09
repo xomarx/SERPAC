@@ -28,6 +28,12 @@ Route::group(['middleware' => ['auth']], function () {
 //'middleware' => ['permission:crearPost', 'permission:editarPost']
     
     route::resource('auxiliar/DNIpersonas','Configuracion\AuxiliarController@PersonDNI');
+    route::resource('Auxiliar/datoSocios','Configuracion\AuxiliarController@autoDatoSocios');
+    route::resource('Auxiliar/codigoSocios','Configuracion\AuxiliarController@autoCodigoSocios');
+    route::resource('Auxiliar/dniSocios','Configuracion\AuxiliarController@autoDNISocios');
+    route::resource('Auxiliar/dniParientesSocios','Configuracion\AuxiliarController@autoDNIParientesSocios');
+    route::resource('Auxiliar/dnipersonas','Configuracion\AuxiliarController@autoDNIPersonas');
+    
     
     Route::get('sign-out', 'Auth\AuthController@getsignOut');
     
@@ -89,12 +95,11 @@ Route::group(['middleware' => ['auth']], function () {
     
     
     //autocompletados
-    route::resource('socios/dni','socios\sociocontroller@autocompleteDniSocio');//autocompleteDniSocio
-    route::resource('socios/codigo','socios\sociocontroller@autocompleteCodigoSocio');//autocompleteCodigoSocio
-    route::resource('socios/searchsocio','socios\sociocontroller@autocomplete');//autocomplete
     
-    route::resource('socios/dnipersona','socios\personacontroller@autoCompleteDniPersona');//autoCompleteDniPersona
-    route::resource('socios/dnibeneficiario','socios\parientescontroller@autocompleteDNIpariente');//autocompleteDNIpariente
+    
+    
+    
+    
     
     route::resource('socios/eliminarpropiedades','socios\fundoscontroller@EliminarPropiedadesFundo');//EliminarPropiedadesFundo
     route::resource('socios/modalfundo','socios\fundoscontroller@ModalFundo');
