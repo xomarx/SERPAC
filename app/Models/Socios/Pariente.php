@@ -8,9 +8,9 @@ use Illuminate\Support\Facades\DB;
 class Pariente extends Model
 {
     //
-    protected $table = 'parientes';
-    protected $primarykey = 'id'; 
-    public  $timestamps=false;
+//    protected $table = 'parientes';
+//    protected $primarykey = 'id'; 
+    public  $timestamps=true;
     protected  $fillable = [
         'grado_inst','socios_codigo','personas_dni','users_id','beneficiario',
         'estado_civil','tipo_pariente'];    
@@ -28,17 +28,28 @@ class Pariente extends Model
         return $this ->belongsTo(Socio::class);
     }
     
-    public static function listaParientes()
+    public static function scopelistaParientes($query,$dato='')
     {
-        return  DB::table('parientes')
+        return  $query
                 ->join('personas','parientes.personas_dni','=','personas.dni')
                 ->join('comites_locales','personas.comites_locales_id','=','comites_locales.id')
                 ->join('comites_centrales','comites_locales.comites_centrales_id','=','comites_centrales.id')
                 ->join('users','parientes.users_id','=','users.id')
+                ->where(function($query)use($dato){
+                    $query->where('socios_codigo','like','%'.$dato.'%')
+                          ->orwhere('dni','like','%'.$dato.'%')
+                            ->orwhere('estado_civil','like','%'.$dato.'%')
+                            ->orwhere('direccion','like','%'.$dato.'%')
+                            ->orwhere('comite_central','like','%'.$dato.'%')
+                            ->orwhere('comite_local','like','%'.$dato.'%')
+                            ->orwhere('name','like','%'.$dato.'%')
+                            ->orwhere('tipo_pariente','like','%'.$dato.'%')
+                            ->orwhere(DB::raw("concat(paterno, ' ',materno,' ',nombre)"),'like','%'.$dato.'%');
+                })
                 ->select('parientes.socios_codigo','personas.dni','personas.paterno','personas.materno','personas.nombre'
                         ,'parientes.estado_civil','personas.direccion'
-                        ,'comites_centrales.comite_central','comites_locales.comite_local','users.name')
-                ->get();
+                        ,'comites_centrales.comite_central','comites_locales.comite_local','users.name','tipo_pariente')
+                ->paginate(10);
     }
     public static  function getparientesSocio($idsocio)
     {

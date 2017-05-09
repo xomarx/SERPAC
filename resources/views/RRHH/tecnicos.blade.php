@@ -40,22 +40,15 @@
         </table>
     </div>
 </div>
-<section id="conten-modal"></section>
+
 @endpermission
 @permission('crear tecnicos')
-
+<section id="conten-modal"></section>
 @endpermission
 
 @stop
 @section('script')
-<script>
-         
-  
-  
-  
-    
-    
-    
+<script>                           
     $(document).ready(function(e){    
     $("#subtecnicos").addClass('active');      
     $("#menuRRHH").addClass('active');

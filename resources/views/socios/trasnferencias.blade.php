@@ -32,7 +32,7 @@
                     <td>{{$transferencia->fecha}}</td>
                     <td>{{$transferencia->name}}</td>
                     <td>                        
-                        <a href="{{url('socios/transferencias/ficha')}}/{{$transferencia->id}}" class="btn-xs btn-success" ><span class="glyphicon glyphicon-print"data-toggle="tooltip" data-placement="top" title="Imprimir"></span></a>                        
+                        <a  href="{{url('socios/transferencias/ficha')}}/{{$transferencia->id}}" class="btn-xs btn-success" target="_blank" ><span class="glyphicon glyphicon-print"data-toggle="tooltip" data-placement="top" title="Imprimir"></span></a>                        
                     </td>                    
                 </tr>
                 @endforeach

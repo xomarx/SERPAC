@@ -7,62 +7,17 @@
 <div class="box box-solid box-primary">
     <div class="box-header">  
         @permission('crear socios')
-        <a id="nuevosocio" class="btn btn-dropbox btn-sm m-t-10" data-toggle="tooltip" data-placement="top" title="Nuevo Socio">NUEVO  <span class="glyphicon glyphicon-plus"></span></a>
+        <a id="nuevosocio" class="btn btn-dropbox" data-toggle="tooltip" data-placement="top" title="Nuevo Socio">NUEVO SOCIO  <span class="glyphicon glyphicon-plus"></span></a>
         @endpermission
         <div class="col-sm-3 form-group-sm" style="float: right">            
             {!! Form::text('buscar',null,['id'=>'buscar','class'=>'form-control','placeholder'=>'Buscar..'])!!}
-        </div>
+        </div>        
     </div>
     <div class="box-body box-content" id="contenidos-box">
-        <table class="table table-hover table-responsive" id="myTable" >
-            <thead>            
-                <tr >
-                    <th >FEC ASOCIADO</th>  
-                    <th >CODIGO</th> 
-                    <th >DNI</th>    
-                    <th >SOCIOS</th>  
-                    <th >COMITE LOCAL</th>
-                    <th >COMITE CENTRAL</th>
-                    <th >USUARIO</th>
-                    <th>ACCION</th> 
-                </tr>           
-            </thead>
-            <tbody>
-                @foreach($socios as $socio)
-                {{--*/ @$name = str_replace(' ','&nbsp;', $socio->codigo) /*--}}
-                {{--*/ @$nombre = str_replace(' ','&nbsp;', $socio->nombre) /*--}}
-                {{--*/ @$paterno = str_replace(' ','&nbsp;', $socio->paterno) /*--}}
-                {{--*/ @$materno = str_replace(' ','&nbsp;', $socio->materno) /*--}}
-                <tr>         
-                    <td >{{$socio->fec_asociado}}</td>
-                    <td>{{$socio->codigo}}</td>
-                    <td>{{$socio->dni}}</td>
-                    <td>{{$socio->paterno}} {{$socio->materno}} {{$socio->nombre}}</td>
-                    <td>{{$socio->comite_local}}</td>
-                    <td>{{$socio->comite_central}}</td>
-                    <td>{{$socio->name}}</td>                    
-                    <td>                                    
-                        <a href="{{url('PadronSocio')}}/{{$socio->codigo}}" target="_blank" data-toggle="tooltip" data-placement="top" title="Ver" class="btn-xs btn-success"><span class="glyphicon glyphicon-eye-open"></span></a>                        
-                        @permission('crear parientes')
-                            <a href="javascript:void(0)" onclick="ParSocio('{{$socio->codigo}}','{{$nombre }}','{{ $paterno }}','{{$materno }}')" data-toggle="modal" data-target="#pariente" class="btn-info btn-xs"><span class="glyphicon glyphicon-user" data-toggle="tooltip" data-placement="top" title="Parientes"></span></a>
-                        @endpermission
-                        @permission('crear fundos')
-                        <a href="#" onclick="fundosocio('{{$socio->codigo}}','{{$nombre }}','{{ $paterno }}','{{$materno }}')" data-toggle='modal' data-target='#fundomodal' class="btn-success btn-xs" ><span data-toggle="tooltip" data-placement="top" title="Fundos" class="glyphicon glyphicon-home"></span></a>
-                        @endpermission
-                        @permission('editar socios')
-                            <a  href="javascript:void(0)" onclick="EditSocio('{{$socio->codigo}}')"  class="btn-xs btn-primary" data-toggle="tooltip" data-placement="top" title="Editar Socio"><span  class="glyphicon glyphicon-pencil"></span></a>
-                        @endpermission
-                        @permission ('eliminar socios')
-                            <a href="javascript:void(0)" onclick="EliSocio('{{$socio->codigo}}','{{$name}}')" class="btn-xs btn-danger"><span data-toggle="tooltip" data-placement="top" title="Eliminar Socio" class="glyphicon glyphicon-remove"></span></a>
-                        @endpermission
-                    </td>                
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
+        @include('socios.sociosList')
     </div>   
 </div>
-<section id="conten-modal">    
+<section id="conten-modal" >
 </section>
 
 @endpermission
@@ -130,14 +85,25 @@
             $("#conten-modal").html(data);
             $("#titulo").empty();
             $("#titulo").append('PARIENTES DE '+ paterno + ' ' + materno + ' '+nombre + ' ('+codigo+')');
-            $("#socios_codigo").val(codigo);
+            
             $("#modal-form").modal();
+            $("#socios_codigo").val(codigo);
         });        
     };   
     
     $(document).ready(function(){
        $("#subsocios").addClass('active');
        $("#menusocios").addClass('active');
+       activarForm(15);
+    });
+    $(document).ready().on('blur','#codigo',function(event){
+        var num = event.target.value.length;var valor=''
+        for(var i=0;i < 5 - num ; i++)
+            valor = valor + '0';             
+        $("#codigo").val('ACO-'+valor+event.target.value);
+    });
+    $("#buscar").keyup(function(event){
+        activarForm(15);
     });
     
 </script>

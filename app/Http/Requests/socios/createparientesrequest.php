@@ -13,7 +13,7 @@ class createparientesrequest extends Request
      */
     public function authorize()
     {
-        return true;
+        return auth()->user()->can(['crear parientes','editar parientes']);
     }
 
     /**

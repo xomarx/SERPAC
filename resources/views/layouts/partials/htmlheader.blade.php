@@ -20,7 +20,7 @@
     <link href="{{ asset('/css/ionicons.min.css') }}" rel="stylesheet" type="text/css" />
     <!--<link href="{{ asset('/css/font-awesome.min.css') }}" rel="stylesheet" type="text/css" />-->
     <link href="{{ asset('/css/skins/skin-blue.css') }}" rel="stylesheet" type="text/css" />
-    <link href="{{ asset('/plugins/select2/select2.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('/plugins/select2/select2.min.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('/plugins/fullcalendar-3.4.0/fullcalendar.min.css') }}" rel="stylesheet" type="text/css" />
     <!--<link href="{{ asset('/plugins/fullcalendar-3.4.0/fullcalendar.print.css') }}" rel="stylesheet" type="text/css" />-->
     <link href="{{ asset('/css/bootstrap-duallistbox.css') }}" rel="stylesheet" type="text/css" />

@@ -27,7 +27,7 @@ class SociocreateRequest extends Request
             case 'DELETE': {
                     return [];
                 }
-            case 'POST': {
+            case 'POST': {                
                     return [
                         //
                         'codigo' => 'required|unique:socios,codigo|min:9|max:9',
@@ -46,7 +46,8 @@ class SociocreateRequest extends Request
                         'sexo' => 'required',
                         'direccion' => 'required',
                         'comite_local' => 'required',
-                        'sexo'=>'required'
+                        'sexo'=>'required',
+                        'condicion'=>'required'
                     ];
                 }
             case 'PATCH':

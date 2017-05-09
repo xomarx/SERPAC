@@ -1,5 +1,16 @@
-<img src="/img/acopagro.png">
-    <center><h3>REGISTRO DE SOCIOS Y SOCIAS</h3></center>
+<table width='100%'>
+    <thead>
+        <tr>
+            <th align='left' width='25%'>
+                <img src="http://acopagro.com.pe/wp-content/uploads/2015/02/logo-png-horizontal-e1423034456225.png" style=" height: 70px; width: 180px;" />
+            </th>
+            <th >
+                <h3>REGISTRO DE SOCIOS Y SOCIAS</h3>
+            </th>
+            <th>&nbsp;</th>
+        </tr>
+    </thead>
+</table>    
     <table border="1" cellspacing="0" cellpadding="5">
         <caption>{{$socio->codigo}}</caption>
         <thead>

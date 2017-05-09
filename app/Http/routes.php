@@ -27,6 +27,7 @@ Route::group(['middleware' => ['auth']], function () {
 ////para dejar pasar a los usuarios con un o mas determinado permiso
 //'middleware' => ['permission:crearPost', 'permission:editarPost']
     
+    route::resource('auxiliar/DNIpersonas','Configuracion\AuxiliarController@PersonDNI');
     
     Route::get('sign-out', 'Auth\AuthController@getsignOut');
     
@@ -99,13 +100,16 @@ Route::group(['middleware' => ['auth']], function () {
     route::resource('socios/modalfundo','socios\fundoscontroller@ModalFundo');
     route::resource('socios/fundos','socios\fundoscontroller');
     
+    route::get('socios/parientes/ListaParientes/{dato?}/{page?}','socios\parientescontroller@listaParientes');
     route::resource('socios/modalparientes','socios\parientescontroller@ModalPariente');    
     route::resource('socios/parientes','socios\parientescontroller');
     route::delete('socios/parientes/{dni}/{cod}','socios\parientescontroller@destroy');
     route::get('socios/parientes/{idsocio?}/{dnipar?}','socios\parientescontroller@datosparientes');
     
-    
-    route::resource('socios/modalsocio','socios\sociocontroller@ModalSocio');
+    route::delete('socios/Condicions-socios/{cod?}','socios\sociocontroller@limpiarCondicion');
+    route::resource('socios/Condicions-socios','socios\sociocontroller@condicions');
+    route::get('socios/ListaSocios/{dato?}/{page?}','socios\sociocontroller@Listasocios');
+    route::resource('socios/modalsocio','socios\sociocontroller@ModalSocio');    
     route::resource('socios','socios\sociocontroller');
     
     

@@ -8,13 +8,7 @@ use Illuminate\Support\Facades\DB;
 
 class Socio extends Model
 {
-    //
-    protected $table = 'socios';
-    protected $primarykey = 'codigo';
-    
-    public $incrementing = false;    
-    
-    public  $timestamps=false;
+    //    
     protected  $fillable = [
         'codigo','fec_asociado','fec_empadron','','estado_civil',
         'ocupacion','grado_inst','produccion','estado','observacion'
@@ -50,7 +44,36 @@ class Socio extends Model
     {
         return $this->hasMany(Transferencia::class);
     }
+    
+    public function condicions(){
+        return $this->belongsToMany(\App\Models\Certificacion\Condicion::class);
+    }
 
+    // socios
+    public static function scopelistasocios($query,$dato='')
+    {
+       return  $socio = $query
+                ->join('personas','socios.dni','=','personas.dni')
+                ->join('comites_locales','personas.comites_locales_id','=','comites_locales.id')
+                ->join('comites_centrales','comites_locales.comites_centrales_id','=','comites_centrales.id')
+               ->join('users','socios.users_id','=','users.id')
+               ->where(function($query)use($dato){
+                   $query->where('socios.codigo','like','%'.$dato.'%')
+                         ->orwhere(DB::raw("concat(personas.paterno,' ',personas.materno,' ',personas.nombre)"), 'like', '%' . $dato . '%')
+                         ->orwhere('socios.dni', 'like', '%' . $dato . '%')
+                           ->orwhere('comite_local', 'like', '%' . $dato . '%')
+                           ->orwhere('comite_central', 'like', '%' . $dato . '%')
+                           ->orwhere('fec_asociado', 'like', '%' . $dato . '%')
+                           ->orwhere('socios.estado', 'like', '%' . $dato . '%')
+                           ->orwhere('name', 'like', '%' . $dato . '%');
+               })
+                ->select('socios.codigo','personas.paterno','personas.dni','personas.materno','personas.nombre'
+                        ,'socios.fec_asociado','comites_locales.comite_local','comites_centrales.comite_central','users.name','socios.estado')
+                       ->orderby('codigo','asc')
+                ->paginate(10);
+    }
+    
+    
     //´para editar
     public static function DNISocioautocomplete($dni)
     {
@@ -111,18 +134,7 @@ class Socio extends Model
                 ->first(); 
         return $socio;
     }
-    // socios
-    public static function listasocios()
-    {
-       return  $socio = DB::table('socios')
-                ->join('personas','socios.dni','=','personas.dni')
-                ->join('comites_locales','personas.comites_locales_id','=','comites_locales.id')
-                ->join('comites_centrales','comites_locales.comites_centrales_id','=','comites_centrales.id')
-               ->join('users','socios.users_id','=','users.id')
-                ->select('socios.codigo','personas.paterno','personas.dni','personas.materno','personas.nombre'
-                        ,'socios.fec_asociado','comites_locales.comite_local','comites_centrales.comite_central','users.name')
-                ->get();
-    }
+    
     
        
     public static function getsocioTransferencia($codigo)

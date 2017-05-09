@@ -12,7 +12,7 @@
 <script src="{{ asset('/js/jquery.bootstrap-duallistbox.js') }}" type="text/javascript"></script>
 <script src="{{ asset('/js/jquery.dataTables.min.js') }}" type="text/javascript"></script>
 
-<script src="{{ asset('/plugins/select2/select2.js') }}" type="text/javascript"></script>
+<script src="{{ asset('/plugins/select2/select2.full.min.js') }}" type="text/javascript"></script>
 <script src="{{ asset('/plugins/datepicker/bootstrap-datepicker.js') }}" type="text/javascript"></script>
 
 <!--<script src="{{ asset('/plugins/fullcalendar-3.4.0/lib/jquery.min.js') }}" type="text/javascript"></script>-->

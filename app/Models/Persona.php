@@ -50,6 +50,14 @@ class Persona extends Model
         return $this->belongsTo(Socios\Comites_Locale::class);
     }
     
+    public static function scopeDNIPersonas($query,$dni){
+        return $query
+                ->where('dni','=',$dni)
+                ->select('paterno','materno','nombre','dni','direccion')
+                ->first();
+    }
+
+
     public static function dnipersonaAutocomplete($dni)
     {
       return $socio = DB::table('personas')

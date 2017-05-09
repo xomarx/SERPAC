@@ -39,16 +39,22 @@ class parientescontroller extends Controller
     public function index(){
         if(!auth()->user()->can('ver parientes'))
             return response ()->view ('errors.403');
-        $parientes = Pariente::listaParientes();
+        $parientes = Pariente::listaParientes('');
         $departamentos = \App\Models\Socios\Departamento::pluck('departamento','id');
         return view('socios/parientes',['parientes'=>$parientes,'departamentos'=>$departamentos]);
     }
     
+    public function listaParientes($dato = ''){    
+        $parientes = Pariente::listaParientes($dato);
+        return response()->view('socios.parientesList',['parientes'=>$parientes]);
+    }
+
+
     public function ModalPariente(){
         if(!auth()->user()->can(['crear parientes','editar parientes']))
                 return response ()->view ('errors.403-modal');
         $departamentos = \App\Models\Socios\Departamento::pluck('departamento','id');
-        return response()->view('socios.formParientes',['departamentos'=>$departamentos]);
+        return response()->view('socios.parientesModal',['departamentos'=>$departamentos]);
     }
 
     public function datosparientes($idsocio,$dnipariente){
@@ -77,14 +83,19 @@ class parientescontroller extends Controller
         if($request->ajax())
         {
             if(!auth()->user()->can('crear parientes'))
-                return response()->view('errors.403-content', [], 403);            
-            $persona = new Persona($request->all());            
-            $persona->fec_nac=Carbon::parse($request->fec_nac);
-           $persona->comites_locales_id = $request->comite_local;
-            $persona->save();
-            $dni = $persona->dni;                   
+                return response()->view('errors.403-content', [], 403);
+            $persona = Persona::where('dni','=',$request->dni)->select()->first();
+            if(count($persona) == 0)
+                $persona = new Persona($request->all());
+            else
+                $persona->fill($request->all());
+                $persona->fec_nac=Carbon::parse($request->fec_nac);
+                $persona->comites_locales_id = $request->comite_local;
+                $persona->save();            
+            
             $pariente = new Pariente($request->all());
-            $pariente->personas_dni = $dni;            
+            $pariente->socios_codigo=$request->socios_codigo;
+            $pariente->personas_dni = $persona->dni;
             $pariente->users_id = \Illuminate\Support\Facades\Auth::user()->id;
             $pariente->save();
             if($persona)
@@ -170,9 +181,16 @@ class parientescontroller extends Controller
     public function destroy($id,$cod)
     {        
         if(auth()->user()->can('eliminar parientes')){
+//            $cant = \App\Models\Tesoreria\Mov_cheque::where('personas_dni','=',$id)->count();            
+            $cant = \App\Models\Socios\Transferencia::where('beneficiario_antiguo','=',$id)->count();
+            if($cant == 0)            {
             $result = Pariente::where('personas_dni','=',$id)
                     ->where('socios_codigo','=',$cod)->delete();
-            if($result) return response ()->json (['success'=>true]);
+        return response ()->json (['success'=>true]);}
+            else{
+                return response ()->json (['success'=>false]);
+            }
+            
         }
         return response()->view('errors.403-content', [], 403);            
     }

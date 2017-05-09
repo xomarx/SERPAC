@@ -103,6 +103,11 @@ var cargardistrito = function (iddist,idsele) {
      });
   });
   
+  function soloNumeros(e){ 
+    var key = window.Event ? e.which : e.keyCode 
+    return ((key >= 48 && key <= 57) || (key==8))
+}
+  
 var activarForm = function(id){
         if(id == 1) {var route = 'ListaRoles'}
         else if(id == 2) {var route = 'headPermisos';}
@@ -118,7 +123,8 @@ var activarForm = function(id){
         else if(id == 12) {var route = 'ListaCheques/'+$("#buscar").val();}
         else if(id == 13) {var route = '/Tesoreria/Mov-Dinero/Con-Documento';}        
         else if(id == 14) {var route = '/Tesoreria/Mov-Caja-Chica/Crear-Caja';}
-        
+        else if(id == 15) {var route = '/socios/ListaSocios/'+$("#buscar").val();}
+        else if(id == 16) {var route = '/socios/parientes/ListaParientes/'+$("#buscar").val();}
         $.ajax({
             type:'get',
             url:route,
@@ -178,15 +184,44 @@ var mensajeRegistro = function(data,formu){
               }
               $("#alert-msj").fadeOut(tiempo);
 };
+
+$(document).ready().on('keyup','#dni',function(event){      
+    if(event.keyCode == 13){//enter        
+        if($("#dni").val().length < 8)
+            $.alertable.alert("Faltan digitos");
+        $.ajax({
+            url:'/auxiliar/DNIpersonas/'+event.target.value,
+            type:'GET',
+            datatype: 'json',
+            success:function(data){
+                $("#paterno").val(data.paterno);
+                $("#nombre").val(data.nombre);
+                $("#materno").val(data.materno);
+            }
+        });
+        
+//        var next = document.getElementById("dni").tabIndex;
+//        next++;
+//        console.log(next)
+//        document.forms[0].elements[next].focus(); 
+        
+    }            
+});
 //  ******************************************************************  CRUD SOCIOS   *******************************************************************
-$("#nuevosocio").click(function (){
-    activarmodal(6);
+$("#nuevosocio").click(function (){    
+    var route = '/socios/modalsocio';                    
+        $.get(route,function(data){            
+            $("#conten-modal").html(data);
+            $("#modal-form").modal();
+            $(".select2").select2();            
+        });                    
 });
 
-var RegSocio = function(){                              
-            var token = $("input[name=_token]").val();
+$(document).ready().on('click','#Regsocio',function(){
+            var options = $("#condicion option:selected");
             var route = "/socios";
-            var type = 'post';                              
+            var type = 'post';      
+            var cod = $("#codigo").val();
             if($("#Regsocio").text() == 'Actualizar')
             {               
                 type = 'PUT';
@@ -194,14 +229,33 @@ var RegSocio = function(){
             }
           $.ajax({              
             url:route,            
-            headers:{'X-CSRF-TOKEN':token},            
+            headers:{'X-CSRF-TOKEN':$("input[name=_token]").val()},            
             type:type,
-            datatype: 'json',            
+            datatype: 'json',
             data: $("#formsocios").serialize(),
             success:function(data)
             {                
                 mensajeRegistro(data,'formsocios');
-                document.location.reload();             
+                limpiarCondicion(cod);
+                $.each(options,function( index, value ){                    
+                $.ajax({
+                          url: '/socios/Condicions-socios',
+                          headers: {'X-CSRF-TOKEN': $("input[name=_token]").val()},
+                          type: 'post',
+                          datatype: 'json',
+                          data: { 
+                              condicions_id: value.value,
+                              socios_codigo:cod
+                          },
+                          success: function (data)
+                          {       
+                              activarForm(15);
+                          },
+                          error:function(data){                              
+                          }
+                      });          
+                });
+                
             },
             error:function(data){
                 if(data.status == 403)                    
@@ -211,6 +265,7 @@ var RegSocio = function(){
                 $("#error_materno").html('');$("#error_nombre").html('');$("#error_fec_nac").html('');$("#error_fec_empadron").html('');
                 $("#error_fec_asociado").html('');$("#error_grado_inst").html('');$("#error_comite_local").html('');$("#error_direccion").html('');
                 $("#error_direccion").html('');$("#error_produccion").html('');$("#error_ocupacion").html('');  $("#error_sexo").html('');
+                $("#error-condicion").html('');
                 var errors =  $.parseJSON(data.responseText);                
                 $.each(errors,function(index, value) {                      
                             if(index == 'codigo')$("#error_codigo").html(value);
@@ -229,67 +284,90 @@ var RegSocio = function(){
                             else if(index == 'produccion')$("#error_produccion").html(value);
                             else if(index == 'ocupacion')$("#error_ocupacion").html(value);
                             else if(index == 'sexo')$("#error_sexo").html(value);
+                            else if(index == 'condicion')$("#error-condicion").html(value);
                       });                       
             }}
-          }) 
-};
+          })
+});
+
+var limpiarCondicion = function(idsocio){
+    $.ajax({
+            url: '/socios/Condicions-socios/'+idsocio,
+            headers: {'X-CSRF-TOKEN':$("input[name=_token]").val()},
+            type: 'delete',
+            datatype: 'json',                          
+                success: function (data)
+                {                                  
+                },
+                error:function(data){                              
+                }
+            });          
+}
+      
       
 var EditSocio = function(codigo){     
-    
-    
+        
     var route = "/socios/"+codigo+"/edit";  
     $.get('socios/modalsocio',function(data){
          $("#conten-modal").html(data);
          $("#Regsocio").text('Actualizar');
      });     
-    $.getJSON(route, function(data){
+    $.getJSON(route, function(data){        
         $("#titulosocio").empty().append('<center>ACTUALIZAR DATO</center>');
-        $("#codigo").val(data.codigo);
-        $("#dni").val(data.dni);
-        if(data.sexo == 'M') $("#sexoM").prop("checked",true);
-        else if(data.sexo == 'F') $("#sexoF").prop("checked",true);        
-        $("#estado").val(data.estado); 
-        $("#estado_civil").val(data.estado_civil);         
-        $("#paterno").val(data.paterno);
-        $("#materno").val(data.materno);
-        $("#nombre").val(data.nombre);
+        $("#codigo").val(data.socio.codigo);
+        $("#dni").val(data.socio.dni);
+        if(data.socio.sexo == 'M') $("#sexoM").prop("checked",true);
+        else if(data.socio.sexo == 'F') $("#sexoF").prop("checked",true);        
+        $("#estado").val(data.socio.estado); 
+        $("#estado_civil").val(data.socio.estado_civil);         
+        $("#paterno").val(data.socio.paterno);
+        $("#materno").val(data.socio.materno);
+        $("#nombre").val(data.socio.nombre);
         
-        $("#fec_nac").val(data.fec_nac);
-        $("#fec_empadron").val(data.fec_empadron);
-        $("#fec_asociado").val(data.fec_asociado);
-        $("#telefono").val(data.telefono);    
-        $("#grado_inst").val(data.grado_inst);
+        $("#fec_nac").val(data.socio.fec_nac);
+        $("#fec_empadron").val(data.socio.fec_empadron);
+        $("#fec_asociado").val(data.socio.fec_asociado);
+        $("#telefono").val(data.socio.telefono);    
+        $("#grado_inst").val(data.socio.grado_inst);
         
-        $("#departamento").val(data.departamentos_id);
+        $("#departamento").val(data.socio.departamentos_id);
         $("#provincia").empty();
-        $("#provincia").append("<option value='" + data.provincias_id+"'>"+data.provincia+"</option>");
+        $("#provincia").append("<option value='" + data.socio.provincias_id+"'>"+data.socio.provincia+"</option>");
         $("#distrito").empty();
-        $("#distrito").append("<option value='" + data.distritos_id+"'>"+data.distrito+"</option>");
+        $("#distrito").append("<option value='" + data.socio.distritos_id+"'>"+data.socio.distrito+"</option>");
         $("#comite_central").empty();
-        $("#comite_central").append("<option value='" + data.comites_centrales_id+"'>"+data.comite_central+"</option>");
+        $("#comite_central").append("<option value='" + data.socio.comites_centrales_id+"'>"+data.socio.comite_central+"</option>");
         $("#comite_local").empty();
-        $("#comite_local").append("<option value='" + data.comites_locales_id+"'>"+data.comite_local+"</option>");
-        $("#direccion").val(data.direccion);
+        $("#comite_local").append("<option value='" + data.socio.comites_locales_id+"'>"+data.socio.comite_local+"</option>");
+        $("#direccion").val(data.socio.direccion);
         
-        $("#produccion").val(data.produccion);                       
-        $("#ocupacion").val(data.ocupacion);        
+        $("#produccion").val(data.socio.produccion);                       
+        $("#ocupacion").val(data.socio.ocupacion);        
         $("#codigo").attr('disabled','disabled') ;
         $("#dni").prop( "disabled", true );
+        var valor = [];
+        $.each(data.condicions,function( index,value){           
+            valor.push(value.condicions_id);           
+        });        
+        $("#condicion").val(valor);
         $("#modal-form").modal();
+        $(".select2").select2();
         });      
 };
 
 var EliSocio = function(codigo,name){      
+               
    $.alertable.confirm("<span style='color:#000'>¿Está seguro de eliminar el registro?</span>"+"<br><strong><span style='color:#ff0000'>"+name+"</span></strong></br>").then(function() {  
-      var route = "/socios/"+codigo+"";
-      var token = $("#token").val();
+      var route = "/socios/"+codigo+"";      
       $.ajax({
         url: route,
-        headers: {'X-CSRF-TOKEN': token},
+        headers: {'X-CSRF-TOKEN': $("input[name=_token]").val()},
         type: 'DELETE',
         dataType: 'json',
-        success: function(data){
-        if (data.success) document.location.reload();
+        success: function(data){           
+        if (data.success){ activarForm(15);}
+        else
+            $.alertable.alert("<h4>No se puede eliminar al Socio: "+name+" <br> Cuenta con Registros</h4>");
         
       },
       error:function(data){
@@ -315,7 +393,7 @@ var RegPariente = function(){
                 route = "/socios/parientes/"+$("#idpariente").val();   
                 type="PUt";
             }
-            
+            console.log($("#formpariente").serialize())
           $.ajax({              
             url:route,            
             headers:{'X-CSRF-TOKEN':token},            
@@ -325,7 +403,7 @@ var RegPariente = function(){
             success:function(data)
             {    
                mensajeRegistro(data,'formpariente');
-               if($("#Regpariente").text() == 'Actualizar') document.location.reload();
+               if($("#Regpariente").text() == 'Actualizar') activarForm(16);
             },
              error:function(data)
             {
@@ -336,6 +414,7 @@ var RegPariente = function(){
                 $("#error_nombrep").html('');$("#error_fec_nac_1").html(''); $("#error_grado_inst_1").html('');$("#error_comite_local_1").html('');$("#error_pariente").html('');
                 var errors =  $.parseJSON(data.responseText);                
                 $.each(errors,function(index, value) {
+                    console.log(index)
                             if(index == 'dni')$("#error_dnip").html(value);                            
                             else if(index == 'estado_civil')$("#error_estado_civil_1").html(value);
                             else if(index == 'paterno') $("#error_paternop").html(value);
@@ -343,7 +422,7 @@ var RegPariente = function(){
                             else if(index == 'nombre')$("#error_nombrep").html(value);
                             else if(index == 'fec_nac')$("#error_fec_nac_1").html(value);                            
                             else if(index == 'grado_inst')$("#error_grado_inst_1").html(value);
-                            else if(index == 'comites_locales_id')$("#error_comite_local_1").html(value);
+                            else if(index == 'comite_local')$("#error_comite_local_1").html(value);
                             else if(index == 'direccion')$("#error_Direccion_1").html(value);
                             else if(index == 'tipo_pariente')$("#error_pariente").html(value);
                       });                       
@@ -353,8 +432,7 @@ var RegPariente = function(){
     }; 
 
 var editPariente = function(idsocio,dnipariente){
-
-    $("#Regpariente").text("Actualizar");
+    
     var route = '/socios/modalparientes';
     $.get(route, function (data) {
         $("#conten-modal").html(data);
@@ -392,6 +470,7 @@ var editPariente = function(idsocio,dnipariente){
             $("#telefono").val(data.telefono);
             $("#estado_civil").val(data.estado_civil);
             $("#direccion").val(data.direccion);
+            $("#Regpariente").text("Actualizar");
             if (data.beneficiario == 0) {
                 $("#beneficiarios").prop('checked', true);
                 $("#beneficiariop").prop('checked', false);
@@ -415,12 +494,12 @@ var ElimPariente = function(dni,codsocio){
         type: 'DELETE',
         dataType: 'json',
         success: function(data){
-        if (data.success) document.location.reload();
-        
+        if (data.success) activarForm(16);        
+        else
+            $.alertable.alert("<h4>No se puede eliminar al Registro del DNI: "+dni+" <br> Cuenta con Registros</h4>");                
       },
       error:function(data){
-          if(data.status==403)
-                    activarmodal(0);
+          if(data.status==403) activarmodal(0);
       }
       });
         
@@ -465,7 +544,7 @@ var fundopropiedadFauna = function(fundo,fauna,cantidad,rendimiento){
             },
             success:function(data)
             {                
-                if(data.success) console.log('fauna registrado');
+                
                 
             },            
           });
@@ -488,7 +567,7 @@ var fundopropiedadFlora = function(fundo,flora,hectarea,rendimiento) {
             },
             success:function(data)
             {                
-                if(data.success)console.log('flora registrado');
+                
                 
             },            
           });
@@ -509,7 +588,7 @@ var fundopropiedadInmueble = function(fundo,inmueble){
             },
             success:function(data)
             {                
-                if(data.success)console.log('inmueble registrado');
+                
                 
             },            
           });
@@ -667,12 +746,15 @@ var EliminarFundo = function(id,name){
     });
 };
 
+      
+      //****************************************************************************        TRANSFERENCIAS ********************************************
+      
+      
+      
 $("#nuevatrans").click(function(){
     if($("#nuevatrans").text() == "LISTA TRANSFERENCIA") document.location.reload();
     else {activarForm(6); $("#nuevatrans").text("LISTA TRANSFERENCIA"); }
 });
-      
-      //****************************************************************************        TRANSFERENCIAS ********************************************
       
 var RegTransferencia = function (){
            
@@ -2316,7 +2398,7 @@ $(document).ready().on('click','#RegCompras',function(){
             }
         });
    },function(){
-       console.log('Cancelado'); 
+       
    });    
 };
 

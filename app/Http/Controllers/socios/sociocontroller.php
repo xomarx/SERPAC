@@ -30,107 +30,29 @@ class sociocontroller extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    
-    public function getdatenow()
-    {
-        $date = Carbon::now();
-        return $date->format('d-m-Y');
-    }
-
-    public function autocompleteDniSocio(Request $request) {
-        if($request->ajax()){
-            $nombre = Input::get('term');
-            $socios = Socio::DNISocioautocomplete($nombre);
-            foreach ($socios as $socio) 
-            {
-                $result[] = ['id' => $socio->codigo, 'value' => $socio->dni,'local'=>$socio->comite_local,'socio'=>$socio->fullname];
-            }
-            return response()->json($result);
-        }
-    }
-    
-    
-    public function autocompleteCodigoSocio(Request $request){
-        if($request->ajax()){
-            $nombre = Input::get('term');
-            $socios = Socio::CodigoSocioautocomplete($nombre);
-            foreach ($socios as $socio) 
-            {
-                $result[] = ['id' => $socio->dni, 'value' => $socio->codigo,'local'=>$socio->comite_local,'socio'=>$socio->fullname];
-            }
-            return response()->json($result);
-        }
-    }
-    
-    public function autocomplete (Request $request) {
-        if($request->ajax()){
-            $nombre = Input::get('term');
-            $socios = Socio::Socioautocomplete($nombre);
-            foreach ($socios as $socio) 
-            {
-                $result[] = ['id' => $socio->codigo, 'value' => $socio->fullname,'local'=>$socio->comite_local,'dni'=>$socio->dni];
-            }
-            return response()->json($result);
-        }
-    }
-
-    
-
-
-
-
-
-    public function autoSociosPersonas(Request $request){
-        if($request->ajax()){
-            $nombre = Input::get('term');
-            $socios = Socio::PersonasSociosAuto($nombre);
-            foreach ($socios as $socio) 
-            {
-                $result[] = ['id' => $socio->dni, 'value' => $socio->socio];
-            }
-            return response()->json($result);
-        }
-    }
-    
-    public function autoSociosPersonasDni(Request $request){
-        if($request->ajax()){
-            $nombre = Input::get('term');
-            $socios = Socio::PersonasSociosAuto($nombre);
-            foreach ($socios as $socio) 
-            {
-                $result[] = ['id' => $socio->dni, 'value' => $socio->socio];
-            }
-            return response()->json($result);
-        }
-    }
-
-        public function autoSociosDni(Request $request)    {
-        if($request->ajax()){
-            $nombre = Input::get('term');
-            $socios = Socio::PersonasSociosDniAuto($nombre);
-            foreach ($socios as $socio) 
-            {
-                $result[] = ['id' => $socio->socio, 'value' => $socio->dni];
-            }
-            return response()->json($result);
-        }
-    }                
-    
+        
+                                    
     public function ModalSocio(){
         if(!auth()->user()->can(['crear socios','editar socios'])) 
             return response()->view('errors.403-modal');
+        $condicions = \App\Models\Certificacion\Condicion::all('condicion','id');
         $departamentos = Departamento::pluck('departamento','id');
-        return response()->view('socios.formsocio',['departamentos'=>$departamentos]);
+        return response()->view('socios.sociosModal',['departamentos'=>$departamentos,'condicions'=>$condicions]);
         
     }
     
     public function index()
     {         
         if(!auth()->user()->can('ver socios'))
-            return response ()->view ('errors.403');
-        $socios = Socio::listasocios();
+            return response ()->view ('errors.403');    
+        $socios = Socio::listasocios('');
         return response()->view('socios.socios',['socios'=>$socios]);
     }       
+    
+    public function Listasocios($dato = ''){
+        $socios = Socio::listasocios($dato);
+        return response()->view('socios.sociosList',['socios'=>$socios]);
+    }
 
     public function verPadronsocio($idsocio) {
         $socio = Socio::getSocio($idsocio);
@@ -172,6 +94,7 @@ class sociocontroller extends Controller
         {
             if(!auth()->user()->can('crear socios'))
                 return response()->view('errors.403-content', [], 403);
+            
             $persona = new Persona($request->all());
             $date = Carbon::parse($request->fec_nac);
             $persona->fec_nac=$date;
@@ -191,6 +114,20 @@ class sociocontroller extends Controller
         }
         
     }
+    
+    public function condicions(Request $request){
+
+        $condicion = \App\Models\Socios\Condicions_has_socio::where('socios_codigo','=',$request->socios_codigo)
+                ->where('condicions_id','=',$request->condicions_id)->first();
+        if(!$condicion)
+            $condicion=\App\Models\Socios\Condicions_has_socio::create($request->all());
+        if($condicion) return response ()->json (['success'=>true]);
+    }
+    
+    public  function limpiarCondicion($idsocio){
+        $condicion = \App\Models\Socios\Condicions_has_socio::where('socios_codigo','=',$idsocio)->delete();
+        if($condicion) return response ()->json (['success'=>true]);
+    }
 
     /**
      * Display the specified resource.
@@ -199,7 +136,7 @@ class sociocontroller extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show()
-    {
+    {        
     }
 
     /**
@@ -210,8 +147,10 @@ class sociocontroller extends Controller
      */
     public function edit($codigo)
     {                
-        $socio = Socio::getSocio($codigo);        
-        return response()->json($socio);
+        $socio = Socio::getSocio($codigo);
+        $condicion = \App\Models\Socios\Condicions_has_socio::where('socios_codigo','=',$codigo)
+                ->select('condicions_id')->get();
+        return response()->json(['socio'=>$socio,'condicions'=>$condicion]);
     }
 
     /**
@@ -268,14 +207,22 @@ class sociocontroller extends Controller
      */
     public function destroy($id) {
         if (auth()->user()->can('eliminar socios')) {
-            $socio = Socio::where('codigo', '=', $id)->delete();
-            
-            if ($socio) 
-                return response()->json(['success' => true]);
-             else 
-                return response()->json(['success' => false]);
-            
+            $socio = \App\Models\Acopio\Compra::where('socios_codigo','=',$id)->count();
+            if($socio>0){
+                return response()->json(['success'=>false]);
+            }
+            else{
+                $estado = \App\Models\Socios\Fundo::where('codigo_socios','=',$id)->delete();                
+                $estado=\App\Models\Socios\Pariente::where('socios_codigo','=',$id)->delete();
+                $estado=\App\Models\Socios\Condicions_has_socio::where('socios_codigo','=',$id)->delete();
+                $estado = Socio::where('codigo','=',$id)->delete();
+//                \App\Models\Socios\Transferencia::where('socios_codigo','=',$id)->delete();
+//                \App\Models\Socios\Cargos_delegados_has_socios::where('socios_codigo','=',$id)->delete();
+//                \App\Models\Socios\Cargos_directivos_has_socios::where('socios_codigo','=',$id)->delete();
+                return response()->json(['success'=>true]);
+            }                                                    
         }
+        return response()->view('errors.403-content', [], 403);  
     }
 
 }

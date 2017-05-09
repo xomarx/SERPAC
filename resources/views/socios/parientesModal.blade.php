@@ -8,8 +8,8 @@
             <div class="modal-body">                   
                 {!! Form::open(['id'=>'formpariente']) !!}   
                 @include('mensajes.mensaje')
-                <input type="hidden" id="socios_codigo"><input type="hidden">
-                <input type="hidden" id="idpariente"><input type="hidden">
+                <input type="hidden" id="socios_codigo" name="socios_codigo">
+                <input type="hidden" id="idpariente" name="idpariente">
                 <div class="col-md-12 row ">                    
                     <div class="col-sm-3">
                         {!! Form::label('dni','DNI',['class'=>'form-label']) !!}
@@ -27,7 +27,7 @@
                     <div class="col-sm-4">
                         {!! Form::label('pariente','Pariente: ',['class'=>'control-label']) !!}
                         {!! Form::select('tipo_pariente',['MADRE'=>'Madre','PADRE'=>'Padre','ESPOSO(A)'=>'Esposo(a)','CONVIVIENTE'=>'Conviviente','HIJO(A)'=>'Hijo(a)','SOBRINO(A)'=>'Sobrino(a)','PRIMO(A)'=>'Primo(a)','HERMANO(A)'=>'Hermano(a)','TIO(A)'=>'Tio(a)'
-                        ],null,['id'=>'tipo_pariente','class' =>'form-control','placeholder'=>'Estado Civil']) !!}
+                        ],null,['id'=>'tipo_pariente','class' =>'form-control','placeholder'=>'Pariente']) !!}
                         <div class="text-danger" id="error_pariente"></div>
                     </div> 
                     <div class="col-md-3 form-group" >                        
@@ -69,21 +69,26 @@
                     </div>
                     <div class="col-sm-4">
                         {!! Form::label('provincia','Provincia: ',['class'=>'control-label']) !!}
-                        {!! Form::select ('provincia',['placeholder'=>'Seleccione'],null,['id'=>'provincia','class'=>'form-control','onchange'=>'province()']) !!}
+                        <select name="provincia" id="provincia" class="form-control" onchange="province()" placeholder='Seleccione'>
+                            <option value="">Seleccione</option>
+                        </select>
+                        
                     </div>
                 </div>
                 <div class="col-md-12 row" >                                                                                                    
                     <div class="col-md-4">
                         {!! Form::label('distrito','Dsto.: ',['class'=>'control-label']) !!}
-                        {!! Form::select ('distrito',['placeholder'=>'Seleccione'],null,['id'=>'distrito','class'=>'form-control','onchange'=>'district()']) !!}
+                        {!! Form::select ('distrito',['placeholder'=>'Seleccione'],null,['id'=>'distrito','class'=>'form-control','onchange'=>'district()']) !!}                        
                     </div>                    
                     <div class="col-md-4">
                         {!! Form::label('central','Com. Central: ',['class'=>'control-label ']) !!}
                         {!! Form::select ('comite_central',['placeholder'=>'selecciona'],null,['id'=>'comite_central','class'=>'form-control','onchange'=>'central_committe()']) !!}
                     </div>
                     <div class="col-md-4">
-                        {!! Form::label('local','Comite Local: ',['class'=>'control-label']) !!}
-                        {!! Form::select ('comite_local',['placeholder'=>'selecciona'],null,['id'=>'comite_local','class'=>'form-control','required']) !!}
+                        {!! Form::label('local','Comite Local: ',['class'=>'control-label']) !!}                        
+                        <select name="comite_local" id="comite_local" class="form-control" >
+                            <option value="">Seleccione</option>
+                        </select>
                         <div class="text-danger" id="error_comite_local_1"></div>
                     </div>
                 </div>
@@ -114,12 +119,13 @@
                     </div>  
                     
                 </div>
-                {!! Form::close()!!}  
-                </div>
                 <div class="modal-footer">                    
                     {!!link_to('#', $title='Registrar', $attributes = ['id'=>'Regpariente', 'class'=>'btn btn-dropbox','onclick'=>'RegPariente()'])!!}
                     <button type="button" class="btn btn-default " data-dismiss="modal">Salir</button>
-                </div>                    
+                </div>  
+                {!! Form::close()!!}  
+                </div>
+                                  
         </div>
     </div>
 </div>

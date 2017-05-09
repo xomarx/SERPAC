@@ -18,4 +18,8 @@ class Condicion extends Model
     {
         return $this->hasMany(Compra::class);
     }
+    
+    public function socios(){
+        return $this->belongsToMany(\App\Models\Socios\Socio::class);
+    }
 }

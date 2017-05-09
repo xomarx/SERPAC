@@ -12,17 +12,17 @@
                 <div class="col-md-12 col-md-offset-0 row form-group">   
                     <div class=" col-sm-2">
                         {!! Form::label('codigo','Codigo: ',['class'=>'form-label']) !!}                        
-                        {!! Form::text('codigo',null,['id'=>'codigo','class'=>'form-control','placeholder'=>'ACO-00000','minlength'=>'9','maxlength'=>'9'])!!}
+                        {!! Form::text('codigo',null,['id'=>'codigo','class'=>'form-control','placeholder'=>'ACO-00000','minlength'=>'1','maxlength'=>'5','onKeypress'=>'return soloNumeros(event)'])!!}
                         <div class="text-danger" id="error_codigo"></div>
                     </div> 
                     <div class=" col-sm-2">
                         {!! Form::label('dni','DNI',['class'=>'form-label col-xs-1']) !!}
-                        {!! Form::text('dni',null,['id'=>'dni','class'=>'form-control','placeholder'=>'N° DNI','minlength'=>'8','maxlength'=>'8'])!!}
+                        {!! Form::text('dni',null,['id'=>'dni','class'=>'form-control','placeholder'=>'N° DNI','minlength'=>'8','maxlength'=>'8','onKeypress'=>'return soloNumeros(event)'])!!}
                         <div class="text-danger" id="error_dni"></div>
                     </div>                                                   
                     <div class=" col-sm-1">
                         <label class="radio">
-                            <input type="radio" name="sexo" id="sexoM" value="M" /> Maculino
+                            <input type="radio" name="sexo" id="sexoM" value="M"  /> Maculino
                         </label>   
                         <label class="radio">
                             <input type="radio" name="sexo" id="sexoF" value="F" /> Femenino
@@ -67,16 +67,17 @@
                         {!! Form::date('fec_nac',null,['id'=>'fec_nac','class'=>'form-control']) !!}
                         <div class="text-danger" id="error_fec_nac"></div>
                     </div> 
-                    <div class=" col-sm-3">
-                        {!! Form::label('asociadosocio','Fecha Asociado',['class'=>'control-label']) !!}    
-                        {!! Form::date('fec_asociado',null,['id'=>'fec_asociado','class'=>'form-control']) !!}
-                        <div class="text-danger" id="error_fec_asociado"></div>
-                    </div>
                     <div class="col-sm-3">
                         {!! Form::label('empadronsocio','Fecha Empadron',['class'=>'control-label']) !!}                        
                         {!! Form::date('fec_empadron',null,['id'=>'fec_empadron','class'=>'form-control','required','placeholder'=>'mm/dd/año']) !!}
                         <div class="text-danger" id="error_fec_empadron"></div>
                     </div>
+                    <div class=" col-sm-3">
+                        {!! Form::label('asociadosocio','Fecha Asociado',['class'=>'control-label']) !!}    
+                        {!! Form::date('fec_asociado',null,['id'=>'fec_asociado','class'=>'form-control']) !!}
+                        <div class="text-danger" id="error_fec_asociado"></div>
+                    </div>
+                    
                     
                     <div class=" col-sm-3">
                         {!! Form::label('gradosocio','Grado Instruccion: ',['class'=>'control-label']) !!}
@@ -133,20 +134,27 @@
                         <div class="text-danger" id="error_telefono"></div>
                     </div> 
                     </div> 
-                <div class="col-md-12 col-md-offset-0 row form-group" >
+                
                     <div class=" col-sm-6">
                         {!! Form::label('direccion','Direccion',['class'=>'form-label']) !!}
                         {!! Form::text('direccion',null,['id'=>'direccion','class'=>'form-control','placeholder'=>'Direccion de la vivienda'])!!}
                         <div class="text-danger" id="error_direccion"></div>
                     </div>
-                </div>
-                 {!! Form::close() !!}             
-            </div>
-            <div class="modal-footer">
-                {!!link_to('#', $title='REGISTRAR', $attributes = ['id'=>'Regsocio', 'class'=>'btn btn-dropbox','onclick'=>'RegSocio()'])!!}                
+                <div class="col-md-6" style="padding-bottom: 10px">
+                    {!! Form::label('condicion','Condicion: ',['class'=>'form-label']) !!}   <br>                     
+                    <select class="form-control select2" multiple="multiple" name="condicion" id="condicion" data-placeholder="Seleccione" style="width: 100%;">
+                            @foreach($condicions as $condicion)
+                            <option value="{{$condicion->id}}">{{$condicion->condicion}}</option>
+                            @endforeach
+                        </select>
+                        <div class="text-danger" id="error-condicion"></div>                        
+                    </div>                
+                 {!! Form::close() !!}  
+                 <div class="modal-footer">
+                {!!link_to('#', $title='REGISTRAR', $attributes = ['id'=>'Regsocio', 'class'=>'btn btn-dropbox'])!!}                
                 <button type="button" class="btn btn-default " data-dismiss="modal">Close</button>
             </div>
-            
+            </div>                        
         </div>
     </div>
 </div>
