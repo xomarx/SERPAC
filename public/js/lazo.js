@@ -114,7 +114,7 @@ var activarForm = function(id){
         else if(id == 3) {var route = 'Caja-Chica/'+$("#anioc").val()+'/'+$("#mesc").val()+'/'+$("#buscarc").val();}
         else if(id == 4) {var route = 'ListMovcheques/'+$("#anio").val()+'/'+$("#mes").val()+'/'+$("#buscar").val();}
         else if(id == 5) {var route = 'ListUsuarios';}
-//        else if(id == 6) {var route = 'transferencias/newtransferencias';}
+        else if(id == 6) {var route = '/socios/fundos/Listfundos/'+$("#buscar").val();}
         else if(id == 7) {var route = 'ListaPlanillaSemanal';}
         else if(id == 8) {var route = 'listaRecepcionFondos/'+$("#anio").val()+'/'+$("#mes").val()+'/'+$("#buscar").val();}
         else if(id == 9) {var route = 'ListaDistribucion/'+$("#anio").val()+'/'+$("#mes").val()+'/'+$("#buscar").val();}
@@ -692,7 +692,7 @@ var RegFundo = function(){
                 if($("#Regfundo").text() == "ACTUALIZAR") limpiarPropiedadesFundo($("#idfundo").val());
                 registropropoiedadesFundo();
                 $("#modal-form").modal('hide');
-                if($("#Regfundo").text() == "ACTUALIZAR") document.location.reload();
+                if($("#Regfundo").text() == "ACTUALIZAR") activarForm(6);
               }
               else{
                   $("#alert-msj").removeClass('alert-success');

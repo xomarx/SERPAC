@@ -67,16 +67,28 @@ class Fundo extends Model
                     ->get();
         }
         
-        public static function listaFundo()
+        public static function scopelistaFundo($query,$data='')
         {
-            return DB::table('fundos')
+            return $query
                 ->join('comites_locales','fundos.comite_local_id','=','comites_locales.id')
                 -> join ('comites_centrales','comites_locales.comites_centrales_id','=','comites_centrales.id')
                 ->join('fundos_has_floras','fundos.id','=','fundos_has_floras.fundos_id')
+                
                 ->where('estado','=',1)
+                ->where(function($query)use($data){
+                    $query->where('codigo_socios','like','%'.$data.'%')
+                            ->orwhere('estadofundo','like','%'.$data.'%')
+                            ->orwhere('fundo','like','%'.$data.'%')
+                            ->orwhere('comite_local','like','%'.$data.'%')
+                            ->orwhere('comite_central','like','%'.$data.'%')
+                            ->orwhere('fecha','like','%'.$data.'%');
+//                            ->orwhere(DB::raw('SUM(fundos_has_floras.hectarea)'),'like','%'.$data.'%');
+//                            ->groupBy('fundos_has_floras.fundos_id');
+                })
                 ->groupBy('fundos_has_floras.fundos_id')
-                ->select('fundos.id','fundos.codigo_socios','fundos.estadofundo','fundos.fundo','comites_locales.comite_local','comites_centrales.comite_central','fundos.fecha',DB::raw('SUM(fundos_has_floras.hectarea) as hectareas'))
-                ->get();
+                ->select('fundos.id','fundos.codigo_socios','fundos.estadofundo','fundos.fundo','comites_locales.comite_local'
+                        ,'comites_centrales.comite_central','fundos.fecha',DB::raw('SUM(fundos_has_floras.hectarea) as hectareas'))
+                ->paginate(10);
         }
         
         public static function getfundoDatos($id)

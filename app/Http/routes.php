@@ -66,8 +66,7 @@ Route::group(['middleware' => ['auth']], function () {
     route::resource('socios/asignacion-directivos','socios\cargodirectivosociocontroller');
     
     route::resource('socios/transferencias/newtransferencias','socios\transferenciacontroller@NewTransferencia');
-    route::resource('socios/transferencias','socios\transferenciacontroller');
-    
+    route::resource('socios/transferencias','socios\transferenciacontroller');    
     route::resource('socios/transferencias/datos','socios\transferenciacontroller@datossocio');
     route::resource('socios/transferencias/nuevo','socios\transferenciacontroller@datosnuevo');//datosnuevo
     route::resource('socios/transferencias/persona','socios\transferenciacontroller@datosnuevobeneficiario');//datosnuevobeneficiario    
@@ -100,7 +99,7 @@ Route::group(['middleware' => ['auth']], function () {
     
     
     
-    
+    route::get('socios/fundos/Listfundos/{data?}/{page?}','socios\fundoscontroller@ListaFundos');
     route::resource('socios/eliminarpropiedades','socios\fundoscontroller@EliminarPropiedadesFundo');//EliminarPropiedadesFundo
     route::resource('socios/modalfundo','socios\fundoscontroller@ModalFundo');
     route::resource('socios/fundos','socios\fundoscontroller');

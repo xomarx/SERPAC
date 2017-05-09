@@ -7,43 +7,12 @@
 @permission('ver fundos')
 <div class="box box-primary box-solid">
     <div class="box-header">
-        
+        <div class="col-sm-3 form-group-sm" style="float: right">            
+            {!! Form::text('buscar',null,['id'=>'buscar','class'=>'form-control','placeholder'=>'Buscar..'])!!}
+        </div>  
     </div>
-    <div class="box-body">
-        <table class="table table-responsive" id="myTable" >
-            <thead>                                                            
-            <th>CODIGO</th> 
-            <th>FUNDO</th>
-            <th>ESTADO</th>                              
-            <th>HECTAREAS</th>
-            <th>COMITE LOCAL</th>
-            <th>COMITE CENTRAL</th>
-            <th>FECHA</th>
-            <th>ACCIONES</th>            
-            </thead>
-            <tbody>
-                @foreach($fundos as $fundo)
-                {{--*/ @$name = str_replace(' ','&nbsp;', $fundo->fundo) /*--}}
-                <tr>                                            
-                    <td>{{$fundo->codigo_socios}}</td>
-                    <td>{{$fundo->fundo}}</td>
-                    <td>{{$fundo->estadofundo}}</td>
-                    <td>{{$fundo->hectareas}}</td>
-                    <td>{{$fundo->comite_local}}</td>
-                    <td>{{$fundo->comite_central}}</td>
-                    <td>{{$fundo->fecha}}</td>                                                        
-                    <td>       
-                        @permission('editar fundos')
-                        <a href="#"  OnClick='EditarFundo({{$fundo->id}});' class="btn-xs btn-primary" data-toggle="tooltip" data-placement="top" title="Editar Fundo"><span class="glyphicon glyphicon-pencil"></span></a>
-                        @endpermission
-                        @permission('eliminar fundos')
-                        <a href="#" onclick="EliminarFundo('{{$fundo->id}}','{{$name}}')" class="btn-xs btn-danger"><span data-toggle="tooltip" data-placement="top" title="Eliminar" class="glyphicon glyphicon-remove"></span></a>                                                            
-                        @endpermission
-                    </td>                    
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
+    <div class="box-body" id="contenidos-box">
+        @include('socios.fundosList')
     </div>
 </div>
 <section id="conten-modal"></section>
@@ -171,7 +140,12 @@ var AgregInmueble = function(){
     $(document).ready(function(){
         $("#subfundos").addClass('active');
         $("#menusocios").addClass('active');
+        activarForm(6);
     });
+     
+     $(document).ready().on('keyup','#buscar',function(){
+         activarForm(6);
+     })
      
 </script>
 @stop

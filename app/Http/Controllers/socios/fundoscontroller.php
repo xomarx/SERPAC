@@ -18,13 +18,18 @@ class fundoscontroller extends Controller
     public function index()
     {
         //
-        $fundos = \App\Models\Socios\Fundo::listaFundo();
+        $fundos = \App\Models\Socios\Fundo::listaFundo('');
         $departamentos = \App\Models\Socios\Departamento::pluck('departamento','id')->prepend('Selleciona');
         $floras = \App\Models\Socios\Flora::pluck('flora','id');  
         $faunas = \App\Models\Socios\Fauna::pluck('fauna','id');  
         $inmuebles = \App\Models\Socios\Inmueble::pluck('inmueble','id'); 
         return view('socios.fundos',  ['fundos'=>$fundos,'departamentos'=>$departamentos,'floras'=>$floras,'faunas'=>$faunas,'inmuebles'=>$inmuebles]);
                 
+    }
+    
+    public function ListaFundos($data=''){
+        $fundos = \App\Models\Socios\Fundo::listaFundo($data);
+        return response()->view('socios.fundosList',['fundos'=>$fundos]);
     }
     
     public function ModalFundo(){
