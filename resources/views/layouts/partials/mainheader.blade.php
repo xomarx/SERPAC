@@ -29,7 +29,7 @@
                 @if(!Auth::guest())
                 <ul class="nav navbar-nav">
                     <li id="menusocios"><a href="{{ url('/socios') }}">Socios</a></li>
-                    <li id="menuRRHH"><a href="{{ url('/RRHH/empleados') }}">RRHH</a></li>
+                    <li id="menuRRHH"><a href="{{ url('/RRHH/Empleados') }}">RRHH</a></li>
                     <li id="menuacopio"><a href="{{ url('/Acopio/Fondos-Acopio') }}">Acopio</a></li>
                     <li id="menucreditos"><a href="{{ url('/Creditos/Creditos-Financieros') }}">Creditos</a></li>
                     <li id="menucertificacion"><a href="{{ url('/Certificacion') }}">Certificacion</a></li>

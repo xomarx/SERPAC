@@ -65,7 +65,7 @@
                     </div> 
                     <div class="col-md-4">
                         {!! Form::label('ubigeosocio','Departamento: ',['class'=>'control-label']) !!}
-                        {!! Form::select('departamento',$departamentos,null,['id'=>'departamento','class'=>'form-control','onchange'=>'department()','placeholder'=>'Seleccione']) !!}
+                        {!! Form::select('departamento',$departamentos,null,['id'=>'departamento','class'=>'form-control','onchange'=>'department(event)','placeholder'=>'Seleccione']) !!}
                     </div>
                     <div class="col-sm-4">
                         {!! Form::label('provincia','Provincia: ',['class'=>'control-label']) !!}

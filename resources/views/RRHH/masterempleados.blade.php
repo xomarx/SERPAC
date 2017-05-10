@@ -6,7 +6,7 @@
             <li class="header">{{ trans('adminlte_lang::message.header') }}</li>
             <!-- Optionally, you can add icons to the links -->
             @permission('ver empleados')
-            <li id="subempleado"><a href="{{ url('RRHH/empleados') }}"><i class='fa fa-child'></i> <span>Empleados</span></a></li>
+            <li id="subempleado"><a href="{{ url('RRHH/Empleados') }}"><i class='fa fa-child'></i> <span>Empleados</span></a></li>
             @endpermission
             @permission('ver tecnicos')
             <li id="subtecnicos"><a href="{{ url('RRHH/Tecnicos') }}"><i class='fa fa-street-view'></i> <span>Tecnicos</span></a></li>
@@ -20,7 +20,9 @@
             @permission('ver almacen')
             <li id="subalmacen"><a href="{{ url('RRHH/Sucursal') }}"><i class='fa fa-hospital-o'></i> <span>Almacen</span></a></li>
             @endpermission
+            @permission('ver empresas')
             <li id="subempresa"><a href="{{ url('RRHH/Empresas') }}"><i class='fa fa-institution'></i> <span>Empresa</span></a></li>
+            @endpermission
         </ul><!-- /.sidebar-menu -->
     </section>
 @stop

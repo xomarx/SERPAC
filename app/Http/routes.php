@@ -122,7 +122,7 @@ Route::group(['middleware' => ['auth']], function () {
     route::resource('RRHH/autoempleadoDni','RRHH\empleadocontroller@autocompleteEmpleadoDni');
     route::resource('RRHH/autoempleado','RRHH\empleadocontroller@autocompleteEmpleado');//   autocompleteEmpleado 
     route::resource('RRHH/modalempleado','RRHH\empleadocontroller@modalEmpleado');
-    route::resource('RRHH/empleados','RRHH\empleadocontroller');
+    route::resource('RRHH/Empleados','RRHH\empleadocontroller');
     
     route::resource('RRHH/Cargos','RRHH\cargoscontroller');
     route::resource('RRHH/Area','RRHH\areascontroller');    
@@ -134,6 +134,7 @@ Route::group(['middleware' => ['auth']], function () {
     route::resource('RRHH/modaltecnicos','RRHH\tecnicoscontroller@modalTecnicos');
     route::resource('RRHH/Tecnicos','RRHH\tecnicoscontroller');
     
+    route::resource('RRHH/Empresas/ListaEmpresa','RRHH\EmpresaController@ListEmpresa');
     route::resource('RRHH/Empresas','RRHH\EmpresaController');
     // *************************************************************************************  ACOPIO **********************************************
     route::get('Acopio/listaRecepcionFondos/{an?}/{mes?}/{dato?}','Acopio\recepcion_fondoscontroller@recepcionfondos'); 

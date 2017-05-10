@@ -22,6 +22,7 @@
                 <th>EMPLEADO</th>
                 <th>CARGO</th> 
                 <th>AREA</th> 
+                <th>EMPRESA</th> 
                 <th>ESTADO</th> 
                 <th>ACCION</th>            
                 </thead>
@@ -34,6 +35,7 @@
                         <td>{{$empleado->paterno}} {{$empleado->materno}} {{$empleado->nombre}}</td>
                         <td>{{$empleado->cargo}}</td>
                         <td>{{$empleado->area}}</td>
+                        <td>{{$empleado->empresa}}</td>
                         <td>{{$empleado->estado}}</td>
                         <td>      
                             <a href="{{url('RRHH/empleados')}}/{{$empleado->empleadoId}}" class="btn-success btn-xs" data-toggle="tooltip" data-placement="top" title="Ver"><span class="glyphicon glyphicon-eye-open"></span></a>
@@ -65,6 +67,13 @@
     $("#menuRRHH").addClass('active');
  });
  
+ $(document).ready().on('blur','#codigo',function(event){
+     $("#codigo").empty();
+        var num = event.target.value.length;var valor=''
+        for(var i=0;i < 5 - num ; i++)
+            valor = valor + '0';             
+        $("#codigo").val('EMP-'+valor+event.target.value);
+    });
 </script>
 @stop
 

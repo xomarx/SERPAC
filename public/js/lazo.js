@@ -16,8 +16,8 @@ $(document).ready(function() {
 } );
 
 
-var department = function(){    
-    cargarprovincia($("#departamento").val(),'provincia');
+var department = function(event){        
+    cargarprovincia(event.target.value,'provincia');
 };
 
 var cargarprovincia = function(iddepa,idselec) {
@@ -127,6 +127,7 @@ var activarForm = function(id){
         else if(id == 16) {var route = '/socios/parientes/ListaParientes/'+$("#buscar").val();}
         else if(id == 17) {var route = '/socios/Asignacion-Delegados/ListaAsigDelegados/'+$("#buscar").val();}
         else if(id == 18) {var route = '/socios/Asignacion-Directivos/ListaAsigDirectivos/'+$("#buscar").val();}
+        else if(id == 19) {var route = '/RRHH/Empresas/ListaEmpresa';}
         $.ajax({
             type:'get',
             url:route,
@@ -1830,25 +1831,23 @@ var RegSectores = function(idempleado){
  });
  
 var RegEmpleado = function(){                       
-        var token = $("input[name=_token]").val();
-        var fields = $("#formempleado").serialize();
-        
-        var route = "/RRHH/empleados";
+       
+        var route = "/RRHH/Empleados";
         var type = "POST";
         if($("#Regempleado").text() == "Actualizar"){
-            route = "/RRHH/empleados/" + $("#codigo").val();
+            route = "/RRHH/Empleados/" + $("#codigo").val();
             type="PUT"            
         }                                                                  
             $.ajax({
                 url: route,
-                headers: {'X-CSRF-TOKEN': token},
+                headers: {'X-CSRF-TOKEN': $("input[name=_token]").val()},
                 type: type,
                 datatype: 'json',                
-                data: fields,
+                data: $("#formempleado").serialize(),
                 success: function (data)
                 {
                     mensajeRegistro(data,'formempleado');
-                    document.location.reload();                    
+                    if(data.success) document.location.reload();                    
                 },
                 error: function (data){
                     if(data.status==403)
@@ -1890,8 +1889,9 @@ var RegEmpleado = function(){
 var EdiEmpleado = function (id) {
     $.get('modalempleado', function (data) {
         $("#conten-modal").html(data);
-        var route = "/RRHH/empleados/" + id + "/edit";
+        var route = "/RRHH/Empleados/" + id + "/edit";
         $.get(route, function (data) {
+            console.log(data);
             $("#Regempleado").text("Actualizar");
             $("#titulo-empleado").html("ACTUALIZAR DATOS EMPLEADO")
             $("#codigo").val(data.empleadoId);
@@ -1915,8 +1915,9 @@ var EdiEmpleado = function (id) {
             else if (data.sexo == 'F')
                 $("#sexoF").prop("checked", true);
             $("#direccion").val(data.direccion);
+            $("#empresa").val(data.empresas_ruc);
             $("#referencia").val(data.referencia);
-            $("#telefono").val(data.telefono);
+            $("#celular").val(data.telefono);
             $("#departamento").val(data.departamentos_id);
             $("#provincia").empty();
             $("#provincia").append("<option value='" + data.provincias_id + "'>" + data.provincia + "</option>");
@@ -1938,7 +1939,7 @@ var EliEmpleado = function(id,name){
      // ALERT JQUERY     
    $.alertable.confirm("<span style='color:#000'>¿Está seguro de eliminar el registro?</span>"+"<br><strong><span style='color:#ff0000'>"
            +name+"</span></strong></br>").then(function() {  
-      var route = "/RRHH/empleados/"+id+"";
+      var route = "/RRHH/Empleados/"+id+"";
       var token = $("input[name=_token]").val();
 
       $.ajax({
@@ -1947,8 +1948,8 @@ var EliEmpleado = function(id,name){
         type: 'DELETE',
         dataType: 'json',
         success: function(data){
-        if (data.success)        
-            document.location.reload();        
+        if (data.success) document.location.reload();
+        else $.alertable.alert("No se puede Eliminar el codigo: "+id+"<br> El Codigo Cuenta con Registros de Operacion");
       },
       error:function(data){
          if(data.status==403) activarmodal(0);
@@ -3378,7 +3379,7 @@ $("#RegAsigDirectivos").click(function(event){
                             else if(index == 'estado')$("#error-estado").html(value); 
                             else if(index == 'inicio')$("#error-inicio").html(value); 
                             else if(index == 'final')$("#error-final").html(value); 
-                            else if(index == 'delegado')$("#error-cargo").html(value);                                                                                 
+                            else if(index == 'directivo')$("#error-cargo").html(value);                                                                                 
                       });
                
            }
@@ -3489,7 +3490,71 @@ $("#RegAsigDelegado").click(function(event){
        }
     });
 });
+//********************************************************  EMPRESAS *********************************************************************
+var ElimEmpresa = function(ruc){
+    $.alertable.confirm("<span style='color:#000'>¿Está seguro de eliminar el registro de RUC: </span><br><strong><span style='color:#ff0000'>"
+           +ruc+"?</span></strong></br>").then(function() {  
+      var route = "Empresas/"+ruc+"";
+      var token = $("input[name=_token]").val();
+      $.ajax({
+        url: route,
+        headers: {'X-CSRF-TOKEN': token},
+        type: 'DELETE',
+        dataType: 'json',
+        success: function(data){
+            if(data.success) activarForm(19);
+            else $.alertable.alert("No se puede Eliminar el Registro "+ruc+"<br> Cuenta con Registros")
+      },
+      error:function(data){
+          if(data.status==403) activarmodal(0);
+      }
+      });          
+    });
+}
 
+var EditEmpresa = function(ruc){
+    $.getJSON("Empresas/"+ruc+"/edit",function(data){         
+         $("#ruc").val(data.ruc);
+         $("#id").val(data.ruc);
+         $("#ruc").prop('disabled',true);
+         $("#empresa").val(data.empresa);
+         $("#direccion").val(data.direccion);         
+         $("#RegEmpresa").text('Actualizar');         
+     });
+};
+
+$("#RegEmpresa").click(function(event){
+    var type='POST';
+    if(event.target.text=='Actualizar'){
+        type='PUT';
+    }
+    
+    $.ajax({
+       url:'Empresas/'+$("#id").val(),
+       headers: {'X-CSRF-TOKEN': $("input[name=_token]").val()},
+       dataType: 'json',
+       type:type,
+       data:$("#formempresa").serialize(),
+       success:function(data){
+            mensajeRegistro(data,'formempresa');            
+            activarForm(19);$("#ruc").prop('disabled',false);
+       },
+       error:function(data){
+           if(data.status==403) activarmodal(0);
+           else{
+                   $("#error-ruc").html(''); $("#error-empresa").html(''); $("#error-direccion").html('');                    
+                   var errors =  $.parseJSON(data.responseText);      
+                    $.each(errors,function(index, value) {                      
+                            if(index == 'ruc')$("#error-ruc").html(value);                            
+                            else if(index == 'empresa')$("#error-empresa").html(value); 
+                            else if(index == 'direccion')$("#error-direccion").html(value);                                                                                                            
+                      });
+               
+           }
+           
+       }
+    });
+});
 
 // ************************************************************************ REPORTES **********************************************
 

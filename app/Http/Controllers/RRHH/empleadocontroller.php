@@ -51,8 +51,8 @@ class empleadocontroller extends Controller
     {        
         if(!auth()->user()->can('ver empleados'))
             return response ()->view ('errors.403');
-        $empleados  = \App\Models\RRHH\Empleado::listaEmpleado();        
-        return view('RRHH/empleados',  array('empleados'=>$empleados));
+        $empleados  = \App\Models\RRHH\Empleado::listaEmpleado();          
+        return view('RRHH/Empleados',  array('empleados'=>$empleados));
     }
     
     public function modalEmpleado(){
@@ -61,7 +61,8 @@ class empleadocontroller extends Controller
         $departamentos = Departamento::pluck('departamento','id');
         $areas = \App\Models\RRHH\Areas::pluck('area','id');
         $cargos = \App\Models\RRHH\Cargos::pluck('cargo','id');
-        return view('RRHH/modalempleados',  array('departamentos'=>$departamentos,'areas'=>$areas,'cargos'=>$cargos));
+        $empresas = \App\Models\RRHH\Empresa::pluck('empresa','ruc');
+        return view('RRHH/empleadosModal',  array('departamentos'=>$departamentos,'areas'=>$areas,'cargos'=>$cargos,'empresas'=>$empresas));
     }
 
     /**
@@ -84,20 +85,42 @@ class empleadocontroller extends Controller
         if($request->ajax()){
             if(!auth()->user()->can('crear empleados'))
                 return response ()->view ('errors.403-content',[],403);
-            $persona = new Persona($request->all());                        
-            $persona->comites_locales_id = $request->comite_local;     
-            $persona->fec_nac = Carbon::parse($request->fec_nac);
-            $persona->paterno = strtoupper($request->paterno);
-            $persona->materno = strtoupper($request->materno);
-            $persona->nombre = strtoupper($request->nombre);
-            $persona->direccion = strtoupper($request->direccion);  
-            $persona->save();               
+                       
+            $persona = Persona::where('dni','=',$request->dni)->first();
+//            dd($persona);
+            if( count($persona)== 0 ){
+                $persona = new Persona($request->all());
+                $persona->sexo= $request->sexo;
+                $persona->telefono=$request->celular;
+                $persona->comites_locales_id = $request->comite_local;     
+                $persona->fec_nac = Carbon::parse($request->fec_nac);
+                $persona->paterno = strtoupper($request->paterno);
+                $persona->materno = strtoupper($request->materno);
+                $persona->nombre = strtoupper($request->nombre);
+                $persona->direccion = strtoupper($request->direccion);  
+                $persona->save();
+            }
+            else{
+                $persona = Persona::where('dni','=',$request->dni)
+                        ->update([
+                    'paterno'=>strtoupper($request->paterno),
+                            'materno'=>strtoupper($request->materno),
+                            'nombre'=>strtoupper($request->nombre),
+                            'fec_nac'=>Carbon::parse($request->fec_nac),
+                            'sexo'=>$request->sexo,
+                            'direccion'=>strtoupper($request->direccion),
+                            'telefono'=>$request->celular,
+                            'comites_locales_id'=>$request->comite_local,
+                ]);
+            }
+                           
             $empleado = new Empleado($request->all());     
             $empleado->empleadoId = strtoupper($request->codigo);
             $empleado->estadocivil = $request->estado_civil;
-            $empleado->personas_dni = $persona->dni;
+            $empleado->personas_dni = $request->dni;
             $empleado->areas_id=$request->area;
             $empleado->cargos_id = $request->cargo;
+            $empleado->empresas_ruc = $request->empresa;
             $empleado->save();            
             if($empleado)
             {                            
@@ -133,7 +156,7 @@ class empleadocontroller extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit($id){        
-        $empleado = Empleado::empleado($id);
+        $empleado = Empleado::getempleado($id);
         return response()->json($empleado);
     }
 
@@ -185,7 +208,9 @@ class empleadocontroller extends Controller
     public function destroy($id) {
         
         if(!auth()->user()->can('eliminar empleados'))
-            return response ()->view ('errors.403-modal',[],403);
+            return response ()->view ('errors.403-modal',[],403);            
+        if(\App\Models\RRHH\Sucursal::where('empleados_empleadoId','=',$id)->count() > 0 || \App\Models\RRHH\Tecnico::where('empleados_empleadoId','=',$id)->count() > 0)
+                return response ()->json (['success'=>false]);
         $empleado = Empleado::where('empleadoId','=',$id)->delete();
         if($empleado)
             return response ()->json (['success'=>true]);

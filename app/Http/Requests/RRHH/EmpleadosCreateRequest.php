@@ -49,6 +49,7 @@ class EmpleadosCreateRequest extends Request
                         'comite_local' => 'required',
                         'email' => 'email|required',
                         'direccion' => 'required',
+                        'empresa'=>'required'
                     ];
                 }
             case 'PATCH':
@@ -73,6 +74,7 @@ class EmpleadosCreateRequest extends Request
                         'comite_local' => 'required',
                         'email' => 'email|required',
                         'direccion' => 'required',
+                        'empresa'=>'required'
                     ];
                 }
             default : break;

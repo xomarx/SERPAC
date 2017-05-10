@@ -90,7 +90,7 @@
                 <div class="col-md-12 col-md-offset-0 row form-group" >
                     <div class="col-sm-3">
                         {!! Form::label('departamento','Departamento',['class'=>'control-label']) !!}
-                        {!! Form::select('departamento',$departamentos,null,['id'=>'departamento','class'=>'form-control','placeholder'=>'Seleccione','onchange'=>'department()']) !!}
+                        {!! Form::select('departamento',$departamentos,null,['id'=>'departamento','class'=>'form-control','placeholder'=>'Seleccione','onchange'=>'department(event)']) !!}
                         <div class="text-danger" id="error_departamento"></div>
                     </div>
                     <div class=" col-sm-3">

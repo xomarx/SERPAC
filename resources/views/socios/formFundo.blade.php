@@ -28,7 +28,7 @@
                     </div>                                    
                     <div class=" col-md-3">
                         {!! Form::label('departamento','Departamento',['class'=>'control-label']) !!}
-                        {!! Form::select('departamento',$departamentos,null,['id'=>'departamento','class'=>'form-control','onchange'=>'department()','placeholder'=>'Seleccione']) !!}
+                        {!! Form::select('departamento',$departamentos,null,['id'=>'departamento','class'=>'form-control','onchange'=>'department(event)','placeholder'=>'Seleccione']) !!}
                     </div>
                 </div>
                 <div class="col-md-12 row" >

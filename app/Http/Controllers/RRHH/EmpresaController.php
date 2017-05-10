@@ -17,9 +17,20 @@ class EmpresaController extends Controller
     public function index()
     {
         //
-        return response()->view('RRHH/empresa');
+        if(!auth()->user()->can('ver empresas'))
+                return response ()->view ('errors.403',[],403);
+        $empresas = \App\Models\RRHH\Empresa::listaEmpresas();
+        return response()->view('RRHH/empresa',['empresas'=>$empresas]);
+    }
+    
+    public function ListEmpresa(){
+        if(!auth()->user()->can('ver empresas'))
+                return response ()->view ('errors.403-content',[],403);
+        $empresas = \App\Models\RRHH\Empresa::listaEmpresas();
+        return response()->view('RRHH/empresaList',['empresas'=>$empresas]);
     }
 
+    
     /**
      * Show the form for creating a new resource.
      *
@@ -36,9 +47,24 @@ class EmpresaController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Requests\RRHH\EmpresaRequest $request)
     {
-        //
+        if($request->ajax()){
+            if(!auth()->user()->can('crear empresas'))
+                return response ()->view ('errors.403-content',[],403);
+            try {
+                $empresa = \App\Models\RRHH\Empresa::create([
+                'empresa'=>  strtoupper($request->empresa),
+                'ruc'=>$request->ruc,
+                'direccion'=>  strtoupper($request->direccion)
+            ]);
+                if($empresa) return response ()->json (['success'=>true,'message'=>'Se registro correctamente']);
+            else return response ()->json (['success'=>false,'message'=>'No se Registro']);
+            } catch (Exception $exc) {                
+                return response ()->json (['success'=>false,'message'=>$exc-getTraceAsString()]);
+            }
+                       
+        }
     }
 
     /**
@@ -60,7 +86,8 @@ class EmpresaController extends Controller
      */
     public function edit($id)
     {
-        //
+        $empresa = \App\Models\RRHH\Empresa::where('ruc','=',$id)->first();
+        return response()->json($empresa);
     }
 
     /**
@@ -72,7 +99,17 @@ class EmpresaController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        if($request->ajax()){
+            if(!auth()->user()->can('editar empresas'))
+                return response ()->view ('errors.403-content',[],403);
+            $empresa = \App\Models\RRHH\Empresa::where('ruc','=',$id)
+                    ->update([
+                        'empresa'=>  strtoupper($request->empresa),
+                        'direccion'=>  strtoupper($request->direccion)
+                    ]);
+            if($empresa) return response ()->json (['success'=>true,'message'=>'Se Actualizaron los Datos']);
+            else return response ()->json (['success'=>false,'message'=>'No se actualizaron ningun registro']);
+        }        
     }
 
     /**
@@ -83,6 +120,14 @@ class EmpresaController extends Controller
      */
     public function destroy($id)
     {
-        //
+        if(!auth()->user()->can('eliminar empresas'))
+                return response ()->view ('errors.403-content',[],403);
+        $empresa = \App\Models\RRHH\Empleado::where('empresas_ruc','=',$id)->first();        
+        if(count($empresa) > 0)
+            return response ()->json (['success'=>false]);
+        $empresa = \App\Models\RRHH\Empresa::where('ruc','=',$id)->delete();
+        if($empresa) return response ()->json (['success'=>true]);
+        else return response ()->json (['success'=>false]);
+//            
     }
 }

@@ -179,7 +179,39 @@
                 {!!Form::checkbox('eliminar_almacen','eliminar_almacen',null,['class'=>'checkbox-inline','onclick'=>'asigpermiso("eliminar_almacen")'])!!}
                 @endif
                 </td>
-        </tr>        
+        </tr> 
+        
+        <tr>
+            <td>Sub modulo de Empresa</td>
+            <td>
+                @if(in_array('crear_empresas',$permisos) )
+                {!!Form::checkbox('crear_empresas','crear_empresas',null,['class'=>'checkbox-inline','onclick'=>'asigpermiso("crear_empresas")','checked'])!!}
+                @else
+                {!!Form::checkbox('crear_empresas','crear_empresas',null,['class'=>'checkbox-inline','onclick'=>'asigpermiso("crear_empresas")'])!!}
+                @endif
+                </td>
+            <td>
+                @if(in_array('editar_empresas',$permisos) )
+                {!!Form::checkbox('editar_empresas','editar_empresas',null,['class'=>'checkbox-inline','onclick'=>'asigpermiso("editar_empresas")','checked'])!!}
+                @else
+                {!!Form::checkbox('editar_empresas','editar_empresas',null,['class'=>'checkbox-inline','onclick'=>'asigpermiso("editar_empresas")'])!!}
+                @endif
+                </td>
+            <td>
+                @if(in_array('ver_empresas',$permisos) )
+                {!!Form::checkbox('ver_empresas','ver_empresas',null,['class'=>'checkbox-inline','onclick'=>'asigpermiso("ver_empresas")','checked'])!!}
+                @else
+                {!!Form::checkbox('ver_empresas','ver_empresas',null,['class'=>'checkbox-inline','onclick'=>'asigpermiso("ver_empresas")'])!!}
+                @endif
+                </td>
+            <td>
+                @if(in_array('eliminar_empresas',$permisos) )
+                {!!Form::checkbox('eliminar_empresas','eliminar_empresas',null,['class'=>'checkbox-inline','onclick'=>'asigpermiso("eliminar_empresas")','checked'])!!}
+                @else
+                {!!Form::checkbox('eliminar_empresas','eliminar_empresas',null,['class'=>'checkbox-inline','onclick'=>'asigpermiso("eliminar_empresas")'])!!}
+                @endif
+                </td>
+        </tr> 
     </tbody>
 </table>
 {!! Form::close() !!}

@@ -97,6 +97,7 @@
        activarForm(15);
     });
     $(document).ready().on('blur','#codigo',function(event){
+        $("#codigo").empty();
         var num = event.target.value.length;var valor=''
         for(var i=0;i < 5 - num ; i++)
             valor = valor + '0';             

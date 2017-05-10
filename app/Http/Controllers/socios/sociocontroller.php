@@ -95,18 +95,36 @@ class sociocontroller extends Controller
             if(!auth()->user()->can('crear socios'))
                 return response()->view('errors.403-content', [], 403);
             
-            $persona = new Persona($request->all());
-            $date = Carbon::parse($request->fec_nac);
-            $persona->fec_nac=$date;
-            $persona->comites_locales_id = $request->comite_local;
-            $persona->save();
-            $dni = $persona->dni;           
-            $socio = new socio($request->all());
-            $date = Carbon::parse($request->fec_asociado);
-            $socio->fec_asociado = $date;
-            $date = Carbon::parse($request->fec_empadron);
-            $socio->fec_empadron = $date;
-            $socio->dni = $dni;
+            $persona = Persona::where('dni','=',$request->dni)->first();
+            if( count($persona)== 0 ){
+                $persona = new Persona($request->all());
+                $persona->sexo= $request->sexo;
+                $persona->telefono=$request->celular;
+                $persona->comites_locales_id = $request->comite_local;     
+                $persona->fec_nac = Carbon::parse($request->fec_nac);
+                $persona->paterno = strtoupper($request->paterno);
+                $persona->materno = strtoupper($request->materno);
+                $persona->nombre = strtoupper($request->nombre);
+                $persona->direccion = strtoupper($request->direccion);  
+                $persona->save();
+            }
+            else{
+                $persona = Persona::where('dni','=',$request->dni)
+                        ->update([
+                    'paterno'=>strtoupper($request->paterno),
+                            'materno'=>strtoupper($request->materno),
+                            'nombre'=>strtoupper($request->nombre),
+                            'fec_nac'=>Carbon::parse($request->fec_nac),
+                            'sexo'=>$request->sexo,
+                            'direccion'=>strtoupper($request->direccion),
+                            'telefono'=>$request->celular,
+                            'comites_locales_id'=>$request->comite_local,
+                ]);
+            }           
+            $socio = new socio($request->all());            
+            $socio->fec_asociado = Carbon::parse($request->fec_asociado);            
+            $socio->fec_empadron = Carbon::parse($request->fec_empadron);
+            $socio->dni = $request->dni;
             $socio->users_id = \Illuminate\Support\Facades\Auth::user()->id;
             $socio->save();                        
             if($socio) return response()->json(['success'=>true,'message'=> 'Se Registro Correctamente']);            

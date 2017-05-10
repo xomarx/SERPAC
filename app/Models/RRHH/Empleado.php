@@ -19,18 +19,19 @@ class Empleado extends Model
         return $this ->hasOne(\App\Models\Persona::class);
     }
     
-    public static  function listaEmpleado() {
-        return DB::table('empleados')
+    public static  function scopelistaEmpleado($query) {
+        return $query
                 ->join('personas','empleados.personas_dni','=','personas.dni')
                 ->join('cargos','empleados.cargos_id','=','cargos.id')
                 ->join('areas','empleados.areas_id','=','areas.id')
+                ->join('empresas','empresas_ruc','=','empresas.ruc')
                 ->select('empleados.empleadoId','empleados.estado','personas.paterno','personas.materno',
-                        'personas.nombre','cargos.cargo','areas.area','empleados.personas_dni')
+                        'personas.nombre','cargos.cargo','areas.area','empleados.personas_dni','empresa')
                 ->get();
     }
     
-    public static function empleado($id) {
-        return DB::table('empleados')
+    public static function scopegetempleado($query,$id) {
+        return $query
                 ->join('personas','empleados.personas_dni','=','personas.dni')
                 ->join('cargos','empleados.cargos_id','=','cargos.id')
                 ->join('areas','empleados.areas_id','=','areas.id')
@@ -39,6 +40,7 @@ class Empleado extends Model
                 ->join('distritos','comites_centrales.distritos_id','=','distritos.id')
                 ->join('provincias','distritos.provincias_id','=','provincias.id')
                 ->join('departamentos','provincias.departamentos_id','=','departamentos.id')
+                ->join('empresas','empresas_ruc','=','empresas.ruc')
                 ->where('empleados.empleadoId','=',$id)
                 ->select('empleados.empleadoId','empleados.estado','empleados.personas_dni','empleados.estadocivil',
                         'empleados.email','empleados.profesion','empleados.ruc','empleados.cargos_id','empleados.areas_id',
@@ -47,7 +49,7 @@ class Empleado extends Model
                         'comites_locales.comite_local','comites_centrales.comite_central','distritos.distrito','provincias.provincia',
                         'comites_centrales.comite_central','comites_locales.comite_local','distritos.distrito','provincias.provincia',
                         'comites_locales.comites_centrales_id','comites_centrales.distritos_id','distritos.provincias_id','provincias.departamentos_id',
-                        'cargos.cargo','areas.area','departamentos.departamento')
+                        'cargos.cargo','areas.area','departamentos.departamento','empresas_ruc')
                 ->first();
     }
     
