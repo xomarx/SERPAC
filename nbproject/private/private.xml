@@ -4,9 +4,8 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/C:/xampp/htdocs/SERPAC/app/Http/routes.php</file>
-            <file>file:/C:/xampp/htdocs/SERPAC/resources/views/RRHH/empleados.blade.php</file>
+            <file>file:/C:/xampp/htdocs/SERPAC/app/Http/Controllers/socios/cargodirectivosociocontroller.php</file>
             <file>file:/C:/xampp/htdocs/SERPAC/public/js/lazo.js</file>
-            <file>file:/C:/xampp/htdocs/SERPAC/resources/views/Tesoreria/movDinero.blade.php</file>
         </group>
     </open-files>
 </project-private>

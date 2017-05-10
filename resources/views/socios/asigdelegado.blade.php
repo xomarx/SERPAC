@@ -111,15 +111,6 @@ $(document).ready().on('keyup','#buscar',function(event){
     activarForm(17);
 })
 
-//$("#estado").change(function(event){
-//    if(event.target.value == 'INACTIVO'){
-//        $("#delegado").prop('disabled',true);
-//    }
-//    else{
-//        $("#delegado").prop('disabled',false);
-//    }
-//});
-  
 </script>
 @stop
 

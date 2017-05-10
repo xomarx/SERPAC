@@ -4,7 +4,7 @@ namespace App\Http\Requests\socios;
 
 use App\Http\Requests\Request;
 
-class AsigDelegadosRequest extends Request
+class AsigDirectivosRequest extends Request
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,7 +27,7 @@ class AsigDelegadosRequest extends Request
             case 'POST':
                 return [
                     'dni'=>'required|numeric|min:8|exists:personas,dni',
-                    'delegado'=>'required',
+                    'directivo'=>'required',
                     'inicio'=>'required|date',
                     'final'=>'numeric|required',
                     'estado'=>'required'
@@ -35,20 +35,12 @@ class AsigDelegadosRequest extends Request
             case 'PUT':
                 return [
                     'dni'=>'required|numeric|min:8|exists:personas,dni',
-                    'delegado'=>'required',
+                    'directivo'=>'required',
                     'inicio'=>'required|date',
                     'final'=>'numeric|required',
                     'estado'=>'required'                
                 ];
             default : break;
         }
-        
-    }
-    
-    public function messages() {
-        parent::messages();
-        return [
-            'dni.exists'=>'El DNI no esta Registrado o no Existe'
-        ];
     }
 }

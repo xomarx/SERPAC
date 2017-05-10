@@ -64,7 +64,8 @@ Route::group(['middleware' => ['auth']], function () {
     //*******************************************************************       SOCIOS ******************************************************************
     route::get('socios/Asignacion-Delegados/ListaAsigDelegados/{dato?}/{page?}','socios\cargodelegadosociocontroller@listaAsigDelegados');
     route::resource('socios/Asignacion-Delegados','socios\cargodelegadosociocontroller');
-    route::resource('socios/asignacion-directivos','socios\cargodirectivosociocontroller');
+    route::get('socios/Asignacion-Directivos/ListaAsigDirectivos/{dato?}/{page?}','socios\cargodirectivosociocontroller@listaAsigDirectivos');
+    route::resource('socios/Asignacion-Directivos','socios\cargodirectivosociocontroller');
     
     route::resource('socios/transferencias/newtransferencias','socios\transferenciacontroller@NewTransferencia');
     route::resource('socios/transferencias','socios\transferenciacontroller');    

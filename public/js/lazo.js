@@ -126,6 +126,7 @@ var activarForm = function(id){
         else if(id == 15) {var route = '/socios/ListaSocios/'+$("#buscar").val();}
         else if(id == 16) {var route = '/socios/parientes/ListaParientes/'+$("#buscar").val();}
         else if(id == 17) {var route = '/socios/Asignacion-Delegados/ListaAsigDelegados/'+$("#buscar").val();}
+        else if(id == 18) {var route = '/socios/Asignacion-Directivos/ListaAsigDirectivos/'+$("#buscar").val();}
         $.ajax({
             type:'get',
             url:route,
@@ -3349,6 +3350,75 @@ var ConforRecep = function(event,id,monto){
            }
        });
    });
+//*********************************************************************** ASIGNAR DIRECTIVOS **********************************************
+$("#RegAsigDirectivos").click(function(event){
+    var type='POST';
+    if(event.target.text=='Actualizar'){
+        type='PUT';
+    }
+    
+    $.ajax({
+       url:'Asignacion-Directivos/'+$("#id").val(),
+       headers: {'X-CSRF-TOKEN': $("input[name=_token]").val()},
+       dataType: 'json',
+       type:type,
+       data:$("#formAsigDirec").serialize(),
+       success:function(data){
+            mensajeRegistro(data,'formAsigDirec');
+            activarForm(18);
+       },
+       error:function(data){
+           if(data.status==403) $("#error-modal").html(data.responseText);
+           else{
+                   $("#error-dni").html(''); $("#error-estado").html(''); $("#error-inicio").html(''); 
+                   $("#error-final").html('');$("#error-cargo").html('');
+                   var errors =  $.parseJSON(data.responseText);      
+                    $.each(errors,function(index, value) {                      
+                            if(index == 'dni')$("#error-dni").html(value);                            
+                            else if(index == 'estado')$("#error-estado").html(value); 
+                            else if(index == 'inicio')$("#error-inicio").html(value); 
+                            else if(index == 'final')$("#error-final").html(value); 
+                            else if(index == 'delegado')$("#error-cargo").html(value);                                                                                 
+                      });
+               
+           }
+           
+       }
+    });
+});
+
+var  EditAsigDirectivos = function(id){
+    $.getJSON("Asignacion-Directivos/"+id+"/edit",function(data){                    
+         $("#dni").val(data.dni);
+         $("#datos").val(data.datos);
+         $("#directivo").val(data.cargos_directivos_id);
+         $("#estado").val(data.estado);
+         $("#inicio").val(data.fecha_inicio);
+         $("#final").val(data.fecha_final);
+         $("#id").val(id);
+         $("#RegAsigDirectivos").text('Actualizar');         
+     });
+};
+
+var ElimAsigDirectivos = function(id,nombre){
+    $.alertable.confirm("<span style='color:#000'>¿Está seguro de eliminar el registro del DNI: ?</span><br><strong><span style='color:#ff0000'>"
+           +nombre+"</span></strong></br>").then(function() {  
+      var route = "Asignacion-Directivos/"+id+"";
+      var token = $("input[name=_token]").val();
+      $.ajax({
+        url: route,
+        headers: {'X-CSRF-TOKEN': token},
+        type: 'DELETE',
+        dataType: 'json',
+        success: function(data){
+            if(data) activarForm(18);
+      },
+      error:function(data){
+          if(data.status==403) activarmodal(0);
+      }
+      });          
+    });
+}
 
 //**********************************************************************  ASIGNAR DELEGADOS  **********************************************
 var  EditAsigDelegado = function(id){
@@ -3384,8 +3454,7 @@ var ElimAsigDelegado = function(id,nombre){
     });
 }
 
-$("#RegAsigDelegado").click(function(event){
-    console.log(event.target.text);
+$("#RegAsigDelegado").click(function(event){    
     var type='POST';
     if(event.target.text=='Actualizar'){
         type='PUT';

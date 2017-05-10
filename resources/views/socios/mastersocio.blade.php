@@ -22,7 +22,7 @@
             <li id="subasigdelegados"><a href="{{ url('socios/Asignacion-Delegados') }}"><i class='fa fa-cubes'></i> <span>Asignacion de Delegados</span></a></li>
             @endpermission
             @permission('ver asigDirectivos')
-            <li id="subasigdirectivos"><a href="{{ url('socios/asignacion-directivos') }}"><i class='fa fa-sitemap'></i> <span>Asignacion de Directivos</span></a></li>
+            <li id="subasigdirectivos"><a href="{{ url('socios/Asignacion-Directivos') }}"><i class='fa fa-sitemap'></i> <span>Asignacion de Directivos</span></a></li>
             @endpermission
             @permission(['ver delegados','ver directivos','ver floras','ver faunas','ver inmuebles'])
             <li class="treeview" id="subbasicos">
