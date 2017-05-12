@@ -22,4 +22,11 @@ class Condicion extends Model
     public function socios(){
         return $this->belongsToMany(\App\Models\Socios\Socio::class);
     }
+    
+    public static function scopegetcondicions($query,$codigo){
+        return $query
+                ->join('condicions_has_socios','id','=','condicions_id')
+                ->where('socios_codigo','=',$codigo)
+                ->pluck('condicion','id');
+    }
 }

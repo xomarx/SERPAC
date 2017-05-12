@@ -2249,74 +2249,83 @@ var EliRecibo = function(id,name){
         alloClear: true
     });
 
-    $("#dni").autocomplete({
-        minLength: 1,
-        autoFocus: true,
-        delay: 1,
-        source: "/nosocios",
-        select: function (event, ui) {
-            $("#paterno").val(ui.item.id);
-            $("#materno").val(ui.item.materno);
-            $("#nombres").val(ui.item.nombres);
-        }
-    });
     $("#acopio").autocomplete({
         minLength: 1,
         autoFocus: true,
         delay: 1,
-        source: "/RRHH/Sucursalsearch",
-        select: function (event, ui) {
-            $("#acopio").val(ui.item.value);
-            $("#sucursal").val(ui.item.sucursal);
+        source: "/Auxiliar/codigoSucursal",
+        select: function (event, ui) {            
+            $("#sucursal").val(ui.item.id);
         }
     });
-    $("#codrecibo").autocomplete({
+    
+    $("#sucursal").autocomplete({
         minLength: 1,
         autoFocus: true,
         delay: 1,
-        source: "/codrecibos",
-        select: function (event, ui) {
-            numerorecibo(ui.item.value);
+        source: "/Auxiliar/datoSucursal",
+        select: function (event, ui) {            
+            $("#acopio").val(ui.item.id);
         }
     });
+
+    $("#dnin").autocomplete({
+        minLength: 1,
+        autoFocus: true,
+        delay: 1,
+        source: "/Auxiliar/nosocios",
+        select: function (event, ui) {
+            $("#paterno").val(ui.item.id);
+            $("#materno").val(ui.item.materno);
+            $("#nombres").val(ui.item.nombres);
+            var valor="<option value=''>Seleccione una Condicion</option>";
+            $.each(ui.item.condicions,function ( index,value){
+                valor = valor + "<option value="+index+">"+value+"</option>"
+            });
+            $("#condicion").empty().html(valor);
+        }
+    });
+        
     $("#codigo").autocomplete({
         minLength: 1,
         autoFocus: true,
         delay: 1,
-        source: "/socios/codigo",
-        select: function (event, ui) {            
-            $("#socio").val(ui.item.socio);
-            $("#codigo").val(ui.item.value);
-            $("#local").val(ui.item.local);
+        source: "/Auxiliar/codigoSocios",
+        select: function (event, ui) {    
+            
+            $("#socio").val(ui.item.socio);            
+            $("#local").val(ui.item.local); var valor='';
+            $.each(ui.item.condicions,function ( index,value){
+                valor = valor + "<option value="+index+">"+value+"</option>"
+            });
+            $("#condicion").empty().html(valor);
         }
     });
     $("#socio").autocomplete({
         minLength: 1,
         autoFocus: true,
         delay: 1,
-        source: "/socios/searchsocio",
-        select: function (event, ui) {            
-            $("#socio").val(ui.item.value);
+        source: "/Auxiliar/datoSocios",
+        select: function (event, ui) {                
             $("#codigo").val(ui.item.id);
             $("#local").val(ui.item.local);
+            var valor='';
+            $.each(ui.item.condicions,function ( index,value){
+                valor = valor + "<option value="+index+">"+value+"</option>"
+            });
+            $("#condicion").empty().html(valor);
         }
     });
-    $("#precio").keyup(function () {
-        if ($("#kilos").val() != '')
-        {
-            var monto = $("#precio").val() * $("#kilos").val();
-            monto = parseFloat(monto).toFixed(2);
-            $("#total").val('S/. ' + monto);
-        }
-    });
-    $("#kilos").keyup(function () {
-        if ($("#precio").val() != '')
-        {
-            var monto = $("#precio").val() * $("#kilos").val();
-            monto = parseFloat(monto).toFixed(2);
-            $("#total").val('S/. ' + monto);
-        }
-    });
+    
+//    $("#codrecibo").autocomplete({
+//        minLength: 1,
+//        autoFocus: true,
+//        delay: 1,
+//        source: "/codrecibos",
+//        select: function (event, ui) {
+//            numerorecibo(ui.item.value);
+//        }
+//    });
     
 };
 
@@ -2397,7 +2406,7 @@ $(document).ready().on('click','#RegCompras',function(){
    $.alertable.prompt('<h3>Motivo de la Anulacion ? </h3>'+"<span style='color:#ff0000'>"+name+"</span>").then(function(data){       
             var motivo = data.value;
             var route = "/Acopio/Compra-Grano/"+id+"";            
-            var token = $("#token").val();            
+            var token = $("input[name=_token]").val();            
         $.ajax({
             url: route,
             headers: {'X-CSRF-TOKEN': token},

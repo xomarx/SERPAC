@@ -26,11 +26,28 @@
 @section('script')
 <script>   
     
+    $(document).ready().on('keyup','#kilos',function(event){
+        if ($("#precio").val() != '')
+             {
+                 var monto = $("#precio").val() * event.target.value;
+                 monto = parseFloat(monto).toFixed(2);
+                 $("#total").val('S/. ' + monto);
+             } 
+    });
+
+    $(document).ready().on('keyup','#precio',function(event){
+       if ($("#kilos").val() != '')
+        {
+            var monto = event.target.value * $("#kilos").val();
+            monto = parseFloat(monto).toFixed(2);
+            $("#total").val('S/. ' + monto);
+        }
+   });
 
    var habilita = function(){
        $("#sisocio").show();
        $("#nosocio").hide();
-       $("#paterno").val('');$("#materno").val('');$("#nombres").val('');$("#dni").val('');
+       $("#paterno").val('');$("#materno").val('');$("#nombres").val('');$("#dnin").val('');
    };
    
    var desabilita = function(){
@@ -59,6 +76,8 @@
       $("#subcompras").addClass('active');
       activarForm(10);
    });
+   
+   
 
 </script>
 

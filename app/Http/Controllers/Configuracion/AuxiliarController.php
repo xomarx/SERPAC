@@ -22,7 +22,9 @@ class AuxiliarController extends Controller
             $socios = \App\Models\Socios\Socio::Socioautocomplete($nombre);
             foreach ($socios as $socio) 
             {
-                $result[] = ['id' => $socio->codigo, 'value' => $socio->fullname,'local'=>$socio->comite_local,'dni'=>$socio->dni];
+                $result[] = [
+                    'id' => $socio->codigo, 'value' => $socio->fullname,'local'=>$socio->comite_local,'dni'=>$socio->dni,'condicions'=>  \App\Models\Certificacion\Condicion::getcondicions($socio->codigo)
+                        ];
             }
             return response()->json($result);
         }
@@ -34,7 +36,7 @@ class AuxiliarController extends Controller
             $socios = \App\Models\Socios\Socio::CodigoSocioautocomplete($nombre);
             foreach ($socios as $socio) 
             {
-                $result[] = ['id' => $socio->dni, 'value' => $socio->codigo,'local'=>$socio->comite_local,'socio'=>$socio->fullname];
+                $result[] = ['id' => $socio->dni, 'value' => $socio->codigo,'local'=>$socio->comite_local,'socio'=>$socio->fullname,'condicions'=>  \App\Models\Certificacion\Condicion::getcondicions($socio->codigo)];
             }
             return response()->json($result);
         }
@@ -47,7 +49,8 @@ class AuxiliarController extends Controller
             $socios = \App\Models\Socios\Socio::DNISocioautocomplete($nombre);
             foreach ($socios as $socio) 
             {
-                $result[] = ['id' => $socio->codigo, 'value' => $socio->dni,'local'=>$socio->comite_local,'socio'=>$socio->fullname];
+                $result[] = ['id' => $socio->codigo, 'value' => $socio->dni,'local'=>$socio->comite_local,'socio'=>$socio->fullname
+                        ,'condicions'=>  \App\Models\Certificacion\Condicion::getcondicions($socio->codigo)];
             }
             return response()->json($result);
         }
@@ -95,10 +98,54 @@ class AuxiliarController extends Controller
         }
     }
 
+     public function autoSucursal(Request $request){
+        if($request->ajax())
+        {
+            $nombre = Input::get('term');
+            $sucursals = \App\Models\RRHH\Sucursal::autoSucursal($nombre);
+            foreach ($sucursals as $sucursal) 
+            {
+                $result[] = ['id' => $sucursal->sucursalId, 'value' => $sucursal->sucursal
+//                        ,'sucursal'=>$sucursal->sucursal,'sector'=>$sucursal->comite_local
+//                        ,'acopiador'=>$sucursal->acopiador,'tecnico'=>$sucursal->tecnico
+                        ];
+            }
+            return response()->json($result);
+        }
+    }
+
+    public function autoCodigoSucursal(Request $request){
+        if($request->ajax())
+        {
+            $nombre = Input::get('term');
+            $sucursals = \App\Models\RRHH\Sucursal::autoCodigoSucursal($nombre);
+            foreach ($sucursals as $sucursal) 
+            {
+                $result[] = ['id' => $sucursal->sucursal, 'value' => $sucursal->sucursalId
+//                        ,'sucursal'=>$sucursal->sucursal,'acopiador'=>$sucursal->acopiador,'tecnico'=>$sucursal->tecnico
+                        ];
+            }
+            return response()->json($result);
+        }
+    }
+
+    public function autoNoSocios(Request $request){
+        if($request->ajax()){
+            $nombre = \Illuminate\Support\Facades\Input::get('term');
+            $nosocios = \App\Models\Acopio\Nosocio::where('dni','like','%'.$nombre.'%')->get();
+            foreach ($nosocios as $nosocio) 
+            {
+                $result[] = ['id' => $nosocio->paterno, 'value' => $nosocio->dni,'materno'=>$nosocio->materno,'nombres'=>$nosocio->nombres,'condicions'=>  \App\Models\Certificacion\Condicion::pluck('condicion','id')];
+            }
+            return response()->json($result);
+        }
+    }
+
     
-
-
-
+    
+    
+    
+    
 
     public function autoSociosPersonas(Request $request){
         if($request->ajax()){

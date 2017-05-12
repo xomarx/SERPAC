@@ -37,33 +37,9 @@ class sucursalescontroller extends Controller
     }
     
     
-    public function autocompletesucursal(Request $request){
-        if($request->ajax())
-        {
-            $nombre = Input::get('term');
-            $sucursals = Sucursal::listaSucursalComplete();
-            foreach ($sucursals as $sucursal) 
-            {
-                $result[] = ['id' => $sucursal->sucursalId, 'value' => $sucursal->sucursal,'sucursal'=>$sucursal->sucursal,'sector'=>$sucursal->comite_local
-                        ,'acopiador'=>$sucursal->acopiador,'tecnico'=>$sucursal->tecnico
-                        ];
-            }
-            return response()->json($result);
-        }
-    }
+   
 
-    public function autocomplete(Request $request){
-        if($request->ajax())
-        {
-            $nombre = Input::get('term');
-            $sucursals = Sucursal::listaSucursalComplete();
-            foreach ($sucursals as $sucursal) 
-            {
-                $result[] = ['id' => $sucursal->sucursalId, 'value' => $sucursal->sucursalId,'sucursal'=>$sucursal->sucursal,'acopiador'=>$sucursal->acopiador,'tecnico'=>$sucursal->tecnico];
-            }
-            return response()->json($result);
-        }
-    }
+    
 
     /**
      * Show the form for creating a new resource.

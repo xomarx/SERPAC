@@ -12,17 +12,7 @@ use App\Models\Acopio\Compra;
 class comprascontroller extends Controller
 {
     
-    public function autoCompleteNosocios(Request $request){
-        if($request->ajax()){
-            $nombre = \Illuminate\Support\Facades\Input::get('term');
-            $nosocios = \App\Models\Acopio\Nosocio::where('dni','like','%'.$nombre.'%')->get();
-            foreach ($nosocios as $nosocio) 
-            {
-                $result[] = ['id' => $nosocio->paterno, 'value' => $nosocio->dni,'materno'=>$nosocio->materno,'nombres'=>$nosocio->nombres];
-            }
-            return response()->json($result);
-        }
-    }
+    
         
 
     /**
@@ -49,10 +39,9 @@ class comprascontroller extends Controller
 
     public function modalCompras(){
         if(!auth()->user()->can('crear compras'))
-            return response ()->view ('errors.403-modal');
-        $condicions = Condicion::pluck('condicion','id'); 
+            return response ()->view ('errors.403-modal');        
         $comite = \App\Models\Socios\Comites_Locale::pluck('comite_local','id');
-        return response()->view('Acopio.modalcompras',['condicions'=>$condicions,'comite'=>$comite]);
+        return response()->view('Acopio.comprasModal',['comite'=>$comite]);
     }
 
     /**

@@ -12,6 +12,7 @@
 */
 
 Route::get('/', function () {    
+    auth()->logout();
     return view('auth.login');
 });
 
@@ -34,6 +35,9 @@ Route::group(['middleware' => ['auth']], function () {
     route::resource('Auxiliar/dniParientesSocios','Configuracion\AuxiliarController@autoDNIParientesSocios');
     route::resource('Auxiliar/dnipersonas','Configuracion\AuxiliarController@autoDNIPersonas');
     route::resource('Auxiliar/datosPersonas','Configuracion\AuxiliarController@autoDatosPersonas');
+    route::resource('Auxiliar/datoSucursal','Configuracion\AuxiliarController@autoSucursal');
+    route::resource('Auxiliar/codigoSucursal','Configuracion\AuxiliarController@autoCodigoSucursal');
+    route::resource('Auxiliar/nosocios','Configuracion\AuxiliarController@autoNoSocios');
     
     Route::get('sign-out', 'Auth\AuthController@getsignOut');
     
@@ -116,8 +120,7 @@ Route::group(['middleware' => ['auth']], function () {
     
     route::get('PadronSocio/{idsocio}','socios\sociocontroller@verPadronsocio');
    //  *********************************************************   RRHH  ************************************************************************
-    route::resource('RRHH/Sucursalsearch','RRHH\sucursalescontroller@autocomplete');//autocomplete
-    route::resource('RRHH/Sucursales','RRHH\sucursalescontroller@autocompletesucursal');//autocompletesucursal  
+    
     
     route::resource('RRHH/autoempleadoDni','RRHH\empleadocontroller@autocompleteEmpleadoDni');
     route::resource('RRHH/autoempleado','RRHH\empleadocontroller@autocompleteEmpleado');//   autocompleteEmpleado 
@@ -148,9 +151,7 @@ Route::group(['middleware' => ['auth']], function () {
     route::resource('Acopio/Planilla-Semanal/PDF','Informes\RecibosController@PlanillaSemanalPDF');
     
     route::resource('Acopio/Planilla-Mensual','Acopio\planillacontroller@cierremensual');//cierremensual
-    
-    route::resource('nosocios','Acopio\comprascontroller@autoCompleteNosocios');
-    
+            
     route::get('Acopio/Compra-Grano/Recibo-Compra/{id?}','Informes\RecibosController@ReciboCompras');
     route::resource('Acopio/modalcompras','Acopio\comprascontroller@modalCompras');
     route::get('Acopio/Compra-Grano/ListaCompras/{page?}','Acopio\comprascontroller@ListCompras');

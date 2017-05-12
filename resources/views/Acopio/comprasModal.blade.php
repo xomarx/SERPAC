@@ -6,7 +6,8 @@
           <center><h4 class="modal-title">COMPRA DE GRANO DE CACAO</h4></center>
         </div>
         <div class="modal-body form-group-sm">
-            {!! Form::open(['id'=>'formcompras']) !!}
+            <div class="box-body box-info bg-primary" >
+                {!! Form::open(['id'=>'formcompras']) !!}
             @include('mensajes.mensaje')
             <input type="hidden" id="id">
             <div class="col-md-12">
@@ -25,7 +26,7 @@
                 </div>
                 <div class="col-md-5">
                     {!! Form::label('codigo','Centro de Acopio:',['class' => 'control-label'])!!}
-                    {!! Form::text('sucursal',null,['id'=>'sucursal','class'=>'form-control','placeholder'=>'Centro de Acopio','disabled'])!!}                    
+                    {!! Form::text('sucursal',null,['id'=>'sucursal','class'=>'form-control','placeholder'=>'Centro de Acopio'])!!}                    
                 </div>
                 
                 <div class="col-md-2">
@@ -52,12 +53,12 @@
                 </div>
                 <div class="col-md-2">
                     {!! Form::label('codigo','D.N.I.:',['class' => 'control-label'])!!}                    
-                    {!! Form::text('dni',null,['id'=>'dni','class'=>'form-control','placeholder'=>'N° D.N.I.','maxlength'=>8])!!}
+                    {!! Form::text('dni',null,['id'=>'dnin','class'=>'form-control','placeholder'=>'N° D.N.I.','maxlength'=>8])!!}
                     <div class="text-danger" id="error_dni"></div>
                 </div>
                 <div class="col-md-3 ">
                     {!! Form::label('comite','Comite Local:',['class' => 'control-label'])!!}                                        
-                    {!! Form::select('comite',$comite,null,['id'=>'comite','placeholder'=>'selecciona']) !!}
+                    {!! Form::select('comite',$comite,null,['id'=>'comite','placeholder'=>'selecciona','style'=>'width:100%']) !!}
                     <div class="text-danger" id="error_comite"></div>
                 </div>
             </div>
@@ -80,7 +81,7 @@
             <div class="col-md-12">
                 <div class="col-md-5">
                     {!! Form::label('condicio','Condicio:',['class' => 'control-label'])!!}                    
-                    {!! Form::select('condicion',$condicions,null,['id'=>'condicion','class'=>'form-control','placeholder'=>'Seleccione una Condicion'])!!}
+                    {!! Form::select('condicion',[],null,['id'=>'condicion','class'=>'form-control','placeholder'=>'Seleccione una Condicion'])!!}
                     <div class="text-danger" id="error_condicion"></div>
                 </div>
                 <div class="col-md-2 ">
@@ -118,14 +119,20 @@
                     <div class="text-danger" id="error_fecha"></div>
                 </div>                             
             </div>
+            {!! Form::close() !!}
+            
+            </div>
+            
+            
+            
+        </div>
             <div class="modal-footer">
-            <div class="col-md-12">
+            
              {!!link_to('#', $title='Registrar', $attributes = ['id'=>'RegCompras', 'class'=>'btn btn-dropbox'])!!}
           <button type="button" class="btn btn-default" data-dismiss="modal">Salir</button>
-          </div>
+          
         </div>
-            {!! Form::close() !!}
-        </div>          
+            
       </div>
     </div>
   </div>

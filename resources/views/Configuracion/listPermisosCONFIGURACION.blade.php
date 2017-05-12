@@ -85,9 +85,8 @@
                 @else
                 {!!Form::checkbox('eliminar_usuarios','eliminar_usuarios',null,['class'=>'checkbox-inline','onclick'=>'asigpermiso("eliminar_usuarios")'])!!}
                 @endif
-                </td>
-        </tr>
-        
+            </td>
+        </tr>        
         <tr>
             <td>Sub modulo de Rol</td>
             <td>

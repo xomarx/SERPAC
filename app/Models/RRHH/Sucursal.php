@@ -34,6 +34,19 @@ class Sucursal extends Model
         return $this->hasMany(\App\Models\Tesoreria\Distribucion::class);
     }
 
+    public static function scopeautoSucursal($query,$nombre){
+        return $query
+                ->where('sucursal','like','%'.$nombre.'%')
+                ->select('sucursal','sucursalId')
+                ->take(5)->get();
+    }
+    
+    public static function scopeautoCodigoSucursal($query,$nombre){
+        return $query
+                ->where('sucursalId','like','%'.$nombre.'%')
+                ->select('sucursal','sucursalId')
+                ->take(5)->get();
+    }
 
     public static  function listaSucursales()
     {

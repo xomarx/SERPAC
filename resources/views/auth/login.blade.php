@@ -9,7 +9,7 @@
     
     <div class="login-box" >        
         <div class="login-logo">            
-            <a href="{{ url('/home') }}"> <img src="{{ url('img/acopagro.png') }}" class="img-responsive" ></a>
+            <a href="{{ url('/') }}"> <img src="{{ url('img/acopagro.png') }}" class="img-responsive" data-toggle='tooltip' title="COOPERATIVA AGRARIA CACAOTERA"></a>
         </div><!-- /.login-logo -->
 
         @if (count($errors) > 0)
@@ -43,6 +43,17 @@
             </form>   
 
         </div><!-- /.login-box-body -->
+        <div class="col-lg-6 bg-warning">
+            <div class="logo-mini">
+            <a href="{{ url('/') }}"> <img src="{{ url('img/app-cacao-logo.png') }}" class="img-responsive" data-toggle='tooltip' title="ASOCIACIÓN PERUANA DE PRODUCTORES DE CACAO"></a>
+        </div>
+        </div>
+         <div class="col-lg-6 bg-warning">
+            <div class="logo-mini">
+                <a href="{{ url('/') }}"> <img src="{{ url('img/secompetitivo-logo.png') }}" class="img-responsive" data-toggle='tooltip' title="COMPETITIVIDAD PARA EL PERÚ"></a>
+        </div>
+        </div>
+        
 
     </div><!-- /.login-box -->
 
