@@ -163,6 +163,7 @@ var activarmodal = function(id){
         else if(id==7){ var route = 'modalempleado';} 
         else if(id==8){ var route = 'Mov-Dinero/Modal-Dinero';} 
         else if(id==9){ var route = '/Acopio/Adelantos-Acopio/Modal-Adelanto';} 
+        else if(id==10){ var route = 'Empleados/Amonestacion';} 
             
         $.get(route,function(data){            
             $("#conten-modal").html(data);

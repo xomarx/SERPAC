@@ -8,7 +8,7 @@
     <div class="box box-solid box-primary">
         <div class="box-header" >
             @permission('crear almacen')
-            <a id="nuevasucursal" data-toggle='modal' data-target='#modalsucursal' class="btn btn-dropbox btn-sm m-t-10" style="float: left;">NUEVO  <span class="glyphicon glyphicon-plus"data-toggle="tooltip" data-placement="top" title="Nueva Sucursal"></span></a>               
+            <a id="nuevasucursal" data-toggle='modal' data-target='#modalsucursal' class="btn btn-dropbox btn-sm m-t-10" style="float: left;">NUEVO ALMACEN <span class="glyphicon glyphicon-plus"data-toggle="tooltip" data-placement="top" title="Nueva Sucursal"></span></a>               
             @endpermission
         </div>
         <div class="box-body">
@@ -138,7 +138,7 @@
                       {!! Form::label('acopiador','Acopiador:',['class' => 'control-label'])!!} 
                   </div>                  
                   <div class="col-sm-12">                      
-                  {!! Form::select('acopiador',$empleados,null,['id'=>'acopiador','placeholder'=>'Seleccione un Acopiador !']) !!}
+                  {!! Form::select('acopiador',$empleados,null,['id'=>'acopiador','placeholder'=>'Seleccione un Acopiador !','style'=>'width:100%']) !!}
                   <div class="text-danger" id="error_acopiador"></div>
                   </div>                  
               </div>

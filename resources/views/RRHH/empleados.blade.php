@@ -9,9 +9,9 @@
     <div class="box box-solid box-primary">
         <div class="box-header">
             @permission('crear empleados')
-            <a id="nuevoempleado" class="btn btn-dropbox" data-toggle="tooltip" data-placement="top" title="Agregar Empleado">AGREGAR EMPLEADO &nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-plus">  </span></a>            
+            <a id="nuevoempleado" class="btn btn-dropbox" data-toggle="tooltip" title="Agregar Empleado">AGREGAR EMPLEADO &nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-plus">  </span></a>            
             @endpermission
-            <a id="nuevoempleado" class="btn btn-dropbox" data-toggle="tooltip" data-placement="top" title="Amonestaciones">AMONESTACIONES &nbsp;&nbsp;&nbsp;<span class="fa fa-clipboard">  </span></a>            
+            <a onclick="activarmodal(10)" class="btn btn-dropbox" data-toggle="tooltip" title="Amonestaciones">AMONESTACIONES &nbsp;&nbsp;&nbsp;<span class="fa fa-clipboard">  </span></a>            
         </div>
         <div class="box-body">
             <input type="hidden" name="_token" value="{{ csrf_token() }}"/>

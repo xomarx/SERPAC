@@ -41,6 +41,10 @@ class empleadocontroller extends Controller
             return response()->json($result);
         }
     }
+    
+    public function amonestacion(){
+        return response()->view('RRHH.amonestaciones');
+    }
 
     /**
      * Display a listing of the resource.

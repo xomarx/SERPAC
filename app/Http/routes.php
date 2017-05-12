@@ -121,6 +121,7 @@ Route::group(['middleware' => ['auth']], function () {
     
     route::resource('RRHH/autoempleadoDni','RRHH\empleadocontroller@autocompleteEmpleadoDni');
     route::resource('RRHH/autoempleado','RRHH\empleadocontroller@autocompleteEmpleado');//   autocompleteEmpleado 
+    route::resource('RRHH/Empleados/Amonestacion','RRHH\empleadocontroller@amonestacion');
     route::resource('RRHH/modalempleado','RRHH\empleadocontroller@modalEmpleado');
     route::resource('RRHH/Empleados','RRHH\empleadocontroller');
     

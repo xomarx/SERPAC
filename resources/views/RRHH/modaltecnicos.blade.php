@@ -11,10 +11,10 @@
         <div class="modal-body">
             {!! Form::open(['id'=>'formtecnicos']) !!}
             @include('mensajes.mensaje')
-            <div class="form-group col-lg-12" >   
-                
+            <div class="box-body bg-primary">
+                <div class="form-group col-lg-12" >                   
                 {!! Form::label('tecnico','EXTENSIONISTAS',['class'=>'control-label']) !!}
-                {!! Form::select('tecnico',$tecnics,null,['id'=>'tecnico','placeholder'=>'Seleccione un Extensionista !','onchange'=>'changetecnicos()']) !!}
+                {!! Form::select('tecnico',$tecnics,null,['id'=>'tecnico','placeholder'=>'Seleccione un Extensionista !','onchange'=>'changetecnicos()','style'=>'width:100%']) !!}
                 <div class="text-danger" id="error_tecnico"></div>
             </div>    
             {!! Form::label('tecnico','ZONAS LOCALES',['class'=>'control-label col-lg-12']) !!}
@@ -30,6 +30,8 @@
                     <button id="final" type="button" class="btn btn-default glyphicon glyphicon-arrow-left col-lg-12"><span class="glyphicon glyphicon-arrow-left"> </span></button>
                     {!! Form::select('zona_final',[],null,['id'=>'zona_final','class'=>'form-control','multiple']) !!}
                 </div>
+            </div>
+            
             {!! Form::close() !!}
         </div>
       <div class="modal-footer">
