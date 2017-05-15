@@ -1,13 +1,31 @@
 <ul class="pager "> 
+  @permission('crear permiso socio')
   <li><a href="javascript:void(0)" onclick="cargarLista(1)" >SOCIOS</a></li>
+  @endpermission
+  @permission('crear permiso RRHH')
   <li><a href="javascript:void(0)" onclick="cargarLista(2)">RRHH</a></li>
+  @endpermission
+  @permission('crear permiso acopio')
   <li><a href="javascript:void(0)" onclick="cargarLista(3)" >ACOPIO</a></li>
+  @endpermission
+  @permission('crear permiso creditos')
   <li><a href="javascript:void(0)" onclick="cargarLista(4)" class="bg-blue-gradient">CREDITOS</a></li>
+  @endpermission
+  @permission('crear permiso certificacion')
   <li><a href="javascript:void(0)" onclick="cargarLista(5)">CERTIFICACION</a></li>
+  @endpermission
+  @permission('crear permiso tesoreria')
   <li><a href="javascript:void(0)" onclick="cargarLista(6)">TESORERIA</a></li>
+  @endpermission
+  @permission('crear permiso contabilidad')
   <li><a href="javascript:void(0)" onclick="cargarLista(7)">CONTABILIDAD</a></li>
+  @endpermission
+  @permission('crear permiso informes')
   <li><a href="javascript:void(0)" onclick="cargarLista(8)">INFORMES</a></li>
+  @endpermission
+  @permission('crear permiso configuracion')
   <li><a href="javascript:void(0)" onclick="cargarLista(9)">CONFIGURACION</a></li>  
+  @endpermission   
 </ul>
 {!! Form::open(['id'=>'formAsigPermisos']) !!}             
 <table class="table table-hover table-responsive">

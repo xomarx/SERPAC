@@ -1,13 +1,15 @@
 <input type="hidden" name="_token" value="{{ csrf_token() }}">
 <table class="table table-hover table-borderless" >
     <thead>
-    <th>USUARIO</th>
-    <th>ROL</th>
-    <th>CORREO</th>
-    <th>EMPLEADO</th>
-    <th>FECHA</th>
-    <th>ESTADO</th>
-    <th>ACCIONES</th>
+        <tr>
+            <th style="border-bottom-color: #0089db; ">USUARIO</th>
+            <th style="border-bottom-color: #0089db; ">ROL</th>
+            <th style="border-bottom-color: #0089db; ">CORREO</th>
+            <th style="border-bottom-color: #0089db; ">EMPLEADO</th>
+            <th style="border-bottom-color: #0089db; ">FECHA</th>
+            <th style="border-bottom-color: #0089db; ">ESTADO</th>
+            <th style="border-bottom-color: #0089db; ">ACCIONES</th>
+        </tr>    
 </thead>
             <tbody>
                 @foreach ($usuarios as $usuario)
@@ -24,9 +26,14 @@
                             <i class="bg-green-active ">ACTIVO </i>                          
                         @endif                        
                     </td>
-                    <td>
-                        <a onclick="modalrol('{{$usuario->name}}')" class="btn-sm btn-success" data-toggle="tooltip" data-placement="top" title="Asignar Rol" style="cursor: pointer" ><span class="glyphicon glyphicon-user"></span></a>
-                        <a onclick="ActDesact('{{$usuario->name}}')" style="cursor: pointer" class="btn-sm btn-warning" data-toggle="tooltip" data-placement="top" title="Activar o Desactivar Usuario"><span class="glyphicon glyphicon-check"></span></a>                        
+                    <td>                                
+                        @if( $usuario->estado)
+                            <a onclick="ActDesact('{{$usuario->name}}',{{$usuario->estado}})" style="cursor: pointer" class="btn-xs btn-warning" data-toggle="tooltip" data-placement="top" title="Activar Usuario"><span class="fa fa-square-o"></span></a>                            
+                        @else                        
+                            <a onclick="ActDesact('{{$usuario->name}}',{{$usuario->estado}})" style="cursor: pointer" class="btn-xs btn-warning" data-toggle="tooltip" data-placement="top" title="Inactivar Usuario"><span class="fa fa-check-square-o"></span></a>                                                                    
+                        @endif 
+                        <a onclick="modalrol('{{$usuario->name}}')" class="btn-xs btn-success" data-toggle="tooltip" data-placement="top" title="Asignar Rol" style="cursor: pointer" ><span class="glyphicon glyphicon-user"></span></a>
+                        
                     </td>
                 </tr>
                 @endforeach

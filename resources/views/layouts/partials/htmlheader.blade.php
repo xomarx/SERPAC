@@ -1,6 +1,6 @@
 <head>
     <meta charset="UTF-8">
-    <title> ERP-ACOPAGRO - @yield('title')</title>
+    <title> SISTEMA INTEGRAL - ACOPAGRO - @yield('title')</title>
     <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     
@@ -27,7 +27,7 @@
     <link href="{{ asset('/css/jquery-ui.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('/css/theme.default.min.css') }}" rel="stylesheet" type="text/css" />
     <!-- iCheck -->
-    <link href="{{ asset('/plugins/iCheck/square/blue.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('/plugins/iCheck/all.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('/plugins/datepicker/datepicker3.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('/css/ionicons.min.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('/plugins/pace/pace.css') }}" rel="stylesheet" type="text/css" />

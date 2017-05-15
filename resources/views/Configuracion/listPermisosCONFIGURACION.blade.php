@@ -1,13 +1,31 @@
 <ul class="pager "> 
+  @permission('crear permiso socio')
   <li><a href="javascript:void(0)" onclick="cargarLista(1)" >SOCIOS</a></li>
+  @endpermission
+  @permission('crear permiso RRHH')
   <li><a href="javascript:void(0)" onclick="cargarLista(2)">RRHH</a></li>
+  @endpermission
+  @permission('crear permiso acopio')
   <li><a href="javascript:void(0)" onclick="cargarLista(3)" >ACOPIO</a></li>
+  @endpermission
+  @permission('crear permiso creditos')
   <li><a href="javascript:void(0)" onclick="cargarLista(4)">CREDITOS</a></li>
+  @endpermission
+  @permission('crear permiso certificacion')
   <li><a href="javascript:void(0)" onclick="cargarLista(5)">CERTIFICACION</a></li>
+  @endpermission
+  @permission('crear permiso tesoreria')
   <li><a href="javascript:void(0)" onclick="cargarLista(6)">TESORERIA</a></li>
+  @endpermission
+  @permission('crear permiso contabilidad')
   <li><a href="javascript:void(0)" onclick="cargarLista(7)">CONTABILIDAD</a></li>
+  @endpermission
+  @permission('crear permiso informes')
   <li><a href="javascript:void(0)" onclick="cargarLista(8)">INFORMES</a></li>
+  @endpermission
+  @permission('crear permiso configuracion')
   <li><a href="javascript:void(0)" onclick="cargarLista(9)" class="bg-blue-gradient">CONFIGURACION</a></li>  
+  @endpermission  
 </ul>
 {!! Form::open(['id'=>'formAsigPermisos']) !!}             
 <table class="table table-hover table-responsive">
@@ -128,27 +146,15 @@
                 {!!Form::checkbox('crear_permiso_socio','crear_permiso_socio',null,['class'=>'checkbox-inline','onclick'=>'asigpermiso("crear_permiso_socio")'])!!}
                 @endif
             </td>
+            <td>                
+                {!!Form::checkbox('permiso','permiso',null,['class'=>'checkbox-inline','disabled'=>'disabled'])!!}                
+            </td>
             <td>
-                @if(in_array('editar_asigDirectivos',$permisos) )
-                {!!Form::checkbox('editar_asigDirectivos','editar_asigDirectivos',null,['class'=>'checkbox-inline','disabled'=>'disabled','onclick'=>'asigpermiso("editar_asigDirectivos")','checked'])!!}
-                @else
-                {!!Form::checkbox('editar_asigDirectivos','editar_asigDirectivos',null,['class'=>'checkbox-inline','disabled'=>'disabled','onclick'=>'asigpermiso("editar_asigDirectivos")'])!!}
-                @endif
+                {!!Form::checkbox('permiso','permiso',null,['class'=>'checkbox-inline','disabled'=>'disabled'])!!}                
                 </td>
             <td>
-                @if(in_array('ver_asigDirectivos',$permisos) )
-                {!!Form::checkbox('ver_asigDirectivos','ver_asigDirectivos',null,['class'=>'checkbox-inline','disabled'=>'disabled','onclick'=>'asigpermiso("ver_asigDirectivos")','checked'])!!}
-                @else
-                {!!Form::checkbox('ver_asigDirectivos','ver_asigDirectivos',null,['class'=>'checkbox-inline','disabled'=>'disabled','onclick'=>'asigpermiso("ver_asigDirectivos")'])!!}
-                @endif
-                </td>
-            <td>
-                @if(in_array('eliminar_asigDirectivos',$permisos) )
-                {!!Form::checkbox('eliminar_asigDirectivos','eliminar_asigDirectivos',null,['class'=>'checkbox-inline','disabled'=>'disabled','onclick'=>'asigpermiso("eliminar_asigDirectivos")','checked'])!!}
-                @else
-                {!!Form::checkbox('eliminar_asigDirectivos','eliminar_asigDirectivos',null,['class'=>'checkbox-inline','disabled'=>'disabled','onclick'=>'asigpermiso("eliminar_asigDirectivos")'])!!}
-                @endif
-                </td>
+                {!!Form::checkbox('permiso','permiso',null,['class'=>'checkbox-inline','disabled'=>'disabled'])!!}
+            </td>
         </tr>
         <tr>
             <td><b>MODULO RRHH - PERMISOS</b></td>
@@ -160,30 +166,18 @@
                 @endif
                 </td>
                 <td>
-                @if(in_array('editar_asigDirectivos',$permisos) )
-                {!!Form::checkbox('editar_asigDirectivos','editar_asigDirectivos',null,['class'=>'checkbox-inline','disabled'=>'disabled','onclick'=>'asigpermiso("editar_asigDirectivos")','checked'])!!}
-                @else
-                {!!Form::checkbox('editar_asigDirectivos','editar_asigDirectivos',null,['class'=>'checkbox-inline','disabled'=>'disabled','onclick'=>'asigpermiso("editar_asigDirectivos")'])!!}
-                @endif
+                {!!Form::checkbox('permiso','permiso',null,['class'=>'checkbox-inline','disabled'=>'disabled'])!!}                
                 </td>
             <td>
-                @if(in_array('ver_asigDirectivos',$permisos) )
-                {!!Form::checkbox('ver_asigDirectivos','ver_asigDirectivos',null,['class'=>'checkbox-inline','disabled'=>'disabled','onclick'=>'asigpermiso("ver_asigDirectivos")','checked'])!!}
-                @else
-                {!!Form::checkbox('ver_asigDirectivos','ver_asigDirectivos',null,['class'=>'checkbox-inline','disabled'=>'disabled','onclick'=>'asigpermiso("ver_asigDirectivos")'])!!}
-                @endif
+                {!!Form::checkbox('permiso','permiso',null,['class'=>'checkbox-inline','disabled'=>'disabled'])!!}                
                 </td>
             <td>
-                @if(in_array('eliminar_asigDirectivos',$permisos) )
-                {!!Form::checkbox('eliminar_asigDirectivos','eliminar_asigDirectivos',null,['class'=>'checkbox-inline','disabled'=>'disabled','onclick'=>'asigpermiso("eliminar_asigDirectivos")','checked'])!!}
-                @else
-                {!!Form::checkbox('eliminar_asigDirectivos','eliminar_asigDirectivos',null,['class'=>'checkbox-inline','disabled'=>'disabled','onclick'=>'asigpermiso("eliminar_asigDirectivos")'])!!}
-                @endif
+                {!!Form::checkbox('permiso','permiso',null,['class'=>'checkbox-inline','disabled'=>'disabled'])!!}
                 </td>
         </tr>
         
         <tr>
-            <td><b>MODULO Acopio - PERMISOS</b></td>
+            <td><b>MODULO ACOPIO - PERMISOS</b></td>
             <td>
                 @if(in_array('crear_permiso_acopio',$permisos) )
                 {!!Form::checkbox('crear_permiso_acopio','crear_permiso_acopio',null,['class'=>'checkbox-inline','onclick'=>'asigpermiso("crear_permiso_acopio")','checked'])!!}
@@ -192,29 +186,17 @@
                 @endif
                 </td>
                 <td>
-                @if(in_array('editar_asigDirectivos',$permisos) )
-                {!!Form::checkbox('editar_asigDirectivos','editar_asigDirectivos',null,['class'=>'checkbox-inline','disabled'=>'disabled','onclick'=>'asigpermiso("editar_asigDirectivos")','checked'])!!}
-                @else
-                {!!Form::checkbox('editar_asigDirectivos','editar_asigDirectivos',null,['class'=>'checkbox-inline','disabled'=>'disabled','onclick'=>'asigpermiso("editar_asigDirectivos")'])!!}
-                @endif
+               {!!Form::checkbox('permiso','permiso',null,['class'=>'checkbox-inline','disabled'=>'disabled'])!!}
                 </td>
             <td>
-                @if(in_array('ver_asigDirectivos',$permisos) )
-                {!!Form::checkbox('ver_asigDirectivos','ver_asigDirectivos',null,['class'=>'checkbox-inline','disabled'=>'disabled','onclick'=>'asigpermiso("ver_asigDirectivos")','checked'])!!}
-                @else
-                {!!Form::checkbox('ver_asigDirectivos','ver_asigDirectivos',null,['class'=>'checkbox-inline','disabled'=>'disabled','onclick'=>'asigpermiso("ver_asigDirectivos")'])!!}
-                @endif
+                {!!Form::checkbox('permiso','permiso',null,['class'=>'checkbox-inline','disabled'=>'disabled'])!!}
                 </td>
             <td>
-                @if(in_array('eliminar_asigDirectivos',$permisos) )
-                {!!Form::checkbox('eliminar_asigDirectivos','eliminar_asigDirectivos',null,['class'=>'checkbox-inline','disabled'=>'disabled','onclick'=>'asigpermiso("eliminar_asigDirectivos")','checked'])!!}
-                @else
-                {!!Form::checkbox('eliminar_asigDirectivos','eliminar_asigDirectivos',null,['class'=>'checkbox-inline','disabled'=>'disabled','onclick'=>'asigpermiso("eliminar_asigDirectivos")'])!!}
-                @endif
+                {!!Form::checkbox('permiso','permiso',null,['class'=>'checkbox-inline','disabled'=>'disabled'])!!}
                 </td>
         </tr>
         <tr>
-            <td><b>MODULO Creditos - PERMISOS</b></td>
+            <td><b>MODULO CREDITOS - PERMISOS</b></td>
             <td>
                 @if(in_array('crear_permiso_creditos',$permisos) )
                 {!!Form::checkbox('crear_permiso_creditos','crear_permiso_creditos',null,['class'=>'checkbox-inline','onclick'=>'asigpermiso("crear_permiso_creditos")','checked'])!!}
@@ -223,29 +205,17 @@
                 @endif
                 </td>
                 <td>
-                @if(in_array('editar_asigDirectivos',$permisos) )
-                {!!Form::checkbox('editar_asigDirectivos','editar_asigDirectivos',null,['class'=>'checkbox-inline','disabled'=>'disabled','onclick'=>'asigpermiso("editar_asigDirectivos")','checked'])!!}
-                @else
-                {!!Form::checkbox('editar_asigDirectivos','editar_asigDirectivos',null,['class'=>'checkbox-inline','disabled'=>'disabled','onclick'=>'asigpermiso("editar_asigDirectivos")'])!!}
-                @endif
+                {!!Form::checkbox('permiso','permiso',null,['class'=>'checkbox-inline','disabled'=>'disabled'])!!}
                 </td>
             <td>
-                @if(in_array('ver_asigDirectivos',$permisos) )
-                {!!Form::checkbox('ver_asigDirectivos','ver_asigDirectivos',null,['class'=>'checkbox-inline','disabled'=>'disabled','onclick'=>'asigpermiso("ver_asigDirectivos")','checked'])!!}
-                @else
-                {!!Form::checkbox('ver_asigDirectivos','ver_asigDirectivos',null,['class'=>'checkbox-inline','disabled'=>'disabled','onclick'=>'asigpermiso("ver_asigDirectivos")'])!!}
-                @endif
+                {!!Form::checkbox('permiso','permiso',null,['class'=>'checkbox-inline','disabled'=>'disabled'])!!}
                 </td>
             <td>
-                @if(in_array('eliminar_asigDirectivos',$permisos) )
-                {!!Form::checkbox('eliminar_asigDirectivos','eliminar_asigDirectivos',null,['class'=>'checkbox-inline','disabled'=>'disabled','onclick'=>'asigpermiso("eliminar_asigDirectivos")','checked'])!!}
-                @else
-                {!!Form::checkbox('eliminar_asigDirectivos','eliminar_asigDirectivos',null,['class'=>'checkbox-inline','disabled'=>'disabled','onclick'=>'asigpermiso("eliminar_asigDirectivos")'])!!}
-                @endif
+                {!!Form::checkbox('permiso','permiso',null,['class'=>'checkbox-inline','disabled'=>'disabled'])!!}
                 </td>
         </tr>
         <tr>
-            <td><b>MODULO Certificacion - PERMISOS</b></td>
+            <td><b>MODULO CERTIFICACION - PERMISOS</b></td>
             <td>
                 @if(in_array('crear_permiso_certificacion',$permisos) )
                 {!!Form::checkbox('crear_permiso_certificacion','crear_permiso_certificacion',null,['class'=>'checkbox-inline','onclick'=>'asigpermiso("crear_permiso_certificacion")','checked'])!!}
@@ -254,29 +224,17 @@
                 @endif
                 </td>
                 <td>
-                @if(in_array('editar_asigDirectivos',$permisos) )
-                {!!Form::checkbox('editar_asigDirectivos','editar_asigDirectivos',null,['class'=>'checkbox-inline','disabled'=>'disabled','onclick'=>'asigpermiso("editar_asigDirectivos")','checked'])!!}
-                @else
-                {!!Form::checkbox('editar_asigDirectivos','editar_asigDirectivos',null,['class'=>'checkbox-inline','disabled'=>'disabled','onclick'=>'asigpermiso("editar_asigDirectivos")'])!!}
-                @endif
+                {!!Form::checkbox('permiso','permiso',null,['class'=>'checkbox-inline','disabled'=>'disabled'])!!}
                 </td>
             <td>
-                @if(in_array('ver_asigDirectivos',$permisos) )
-                {!!Form::checkbox('ver_asigDirectivos','ver_asigDirectivos',null,['class'=>'checkbox-inline','disabled'=>'disabled','onclick'=>'asigpermiso("ver_asigDirectivos")','checked'])!!}
-                @else
-                {!!Form::checkbox('ver_asigDirectivos','ver_asigDirectivos',null,['class'=>'checkbox-inline','disabled'=>'disabled','onclick'=>'asigpermiso("ver_asigDirectivos")'])!!}
-                @endif
+                {!!Form::checkbox('permiso','permiso',null,['class'=>'checkbox-inline','disabled'=>'disabled'])!!}
                 </td>
             <td>
-                @if(in_array('eliminar_asigDirectivos',$permisos) )
-                {!!Form::checkbox('eliminar_asigDirectivos','eliminar_asigDirectivos',null,['class'=>'checkbox-inline','disabled'=>'disabled','onclick'=>'asigpermiso("eliminar_asigDirectivos")','checked'])!!}
-                @else
-                {!!Form::checkbox('eliminar_asigDirectivos','eliminar_asigDirectivos',null,['class'=>'checkbox-inline','disabled'=>'disabled','onclick'=>'asigpermiso("eliminar_asigDirectivos")'])!!}
-                @endif
+                {!!Form::checkbox('permiso','permiso',null,['class'=>'checkbox-inline','disabled'=>'disabled'])!!}
                 </td>
         </tr>
         <tr>
-            <td><b>MODULO Tesoreria - PERMISOS</b></td>
+            <td><b>MODULO TESORERIA - PERMISOS</b></td>
             <td>
                 @if(in_array('crear_permiso_tesoreria',$permisos) )
                 {!!Form::checkbox('crear_permiso_tesoreria','crear_permiso_tesoreria',null,['class'=>'checkbox-inline','onclick'=>'asigpermiso("crear_permiso_tesoreria")','checked'])!!}
@@ -285,29 +243,17 @@
                 @endif
                 </td>
                 <td>
-                @if(in_array('editar_asigDirectivos',$permisos) )
-                {!!Form::checkbox('editar_asigDirectivos','editar_asigDirectivos',null,['class'=>'checkbox-inline','disabled'=>'disabled','onclick'=>'asigpermiso("editar_asigDirectivos")','checked'])!!}
-                @else
-                {!!Form::checkbox('editar_asigDirectivos','editar_asigDirectivos',null,['class'=>'checkbox-inline','disabled'=>'disabled','onclick'=>'asigpermiso("editar_asigDirectivos")'])!!}
-                @endif
+                {!!Form::checkbox('permiso','permiso',null,['class'=>'checkbox-inline','disabled'=>'disabled'])!!}
                 </td>
             <td>
-                @if(in_array('ver_asigDirectivos',$permisos) )
-                {!!Form::checkbox('ver_asigDirectivos','ver_asigDirectivos',null,['class'=>'checkbox-inline','disabled'=>'disabled','onclick'=>'asigpermiso("ver_asigDirectivos")','checked'])!!}
-                @else
-                {!!Form::checkbox('ver_asigDirectivos','ver_asigDirectivos',null,['class'=>'checkbox-inline','disabled'=>'disabled','onclick'=>'asigpermiso("ver_asigDirectivos")'])!!}
-                @endif
+                {!!Form::checkbox('permiso','permiso',null,['class'=>'checkbox-inline','disabled'=>'disabled'])!!}
                 </td>
             <td>
-                @if(in_array('eliminar_asigDirectivos',$permisos) )
-                {!!Form::checkbox('eliminar_asigDirectivos','eliminar_asigDirectivos',null,['class'=>'checkbox-inline','disabled'=>'disabled','onclick'=>'asigpermiso("eliminar_asigDirectivos")','checked'])!!}
-                @else
-                {!!Form::checkbox('eliminar_asigDirectivos','eliminar_asigDirectivos',null,['class'=>'checkbox-inline','disabled'=>'disabled','onclick'=>'asigpermiso("eliminar_asigDirectivos")'])!!}
-                @endif
+                {!!Form::checkbox('permiso','permiso',null,['class'=>'checkbox-inline','disabled'=>'disabled'])!!}
                 </td>
         </tr>
         <tr>
-            <td><b>MODULO Contabilidad - PERMISOS</b></td>
+            <td><b>MODULO CONTABILIDAD - PERMISOS</b></td>
             <td>
                 @if(in_array('crear_permiso_contabilidad',$permisos) )
                 {!!Form::checkbox('crear_permiso_contabilidad','crear_permiso_contabilidad',null,['class'=>'checkbox-inline','onclick'=>'asigpermiso("crear_permiso_contabilidad")','checked'])!!}
@@ -316,29 +262,17 @@
                 @endif
                 </td>
                 <td>
-                @if(in_array('editar_asigDirectivos',$permisos) )
-                {!!Form::checkbox('editar_asigDirectivos','editar_asigDirectivos',null,['class'=>'checkbox-inline','disabled'=>'disabled','onclick'=>'asigpermiso("editar_asigDirectivos")','checked'])!!}
-                @else
-                {!!Form::checkbox('editar_asigDirectivos','editar_asigDirectivos',null,['class'=>'checkbox-inline','disabled'=>'disabled','onclick'=>'asigpermiso("editar_asigDirectivos")'])!!}
-                @endif
+                {!!Form::checkbox('permiso','permiso',null,['class'=>'checkbox-inline','disabled'=>'disabled'])!!}
                 </td>
             <td>
-                @if(in_array('ver_asigDirectivos',$permisos) )
-                {!!Form::checkbox('ver_asigDirectivos','ver_asigDirectivos',null,['class'=>'checkbox-inline','disabled'=>'disabled','onclick'=>'asigpermiso("ver_asigDirectivos")','checked'])!!}
-                @else
-                {!!Form::checkbox('ver_asigDirectivos','ver_asigDirectivos',null,['class'=>'checkbox-inline','disabled'=>'disabled','onclick'=>'asigpermiso("ver_asigDirectivos")'])!!}
-                @endif
+                {!!Form::checkbox('permiso','permiso',null,['class'=>'checkbox-inline','disabled'=>'disabled'])!!}
                 </td>
             <td>
-                @if(in_array('eliminar_asigDirectivos',$permisos) )
-                {!!Form::checkbox('eliminar_asigDirectivos','eliminar_asigDirectivos',null,['class'=>'checkbox-inline','disabled'=>'disabled','onclick'=>'asigpermiso("eliminar_asigDirectivos")','checked'])!!}
-                @else
-                {!!Form::checkbox('eliminar_asigDirectivos','eliminar_asigDirectivos',null,['class'=>'checkbox-inline','disabled'=>'disabled','onclick'=>'asigpermiso("eliminar_asigDirectivos")'])!!}
-                @endif
+                {!!Form::checkbox('permiso','permiso',null,['class'=>'checkbox-inline','disabled'=>'disabled'])!!}
                 </td>
         </tr>
         <tr>
-            <td><b>MODULO Informes - PERMISOS</b></td>
+            <td><b>MODULO INFORMES - PERMISOS</b></td>
             <td>
                 @if(in_array('crear_permiso_informes',$permisos) )
                 {!!Form::checkbox('crear_permiso_informes','crear_permiso_informes',null,['class'=>'checkbox-inline','onclick'=>'asigpermiso("crear_permiso_informes")','checked'])!!}
@@ -347,29 +281,17 @@
                 @endif
                 </td>
                 <td>
-                @if(in_array('editar_asigDirectivos',$permisos) )
-                {!!Form::checkbox('editar_asigDirectivos','editar_asigDirectivos',null,['class'=>'checkbox-inline','disabled'=>'disabled','onclick'=>'asigpermiso("editar_asigDirectivos")','checked'])!!}
-                @else
-                {!!Form::checkbox('editar_asigDirectivos','editar_asigDirectivos',null,['class'=>'checkbox-inline','disabled'=>'disabled','onclick'=>'asigpermiso("editar_asigDirectivos")'])!!}
-                @endif
+                {!!Form::checkbox('permiso','permiso',null,['class'=>'checkbox-inline','disabled'=>'disabled'])!!}
                 </td>
             <td>
-                @if(in_array('ver_asigDirectivos',$permisos) )
-                {!!Form::checkbox('ver_asigDirectivos','ver_asigDirectivos',null,['class'=>'checkbox-inline','disabled'=>'disabled','onclick'=>'asigpermiso("ver_asigDirectivos")','checked'])!!}
-                @else
-                {!!Form::checkbox('ver_asigDirectivos','ver_asigDirectivos',null,['class'=>'checkbox-inline','disabled'=>'disabled','onclick'=>'asigpermiso("ver_asigDirectivos")'])!!}
-                @endif
+                {!!Form::checkbox('permiso','permiso',null,['class'=>'checkbox-inline','disabled'=>'disabled'])!!}
                 </td>
             <td>
-                @if(in_array('eliminar_asigDirectivos',$permisos) )
-                {!!Form::checkbox('eliminar_asigDirectivos','eliminar_asigDirectivos',null,['class'=>'checkbox-inline','disabled'=>'disabled','onclick'=>'asigpermiso("eliminar_asigDirectivos")','checked'])!!}
-                @else
-                {!!Form::checkbox('eliminar_asigDirectivos','eliminar_asigDirectivos',null,['class'=>'checkbox-inline','disabled'=>'disabled','onclick'=>'asigpermiso("eliminar_asigDirectivos")'])!!}
-                @endif
+                {!!Form::checkbox('permiso','permiso',null,['class'=>'checkbox-inline','disabled'=>'disabled'])!!}
                 </td>
         </tr>
         <tr>
-            <td><b>MODULO Configuracion - PERMISOS</b></td>
+            <td><b>MODULO CONFIGURACION - PERMISOS</b></td>
             <td>
                 @if(in_array('crear_permiso_configuracion',$permisos) )
                 {!!Form::checkbox('crear_permiso_configuracion','crear_permiso_configuracion',null,['class'=>'checkbox-inline','onclick'=>'asigpermiso("crear_permiso_configuracion")','checked'])!!}
@@ -378,25 +300,13 @@
                 @endif
                 </td>
                 <td>
-                @if(in_array('editar_asigDirectivos',$permisos) )
-                {!!Form::checkbox('editar_asigDirectivos','editar_asigDirectivos',null,['class'=>'checkbox-inline','disabled'=>'disabled','onclick'=>'asigpermiso("editar_asigDirectivos")','checked'])!!}
-                @else
-                {!!Form::checkbox('editar_asigDirectivos','editar_asigDirectivos',null,['class'=>'checkbox-inline','disabled'=>'disabled','onclick'=>'asigpermiso("editar_asigDirectivos")'])!!}
-                @endif
+                {!!Form::checkbox('permiso','permiso',null,['class'=>'checkbox-inline','disabled'=>'disabled'])!!}
                 </td>
             <td>
-                @if(in_array('ver_asigDirectivos',$permisos) )
-                {!!Form::checkbox('ver_asigDirectivos','ver_asigDirectivos',null,['class'=>'checkbox-inline','disabled'=>'disabled','onclick'=>'asigpermiso("ver_asigDirectivos")','checked'])!!}
-                @else
-                {!!Form::checkbox('ver_asigDirectivos','ver_asigDirectivos',null,['class'=>'checkbox-inline','disabled'=>'disabled','onclick'=>'asigpermiso("ver_asigDirectivos")'])!!}
-                @endif
+                {!!Form::checkbox('permiso','permiso',null,['class'=>'checkbox-inline','disabled'=>'disabled'])!!}
                 </td>
             <td>
-                @if(in_array('eliminar_asigDirectivos',$permisos) )
-                {!!Form::checkbox('eliminar_asigDirectivos','eliminar_asigDirectivos',null,['class'=>'checkbox-inline','disabled'=>'disabled','onclick'=>'asigpermiso("eliminar_asigDirectivos")','checked'])!!}
-                @else
-                {!!Form::checkbox('eliminar_asigDirectivos','eliminar_asigDirectivos',null,['class'=>'checkbox-inline','disabled'=>'disabled','onclick'=>'asigpermiso("eliminar_asigDirectivos")'])!!}
-                @endif
+                {!!Form::checkbox('permiso','permiso',null,['class'=>'checkbox-inline','disabled'=>'disabled'])!!}
                 </td>
         </tr>
     </tbody>

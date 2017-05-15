@@ -5,11 +5,12 @@
         <div class="modal-content" id="error-modal">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title" id="titulo-empleado" align='center'>EMPLEADO</h4>
+                <h4 class="modal-title" id="titulo-empleado" align='center'>DATOS DEL EMPLEADO</h4>
             </div>            
             <div class="modal-body">
                 {!! Form::open(['id'=>'formempleado']) !!}
-                @include('mensajes.mensaje')                
+                @include('mensajes.mensaje')       
+                <div class="box-body bg-primary">
                 <div class="col-md-2">
                         {!! Form::label('codigo','Codigo: ',['class'=>'control-label']) !!}                        
                         {!! Form::text('codigo',null,['id'=>'codigo','class'=>'form-control','placeholder'=>'EMP-00000','maxlength'=>'5','onKeypress'=>'return soloNumeros(event)'])!!}
@@ -140,21 +141,15 @@
                         {!! Form::label('celular','Celular',['class'=>'form-label']) !!}
                         {!! Form::text('celular',null,['id'=>'celular','class'=>'form-control','placeholder'=>'Nombre Completo','maxlength'=>'9'])!!}
                         <div class="text-danger" id="error_nombre"></div>
-                    </div>
-                <div class="col-md-12" style="float: right;">
-                    {!!link_to('#', $title='Registrar', $attributes = ['id'=>'Regempleado', 'class'=>'btn btn-dropbox','onclick'=>'RegEmpleado()'])!!}
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Salir</button>                 
-                </div>
-                    
-               
-                     
+                </div>                                                                        
                 {!! Form::close() !!} 
-                <div class="modal-footer">                        
-                                                                                     
-                </div>
+            </div>
             </div>
             
-            
+            <div class="modal-footer">                        
+                    {!!link_to('#', $title='Registrar', $attributes = ['id'=>'Regempleado', 'class'=>'btn btn-dropbox','onclick'=>'RegEmpleado()'])!!}
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Salir</button>                                                               
+                </div>
         </div>
 
     </div>

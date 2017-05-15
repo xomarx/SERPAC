@@ -31,4 +31,20 @@ class Role extends EntrustRole
                 ->where('role_user.user_id','=',$iduser)                
                 ->delete();
     }
+    
+    public static function RolUser($idrol){
+        return \Illuminate\Support\Facades\DB::table('role_user')
+                ->where('role_id','=',$idrol)->count();
+    }
+    
+    public static function scopeListRols($query,$dato=''){
+        return $query
+                ->where(function($query)use($dato){
+                    $query->where('name','like','%'.$dato.'%')
+                            ->orwhere('display_name','like','%'.$dato.'%')
+                            ->orwhere('description','like','%'.$dato.'%');
+                })
+                ->select('name','display_name','description','id')->get();
+        
+    }
 }

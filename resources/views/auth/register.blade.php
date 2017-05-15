@@ -104,6 +104,10 @@
 @stop
 @section('script')
 <script>
+    $(document).ready(function(){
+        $("#subusuarios").addClass('active');
+        $("#menuconfiguracion").addClass('active');
+    });
     $("#empleado").change(function(event){
         
         var texto = $("#empleado option:selected").text();

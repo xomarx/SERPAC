@@ -10,17 +10,41 @@ use App\Http\Controllers\Controller;
 
 class usuarioController extends Controller
 {
-   
+    
+    
+    
+    public function EditRol($id){
+        $rol = \App\Role::where('id','=',$id)->select('name','display_name','description')->first();
+        return response()->json($rol);
+    }
+    
+    public function updateRol(Requests\Configuracion\RolCreateRequest $request,$id){
+        $rol = \App\Role::FindOrFail($id);
+        $rol->name = strtoupper($request->rol);
+        $rol->display_name=$request->tag;
+        $rol->description=$request->descripcion;
+        $rol->save();
+        if($rol) return  response()->json(['success'=>true,'message'=>'Se actualizo los datos del Rol']);
+        else return  response()->json(['success'=>false,'message'=>'No se actualizo los datos del Rol']);
+    }
+
+
     public function roluser(){        
         return view('Configuracion.roles');
     }
     
-    public function listaRoles()
+    public function HeadRoles()
     {
-        $roles = \App\Role::all();
-        return view('Configuracion.listarRoles')->with('roles',$roles);
+        $roles = \App\Role::ListRols('');
+        return view('Configuracion.rolHead')->with('roles',$roles);
     }
-                
+    
+    public function listaRoles($dato=''){
+        $roles = \App\Role::ListRols($dato);
+        return view('Configuracion.rolList')->with('roles',$roles);
+    }
+
+
     public function PermisoUser(){        
         return view('Configuracion.permisos');
     }
@@ -86,7 +110,7 @@ class usuarioController extends Controller
 //        return redirect('Usuarios');
         if ($request->ajax()) {
             $rol = \App\Role::create([
-                'name'=>$request->rol,
+                'name'=>  strtoupper($request->rol),
                 'display_name'=>$request->tag,
                 'description'=>$request->descripcion
             ]);
@@ -155,22 +179,61 @@ class usuarioController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id,$modulo)
-    {
+    public function show($id,$modulo) {
         $permisos = \App\Role::listaPermisos($id);
         $results[]=[0=>'nada'];
         foreach ($permisos as $permiso){
             $results[] = $permiso->display_name;
         }
-        if($modulo==1) return    view('Configuracion.listPermisos')->with('permisos',$results);
-        else if($modulo==2) return    view('Configuracion.listaPermisoRRHH')->with('permisos',$results);
-        else if($modulo==3) return    view('Configuracion.listPermisosACOPIO')->with('permisos',$results);
-        else if($modulo==4) return    view('Configuracion.listPermisosCREDITOS')->with('permisos',$results);
-        else if($modulo==5) return    view('Configuracion.listPermisosCERTIFICACION')->with('permisos',$results);
-        else if($modulo==6) return    view('Configuracion.listPermisosTESORERIA')->with('permisos',$results);
-        else if($modulo==7) return    view('Configuracion.listPermisosCONTABILIDAD')->with('permisos',$results);
-        else if($modulo==8) return    view('Configuracion.listPermisosINFORMES')->with('permisos',$results);
-        else if($modulo==9) return    view('Configuracion.listPermisosCONFIGURACION')->with('permisos',$results);
+        if($modulo==0){
+            if(auth()->user()->can('crear permiso socio'))  return    view('Configuracion.listPermisos')->with('permisos',$results);
+            else if(auth()->user()->can('crear permiso RRHH')) return    view('Configuracion.listaPermisoRRHH')->with('permisos',$results);
+            else if(auth()->user()->can('crear permiso acopio')) return    view('Configuracion.listPermisosACOPIO')->with('permisos',$results);
+            else if(auth()->user()->can('crear permiso creditos')) return    view('Configuracion.listPermisosCREDITOS')->with('permisos',$results);
+            else if(auth()->user()->can('crear permiso certificacion')) return    view('Configuracion.listPermisosCERTIFICACION')->with('permisos',$results);
+            else if(auth()->user()->can('crear permiso tesoreria')) return    view('Configuracion.listPermisosTESORERIA')->with('permisos',$results);
+            else if(auth()->user()->can('crear permiso contabilidad')) return    view('Configuracion.listPermisosCONTABILIDAD')->with('permisos',$results);
+            else if(auth()->user()->can('crear permiso informes')) return    view('Configuracion.listPermisosINFORMES')->with('permisos',$results);
+            else if(auth()->user()->can('crear permiso configuracion')) return    view('Configuracion.listPermisosCONFIGURACION')->with('permisos',$results);
+            else return response ()->view ('errors.403-content');
+        }
+        else if($modulo == 1){
+            if(auth()->user()->can('crear permiso socio'))  return    view('Configuracion.listPermisos')->with('permisos',$results);
+            else return response ()->view ('errors.403-content');
+        }
+        else if($modulo == 2){
+            if(auth()->user()->can('crear permiso RRHH')) return    view('Configuracion.listaPermisoRRHH')->with('permisos',$results);
+            else return response ()->view ('errors.403-content');
+        }
+        else if($modulo == 3){
+            if(auth()->user()->can('crear permiso acopio')) return    view('Configuracion.listPermisosACOPIO')->with('permisos',$results);
+            else return response ()->view ('errors.403-content');
+        }
+        else if($modulo == 4){
+            if(auth()->user()->can('crear permiso creditos')) return    view('Configuracion.listPermisosCREDITOS')->with('permisos',$results);
+            else return response ()->view ('errors.403-content');
+        }
+        else if($modulo == 5){
+            if(auth()->user()->can('crear permiso certificacion')) return    view('Configuracion.listPermisosCERTIFICACION')->with('permisos',$results);
+            else return response ()->view ('errors.403-content');
+        }
+        else if($modulo == 6){
+            if(auth()->user()->can('crear permiso tesoreria')) return    view('Configuracion.listPermisosTESORERIA')->with('permisos',$results);
+            else return response ()->view ('errors.403-content');
+        }
+        else if($modulo == 7){
+            if(auth()->user()->can('crear permiso contabilidad')) return    view('Configuracion.listPermisosCONTABILIDAD')->with('permisos',$results);
+            else return response ()->view ('errors.403-content');
+        }
+        else if($modulo == 8){
+            if(auth()->user()->can('crear permiso informes')) return    view('Configuracion.listPermisosINFORMES')->with('permisos',$results);
+            else return response ()->view ('errors.403-content');
+        }
+        else if($modulo == 9){
+            if(auth()->user()->can('crear permiso configuracion')) 
+                return    view('Configuracion.listPermisosCONFIGURACION')->with('permisos',$results);
+            else return response ()->view ('errors.403-content');
+        }
     }
     
 
@@ -183,6 +246,7 @@ class usuarioController extends Controller
     public function edit($id)
     {
         //
+        
     }
 
     /**
@@ -208,5 +272,13 @@ class usuarioController extends Controller
         
     }
     
-    
+    public function deleteRol($id){
+        if(!auth()->user()->can('eliminar rol'))
+            return response ()->view ('errors.403-content',[],403);
+        if(\App\Role::RolUser($id) == 0){
+            \App\Role::FindOrFail($id)->delete();
+            return response()->json(['success'=>true]);
+        }
+        return response()->json(['success'=>false]);                       
+    }
 }

@@ -3,7 +3,7 @@
     
     <div class="box-header form-inline">
        {!! Form::label('rol','Rol: ',['class'=>'col-md-1'])!!}
-       {!! Form::select('rol',$roles,null,['id'=>'rol','class'=>'col-md-8 form-control','onchange'=>'cargarLista(1)','placeholder'=>'Seleccione un Rol']) !!} &nbsp;&nbsp;&nbsp;       
+       {!! Form::select('rol',$roles,null,['id'=>'rol','class'=>'col-md-8 form-control','onchange'=>'cargarLista(0)','placeholder'=>'Seleccione un Rol']) !!} &nbsp;&nbsp;&nbsp;       
     </div>
     <div class="box box-body" id="SelecListPermiso" >
         

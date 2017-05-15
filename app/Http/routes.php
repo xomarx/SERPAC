@@ -46,9 +46,9 @@ Route::group(['middleware' => ['auth']], function () {
     
     route::resource('error-403','Configuracion\usuarioController@errorModal');
     
-    route::resource('NewRolUsuario','Configuracion\usuarioController@storerol');
+//    route::resource('NewRolUsuario','Configuracion\usuarioController@storerol');
     route::resource('RolUsuario','Configuracion\usuarioController@roluser');
-    route::resource('ListaRoles','Configuracion\usuarioController@listaRoles');//listaRoles
+    
     route::resource('PermisoUser','Configuracion\usuarioController@PermisoUser');    
     route::resource('headPermisos','Configuracion\usuarioController@HeadPermisoUser');//HeadPermisoUser
     route::resource('NewPermisoUser','Configuracion\usuarioController@PermisoStore');//PermisoStore
@@ -58,6 +58,13 @@ Route::group(['middleware' => ['auth']], function () {
     route::resource('NewRolUser','Configuracion\usuarioController@AsigRolUserStore');
     route::resource('ListUsuarios','Configuracion\usuarioController@ListUsers');
     route::resource('estado-user','Configuracion\usuarioController@ActDesact');
+    
+    route::resource('Usuario/RolList','Configuracion\usuarioController@listaRoles');
+    route::resource('Usuario/RolHead','Configuracion\usuarioController@HeadRoles');
+    route::resource('Usuario/RolDelete','Configuracion\usuarioController@deleteRol');
+    route::resource('Usuario/RolUpdate','Configuracion\usuarioController@updateRol');
+    route::resource('Usuario/RolUsuario','Configuracion\usuarioController@storerol');
+    route::resource('Usuarios/Rol','Configuracion\usuarioController@EditRol');
 //    route::get('ListaPermisos/{id?}/{modu?}','Configuracion\usuarioController@showPermisos');
     
     Route::get('comite_locales/{id}','socios\comite_localcontroller@getcomites_locales');

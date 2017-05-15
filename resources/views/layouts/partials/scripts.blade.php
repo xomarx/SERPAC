@@ -28,7 +28,7 @@
 <script src="{{ asset('/plugins/pace/pace.js') }}" type="text/javascript"></script>
 <script src="{{ asset('/plugins/pace/pace.min.js') }}" type="text/javascript"></script>
 <script src="{{ asset('/js/jquery-alertable-master/jquery.alertable.js') }}" type="text/javascript"></script>
-
+<script src="{{ asset('/plugins/iCheck/icheck.min.js') }}" type="text/javascript"></script>
 
 <!-- Optionally, you can add Slimscroll and FastClick plugins.
       Both of these plugins are recommended to enhance the

@@ -109,8 +109,8 @@ var cargardistrito = function (iddist,idsele) {
 }
   
 var activarForm = function(id){
-        if(id == 1) {var route = 'ListaRoles'}
-        else if(id == 2) {var route = 'headPermisos';}
+//        if(id == 1) {var route = '/Usuario/RolHead'}        
+        if(id == 2) {var route = 'headPermisos';}
         else if(id == 3) {var route = 'Caja-Chica/'+$("#anioc").val()+'/'+$("#mesc").val()+'/'+$("#buscarc").val();}
         else if(id == 4) {var route = 'ListMovcheques/'+$("#anio").val()+'/'+$("#mes").val()+'/'+$("#buscar").val();}
         else if(id == 5) {var route = 'ListUsuarios';}
@@ -139,7 +139,7 @@ var activarForm = function(id){
     
 var activarFormHead = function(head,body){
     if(head==1) { var route = 'headmovcheque'; }
-    else if(head==2) { var route = 'headcajachica'; } 
+    else if(head==2) { var route = 'headcajachica'; }       
     $.ajax({
        type:'get' ,
        url:route,
@@ -2333,8 +2333,7 @@ $(document).ready().on('click','#RegCompras',function(){
     
         var fields = $("#formcompras").serialize();
         var route = "/Acopio/Compra-Grano";
-        var token = $("input[name=_token]").val();
-        console.log(fields)
+        var token = $("input[name=_token]").val();        
         $.ajax({
             url: route,
             headers: {'X-CSRF-TOKEN': token},
@@ -2355,47 +2354,25 @@ $(document).ready().on('click','#RegCompras',function(){
                 if (data.status == 403)
                     $("#error-modal").html(data.responseText);
                 else {
-                    $("#error_acopio").html('');
-                    $("#error_paterno").html('');
-                    $("#error_socio").html('');
-                    $("#error_materno").html('');
-                    $("#error_nombres").html('');
-                    $("#error_codigo").html('');
-                    $("#error_dni").html('');
-                    $("#error_numero").html('');
-                    $("#error_comite").html('');
-                    $("#error_fecha").html('');
-                    $("#error_condicion").html('');
-                    $("#error_kilos").html('');
+                    $("#error_acopio").html('');$("#error_paterno").html(''); $("#error_socio").html(''); $("#error_materno").html('');
+                    $("#error_nombres").html('');$("#error_codigo").html('');$("#error_dni").html(''); $("#error_numero").html('');
+                    $("#error_comite").html('');$("#error_fecha").html(''); $("#error_condicion").html(''); $("#error_kilos").html('');
                     $("#error_precio").html('');
                     var errors = $.parseJSON(data.responseText);
                     $.each(errors, function (index, value) {
-                        if (index == 'acopio')
-                            $("#error_acopio").html(value);
-                        else if (index == 'paterno')
-                            $("#error_paterno").html(value);
-                        else if (index == 'materno')
-                            $("#error_materno").html(value);
-                        else if (index == 'nombres')
-                            $("#error_nombres").html(value);
-                        else if (index == 'dni')
-                            $("#error_dni").html(value);
-                        else if (index == 'numero')
-                            $("#error_numero").html(value);
-                        else if (index == 'comite')
-                            $("#error_comite").html(value);
-                        else if (index == 'codigo')
-                            $("#error_codigo").html(value);
-                        else if (index == 'socio')
-                            $("#error_socio").html(value);
-                        else if (index == 'condicion')
-                            $("#error_condicion").html(value);
-                        else if (index == 'kilos')
-                            $("#error_kilos").html(value);
-                        else if (index == 'precio')
-                            $("#error_precio").html(value);
-                        else if (index == 'fecha')
-                            $("#error_fecha").html(value);
+                        if (index == 'acopio') $("#error_acopio").html(value);
+                        else if (index == 'paterno') $("#error_paterno").html(value);
+                        else if (index == 'materno')$("#error_materno").html(value);
+                        else if (index == 'nombres')$("#error_nombres").html(value);
+                        else if (index == 'dni')$("#error_dni").html(value);
+                        else if (index == 'numero')$("#error_numero").html(value);
+                        else if (index == 'comite')$("#error_comite").html(value);
+                        else if (index == 'codigo')$("#error_codigo").html(value);
+                        else if (index == 'socio')$("#error_socio").html(value);
+                        else if (index == 'condicion')$("#error_condicion").html(value);
+                        else if (index == 'kilos')$("#error_kilos").html(value);
+                        else if (index == 'precio')$("#error_precio").html(value);
+                        else if (index == 'fecha')$("#error_fecha").html(value);
                     });
                 }
             }
@@ -2510,79 +2487,6 @@ var AnulJuridico = function(id,name){
     });
    };
    
-// *******************************************************************************************  CRUD TIPO EGRESO  ***************************************
-$("#nuevaegreso").click(function(){
-    $("#formegresos")[0].reset();$("#RegtipoEgreso").text("Registrar");
-    $("#error_tipo").html('');$("#error_descripcion").html('');
-});
-
-var EdiTipoEgreso = function(id){
-    
-        $("#RegtipoEgreso").text("Actualizar");
-        var route = "/Tesoreria/Tipos-egresos/"+id+"/edit";
-        
-        $("#idegreso").val(id);
-        $.get(route, function(data){
-            $("#tipo").val(data.tipo_egreso);
-            $("#descripcion").val(data.descripcion);
-        });
-};
-
-var ElitipoEgreso = function(id,name){
-    $.alertable.confirm("<span style='color:#000'>¿Está seguro de eliminar el registro?</span>"+"<br><strong><span style='color:#ff0000'>"+name+"</span></strong></br>").then(function() {  
-      var route = "/Tesoreria/Tipos-egresos/"+id+"";
-      var token = $("#token").val();
-      $.ajax({
-        url: route,
-        headers: {'X-CSRF-TOKEN': token},
-        type: 'DELETE',
-        dataType: 'json',
-        success: function(data){
-        if (data.success)
-        {           
-            document.location.reload();
-        }
-      }
-      });          
-    });
-};
-
-$("#RegtipoEgreso").click(function(){
-    var fields = $("#formegresos").serialize();
-    var route = "/Tesoreria/Tipos-egresos";    
-    var token = $("#token").val();
-    var type = 'post';
-    if($("#RegtipoEgreso").text() == 'Actualizar')
-    {        
-        route = '/Tesoreria/Tipos-egresos/'+$("#idegreso").val();
-        type='put';        
-    }        
-    $.ajax({
-           url:route,
-           headers:{'X-CSRF-TOKEN':token},
-           type: type,
-           data:fields,
-           success:function(data){
-               if (data.success) {
-                   console.log(data.message);
-                   var msj = "<h4>" + data.message + "</h4>";
-                   $("#msj-egresos").html(msj);
-                   $("#alert-egreso").fadeIn(1000);                   
-                   document.location.reload();
-                   $("#alert-egreso").hide();
-                }
-           },
-           error: function(data){
-               var errors = $.parseJSON(data.responseText);
-                $("#error_tipo").html('');$("#error_descripcion").html('');
-                    $.each(errors, function (index, value) {                        
-                        if(index == 'tipo') $("#error_tipo").html(value);
-                        else if(index == 'descripcion') $("#error_descripcion").html(value);                        
-                    });
-           }
-       });
-});
-
 // ********************************************************************************************  PAGOS **************************************************
 
 $("#RegEgresos").click(function(){        
@@ -2639,36 +2543,95 @@ var EliGasto = function(id,nombre){
    };
    
    // **************************************************************************************************   ROL ******************************************
+     
+     var ElimRol = function (name, id) {
+    $.alertable.confirm("<span style='color:#000'>¿Está seguro de eliminar el Rol ?</span>" + "<br><strong><span style='color:#ff0000'>" + name + "</span></strong></br>").then(function () {
+        var route = "/Usuario/RolDelete/" + id + "";        
+
+        $.ajax({
+            url: route,
+            headers: {'X-CSRF-TOKEN': $("input[name=_token]").val()},
+            type: 'DELETE',
+            dataType: 'json',
+            success: function (data) {
+                if (data.success) Roles();
+                else $.alertable.alert("No se puede Eliminar el Rol "+name +"<br> Tiene Registros de Operación");                    
+            },
+            error: function (data) {
+                if (data.status==403) activarmodal(0);
+            }
+        });
+    });
+}
+     var EditRol = function(id){
+         activarmodal(1);
+         $.getJSON('/Usuarios/Rol/'+id,function(data){             
+             $("#rol").val(data.name);
+             $("#tag").val(data.display_name);
+             $("#descripcion").val(data.description);
+             $("#RegRol").text('Actualizar');
+             $("#id").val(id);
+         })
+     };
+     
+     var Roles = function(){
+         var route = '/Usuario/RolHead';
+         $.ajax({
+            type:'get',
+            url:route,
+            success:function(data){                
+                $("#contenidos-box").html(data);  
+                ListaRol();
+            }            
+        })
+     }
+     
+    
         
-   var regrol = function (id){
-       var formu = $("#formrol").serialize();
-       var token = $("input[name=_token]").val();
+    $(document).ready().on('click','#RegRol',function(event){
+        var type = 'POST';        var route = '/Usuario/RolUsuario';
+        if($(this).text() == "Actualizar") {type='PUT'; route = '/Usuario/RolUpdate/'+$("#id").val();}
+        $.ajax({          
+          url:route,
+          headers:{'X-CSRF-TOKEN':$("input[name=_token]").val()},
+          type:type,
+          datatype:'json',
+          data:$("#formrol").serialize(),
+          success:function(data){
+              mensajeRegistro(data,'formrol');
+              Roles();
+          },
+          error:function(data){
+              $("#error_rol").html('');$("#error_tag").html('');$("#error_descripcion").html('');              
+              var errors =  $.parseJSON(data.responseText);
+              $.each(errors,function(index, value) {                      
+                            if(index == 'rol' )$("#error_rol").html(value);
+                            else if(index == 'permiso' || index == 'cheque')$("#error_rol").html(value);
+                            else if(index == 'tag' || index == 'numero')$("#error_tag").html(value);                             
+                            else if(index == 'descripcion' || index == 'importe')$("#error_descripcion").html(value);                            
+                      });
+          }
+       });
+    });
+    
+    
+   var regrol = function (id){           
        if(id==1) var route = "NewRolUsuario";
        else if(id==2) var route = "NewPermisoUser";
        else if(id==3) var route = $("#Regmodal").text()+"Cheques" + "/"+$("#idcheque").val();
        
        var type = 'POST';
-       if($("#Regmodal").text() == "Actualizar") type = 'PUT';
+       if($("#RegRol").text() == "Actualizar") type = 'PUT';
 //       console.log($("#Regmodal").text());
        $.ajax({          
           url:route,
-          headers:{'X-CSRF-TOKEN':token},
+          headers:{'X-CSRF-TOKEN':$("input[name=_token]").val()},
           type:type,
           datatype:'json',
-          data:formu,
+          data:$("#formrol").serialize(),
           success:function(data){
-              $("#msj_rol").fadeIn();
-              if(data.success){
-                $("#txt_rol").html(data.message);
-                $("#formrol")[0].reset();
-                if(id==3) document.location.reload();
-              }
-              else{
-                  $("#msj_rol").removeClass('alert-success');
-                  $("#msj_rol").addClass('alert-danger');
-                  $("#txt_rol").html(data.message);                                                
-              }
-              $("#msj_rol").fadeOut(1000);                  
+              mensajeRegistro(data,'formrol');
+                if(id==3) document.location.reload();                                             
           },
           error:function(data){
               $("#error_rol").html('');$("#error_tag").html('');$("#error_descripcion").html('');              
@@ -2975,9 +2938,13 @@ var EliGasto = function(id,nombre){
           }
        });
    };
-   
-   var ActDesact = function(name){
-       $.alertable.confirm("<span style='color:#000'>¿Está seguro de Cambiar el estado del Usuario: ?</span>"+"<br><strong><span style='color:#ff0000'>"+name+"</span></strong></br>").then(function() {  
+      
+   var ActDesact = function(name,estado){
+       if(estado)
+           var valor = 'HABILITAR';
+       else 
+           var valor = 'INHABILITAR';
+       $.alertable.confirm("<span style='color:#000'>¿Está seguro de "+valor+" al Usuario: ?</span>"+"<br><strong><span style='color:#ff0000'>"+name+"</span></strong></br>").then(function() {  
       var route = "estado-user"
       var token = $("input[name=_token]").val();
       $.ajax({
