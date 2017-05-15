@@ -35,12 +35,17 @@ class AuthController extends Controller
        return redirect('/');
     }
 
+    
+    public function redirectPath()
+    {
+        return '/socios';
+    }
     /**
      * Where to redirect users after login / registration.
      *
      * @var string
      */
-    protected $redirectTo = '/socios';
+//    protected $redirectTo = '/socios';
 
     /**
      * Create a new authentication controller instance.
@@ -92,13 +97,6 @@ class AuthController extends Controller
     public function listUsers(){        
         $usuarios = \App\User::usuarios();
         return view('Configuracion.usuarios',['usuarios'=>$usuarios]);        
-    }
-    
-//    public function listUsers() {
-//        $usuarios = \App\User::usuarios();
-//        return view('Configuracion.usuarios', ['usuarios' => $usuarios]);
-//    }
-
-    
+    }    
 }
     

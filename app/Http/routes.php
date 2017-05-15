@@ -73,13 +73,15 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('distritos/{id}','socios\distritocontroller@getdistritos');   
 //    route::post('socios/{codigo}','socios\sociocontroller@update');   
     //*******************************************************************       SOCIOS ******************************************************************
+    
+    
     route::get('socios/Asignacion-Delegados/ListaAsigDelegados/{dato?}/{page?}','socios\cargodelegadosociocontroller@listaAsigDelegados');
-    route::resource('socios/Asignacion-Delegados','socios\cargodelegadosociocontroller');
+    route::resource('Socios/Asignacion-Delegados','socios\cargodelegadosociocontroller');
     route::get('socios/Asignacion-Directivos/ListaAsigDirectivos/{dato?}/{page?}','socios\cargodirectivosociocontroller@listaAsigDirectivos');
-    route::resource('socios/Asignacion-Directivos','socios\cargodirectivosociocontroller');
+    route::resource('Socios/Asignacion-Directivos','socios\cargodirectivosociocontroller');
     
     route::resource('socios/transferencias/newtransferencias','socios\transferenciacontroller@NewTransferencia');
-    route::resource('socios/transferencias','socios\transferenciacontroller');    
+    route::resource('Socios/transferencias','socios\transferenciacontroller');    
     route::resource('socios/transferencias/datos','socios\transferenciacontroller@datossocio');
     route::resource('socios/transferencias/nuevo','socios\transferenciacontroller@datosnuevo');//datosnuevo
     route::resource('socios/transferencias/persona','socios\transferenciacontroller@datosnuevobeneficiario');//datosnuevobeneficiario    
@@ -89,17 +91,17 @@ Route::group(['middleware' => ['auth']], function () {
     route::resource('socios/propiedadfauna','socios\fundoscontroller@propiedadfauna');
     route::resource('socios/propiedadflora','socios\fundoscontroller@propiedadflora');
     
-    route::resource('socios/basicos/floras','socios\floracontroller');
-    route::resource('socios/basicos/faunas','socios\faunacontroller');
-    route::resource('socios/basicos/inmuebles','socios\inmueblescontroller');
-    route::resource('socios/basicos/delegados','socios\delegadoscontroller');
-    route::resource('socios/basicos/directivos','socios\directivoscontroller');
+    route::resource('Socios/basicos/floras','socios\floracontroller');
+    route::resource('Socios/basicos/faunas','socios\faunacontroller');
+    route::resource('Socios/basicos/inmuebles','socios\inmueblescontroller');
+    route::resource('Socios/basicos/delegados','socios\delegadoscontroller');
+    route::resource('Socios/basicos/directivos','socios\directivoscontroller');
     
-    route::resource('socios/comite-local','socios\comite_localcontroller');
-    route::resource('socios/comite-central','socios\comite_centralcontroller');    
-    route::resource('socios/distritos','socios\distritocontroller');
-    route::resource('socios/provincias','socios\provinciacontroller');    
-    route::resource('socios/departamentos','socios\departamentocontroller');        
+    route::resource('Socios/comite-local','socios\comite_localcontroller');
+    route::resource('Socios/comite-central','socios\comite_centralcontroller');    
+    route::resource('Socios/distritos','socios\distritocontroller');
+    route::resource('Socios/provincias','socios\provinciacontroller');    
+    route::resource('Socios/departamentos','socios\departamentocontroller');        
 //    route::resource('socios','socios\sociocontroller@create');
     
     route::resource('socios/autopersonas','socios\sociocontroller@autoSociosPersonas');    
@@ -110,11 +112,11 @@ Route::group(['middleware' => ['auth']], function () {
     route::get('socios/fundos/Listfundos/{data?}/{page?}','socios\fundoscontroller@ListaFundos');
     route::resource('socios/eliminarpropiedades','socios\fundoscontroller@EliminarPropiedadesFundo');//EliminarPropiedadesFundo
     route::resource('socios/modalfundo','socios\fundoscontroller@ModalFundo');
-    route::resource('socios/fundos','socios\fundoscontroller');
+    route::resource('Socios/fundos','socios\fundoscontroller');
     
     route::get('socios/parientes/ListaParientes/{dato?}/{page?}','socios\parientescontroller@listaParientes');
     route::resource('socios/modalparientes','socios\parientescontroller@ModalPariente');    
-    route::resource('socios/parientes','socios\parientescontroller');
+    route::resource('Socios/parientes','socios\parientescontroller');
     route::delete('socios/parientes/{dni}/{cod}','socios\parientescontroller@destroy');
     route::get('socios/parientes/{idsocio?}/{dnipar?}','socios\parientescontroller@datosparientes');
     
@@ -122,12 +124,13 @@ Route::group(['middleware' => ['auth']], function () {
     route::resource('socios/Condicions-socios','socios\sociocontroller@condicions');
     route::get('socios/ListaSocios/{dato?}/{page?}','socios\sociocontroller@Listasocios');
     route::resource('socios/modalsocio','socios\sociocontroller@ModalSocio');    
-    route::resource('socios','socios\sociocontroller');
-    
+    route::resource('Socios/Socios','socios\sociocontroller');
+    route::resource('Socios','Configuracion\AuxiliarController@Socios');
     
     route::get('PadronSocio/{idsocio}','socios\sociocontroller@verPadronsocio');
    //  *********************************************************   RRHH  ************************************************************************
     
+   
     
     route::resource('RRHH/autoempleadoDni','RRHH\empleadocontroller@autocompleteEmpleadoDni');
     route::resource('RRHH/autoempleado','RRHH\empleadocontroller@autocompleteEmpleado');//   autocompleteEmpleado 
@@ -147,7 +150,10 @@ Route::group(['middleware' => ['auth']], function () {
     
     route::resource('RRHH/Empresas/ListaEmpresa','RRHH\EmpresaController@ListEmpresa');
     route::resource('RRHH/Empresas','RRHH\EmpresaController');
+     route::resource('RRHH','Configuracion\AuxiliarController@RRHH');
     // *************************************************************************************  ACOPIO **********************************************
+    
+    
     route::get('Acopio/listaRecepcionFondos/{an?}/{mes?}/{dato?}','Acopio\recepcion_fondoscontroller@recepcionfondos'); 
     route::resource('Acopio/Fondos-Acopio','Acopio\recepcion_fondoscontroller');
 //    route::resource('Acopio/PlanillaSemanal/{id}','Acopio\planillacontroller@planillasemanal');
@@ -171,8 +177,10 @@ Route::group(['middleware' => ['auth']], function () {
     route::resource('Acopio/Adelantos-Acopio/Modal-Adelanto','Acopio\AdelantoAcopioController@adelantoacopio');
     route::resource('Acopio/Adelantos-Acopio','Acopio\AdelantoAcopioController');
     route::resource('Acopio/Persona-Juridica','Tesoreria\persona_juridicacontroller');
-    
+    route::resource('Acopio','Configuracion\AuxiliarController@Acopio');
     // *********************************************************************************   MODULO DE TESORERIA ************************************     
+    
+    
     route::resource('Tesoreria/Caja/Apertura-Cierre-Caja','Tesoreria\CajaController@Caja');
     route::resource('Tesoreria/Caja/Lista-caja','Tesoreria\CajaController@listacaja');
     route::resource('Tesoreria/Caja/Datos-Caja','Tesoreria\CajaController@DatoCaja');
@@ -222,13 +230,16 @@ Route::group(['middleware' => ['auth']], function () {
     
                
     route::resource('Tesoreria/Tipos-egresos','Tesoreria\tipo_egresoscontroller');
+    route::resource('Tesoreria','Configuracion\AuxiliarController@Tesoreria');
+    //*****************************************************************************************  CREDITOS ***************************************
             
     route::resource('Creditos/Creditos-Financieros','Creditos\prestamoscontroller');
     //********************************   CONDIGURACION *******************************************************************************
-            
+    route::resource('Configuracion','Configuracion\AuxiliarController@Configuracion');       
     route::resource('Configuracion/Documentos','Configuracion\tipo_documentoController');
     
     // ******************************************************************  REPORTES O INFORMES GRAFICAS ******************************** 
+    
     route::get('Acopio/Fondos-Acopio/Report-Fondos-Acopio/{an?}/{mes?}/{dato?}','Informes\Reportecontroller@pdfrecepcion');
     route::get('Acopio/Fondos-Acopio/excel-Fondos-Acopio/{an?}/{mes?}','Informes\Reportecontroller@excelrecepcion');
     
@@ -251,9 +262,10 @@ Route::group(['middleware' => ['auth']], function () {
         
     route::get('codrecibos/{id}','Configuracion\tipo_documentoController@getnumerodocumento');
     route::resource('codrecibos','Configuracion\tipo_documentoController@autoCompleteCodRecibo');//
+    route::resource('Informes','Configuracion\AuxiliarController@Informes');       
     //*****************************************************************     CERTIFICACION *************************************************************
-    
+      
     route::resource('Certificacion/Condicion','Certificacion\condicioncontroller');
     route::resource('Certificacion','Certificacion\condicioncontroller@certificacion');    
-    
+    route::resource('Certificacion','Configuracion\AuxiliarController@Certificacion');     
 });

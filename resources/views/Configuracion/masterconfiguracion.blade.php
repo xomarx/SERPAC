@@ -14,3 +14,10 @@
         </ul><!-- /.sidebar-menu -->
     </section>
 @stop
+@section('script')
+<script>
+    $(document).ready(function(){
+        $("#menuconfiguracion").addClass('active');
+    })
+ </script>
+@stop

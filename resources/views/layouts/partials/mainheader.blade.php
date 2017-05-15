@@ -28,15 +28,15 @@
             <div class="collapse navbar-collapse" id="myNavbar">
                 @if(!Auth::guest())
                 <ul class="nav navbar-nav">
-                    <li id="menusocios"><a href="{{ url('/socios') }}">Socios</a></li>
-                    <li id="menuRRHH"><a href="{{ url('/RRHH/Empleados') }}">RRHH</a></li>
-                    <li id="menuacopio"><a href="{{ url('/Acopio/Fondos-Acopio') }}">Acopio</a></li>
-                    <li id="menucreditos"><a href="{{ url('/Creditos/Creditos-Financieros') }}">Creditos</a></li>
+                    <li id="menusocios"><a href="{{ url('/Socios') }}">Socios</a></li>
+                    <li id="menuRRHH"><a href="{{ url('/RRHH') }}">RRHH</a></li>
+                    <li id="menuacopio"><a href="{{ url('/Acopio') }}">Acopio</a></li>
+                    <li id="menucreditos"><a href="{{ url('/Creditos') }}">Creditos</a></li>
                     <li id="menucertificacion"><a href="{{ url('/Certificacion') }}">Certificacion</a></li>
-                    <li id="menutesoreria"><a href="{{ url('/Tesoreria/Distribucion-Fondos') }}">Tesoreria</a></li>
-                    <li id="menucontabilidad"><a href="{{ url('/Creditos/Contabilidad') }}">Contabilidad</a></li>
+                    <li id="menutesoreria"><a href="{{ url('/Tesoreria') }}">Tesoreria</a></li>
+                    <li id="menucontabilidad"><a href="{{ url('/Creditos') }}">Contabilidad</a></li>
                     <li id="menuinformes" ><a href="{{ url('/Informes') }}">Informes <i class="glyphicon glyphicon-stats"></i></a></li>
-                    <li id="menuconfiguracion"><a href="{{url('Configuracion/Documentos') }}">Configuracion</a></li>
+                    <li id="menuconfiguracion"><a href="{{url('Configuracion') }}">Configuracion</a></li>
                 </ul>                                                                       
                 <ul class="navbar-custom-menu">
                     <ul class="nav navbar-nav">   

@@ -27,3 +27,10 @@
     </section>
 @stop
 
+@section('script')
+<script>
+    $(document).ready(function(){
+        $("#menuRRHH").addClass('active');
+    })
+ </script>
+@stop

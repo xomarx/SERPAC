@@ -11,6 +11,36 @@ use Illuminate\Support\Facades\Input;
 class AuxiliarController extends Controller
 {
     
+    public function RRHH(){
+        return response()->view('RRHH.masterempleados');
+    }    
+    public function Socios(){
+        return response()->view('socios.mastersocio');
+    }    
+    public function Acopio(){
+        return response()->view('Acopio.masteracopio');
+    }
+    public function Creditos(){
+        return response()->view('Creditos.masterCreditos');
+    }
+    public function Certificacion(){
+        return response()->view('Certificacion.masterCertificacion');
+    }
+    public function Tesoreria(){
+        return response()->view('Tesoreria.mastertesoreria');
+    }
+    public function Contabilidad(){
+        return response()->view('Contabilidad.masterContabilidad');
+    }
+    public function Informes(){
+        return response()->view('Reportes.masterInform');
+    }
+    public function Configuracion(){
+        return response()->view('Configuracion.masterconfiguracion');
+    }
+    
+
+
     public function PersonDNI($dni){        
             $personas = \App\Models\Persona::DNIPersonas($dni);            
             return response()->json($personas);        

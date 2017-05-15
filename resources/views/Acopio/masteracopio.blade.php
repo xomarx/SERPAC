@@ -48,4 +48,10 @@
         </ul><!-- /.sidebar-menu -->
     </section>
 @stop
-
+@section('script')
+<script>
+    $(document).ready(function(){
+        $("#menuacopio").addClass('active');
+    })
+ </script>
+@stop
