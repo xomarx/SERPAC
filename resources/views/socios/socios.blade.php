@@ -66,7 +66,7 @@
     };
     
     var fundosocio = function(codigo,nombre,paterno,materno){
-        var route = '/socios/modalfundo';        
+        var route = '/Socios/modalfundo';
         $.get(route,function(data){            
             $("#conten-modal").html(data);
             $("#tablainmueble tbody").remove();
@@ -80,7 +80,7 @@
     };
         
     var ParSocio = function (codigo,nombre,paterno,materno){       
-        var route = '/socios/modalparientes';        
+        var route = '/Socios/modalparientes';        
         $.get(route,function(data){            
             $("#conten-modal").html(data);
             $("#titulo").empty();

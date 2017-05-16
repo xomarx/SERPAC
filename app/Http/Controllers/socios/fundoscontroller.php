@@ -73,7 +73,7 @@ class fundoscontroller extends Controller
             $fundo->users_id=  \Illuminate\Support\Facades\Auth::user()->id;
             $fundo->save();
             if($fundo)
-                return response()->json(['success'=>'Registrar','message'=>'Se registro Correctamente']);
+                return response()->json(['success'=>'Registrar','message'=>'Se registro Correctamente','idfundo'=>$fundo->id]);
         }
     }
     
@@ -82,7 +82,7 @@ class fundoscontroller extends Controller
         if($request->ajax())
         {
             $inmuebleid = \App\Models\Socios\Inmueble::where('inmueble','=', $request->inmueble)->first();
-            $fundoid = \App\Models\Socios\Fundo::where('fundo','=',$request->fundo)->first();
+            $fundoid = \App\Models\Socios\Fundo::where('fundo','=',$request->fundo)->first();            
             $inmueble = \App\Models\socios\Fundos_has_inmueble::create([
                 'inmuebles_id'=>$inmuebleid->id,
                 'fundos_id'=>$fundoid->id
@@ -95,7 +95,7 @@ class fundoscontroller extends Controller
     {
         if($request->ajax())
         {
-            $fundo = \App\Models\Socios\Fundo::where('fundo','=',$request->fundo)->first();
+            $fundo = \App\Models\Socios\Fundo::where('fundo','=',$request->fundo)->first();            
             $fauna = \App\Models\Socios\Fauna::where('fauna','=',$request->fauna)->first();
             $faunas = \App\Models\socios\Fundos_has_fauna::create([
                 'fundos_id'=>$fundo->id,
@@ -110,7 +110,7 @@ class fundoscontroller extends Controller
         if($request->ajax())
         {
             $fundo = \App\Models\Socios\Fundo::where('fundo','=',$request->fundo)->first();
-            $flora = \App\Models\Socios\Flora::where('flora','=',$request->flora)->first();
+            $flora = \App\Models\Socios\Flora::where('flora','=',$request->flora)->first();            
             $floras = \App\Models\socios\Fundos_has_flora::create([
                 'fundos_id'=>$fundo->id,
                 'floras_id'=>$flora->id,
@@ -121,7 +121,7 @@ class fundoscontroller extends Controller
         }
     }
 
-    public  function EliminarPropiedadesFundo($idfundo){
+    public  function EliminarPropiedadesFundo($idfundo){        
         $inmuebles = \App\Models\socios\Fundos_has_inmueble::where('fundos_id','=',$idfundo)->delete();
         $floras = \App\Models\socios\Fundos_has_flora::where('fundos_id','=',$idfundo)->delete();
         $faunas = \App\Models\socios\Fundos_has_fauna::where('fundos_id','=',$idfundo)->delete();

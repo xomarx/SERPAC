@@ -114,7 +114,7 @@ var activarForm = function(id){
         else if(id == 3) {var route = 'Caja-Chica/'+$("#anioc").val()+'/'+$("#mesc").val()+'/'+$("#buscarc").val();}
         else if(id == 4) {var route = 'ListMovcheques/'+$("#anio").val()+'/'+$("#mes").val()+'/'+$("#buscar").val();}
         else if(id == 5) {var route = 'ListUsuarios';}
-        else if(id == 6) {var route = '/socios/fundos/Listfundos/'+$("#buscar").val();}
+        else if(id == 6) {var route = '/Socios/fundos/Listfundos/'+$("#buscar").val();}
         else if(id == 7) {var route = 'ListaPlanillaSemanal';}
         else if(id == 8) {var route = 'listaRecepcionFondos/'+$("#anio").val()+'/'+$("#mes").val()+'/'+$("#buscar").val();}
         else if(id == 9) {var route = 'ListaDistribucion/'+$("#anio").val()+'/'+$("#mes").val()+'/'+$("#buscar").val();}
@@ -123,10 +123,10 @@ var activarForm = function(id){
         else if(id == 12) {var route = 'ListaCheques/'+$("#buscar").val();}
         else if(id == 13) {var route = '/Tesoreria/Mov-Dinero/Con-Documento';}        
         else if(id == 14) {var route = '/Tesoreria/Mov-Caja-Chica/Crear-Caja';}
-        else if(id == 15) {var route = '/socios/ListaSocios/'+$("#buscar").val();}
-        else if(id == 16) {var route = '/socios/parientes/ListaParientes/'+$("#buscar").val();}
-        else if(id == 17) {var route = '/socios/Asignacion-Delegados/ListaAsigDelegados/'+$("#buscar").val();}
-        else if(id == 18) {var route = '/socios/Asignacion-Directivos/ListaAsigDirectivos/'+$("#buscar").val();}
+        else if(id == 15) {var route = '/Socios/Socios/ListaSocios/'+$("#buscar").val();}
+        else if(id == 16) {var route = '/Socios/parientes/ListaParientes/'+$("#buscar").val();}
+        else if(id == 17) {var route = '/Socios/Asignacion-Delegados/ListaAsigDelegados/'+$("#buscar").val();}
+        else if(id == 18) {var route = '/Socios/Asignacion-Directivos/ListaAsigDirectivos/'+$("#buscar").val();}
         else if(id == 19) {var route = '/RRHH/Empresas/ListaEmpresa';}
         $.ajax({
             type:'get',
@@ -158,7 +158,7 @@ var activarmodal = function(id){
         else if(id==3){ var route = 'modalcheque';}
         else if(id==4){ var route = '/Tesoreria/modalmovcheque';}
         else if(id==5){ var route = 'Mov-Caja-Chica/modalCaja';}
-        else if(id==6){ var route = '/socios/modalsocio';}
+        else if(id==6){ var route = '/Socios/Socios/modalsocio';}
         else if(id==0){ var route = '/error-403';}
         else if(id==7){ var route = 'modalempleado';} 
         else if(id==8){ var route = 'Mov-Dinero/Modal-Dinero';} 
@@ -214,7 +214,7 @@ $(document).ready().on('keyup','#dni',function(event){
 });
 //  ******************************************************************  CRUD SOCIOS   *******************************************************************
 $("#nuevosocio").click(function (){    
-    var route = '/socios/modalsocio';                    
+    var route = '/Socios/Socios/modalsocio';                    
         $.get(route,function(data){            
             $("#conten-modal").html(data);
             $("#modal-form").modal();
@@ -224,13 +224,13 @@ $("#nuevosocio").click(function (){
 
 $(document).ready().on('click','#Regsocio',function(){
             var options = $("#condicion option:selected");
-            var route = "/socios";
+            var route = "/Socios/Socios";
             var type = 'post';      
             var cod = $("#codigo").val();
             if($("#Regsocio").text() == 'Actualizar')
             {               
                 type = 'PUT';
-                route=  "/socios/"+$("#codigo").val()+"";                
+                route=  "/Socios/Socios/"+$("#codigo").val()+"";                
             }
           $.ajax({              
             url:route,            
@@ -244,7 +244,7 @@ $(document).ready().on('click','#Regsocio',function(){
                 limpiarCondicion(cod);
                 $.each(options,function( index, value ){                    
                 $.ajax({
-                          url: '/socios/Condicions-socios',
+                          url: '/Socios/Socios/Condicions-socios',
                           headers: {'X-CSRF-TOKEN': $("input[name=_token]").val()},
                           type: 'post',
                           datatype: 'json',
@@ -312,8 +312,8 @@ var limpiarCondicion = function(idsocio){
       
 var EditSocio = function(codigo){     
         
-    var route = "/socios/"+codigo+"/edit";  
-    $.get('socios/modalsocio',function(data){
+    var route = "/Socios/Socios/"+codigo+"/edit";  
+    $.get('Socios/modalsocio',function(data){
          $("#conten-modal").html(data);
          $("#Regsocio").text('Actualizar');
      });     
@@ -391,14 +391,13 @@ var RegPariente = function(){
         
             var fields = $("#formpariente").serialize();
             var token = $("input[name=_token]").val();
-            var route = "/socios/parientes"; 
+            var route = "/Socios/parientes"; 
             var type = "POST";            
             if($("#Regpariente").text() == 'Actualizar')
             {
-                route = "/socios/parientes/"+$("#idpariente").val();   
+                route = "/Socios/parientes/"+$("#idpariente").val();   
                 type="PUt";
-            }
-            console.log($("#formpariente").serialize())
+            }            
           $.ajax({              
             url:route,            
             headers:{'X-CSRF-TOKEN':token},            
@@ -418,8 +417,7 @@ var RegPariente = function(){
                 $("#error_dnip").html('');$("#error_estado_civil_1").html('');$("#error_paternop").html('');$("#error_maternop").html('');$("#error_Direccion_1").html('');
                 $("#error_nombrep").html('');$("#error_fec_nac_1").html(''); $("#error_grado_inst_1").html('');$("#error_comite_local_1").html('');$("#error_pariente").html('');
                 var errors =  $.parseJSON(data.responseText);                
-                $.each(errors,function(index, value) {
-                    console.log(index)
+                $.each(errors,function(index, value) {                    
                             if(index == 'dni')$("#error_dnip").html(value);                            
                             else if(index == 'estado_civil')$("#error_estado_civil_1").html(value);
                             else if(index == 'paterno') $("#error_paternop").html(value);
@@ -438,14 +436,14 @@ var RegPariente = function(){
 
 var editPariente = function(idsocio,dnipariente){
     
-    var route = '/socios/modalparientes';
+    var route = '/Socios/modalparientes';
     $.get(route, function (data) {
         $("#conten-modal").html(data);
         $("#titulo").empty();
         $("#titulo").append('PARIENTES DE ' + idsocio);
         $("#socios_codigo").val(idsocio);
 
-        var ruta = "/socios/parientes/" + idsocio + "/" + dnipariente;
+        var ruta = "/Socios/parientes/" + idsocio + "/" + dnipariente;
         $.getJSON(ruta, function (data) {            
             $("#dni").val(data.dni);
             $("#dni").prop('disabled', true);
@@ -491,7 +489,7 @@ var editPariente = function(idsocio,dnipariente){
 var ElimPariente = function(dni,codsocio){
     $.alertable.confirm("<span style='color:#000'>¿Está seguro de eliminar el registro?</span>"+"<br><strong><span style='color:#ff0000'>"
             +dni+"</span></strong></br>").then(function() {  
-      var route = "/socios/parientes/"+dni+"/"+codsocio;
+      var route = "/Socios/parientes/"+dni+"/"+codsocio;
       var token = $("input[name=_token]").val();
       $.ajax({
         url: route,
@@ -532,8 +530,8 @@ var Eliminarinmueble = function(fila,idinmueble){
         $("#inmueble").append("<option value="+idinmueble+" selected='selected'>"+ valor+"</option>")
     }
 
-var fundopropiedadFauna = function(fundo,fauna,cantidad,rendimiento){    
-    var route = '/socios/propiedadfauna';
+function fundopropiedadFauna(fundo,fauna,cantidad,rendimiento){      
+    var route = '/Socios/propiedadfauna';
     var token = $("input[name=_token]").val();
     $.ajax({              
             url:route,            
@@ -548,15 +546,13 @@ var fundopropiedadFauna = function(fundo,fauna,cantidad,rendimiento){
                 rendimiento:rendimiento
             },
             success:function(data)
-            {                
-                
-                
+            {                                                
             },            
           });
 };
 
-var fundopropiedadFlora = function(fundo,flora,hectarea,rendimiento) {            
-    var route = '/socios/propiedadflora';
+function fundopropiedadFlora(fundo,flora,hectarea,rendimiento) {            
+    var route = '/Socios/propiedadflora';    
     var token = $("input[name=_token]").val();
     $.ajax({              
             url:route,            
@@ -571,15 +567,13 @@ var fundopropiedadFlora = function(fundo,flora,hectarea,rendimiento) {
                 rendimiento:rendimiento
             },
             success:function(data)
-            {                
-                
-                
+            {                                                
             },            
           });
 };
 
-var fundopropiedadInmueble = function(fundo,inmueble){    
-    var route = '/socios/propiedadinmueble';
+function fundopropiedadInmueble(fundo,inmueble){    
+    var route = '/Socios/propiedadinmueble';    
     var token = $("input[name=_token]").val();
     $.ajax({              
             url:route,            
@@ -592,34 +586,34 @@ var fundopropiedadInmueble = function(fundo,inmueble){
                 inmueble:inmueble                
             },
             success:function(data)
-            {                
-                
-                
+            {                                                
             },            
           });
 };
 
-var registropropoiedadesFundo = function(){
-    for (var i = 1; i < document.getElementById("tablacultivos").rows.length; i++) {
+ function registropropoiedadesFundo(){
+   
+    for (var i = 1; i < document.getElementById("tablacultivos").rows.length; i++) {        
                         var hectarea =document.getElementById("tablacultivos").rows[i].cells[1].getElementsByTagName('input');
                         var rendimiento =document.getElementById("tablacultivos").rows[i].cells[2].getElementsByTagName('input');
-                        var flora =document.getElementById("tablacultivos").rows[i].cells[0].innerText;                        
-                        fundopropiedadFlora($("#fundo").val(),flora,hectarea[0].value,rendimiento[0].value);
+                        var flora =document.getElementById("tablacultivos").rows[i].cells[0].innerText;                          
+                        fundopropiedadFlora($("#fundo").val(),flora,hectarea[0].value,rendimiento[0].value);                        
                     }
                     for (var i = 1; i < document.getElementById("tablafauna").rows.length; i++) {
                         var cantidad =document.getElementById("tablafauna").rows[i].cells[1].getElementsByTagName('input');
                         var rendimiento =document.getElementById("tablafauna").rows[i].cells[2].getElementsByTagName('input');
                         var fauna =document.getElementById("tablafauna").rows[i].cells[0].innerText;                        
-                        fundopropiedadFauna($("#fundo").val(),fauna,cantidad[0].value,rendimiento[0].value);
+                        fundopropiedadFauna($("#fundo").val(),fauna,cantidad[0].value,rendimiento[0].value);                         
                     }
                     for (var i = 1; i < document.getElementById("tablainmueble").rows.length; i++) {                        
                         var inmueble =document.getElementById("tablainmueble").rows[i].cells[0].innerText;                        
-                        fundopropiedadInmueble($("#fundo").val(),inmueble);
+                        fundopropiedadInmueble($("#fundo").val(),inmueble);                         
                     }
 }
 
 var limpiarPropiedadesFundo = function (idfundo){
-    var route = "/socios/eliminarpropiedades/" + idfundo + "";
+    if(idfundo!=''){
+    var route = "/Socios/eliminarpropiedades/" + idfundo + "";
     var token = $("input[name=_token]").val();
     $.ajax({
         url: route,
@@ -628,10 +622,10 @@ var limpiarPropiedadesFundo = function (idfundo){
         dataType: 'json',
         success: function (data) {            
         }
-    });
+    });}
 }
 
-var RegFundo = function(){
+$(document).ready().on('click','#Regfundo',function(event){
     var errortexto;
     for (var i = 1; i < document.getElementById("tablacultivos").rows.length; i++) {
         var texto =document.getElementById("tablacultivos").rows[i].cells[1].getElementsByTagName('input');
@@ -648,8 +642,7 @@ var RegFundo = function(){
          }
          else {var errortexto =document.getElementById("tablacultivos").rows[i].cells[2].getElementsByTagName('div');
              errortexto[0].innerHTML = "";}
-    }
-    
+    }    
     for (var i = 1; i < document.getElementById("tablafauna").rows.length; i++) {
         var texto =document.getElementById("tablafauna").rows[i].cells[1].getElementsByTagName('input');
         var texto2 =document.getElementById("tablafauna").rows[i].cells[2].getElementsByTagName('input');
@@ -675,36 +668,28 @@ var RegFundo = function(){
     else $("#error_inmuebles").html("");
     if($("#tablacultivos tr").length == 1 || $("#tablafauna tr").length == 1 || $("#tablainmueble tr").length == 1) return;            
     var type = 'POST';
-    var route = '/socios/fundos';
-    var fields = $("#formfundo").serialize('hidden');    
+    var route = '/Socios/fundos';
+    var fields = $("#formfundo").serialize();    
     if($("#Regfundo").text() == "ACTUALIZAR")  {
         type = "PUT";
-        route = "/socios/fundos/"+$("#idfundo").val();        
-    }        
-    var token = $("input[name=_token]").val();
+        route = "/Socios/fundos/"+$("#idfundo").val();        
+    }         
     $.ajax({              
             url:route,            
-            headers:{'X-CSRF-TOKEN':token},            
+            headers:{'X-CSRF-TOKEN':$("input[name=_token]").val()},            
             type:type,
             datatype: 'json',
             //async: false,
             data: fields,
             success:function(data)
-            {        
-              $("#alert-msj").fadeIn();
-              if(data.success){
-                $("#alert-txt").html(data.message);
-                if($("#Regfundo").text() == "ACTUALIZAR") limpiarPropiedadesFundo($("#idfundo").val());
+            {                                                              
+                limpiarPropiedadesFundo($("#idfundo").val());
                 registropropoiedadesFundo();
-                $("#modal-form").modal('hide');
-                if($("#Regfundo").text() == "ACTUALIZAR") activarForm(6);
-              }
-              else{
-                  $("#alert-msj").removeClass('alert-success');
-                  $("#alert-msj").addClass('alert-danger');
-                  $("#alert-txt").html(data.message);                                                
-              }
-              $("#alert-msj").fadeOut(1000);
+                if($("#Regfundo").text() == "ACTUALIZAR"){ activarForm(6);  } 
+                mensajeRegistro(data,'formfundo');
+                if(data.success){
+                    $("#modal-form").fadeOut(3000);
+                }
             },
             error:function(data)
             {
@@ -724,7 +709,8 @@ var RegFundo = function(){
                   }
             }
           });
-};
+});
+
  
 var EliminarFundo = function(id,name){ 
      // ALERT JQUERY     
@@ -777,7 +763,7 @@ var RegTransferencia = function (){
            
             var fields = $("#formtransferencia").serialize();
             var token = $("input[name=_token]").val();                       
-            var route = "/socios/transferencias";             
+            var route = "/Socios/transferencias";             
           $.ajax({
             url:route,
             headers:{'X-CSRF-TOKEN':token},
@@ -819,7 +805,7 @@ var EdiCargo = function(id) {
         var route = "/RRHH/Cargos/"+id+"/edit";
         $.getJSON(route, function(data){
 //            alert(id);
-        $("#idcargo").val(data.id);
+        $("#idcargo").val(id);
         $("#cargo").val(data.cargo);
         $("#RegCargo").text("Actualizar");
         });
@@ -840,7 +826,7 @@ $("#RegCargo").click(function(){
     dataType: 'json',
     data: {cargo: cargo},
     success: function(data){
-            mensajeRegistro(data,'formcargos');
+        mensajeRegistro(data,'formcargos');
         document.location.reload();           
    },
     error:function(data)
@@ -956,12 +942,12 @@ $("#nuefauna").click(function(event){$("#RegFauna").text("Registrar");});
 
 $("#RegFauna").click(function (event) {
     var fields = $("#formfauna").serialize();
-    var token = $("#token").val();
+    var token = $("input[name=_token]").val();
     var type = "POST";
-    var route = "/socios/basicos/faunas";
+    var route = "/Socios/basicos/faunas";
     if ($("#RegFauna").text() == "Actualizar")
     {
-        route = "/socios/basicos/faunas/" + $("#idfauna").val();
+        route = "/Socios/basicos/faunas/" + $("#idfauna").val();
         type = "PUT";
     }
 
@@ -996,7 +982,7 @@ $("#RegFauna").click(function (event) {
 
 var EditFauna = function(id) {                
         $("#RegFauna").text("Actualizar");
-        var route = "/socios/basicos/faunas/"+id+"/edit";                
+        var route = "/Socios/basicos/faunas/"+id+"/edit";                
         $.get(route, function(data){   
         $("#idfauna").val(data.id);
         $("#fauna").val(data.fauna);          
@@ -1006,8 +992,8 @@ var EditFauna = function(id) {
 var EliFauna = function(id,name){ 
      // ALERT JQUERY        
    $.alertable.confirm("<span style='color:#000'>¿Está seguro de eliminar el registro?</span>"+"<br><strong><span style='color:#ff0000'>"+name+"</span></strong></br>").then(function() {  
-      var route = "/socios/basicos/faunas/"+id+"";      
-      var token = $("#token").val();
+      var route = "/Socios/basicos/faunas/"+id+"";      
+      var token = $("input[name=_token]").val();
       $.ajax({
         url: route,
         headers: {'X-CSRF-TOKEN': token},
@@ -1031,12 +1017,12 @@ var EliFauna = function(id,name){
 
 $("#RegInmueble").click(function(event){                   
             var fields = $("#forminmueble").serialize();
-            var token = $("#token").val();
-            var route = "/socios/basicos/inmuebles";     
+            var token = $("input[name=_token]").val();
+            var route = "/Socios/basicos/inmuebles";     
             var type = "POST";
             if($("#RegInmueble").text() == "Actualizar")
             {
-                route = "/socios/basicos/inmuebles/" + $("#idinmueble").val();
+                route = "/Socios/basicos/inmuebles/" + $("#idinmueble").val();
                 type = "PUT";
             }
           $.ajax({
@@ -1067,7 +1053,7 @@ $("#RegInmueble").click(function(event){
     });  
 
 var EdInmueble = function(id){              
-        var route = "/socios/basicos/inmuebles/"+id+"/edit";                
+        var route = "/Socios/basicos/inmuebles/"+id+"/edit";                
         $.get(route, function(data){   
         $("#idinmueble").val(data.id);
         $("#inmueble").val(data.inmueble);  
@@ -1080,8 +1066,8 @@ var EdInmueble = function(id){
 var EliInmueble = function(id,name){ 
      // ALERT JQUERY        
    $.alertable.confirm("<span style='color:#000'>¿Está seguro de eliminar el registro?</span>"+"<br><strong><span style='color:#ff0000'>"+name+"</span></strong></br>").then(function() {  
-      var route = "/socios/basicos/inmuebles/"+id+"";      
-      var token = $("#token").val();
+      var route = "/Socios/basicos/inmuebles/"+id+"";      
+      var token = $("input[name=_token]").val();
       $.ajax({
         url: route,
         headers: {'X-CSRF-TOKEN': token},
@@ -1104,10 +1090,10 @@ $("#nuevaflora").click(function (event){ $("#RegFlora").text("Registrar");$("#er
 
 $("#RegFlora").click(function(event){                   
             var fields = $("#formflora").serialize();
-            var token = $("#token").val();
-            var route = "/socios/basicos/floras";    var type = "POST";
+            var token = $("input[name=_token]").val();
+            var route = "/Socios/basicos/floras";    var type = "POST";
             if($("#RegFlora").text() == "Actualizar"){
-                route = "/socios/basicos/floras/" + $("#idflora").val(); type = "PUT";
+                route = "/Socios/basicos/floras/" + $("#idflora").val(); type = "PUT";
             }            
           $.ajax({
             url:route,
@@ -1138,7 +1124,7 @@ $("#RegFlora").click(function(event){
 
 var EdFlora = function(id){           
         $("#RegFlora").text("Actualizar");
-        var route = "/socios/basicos/floras/"+id+"/edit";                
+        var route = "/Socios/basicos/floras/"+id+"/edit";                
         $.get(route, function(data){              
         $("#idflora").val(data.id);
         $("#flora").val(data.flora);          
@@ -1148,8 +1134,8 @@ var EdFlora = function(id){
 var EliFlora = function(id,name){ 
      // ALERT JQUERY        
    $.alertable.confirm("<span style='color:#000'>¿Está seguro de eliminar el registro?</span>"+"<br><strong><span style='color:#ff0000'>"+name+"</span></strong></br>").then(function() {  
-      var route = "/socios/basicos/floras/"+id+"";      
-      var token = $("#token").val();
+      var route = "/Socios/basicos/floras/"+id+"";      
+      var token = $("input[name=_token]").val();
       $.ajax({
         url: route,
         headers: {'X-CSRF-TOKEN': token},
@@ -1176,9 +1162,9 @@ $("#RegDelegado").click(function(event){
             var fields = $("#formdelegados").serialize();
             var token = $("input[name=_token]").val(); 
             var type = "POST";
-            var route = "/socios/basicos/delegados";    
+            var route = "/Socios/basicos/delegados";    
             if($("#RegDelegado").text() == "Actualizar"){
-                route = "/socios/basicos/delegados/"+$("#iddelegado").val(); 
+                route = "/Socios/basicos/delegados/"+$("#iddelegado").val(); 
                 type="PUT";
             }            
           $.ajax({
@@ -1212,7 +1198,7 @@ $("#RegDelegado").click(function(event){
 
 var EdDelegado = function(id){         
         $("#RegDelegado").text("Actualizar");
-        var route = "/socios/basicos/delegados/"+id+"/edit";                
+        var route = "/Socios/basicos/delegados/"+id+"/edit";                
         $.get(route, function(data){              
         $("#iddelegado").val(data.id);        
         $("#cargo_delegado").val(data.cargo_delegado);          
@@ -1221,8 +1207,8 @@ var EdDelegado = function(id){
         
 var EliDelegado = function(id,name){      
    $.alertable.confirm("<span style='color:#000'>¿Está seguro de eliminar el registro?</span>"+"<br><strong><span style='color:#ff0000'>"+name+"</span></strong></br>").then(function() {  
-      var route = "/socios/basicos/delegados/"+id+"";      
-      var token = $("#token").val();
+      var route = "/Socios/basicos/delegados/"+id+"";      
+      var token = $("input[name=_token]").val();
       $.ajax({
         url: route,
         headers: {'X-CSRF-TOKEN': token},
@@ -1249,9 +1235,9 @@ $("#nuevodirectivo").click(function(event){$("#RegDirectivo").text("Registrar");
 $("#RegDirectivo").click(function(event) {                   
             var fields = $("#formdirectivos").serialize();
             var token = $("input[name=_token]").val();var type = "POST";
-            var route = "/socios/basicos/directivos";  
+            var route = "/Socios/basicos/directivos";  
             if($("#RegDirectivo").text() == "Actualizar"){
-                route = "/socios/basicos/directivos/" + $("#iddirectivo").val();
+                route = "/Socios/basicos/directivos/" + $("#iddirectivo").val();
                 type = "PUT";
             };
             
@@ -1283,7 +1269,7 @@ $("#RegDirectivo").click(function(event) {
     });  
 
 var EdDirectivo = function(id){              
-        var route = "/socios/basicos/directivos/"+id+"/edit";
+        var route = "/Socios/basicos/directivos/"+id+"/edit";
         $("#RegDirectivo").text("Actualizar");
         $.get(route, function(data){              
         $("#iddirectivo").val(data.id);
@@ -1293,8 +1279,8 @@ var EdDirectivo = function(id){
           
 var EliDirectivo = function(id,name){      
    $.alertable.confirm("<span style='color:#000'>¿Está seguro de eliminar el registro?</span>"+"<br><strong><span style='color:#ff0000'>"+name+"</span></strong></br>").then(function() {  
-      var route = "/socios/basicos/directivos/"+id+"";      
-      var token = $("#token").val();
+      var route = "/Socios/basicos/directivos/"+id+"";      
+      var token = $("input[name=_token]").val();
       $.ajax({
         url: route,
         headers: {'X-CSRF-TOKEN': token},
@@ -1319,9 +1305,9 @@ $("#regdepartamento").click(function(event){
             var fields = $("#formdepartamento").serialize();
             var token = $("input[name=_token]").val();
             var type = "POST";
-            var route = "/socios/departamentos/";                        
+            var route = "/Socios/departamentos/";                        
             if($("#regdepartamento").text() == "Actualizar"){
-                route = "/socios/departamentos/"+$("#iddepartamento").val();
+                route = "/Socios/departamentos/"+$("#iddepartamento").val();
                 type = "PUT";
             }            
           $.ajax({
@@ -1353,7 +1339,7 @@ $("#regdepartamento").click(function(event){
 
     var btneditar = function(id){                
         $("#regdepartamento").text("Actualizar");
-        var route = "/socios/departamentos/"+id+"/edit";
+        var route = "/Socios/departamentos/"+id+"/edit";
         $.get(route, function(data){
 //            alert(id);        
         $("#iddepartamento").val(data.id);
@@ -1365,8 +1351,8 @@ $("#regdepartamento").click(function(event){
      $.alertable.confirm("<span style='color:#000'>¿Está seguro de eliminar el registro?</span>"
              +"<br><strong><span style='color:#ff0000'>"+name+"</span></strong></br>")
              .then(function(){
-                var route = "/socios/departamentos/" + id + "" ;
-                var token = $("#token").val();
+                var route = "/Socios/departamentos/" + id + "" ;
+                var token = $("input[name=_token]").val();
                 $.ajax( { 
                    url: route,
                    headers: { 'X-CSRF-TOKEN':token},
@@ -1394,7 +1380,7 @@ $("#nuevaprovincia").click(function(event){ $("#RegProvincia").text("Registrar")
 
 var EdProvincia = function(id) {        
               $("#RegProvincia").text("Actualizar"); 
-        var route = "/socios/provincias/"+id+"/edit";
+        var route = "/Socios/provincias/"+id+"/edit";
         $.get(route, function(data){
         $("#idprovincia").val(data.id);
         $("#provincia").val(data.provincia);
@@ -1407,9 +1393,9 @@ $("#RegProvincia").click(function(event) {
             var fields = $("#formprovincia").serialize();                
             var token = $("input[name=_token]").val();
             var type = "POST";
-            var route = "/socios/provincias/"; 
+            var route = "/Socios/provincias/"; 
             if($("#RegProvincia").text() == "Actualizar"){
-                type = "PUT"; route="/socios/provincias/"+$("#idprovincia").val();
+                type = "PUT"; route="/Socios/provincias/"+$("#idprovincia").val();
             }
           $.ajax({              
             url:route,            
@@ -1442,8 +1428,8 @@ $("#RegProvincia").click(function(event) {
 var EliProvincia = function(id,name){ 
      // ALERT JQUERY        
    $.alertable.confirm("<span style='color:#000'>¿Está seguro de eliminar el registro?</span>"+"<br><strong><span style='color:#ff0000'>"+name+"</span></strong></br>").then(function() {  
-      var route = "/socios/provincias/"+id+"";
-      var token = $("#token").val();
+      var route = "/Socios/provincias/"+id+"";
+      var token = $("input[name=_token]").val();
       $.ajax({
         url: route,
         headers: {'X-CSRF-TOKEN': token},
@@ -1469,9 +1455,9 @@ $("#RegDistrito").click(function(event){
             var fields = $("#formdistrito").serialize();          
             var type = "POST";
             var token = $("input[name=_token]").val();            
-            var route = "/socios/distritos";   
+            var route = "/Socios/distritos";   
             if($("#RegDistrito").text() == "Actualizar"){
-                route = "/socios/distritos/"+$("#iddistrito").val();
+                route = "/Socios/distritos/"+$("#iddistrito").val();
                 type="PUT";
             }
           $.ajax({
@@ -1506,7 +1492,7 @@ $("#RegDistrito").click(function(event){
 
 var EdDistrito = function(id) {
         $("#RegDistrito").text("Actualizar");
-        var route = "/socios/distritos/"+id+"/edit";
+        var route = "/Socios/distritos/"+id+"/edit";
         $.get(route, function(data){        
         $("#provincia").empty();
         $("#provincia").append("<option value='" + data.provincias_id+"'>"+data.provincia+"</option>");
@@ -1518,8 +1504,8 @@ var EdDistrito = function(id) {
  
 var EliDistrito = function (id, name) {
     $.alertable.confirm("<span style='color:#000'>¿Está seguro de eliminar el registro?</span>"+"<br><strong><span style='color:#ff0000'>"+name+"</span></strong></br>").then(function() {  
-      var route = "/socios/distritos/"+id+"";
-      var token = $("#token").val();
+      var route = "/Socios/distritos/"+id+"";
+      var token = $("input[name=_token]").val();
       $.ajax({
         url: route,
         headers: {'X-CSRF-TOKEN': token},
@@ -1542,10 +1528,10 @@ $("#RegCentral").click(function(event)  {
             var fields = $("#formcomite_central").serialize();
             
             var token = $("input[name=_token]").val();
-            var route = "/socios/comite-central"; 
+            var route = "/Socios/comite-central"; 
             var type = "POST";
             if( $("#RegCentral").text() == "Actualizar" ){
-                route = "/socios/comite-central/" + $("#idcentral").val();
+                route = "/Socios/comite-central/" + $("#idcentral").val();
                 type="PUT";
             }                        
           $.ajax({
@@ -1581,7 +1567,7 @@ $("#RegCentral").click(function(event)  {
 var Edcentral = function(id) {
         $('#RegCentral').text("Actualizar");
               
-        var route = "/socios/comite-central/"+id+"/edit";                
+        var route = "/Socios/comite-central/"+id+"/edit";                
         $.get(route, function(data){            
         $("#departamento").val(data.departamentos_id);
         $("#provincia").empty();
@@ -1597,16 +1583,15 @@ var Edcentral = function(id) {
 var EliCentral = function(id,name){ 
  
    $.alertable.confirm("<span style='color:#000'>¿Está seguro de eliminar el registro?</span>"+"<br><strong><span style='color:#ff0000'>"+name+"</span></strong></br>").then(function() {  
-      var route = "/socios/comite-central/"+id+"";
-      var token = $("#token").val();
+      var route = "/Socios/comite-central/"+id+"";
+      var token = $("input[name=_token]").val();
       $.ajax({
         url: route,
         headers: {'X-CSRF-TOKEN': token},
         type: 'DELETE',
         dataType: 'json',
         success: function(data){
-        if (data.success)        
-          document.location.reload();
+        if (data.success) document.location.reload();
         
       },
       error:function(data){
@@ -1625,9 +1610,9 @@ $("#RegLocal").click(function(event){
             var fields = $("#formlocal").serialize();
             var type = "POST";
             var token = $("input[name=_token]").val();
-            var route = "/socios/comite-local";     
+            var route = "/Socios/comite-local";     
             if($("#RegLocal").text() == "Actualizar"){
-                route = "/socios/comite-local/" + $("#idlocal").val();
+                route = "/Socios/comite-local/" + $("#idlocal").val();
                 type = "PUT";
             }
           $.ajax({
@@ -1662,7 +1647,7 @@ $("#RegLocal").click(function(event){
 
 var Edlocal = function(id) {
         $('#RegLocal').text("Actualizar");               
-        var route = "/socios/comite-local/"+id+"/edit";                
+        var route = "/Socios/comite-local/"+id+"/edit";                
         $.getJSON(route, function(data){              
         $("#departamento").val(data.departamentos_id);
         $("#provincia").empty();
@@ -1678,8 +1663,8 @@ var Edlocal = function(id) {
   
 var EliLocal = function(id,name){     
    $.alertable.confirm("<span style='color:#000'>¿Está seguro de eliminar el registro?</span>"+"<br><strong><span style='color:#ff0000'>"+name+"</span></strong></br>").then(function() {  
-      var route = "/socios/comite-local/"+id+"";
-      var token = $("#token").val();
+      var route = "/Socios/comite-local/"+id+"";
+      var token = $("input[name=_token]").val();
       $.ajax({
         url: route,
         headers: {'X-CSRF-TOKEN': token},
@@ -3575,3 +3560,99 @@ $(document).ready().on('click','#pdfMoney',function(e){
     var route = '/Acopio/Fondos-Acopio/Report-Fondos-Acopio/' + $("#anio").val()+'/'+$("#mes").val()+'/'+$("#buscar").val();
     $(this).attr('href',route);
 });
+
+
+//*********************************************  IMPORTAR DATOS DE EXCEL ******************************************
+
+$(document).ready().on('click','#btndatos',function(event){
+   
+    var ruta = '/Datos';
+    var formdata = new FormData($("#formdatos")[0]);    
+    $.ajax({
+        url:ruta,
+        type:'POST',
+        data:formdata,
+        cache:false,
+        contentType:false,
+        processData:false,
+        beforeSend: function(){
+            var cargar = "<i class='fa fa-refresh fa-spin'></i>";
+            $("#cargar").addClass('overlay').empty().html(cargar);
+        },
+        success:function(data){
+            $("#cargar").removeClass('overlay').empty();
+            mensajeRegistro(data,'formdatos');
+        },
+        error:function(data){
+            if(!data.success)$.alertable.alert("Se Produjo un Error");
+            else{
+                $("#error-datos").html(''); 
+                   var errors =  $.parseJSON(data.responseText);      
+                    $.each(errors,function(index, value) {                      
+                            if(index == 'excel')$("#error-datos").html(value);                                                                                                                                       
+                      });
+            }
+            $("#cargar").removeClass('overlay').empty();
+        }
+    });
+})
+
+// ******************************************************************************************  CERTIFICACION *****************************************
+
+$(document).ready().on('click','#RegCondicion',function(event){
+    var type = 'POST';
+    if(event.target.text == 'Actualizar'){
+        type = 'PUT';
+    }
+    $.ajax({        
+        url:'/Certificacion/Condicion/'+$("#id").val(),
+        type:type,
+        data:$("#formcondicion").serialize(),        
+        success:function(data){            
+            mensajeRegistro(data,'formcondicion');
+            document.location.reload();
+        },
+        error:function(data){
+            if(data.status==403) activarmodal(0);
+            else{
+                $("#error-datos").html(''); 
+                   var errors =  $.parseJSON(data.responseText);      
+                    $.each(errors,function(index, value) {                      
+                            if(index == 'condicion')$("#error-condicion").html(value); 
+                            else if(index == 'descripcion')$("#error-descripcion").html(value);
+                      });
+            }           
+        }
+    })
+});
+
+function EditCondicion(id){
+    $.getJSON('/Certificacion/Condicion/'+id+'/edit',function(data){
+        $("#condicion").val(data.condicion);
+        $("#descripcion").val(data.descripcion);
+        $("#id").val(id);
+        $("#RegCondicion").text('Actualizar');
+    })
+}
+
+function ElimCondicion(id, name){
+    $.alertable.confirm("<span style='color:#000'>¿Está seguro de eliminar la condicion: </span><br><strong><span style='color:#ff0000'>"
+           +name+"?</span></strong></br>").then(function() {  
+      var route = "/Certificacion/Condicion/"+id+"";
+      var token = $("input[name=_token]").val();
+      $.ajax({
+        url: route,
+        headers: {'X-CSRF-TOKEN': token},
+        type: 'DELETE',
+        dataType: 'json',
+        success: function(data){
+            if(data.status==403) activarmodal(0);
+            else if(data.success) document.location.reload();
+            else $.alertable.alert("No se puede Eliminar la condicion "+name+"<br> Cuenta con Registros")
+      },
+      error:function(data){
+          if(data.status==403) activarmodal(0);
+      }
+      });          
+    });
+}

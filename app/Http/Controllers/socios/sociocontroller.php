@@ -23,8 +23,8 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Session;
 
 class sociocontroller extends Controller
+{    
 
-{
     /**
      * Display a listing of the resource.
      *
@@ -37,8 +37,7 @@ class sociocontroller extends Controller
             return response()->view('errors.403-modal');
         $condicions = \App\Models\Certificacion\Condicion::all('condicion','id');
         $departamentos = Departamento::pluck('departamento','id');
-        return response()->view('socios.sociosModal',['departamentos'=>$departamentos,'condicions'=>$condicions]);
-        
+        return response()->view('socios.sociosModal',['departamentos'=>$departamentos,'condicions'=>$condicions]);        
     }
     
     public function index()

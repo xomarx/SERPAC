@@ -38,7 +38,7 @@ class AuthController extends Controller
     
     public function redirectPath()
     {
-        return '/socios';
+        return '/Socios';
     }
     /**
      * Where to redirect users after login / registration.

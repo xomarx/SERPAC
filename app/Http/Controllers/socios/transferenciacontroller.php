@@ -46,8 +46,9 @@ class transferenciacontroller extends Controller
     }
 
     public function fichaTransferencia($id){
-        $transferencia = \App\Models\Socios\Transferencia::FindOrFail($id);
+        $transferencia = \App\Models\Socios\Transferencia::FindOrFail($id);        
         $fundos = \App\Models\Socios\Fundo::getDatoFundo($transferencia->socios_codigo);
+//        dd($fundos);
         $socioa = \App\Models\Persona::getdatopersona($transferencia->dniantiguo);
         $socio = \App\Models\Persona::getdatopersona($transferencia->dninuevo);
         $beneficiarioa = \App\Models\Persona::getdatopersona($transferencia->beneficiario_antiguo);

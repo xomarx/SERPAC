@@ -32,7 +32,7 @@
                     <td>{{$transferencia->fecha}}</td>
                     <td>{{$transferencia->name}}</td>
                     <td>                        
-                        <a  href="{{url('socios/transferencias/ficha')}}/{{$transferencia->id}}" class="btn-xs btn-success" target="_blank" ><span class="glyphicon glyphicon-print"data-toggle="tooltip" data-placement="top" title="Imprimir"></span></a>                        
+                        <a  href="{{url('Socios/transferencias/ficha')}}/{{$transferencia->id}}" class="btn-xs btn-success" target="_blank" ><span class="glyphicon glyphicon-print"data-toggle="tooltip" data-placement="top" title="Imprimir"></span></a>                        
                     </td>                    
                 </tr>
                 @endforeach
@@ -61,7 +61,7 @@ var rellenardatossocio = function(codigosocio) {
         $("#parentesco").empty();$("#parcela").empty();
         $("#areatotal").empty();       
         $("#dni_nuevo_socio").prop('disabled',false);
-        $.get("/socios/transferencias/datos/{term}",        
+        $.get("/Socios/transferencias/datos/{term}",        
         {codigo:codigosocio},
         function(data){
             
@@ -163,7 +163,7 @@ var  cargartransfer = function(id){
                     
    var validarnuevosocio = function(dninuevo) {
        
-       $.get("/socios/transferencias/nuevo/{term}",        
+       $.get("/Socios/transferencias/nuevo/{term}",        
         {dni:dninuevo},
         function(data){
             $("#error-dni_nuevo_socio").empty();
@@ -187,7 +187,7 @@ var  cargartransfer = function(id){
       
    var validarbeneficiario = function(dnibeneficiario){
        var codigo=$("#codigo").val();
-       $.get("/socios/transferencias/persona/{term}",        
+       $.get("/Socios/transferencias/persona/{term}",        
         {dni:dnibeneficiario,codigo:codigo},
         function(data){
             $("#error-dni_beneficiario").empty();                       

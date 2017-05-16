@@ -13,7 +13,7 @@ CARGOS DE EMPLEADOS
             <div class="box-body">                               
                 @include('mensajes.mensaje')
                 {!! Form::open(['id'=>'formcargos']) !!}     
-                <input type="hidden" name="idcargo" id="idarea" />
+                <input type="hidden" name="idcargo" id="idcargo" />
                 {!! Form::label('cargo','Cargo:',['class' => 'control-label'])!!}                    
                 {!! Form::text('cargo',null,['id'=>'cargo','class'=>'form-control','placeholder'=>'Nombre del Cargo'])!!}
                 <div class="text-danger" id="error-cargo"></div>

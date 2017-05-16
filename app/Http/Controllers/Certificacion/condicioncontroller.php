@@ -21,6 +21,8 @@ class condicioncontroller extends Controller
      */
     public function index()
     {
+        if(!auth()->user()->can('ver condicion'))
+            return response ()->view ('errors.403',[],403);
         $condicion = \App\Models\Certificacion\Condicion::all();
         return response()->view('Certificacion.condicion',['condicions'=>$condicion]);
     }
@@ -43,7 +45,17 @@ class condicioncontroller extends Controller
      */
     public function store(Request $request)
     {
-        //
+        if(!auth()->user()->can('crear condicion'))
+            return response ()->view ('errors.403-content',[],403);
+        $this->validate($request, ['condicion'=>'required|unique:condicions,condicion','descripcion'=>'required']);
+        if($request->ajax()){
+            $condicion = \App\Models\Certificacion\Condicion::create([
+                'condicion'=>  strtoupper($request->condicion),
+                'descripcion'=>  strtoupper($request->descripcion)
+            ]);
+            if($condicion) return response()->json (['success'=>true, 'message'=>'Se registro correctamente los Datos']);
+            else return response ()->json (['success'=>false,'message'=>'Error no se registro ningun Dato']);
+        }
     }
 
     /**
@@ -66,6 +78,8 @@ class condicioncontroller extends Controller
     public function edit($id)
     {
         //
+        $condicion = \App\Models\Certificacion\Condicion::FindOrFail($id);
+        return response()->json($condicion);
     }
 
     /**
@@ -77,7 +91,15 @@ class condicioncontroller extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        if(!auth()->user()->can('editar condicion'))
+            return response ()->view ('errors.403-content',[],403);
+        $this->validate($request, ['condicion'=>'required|unique:condicions,condicion','descripcion'=>'required']);
+        if($request->ajax()){
+            $condicion = \App\Models\Certificacion\Condicion::FindOrFail($id);
+            $condicion->condicion=$request->condicion;
+            $condicion->descripcion = $request->descripcion;
+            $condicion->save();   
+        }        
     }
 
     /**
@@ -88,6 +110,15 @@ class condicioncontroller extends Controller
      */
     public function destroy($id)
     {
-        //
+        if(!auth()->user()->can('eliminar condicion'))
+            return response ()->view ('errors.403-content',[],403);
+        $cont = \App\Models\Acopio\Compra::where('condicions_id','=',$id)->count();
+        $cant = \App\Models\Socios\Condicions_has_socio::where('condicions_id','=',$id)->count();
+        if($cont == 0 && $cant == 0){
+            \App\Models\Certificacion\Condicion::where('id','=',$id)->delete();
+            return response()->json(['success'=>true]);
+        }
+        return response()->json(['success'=>false]);
+        
     }
 }

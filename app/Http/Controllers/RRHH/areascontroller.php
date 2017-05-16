@@ -47,7 +47,7 @@ class areascontroller extends Controller
         {
             if(!auth()->user()->can('crear areas'))
                 return response ()->view ('errors.403-content',[],403);
-            $area = Areas::create($request->all());
+            $area = Areas::create(['area'=>  strtoupper($request->area)]);
             if($area) return response()->json(['success'=>true,'message'=>'Se Registro correctamente']);
             else return response()->json(['success'=>false,'No se registro nigun Dato']);            
         }
@@ -91,7 +91,7 @@ class areascontroller extends Controller
             if(!auth()->user()->can('editar areas'))
                 return response ()->view ('errors.403-content',[],403);
             $area = Areas::FindOrFail($id);
-            $area->area = $request->area;
+            $area->area = strtoupper($request->area);
             $area->save();
             if($area)          
                 return response()->json(['success'=>true,'message'=>'Se actualizo correctamente']);            

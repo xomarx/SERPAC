@@ -72,22 +72,39 @@ class parientescontroller extends Controller
             if(!auth()->user()->can('crear parientes'))
                 return response()->view('errors.403-content', [], 403);
             $persona = Persona::where('dni','=',$request->dni)->select()->first();
-            if(count($persona) == 0)
-                $persona = new Persona($request->all());
-            else
-                $persona->fill($request->all());
-                $persona->fec_nac=Carbon::parse($request->fec_nac);
-                $persona->comites_locales_id = $request->comite_local;
-                $persona->save();            
-            
+            if(count($persona) == 0){
+                $persona = Persona::create([
+                    'paterno'=>  strtoupper($request->paterno),
+                    'materno'=>  strtoupper($request->materno),
+                    'nombre'=>  strtoupper($request->nombre),
+                    'fec_nac'=>Carbon::parse($request->fec_nac),
+                    'sexo'=>$request->sexo,
+                    'direccion'=>  strtoupper($request->direccion),
+                    'telefono'=>$request->telefono,
+                    'comites_locales_id'=>$request->comite_local,
+                    'dni'=>$request->dni
+                ]);
+            }
+            else{
+                $persona = Persona::where('dni','=',$request->dni)->update([
+                    'paterno'=>  strtoupper($request->paterno),
+                    'materno'=>  strtoupper($request->materno),
+                    'nombre'=>  strtoupper($request->nombre),
+                    'fec_nac'=>Carbon::parse($request->fec_nac),
+                    'sexo'=>$request->sexo,
+                    'direccion'=>  strtoupper($request->direccion),
+                    'telefono'=>$request->telefono,
+                    'comites_locales_id'=>$request->comite_local,
+                ]);
+            }        
             $pariente = new Pariente($request->all());
-            $pariente->socios_codigo=$request->socios_codigo;
-            $pariente->personas_dni = $persona->dni;
-            $pariente->users_id = \Illuminate\Support\Facades\Auth::user()->id;
-            $pariente->save();
-            if($persona)
-            {
-                return response()->json(['success'=>true,'message'=>'Se registro correctamente']);
+                $pariente->socios_codigo=$request->socios_codigo;
+                $pariente->personas_dni = $request->dni;
+                $pariente->users_id = \Illuminate\Support\Facades\Auth::user()->id;
+                $pariente->save();
+            if($pariente)
+            {                               
+                return response()->json(['success'=>true,'message'=>'Se registro correctamente']);               
             }
             else{
                 return response()->json(['success'=>false,'message'=>'No se Registro ningun Dato']);

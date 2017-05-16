@@ -10,9 +10,9 @@ class Empleado extends Model
     //
      protected  $table = 'empleados';
     protected  $primarykey = 'empleadoId';
-    public  $timestamps=false;
+    public  $timestamps=true;
     protected  $fillable = ['empleadoId','estado','estadocivil','email','profesion','ruc',
-        'personas_dni','cargos_id','areas_id'];
+        'personas_dni','cargos_id','areas_id','empresas_ruc'];
     
     public function persona()
     {

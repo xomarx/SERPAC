@@ -38,6 +38,7 @@ Route::group(['middleware' => ['auth']], function () {
     route::resource('Auxiliar/datoSucursal','Configuracion\AuxiliarController@autoSucursal');
     route::resource('Auxiliar/codigoSucursal','Configuracion\AuxiliarController@autoCodigoSucursal');
     route::resource('Auxiliar/nosocios','Configuracion\AuxiliarController@autoNoSocios');
+    route::resource('Datos','Configuracion\AuxiliarController');
     
     Route::get('sign-out', 'Auth\AuthController@getsignOut');
     
@@ -72,24 +73,24 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('provincias/{id}','socios\provinciacontroller@getprovincias');
     Route::get('distritos/{id}','socios\distritocontroller@getdistritos');   
 //    route::post('socios/{codigo}','socios\sociocontroller@update');   
+//    
+//    
     //*******************************************************************       SOCIOS ******************************************************************
     
     
-    route::get('socios/Asignacion-Delegados/ListaAsigDelegados/{dato?}/{page?}','socios\cargodelegadosociocontroller@listaAsigDelegados');
+    route::get('Socios/Asignacion-Delegados/ListaAsigDelegados/{dato?}/{page?}','socios\cargodelegadosociocontroller@listaAsigDelegados');
     route::resource('Socios/Asignacion-Delegados','socios\cargodelegadosociocontroller');
-    route::get('socios/Asignacion-Directivos/ListaAsigDirectivos/{dato?}/{page?}','socios\cargodirectivosociocontroller@listaAsigDirectivos');
+    route::get('Socios/Asignacion-Directivos/ListaAsigDirectivos/{dato?}/{page?}','socios\cargodirectivosociocontroller@listaAsigDirectivos');
     route::resource('Socios/Asignacion-Directivos','socios\cargodirectivosociocontroller');
     
-    route::resource('socios/transferencias/newtransferencias','socios\transferenciacontroller@NewTransferencia');
+    route::resource('Socios/transferencias/newtransferencias','socios\transferenciacontroller@NewTransferencia');
     route::resource('Socios/transferencias','socios\transferenciacontroller');    
-    route::resource('socios/transferencias/datos','socios\transferenciacontroller@datossocio');
-    route::resource('socios/transferencias/nuevo','socios\transferenciacontroller@datosnuevo');//datosnuevo
-    route::resource('socios/transferencias/persona','socios\transferenciacontroller@datosnuevobeneficiario');//datosnuevobeneficiario    
-    route::resource('socios/transferencias/ficha','socios\transferenciacontroller@fichaTransferencia');//fichaTransferencia            
+    route::resource('Socios/transferencias/datos','socios\transferenciacontroller@datossocio');
+    route::resource('Socios/transferencias/nuevo','socios\transferenciacontroller@datosnuevo');//datosnuevo
+    route::resource('Socios/transferencias/persona','socios\transferenciacontroller@datosnuevobeneficiario');//datosnuevobeneficiario    
+    route::resource('Socios/transferencias/ficha','socios\transferenciacontroller@fichaTransferencia');//fichaTransferencia            
     
-    route::resource('socios/propiedadinmueble','socios\fundoscontroller@propiedadinmueble');
-    route::resource('socios/propiedadfauna','socios\fundoscontroller@propiedadfauna');
-    route::resource('socios/propiedadflora','socios\fundoscontroller@propiedadflora');
+    
     
     route::resource('Socios/basicos/floras','socios\floracontroller');
     route::resource('Socios/basicos/faunas','socios\faunacontroller');
@@ -104,30 +105,31 @@ Route::group(['middleware' => ['auth']], function () {
     route::resource('Socios/departamentos','socios\departamentocontroller');        
 //    route::resource('socios','socios\sociocontroller@create');
     
-    route::resource('socios/autopersonas','socios\sociocontroller@autoSociosPersonas');    
-    route::resource('socios/autoDniSocios','socios\sociocontroller@autoSociosDni');
+    route::resource('Socios/autopersonas','socios\sociocontroller@autoSociosPersonas');    
+    route::resource('Socios/autoDniSocios','socios\sociocontroller@autoSociosDni');
         
     //autocompletados
-                    
-    route::get('socios/fundos/Listfundos/{data?}/{page?}','socios\fundoscontroller@ListaFundos');
-    route::resource('socios/eliminarpropiedades','socios\fundoscontroller@EliminarPropiedadesFundo');//EliminarPropiedadesFundo
-    route::resource('socios/modalfundo','socios\fundoscontroller@ModalFundo');
+    route::resource('Socios/propiedadinmueble','socios\fundoscontroller@propiedadinmueble');
+    route::resource('Socios/propiedadfauna','socios\fundoscontroller@propiedadfauna');
+    route::resource('Socios/propiedadflora','socios\fundoscontroller@propiedadflora');              
+    route::get('Socios/fundos/Listfundos/{data?}/{page?}','socios\fundoscontroller@ListaFundos');
+    route::resource('Socios/eliminarpropiedades','socios\fundoscontroller@EliminarPropiedadesFundo');//EliminarPropiedadesFundo
+    route::resource('Socios/modalfundo','socios\fundoscontroller@ModalFundo');
     route::resource('Socios/fundos','socios\fundoscontroller');
     
-    route::get('socios/parientes/ListaParientes/{dato?}/{page?}','socios\parientescontroller@listaParientes');
-    route::resource('socios/modalparientes','socios\parientescontroller@ModalPariente');    
+    route::get('Socios/parientes/ListaParientes/{dato?}/{page?}','socios\parientescontroller@listaParientes');
+    route::resource('Socios/modalparientes','socios\parientescontroller@ModalPariente');    
     route::resource('Socios/parientes','socios\parientescontroller');
-    route::delete('socios/parientes/{dni}/{cod}','socios\parientescontroller@destroy');
-    route::get('socios/parientes/{idsocio?}/{dnipar?}','socios\parientescontroller@datosparientes');
+    route::delete('Socios/parientes/{dni}/{cod}','socios\parientescontroller@destroy');
+    route::get('Socios/parientes/{idsocio?}/{dnipar?}','socios\parientescontroller@datosparientes');
     
-    route::delete('socios/Condicions-socios/{cod?}','socios\sociocontroller@limpiarCondicion');
-    route::resource('socios/Condicions-socios','socios\sociocontroller@condicions');
-    route::get('socios/ListaSocios/{dato?}/{page?}','socios\sociocontroller@Listasocios');
-    route::resource('socios/modalsocio','socios\sociocontroller@ModalSocio');    
-    route::resource('Socios/Socios','socios\sociocontroller');
-    route::resource('Socios','Configuracion\AuxiliarController@Socios');
-    
+    route::delete('Socios/Socios/Condicions-socios/{cod?}','socios\sociocontroller@limpiarCondicion');
+    route::resource('Socios/Socios/Condicions-socios','socios\sociocontroller@condicions');
+    route::get('Socios/Socios/ListaSocios/{dato?}/{page?}','socios\sociocontroller@Listasocios');
+    route::resource('Socios/Socios/modalsocio','socios\sociocontroller@ModalSocio');    
+    route::resource('Socios/Socios','socios\sociocontroller');    
     route::get('PadronSocio/{idsocio}','socios\sociocontroller@verPadronsocio');
+    route::resource('Socios','Configuracion\AuxiliarController@Socios');        
    //  *********************************************************   RRHH  ************************************************************************
     
    
@@ -266,6 +268,5 @@ Route::group(['middleware' => ['auth']], function () {
     //*****************************************************************     CERTIFICACION *************************************************************
       
     route::resource('Certificacion/Condicion','Certificacion\condicioncontroller');
-    route::resource('Certificacion','Certificacion\condicioncontroller@certificacion');    
-    route::resource('Certificacion','Configuracion\AuxiliarController@Certificacion');     
+    route::resource('Certificacion','Certificacion\condicioncontroller@certificacion');           
 });

@@ -12,7 +12,7 @@ class Socio extends Model
     protected  $fillable = [
         'codigo','fec_asociado','fec_empadron','','estado_civil',
         'ocupacion','grado_inst','produccion','estado','observacion'
-        ,'persona_dni','users_id'];    
+        ,'dni','users_id'];    
     
     /**
      * Obtener el registro de persona asociado con el socio

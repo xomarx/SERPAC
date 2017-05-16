@@ -48,10 +48,9 @@ class cargoscontroller extends Controller
         {
             if(!auth()->user()->can('crear cargos'))
                 return response ()->view ('errors.403-content',[],403);
-            $cargo = Cargos::create($request->all());
-            if($cargo)  return response()->json(['success',true,'message'=>'Se registro correctamente']);            
-            else 
-            return response()->json(['success',false,'message'=>'No se Registro Ningun dato']);
+            $cargo = Cargos::create(['cargo'=>  strtoupper($request->cargo)]);
+            if($cargo)  return response()->json(['success'=>true,'message'=>'Se registro correctamente']);            
+            else  return response()->json(['success'=>false,'message'=>'No se Registro Ningun dato']);
             
         }
     }
@@ -95,14 +94,12 @@ class cargoscontroller extends Controller
             if(!auth()->user()->can('editar cargos'))
                 return response ()->view ('errors.403-content',[],403);
             $cargo = Cargos::FindOrFail($id);
-            $cargo->cargo = $request->cargo;
+            $cargo->cargo = strtoupper($request->cargo);
             $cargo->save();
-            if($cargo)
-                {
-                return response()->json(['success',true,'message'=>'Se actualizaron los DAtos']);
-            }
+            if($cargo)                
+                return response()->json(['success'=>true,'message'=>'Se actualizaron los DAtos']);            
             else {
-            return response()->json(['success',false,'message'=>'No se actualizo ningun dato']);
+            return response()->json(['success'=>false,'message'=>'No se actualizo ningun dato']);
             }
         }
     }

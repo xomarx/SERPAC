@@ -47,6 +47,11 @@ return [
             'root' => storage_path('app'),
         ],
         
+        'archivosDatos' => [
+            'driver' => 'local',
+            'root' => storage_path('app/archivosDatos'),             
+        ],
+        
         'cheques' => [
             'driver' => 'local',
             'root' => storage_path('app/cheques'),             

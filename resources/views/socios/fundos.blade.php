@@ -26,11 +26,11 @@
     
 var EditarFundo = function(id){
     
-    var route = '/socios/modalfundo';        
+    var route = '/Socios/modalfundo';        
         $.get(route,function(data){            
             $("#conten-modal").html(data);                                         
         });                    
-    route = "{{url('socios/fundos')}}/"+id+"/edit";   
+    route = "{{url('Socios/fundos')}}/"+id+"/edit";   
     $.get(route,function(data){
                 
         $("#idfundo").val(id);
@@ -124,8 +124,7 @@ var AgregFauna = function(){
         $("#fauna option:selected").remove();
     };
     
-var AgregInmueble = function(){
-        console.log('hola mundo');
+var AgregInmueble = function(){        
         var tds = "<tr>";
         var tds = '<tr>';var idcul = $("#inmueble").val();
         tds += "{{--*/ @$idinmueble = str_replace(' ','&nbsp;',"idcul") /*--}}"

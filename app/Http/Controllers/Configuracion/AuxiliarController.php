@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Storage;
 
 class AuxiliarController extends Controller
 {
@@ -222,7 +223,7 @@ class AuxiliarController extends Controller
      */
     public function index()
     {
-        //
+        return response()->view('Configuracion.datos');
     }
 
     /**
@@ -235,17 +236,147 @@ class AuxiliarController extends Controller
         //
     }
 
+    
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request)// carga los datos del archivo de excel para los socios
     {
-        //
+        $this->validate($request, [
+            'excel'=>'required|file'
+        ],['excel.required'=>'No cargo ningun archivo de tipo Excel','excel.file'=>'Solo se permiten Archivos de tipo Excel']);
+        if($request->ajax()){
+        $archivo = $request->file('excel');
+        $nombre = $archivo->getClientOriginalName();
+        $extension = $archivo->getClientOriginalExtension();
+        $path = Storage::disk('archivosDatos')->put($nombre, \File($archivo));
+        $ruta = "/storage/app/archivosDatos/".$nombre;
+        
+        ini_set('max_execution_time', 180);
+        if($path){
+            $cont=0;
+//            return response()->json($ruta);
+            \Maatwebsite\Excel\Facades\Excel::selectSheetsByIndex(0)->load($ruta,function($hoja){                 
+                $hoja->each(function($fila){
+                    
+                    $comite = \App\Models\Socios\Comites_Locale::where('comite_local','=',$fila->comite_local)->first();
+                    $area = \App\Models\RRHH\Areas::where('area','=',$fila->area)->first();
+                    if(count($area) == 0){
+                        $area = new \App\Models\RRHH\Areas();
+                        $area->area = $fila->area;
+                        $area->save();
+                    }                        
+                    $cargo = \App\Models\RRHH\Cargos::where('cargo','=',$fila->cargo)->first();
+                    if(count($cargo) == 0){
+                        $cargo = new \App\Models\RRHH\Cargos();
+                        $cargo->cargo = $fila->cargo;
+                        $cargo->save();
+                    }                        
+                    $persona = \App\Models\Persona::where('dni','=',$fila->dni)->first();
+                    if(count($persona) == 0){
+                        $persona = new \App\Models\Persona();
+                        $persona->dni=$fila->dni;                       
+                           $persona->paterno=$fila->paterno;
+                           $persona->materno=$fila->materno;
+                           $persona->nombre=$fila->nombre;
+                           $persona->fec_nac=$fila->fec_nacimiento;
+                           $persona->sexo=substr($fila->sexo,1);
+                           $persona->direccion=$fila->direccion;
+                           $persona->telefono=$fila->telefono;
+                           $persona->comites_locales_id=$comite->id;
+                           $persona->save();
+                    }
+                    $empleado = \App\Models\RRHH\Empleado::where('personas_dni','=',$fila->dni)->first();
+                    if(count($empleado) == 0){
+                        \App\Models\RRHH\Empleado::create([
+                            'empleadoId'=>$fila->codigo,
+                            'estado'=>'ACTIVO',
+                            'estadocivil'=>$fila->estadocivil,
+                            'email'=>$fila->email,
+                            'profesion'=>$fila->profesion,
+                            'ruc'=>$fila->ruc,
+                            'personas_dni'=>$persona->dni,
+                            'cargos_id'=>$cargo->id,
+                            'areas_id'=>$area->id,
+                            'empresas_ruc'=>$fila->empresa_ruc,
+                        ]);   
+                    }
+                });
+            });
+            return response()->json(['success'=>true,'message'=>'Se cargo correctamente los Datos']);
+        }
+        else{
+            return response()->json(['success'=>false,'message'=>'Error al cargar los datos del Archivo']);
+        }
+        }
     }
 
+    /*
+    //**********************   cargar comites centrales
+                        
+                    $distrito = \App\Models\Socios\Distrito::where('distrito','=',$fila->distrito)->select('id')->first();                    
+                    $comite = \App\Models\Socios\Comites_Centrales::where('comite_central','=',$fila->comite_central)
+                            ->where('distritos_id','=',$distrito->id)->first();
+//                    dd(count($comite));
+                    if(count($comite) == 0){
+                    \App\Models\Socios\Comites_Centrales::create([
+                        'comite_central'=>$fila->comite_central,
+                        'distritos_id'=>$distrito->id
+                    ]);
+                    }
+    
+    //***************************  COMITE LOCALES 
+                        
+                    $central = \App\Models\Socios\Comites_Centrales::where('comite_central','=',$fila->comite_central)->select('id')->first();                    
+                    $local = \App\Models\Socios\Comites_Locale::where('comite_local','=',$fila->comite_local)
+                            ->where('comites_centrales_id','=',$central->id)->first();
+//                    dd(count($comite));
+                    if(count($local) == 0){
+                        \App\Models\Socios\Comites_Locale::create([
+                        'comite_local'=>$fila->comite_local,
+                        'comites_centrales_id'=>$central->id
+                    ]);
+                    }
+     // **********************************   SOCIOS  ************************************************************
+     
+                    $comite = \App\Models\Socios\Comites_Locale::where('comite_local','=',$fila->comite_local)->first();
+                    $socios = \App\Models\Socios\Socio::where('dni','=',$fila->dni)->first();
+                    if(count($socios) ==0 ){
+                        $persona = new \App\Models\Persona();
+                        $persona->dni=$fila->dni;                       
+                           $persona->paterno=$fila->paterno;
+                           $persona->materno=$fila->materno;
+                           $persona->nombre=$fila->nombre;
+                           $persona->fec_nac=$fila->fec_nacimiento;
+                           $persona->sexo=substr($fila->sexo,1);
+                           $persona->direccion=$fila->direccion;
+                           $persona->telefono=$fila->telefono;
+                           $persona->comites_locales_id=$comite->id;
+                           $persona->save();
+//                        dd($persona->dni);
+                        \App\Models\Socios\Socio::create([
+                            'codigo'=>$fila->codigo,
+                            'fec_asociado'=>$fila->fec_asociado,
+                            'fec_empadron'=>$fila->fec_empadron,
+                            'estado_civil'=>$fila->estado_civil,
+                            'ocupacion'=>$fila->ocupacion,
+                            'grado_inst'=>$fila->grado_inst,
+                            'produccion'=>$fila->produccion,
+                            'estado'=>$fila->estado,
+                            'observacion'=>$fila->observacion,
+                            'dni'=>$persona->dni,
+                            'users_id'=>  auth()->user()->id
+                        ]);
+                    } 
+     
+     * 
+     * 
+     * 
+    */
+    
     /**
      * Display the specified resource.
      *

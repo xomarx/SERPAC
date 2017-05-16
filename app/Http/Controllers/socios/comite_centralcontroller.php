@@ -62,7 +62,10 @@ class comite_centralcontroller extends Controller
         {
             if(!auth()->user()->can('crear central'))
                 return response ()->view ('errors.403-content',[],403);
-            $comite_centrals = Comites_Centrales::create($request->all());
+            $comite_centrals = Comites_Centrales::create([
+                'comite_central'=>  strtoupper($request->comite_central),
+                'distritos_id'=>  $request->distrito
+            ]);
             if($comite_centrals)            
                 return response()->json(['success'=>true,'message'=>'Se Registro correctamente']);            
             else            
@@ -132,13 +135,15 @@ class comite_centralcontroller extends Controller
      */
     public function destroy($id)
     {        
-        if(!auth()->user()->can('eliminar central')){
-        $central = Comites_Centrales::FindOrFail($id);
+        
+        if(auth()->user()->can('eliminar central')){
+            $central = Comites_Centrales::FindOrFail($id);
         $result = $central->delete();
         if ($result)                   
             return response()->json(['success'=>true]);         
         else        
             return response()->json(['success'=> false]);  
         }
+        return response()->view('errors.403-content',[],403);
     }
 }

@@ -22,7 +22,7 @@
                         <div class="text-danger" id="error_estadofundo"></div>
                     </div>
                     <div class=" col-md-3">                                
-                        {!! Form::label('fecnaci','Fecha Nacimiento',['class'=>'control-label']) !!}
+                        {!! Form::label('fecnaci','Fecha Adquisicion',['class'=>'control-label']) !!}
                         {!! Form::date('fecha',null,['id'=>'fecha','class'=>'form-control datepicker']) !!} 
                         <div class="text-danger" id="error_fecha"></div>
                     </div>                                    
@@ -58,7 +58,7 @@
                     </div>
                     <div class=" form-group col-md-6">
                         {!! Form::label('observacion','Observacion',['class'=>'form-label']) !!}
-                        {!! Form::textarea('observacion',null,['id'=>'observaciones','placeholder'=>'Observaciones del Fundo','rows'=>'2'])!!}
+                        {!! Form::textarea('observacion',null,['id'=>'observaciones','class'=>'form-control','placeholder'=>'Observaciones del Fundo','rows'=>'2'])!!}
                     </div>
                 </div>                                    
                 <div class="col-md-12 col-md-offset-0 row" >
@@ -118,7 +118,7 @@
                 </div>
                 {!! Form::close() !!}
                 <div class="modal-footer">                    
-                    {!!link_to('#', $title='REGISTRAR', $attributes = ['id'=>'Regfundo', 'class'=>'btn btn-dropbox','onclick'=>'RegFundo()'])!!}
+                    {!!link_to('#', $title='REGISTRAR', $attributes = ['id'=>'Regfundo', 'class'=>'btn btn-dropbox'])!!}
                     <button type="button" class="btn btn-default " data-dismiss="modal">SALIR</button>
                 </div>
             </div>        
