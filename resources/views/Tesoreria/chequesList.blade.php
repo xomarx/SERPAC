@@ -1,4 +1,4 @@
-
+@permission('ver cheques')
         @if(count($cheques) > 0)
         <table class="table table-hover table-responsive tablesorter" id="tablacheque">
             <thead>
@@ -20,8 +20,12 @@
                     <td>{{$cheque->num_cuenta}}</td>
                     <td>{{$cheque->descripcion}}</td>
                     <td>
+                        @permission('editar cheques')
                         <a onclick="EdiCheque('{{$cheque->id}}')" href="javascript:void(0);" class=" btn-xs btn-primary" data-toggle="tooltip" data-placement="top" title="Editar Cheque"><i class="glyphicon glyphicon-pencil" ></i></a>
+                        @endpermission
+                        @permission('eliminar cheques')
                         <a onclick="ElimCheque('{{$cheque->id}}','{{$cheque->cheque}}')" href="javascript:void(0);" class=" btn-xs btn-danger" data-toggle="tooltip" data-placement="top" title="Eliminar Cheque"><i class="glyphicon glyphicon-remove" ></i></a>
+                        @endpermission
                     </td>
                 </tr>
                 @endforeach
@@ -35,4 +39,4 @@
         @else
         <p class="text-info text-center">-->NO se encontro ningun registro ... </p>
         @endif
-    
+    @endpermission

@@ -10,7 +10,9 @@ use App\Http\Controllers\Controller;
 class ChequeController extends Controller
 {
     public function cheque(){
-        return  view('Tesoreria.cheque');
+        if(!auth()->user()->can(['crear cheques','editar cheques']))
+                return response ()->view ('errors.403-modal');
+        return  view('Tesoreria.chequeModal');
     }
     /**
      * Display a listing of the resource.
@@ -22,12 +24,14 @@ class ChequeController extends Controller
         if(!auth()->user()->can('ver cheques'))
                 return response ()->view ('errors.403');
         $cheques = \App\Models\Tesoreria\Cheque::ListaCheques('');
-        return view('Tesoreria.ChequeView')->with('cheques',$cheques);
+        return view('Tesoreria.Cheques')->with('cheques',$cheques);
     }
 
     public function listaCheque($dato=''){
+        if(!auth()->user()->can('ver cheques'))
+                return response ()->view ('errors.403-content');
         $cheques = \App\Models\Tesoreria\Cheque::ListaCheques($dato);
-        return response()->view('Tesoreria.listacheques',['cheques'=>$cheques]);
+        return response()->view('Tesoreria.chequesList',['cheques'=>$cheques]);
     }
 
     /**

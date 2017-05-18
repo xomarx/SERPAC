@@ -2630,8 +2630,7 @@ var EliGasto = function(id,nombre){
     
    var regrol = function (id){           
        if(id==1) var route = "NewRolUsuario";
-       else if(id==2) var route = "NewPermisoUser";
-       else if(id==3) var route = $("#Regmodal").text()+"Cheques" + "/"+$("#idcheque").val();
+       else if(id==2) var route = "NewPermisoUser";      
        
        var type = 'POST';
        if($("#RegRol").text() == "Actualizar") type = 'PUT';
@@ -2687,7 +2686,7 @@ var EliGasto = function(id,nombre){
          $("#numero").val(data.num_cuenta);
          $("#descripcion").val(data.descripcion); 
          $("#idcheque").val(data.id);
-         $("#Regmodal").text("Actualizar");         
+         $("#RegChe").text("Actualizar");         
          $("#modal-form").modal();
      });
    };
@@ -2708,6 +2707,34 @@ var EliGasto = function(id,nombre){
       });          
     });
    };
+   
+   $(document).ready().on('click','#RegChe',function(event){
+       var route = '/Tesoreria/Cheques';var type = 'POST';
+       if(event.target.text == 'Actualizar'){
+           route= '/Tesoreria/Cheques/' + $("#idcheque").val();
+           type = 'PUT';
+       }
+       $.ajax({          
+          url:route,
+          headers:{'X-CSRF-TOKEN':$("input[name=_token]").val()},
+          type:type,
+          datatype:'json',
+          data:$("#formCheque").serialize(),
+          success:function(data){
+              mensajeRegistro(data,'formCheque');
+                activarForm(12);                                             
+          },
+          error:function(data){
+              $("#erro-cheque").html('');$("#error-numero").html('');$("#error-descripcion").html('');              
+              var errors =  $.parseJSON(data.responseText);
+              $.each(errors,function(index, value) {                      
+                            if(index == 'cheque' )$("#error-cheque").html(value);
+                            else if(index == 'numero')$("#error-numero").html(value);
+                            else if(index == 'descripcion')$("#error-descripcion").html(value);                            
+                      });
+          }
+       });
+   });
    
    //***********************************************************************************************************   MOV CHEQUE ***************************
    $(document).ready().on('click','#RegMovCheque',function (){             
