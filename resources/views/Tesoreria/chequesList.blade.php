@@ -1,5 +1,6 @@
 @permission('ver cheques')
         @if(count($cheques) > 0)
+        {{ csrf_field() }}
         <table class="table table-hover table-responsive tablesorter" id="tablacheque">
             <thead>
                 <tr>

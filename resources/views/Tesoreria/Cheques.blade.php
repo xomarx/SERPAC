@@ -13,8 +13,7 @@
         </div>
     </div>
     <div class="box-body" id="contenidos-box">
-        @permission('ver cheques')
-        <input id="token" type="hidden" name="_token" value="{{ csrf_token() }}" >
+        @permission('ver cheques')        
         @include('Tesoreria.chequesList')
         @endpermission
 </div>

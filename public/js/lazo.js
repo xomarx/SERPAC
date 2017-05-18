@@ -2680,18 +2680,19 @@ var EliGasto = function(id,nombre){
    var EdiCheque = function(id){     
      $.get('modalcheque',function(data){
          $("#conten-modal").html(data);
-     });
-     $.getJSON("Cheques/"+id+"/edit",function(data){         
-         $("#cheque").val(data.cheque);
-         $("#numero").val(data.num_cuenta);
-         $("#descripcion").val(data.descripcion); 
-         $("#idcheque").val(data.id);
-         $("#RegChe").text("Actualizar");         
+         $.getJSON("Cheques/"+id+"/edit",function(data){         
+             $("#cheque").val(data.cheque);
+             $("#numero").val(data.num_cuenta);
+             $("#descripcion").val(data.descripcion); 
+             $("#idcheque").val(data.id);
+             $("#RegCheque").text("Actualizar");         
+         });
          $("#modal-form").modal();
      });
+     
    };
    
-   var ElimCheque = function(id,nombre){       
+    var ElimCheque = function(id,nombre){  
        $.alertable.confirm("<span style='color:#000'>¿Está seguro de eliminar el registro?</span><br><strong><span style='color:#ff0000'>"
            +nombre+"</span></strong></br>").then(function() {  
       var route = "deleteCheques/"+id+"";
@@ -2702,13 +2703,16 @@ var EliGasto = function(id,nombre){
         type: 'DELETE',
         dataType: 'json',
         success: function(data){
-            if(data) document.location.reload();        
-      }
+                activarForm(12);   
+        },
+        error:function(data){
+            if(data.status==403) activarmodal(0);
+        }
       });          
     });
    };
    
-   $(document).ready().on('click','#RegChe',function(event){
+   $(document).ready().on('click','#RegCheque',function(event){
        var route = '/Tesoreria/Cheques';var type = 'POST';
        if(event.target.text == 'Actualizar'){
            route= '/Tesoreria/Cheques/' + $("#idcheque").val();
@@ -2725,6 +2729,8 @@ var EliGasto = function(id,nombre){
                 activarForm(12);                                             
           },
           error:function(data){
+              if(data.status==403) $("#error-modal").empty().html(data.responseText);
+              else{
               $("#erro-cheque").html('');$("#error-numero").html('');$("#error-descripcion").html('');              
               var errors =  $.parseJSON(data.responseText);
               $.each(errors,function(index, value) {                      
@@ -2732,6 +2738,7 @@ var EliGasto = function(id,nombre){
                             else if(index == 'numero')$("#error-numero").html(value);
                             else if(index == 'descripcion')$("#error-descripcion").html(value);                            
                       });
+                  }
           }
        });
    });

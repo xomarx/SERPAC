@@ -20,12 +20,16 @@
             <li id="submovdinero"><a href="{{ url('Tesoreria/Mov-Dinero') }}"><i class='fa fa-money'></i> <span>Movimiento Dinero</span></a></li>
             <li id="subcajachica"><a href="{{ url('Tesoreria/Mov-Caja-Chica') }}"><i class='fa fa-puzzle-piece'></i> <span>Movimiento Caja Chica</span></a></li>
             <li id="subbanco"><a href="{{ url('Tesoreria/Mov-Bancario') }}"><i class='fa fa-bank'></i> <span>Movimiento Bancario</span></a></li>
+             @permission(['ver cheques'])
             <li class="treeview" id="subbasico">              
                 <a href="#"><i class='fa fa-chain-broken'></i> <span>Reg. Basico</span> <i class="fa fa-angle-left pull-right"></i></a>
                 <ul class="treeview-menu">
-                    <li id="subcheque"><a href="{{url('Tesoreria/Cheques')}}"><i class="fa fa-cc-mastercard"></i> Cheques </a></li>                    
+                     @permission('ver cheques')
+                    <li id="subcheque"><a href="{{url('Tesoreria/Cheques')}}"><i class="fa fa-cc-mastercard"></i> Cheques </a></li>
+                    @endpermission
                 </ul>
             </li>
+            @endpermission
         </ul><!-- /.sidebar-menu -->
 </section>
 @stop
