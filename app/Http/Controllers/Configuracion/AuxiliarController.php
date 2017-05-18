@@ -11,7 +11,67 @@ use Illuminate\Support\Facades\Storage;
 
 class AuxiliarController extends Controller
 {
+    public function autoDNInoEmpleado(Request $request) {
+        if($request->ajax()){
+            $nombre = Input::get('term');
+            $socios = \App\Models\Persona::autocompleteDNInoEmpleado($nombre);
+//            dd($nombre);
+            $result=[];
+            foreach ($socios as $socio) 
+            {
+                $result[] = [
+                    'id' => $socio->datos, 'value' => $socio->dni
+                        ];
+            }
+            return response()->json($result);
+        }
+    }
     
+    public function autoDatosNoEmpleados(Request $request){
+        if($request->ajax()){
+            $nombre = Input::get('term');
+            $socios = \App\Models\Persona::autoDatosNoEmpleados($nombre);
+            $result=[];
+            foreach ($socios as $socio) 
+            {
+                $result[] = [
+                    'value' => $socio->datos, 'id' => $socio->dni
+                        ];
+            }
+            return response()->json($result);
+        }
+    }
+    
+    public function AutoDNIEmpleados(Request $request){
+        if($request->ajax()){
+            $nombre = Input::get('term');
+            $mpleados = \App\Models\RRHH\Empleado::autocompleteDni($nombre);
+            $result=[];
+            foreach ($mpleados as $mpleado) 
+            {
+                $result[] = [
+                    'value' => $mpleado->dni, 'id' => $mpleado->datos
+                        ];
+            }
+            return response()->json($result);
+        }
+    }
+    
+    public function AutoDatosEmpleados(Request $request){
+        if($request->ajax()){
+            $nombre = Input::get('term');
+            $mpleados = \App\Models\RRHH\Empleado::autocompleteDatos($nombre);
+            $result=[];
+            foreach ($mpleados as $mpleado) 
+            {
+                $result[] = [
+                    'value' => $mpleado->datos, 'id' => $mpleado->dni
+                        ];
+            }
+            return response()->json($result);
+        }
+    }
+
     public function StorePersona(Request $request){
         $this->validate($request, [
             'dni'=>'required|numeric|unique:personas,dni',
@@ -82,6 +142,7 @@ class AuxiliarController extends Controller
         if($request->ajax()){
             $nombre = Input::get('term');
             $socios = \App\Models\Socios\Socio::Socioautocomplete($nombre);
+            $result=[];
             foreach ($socios as $socio) 
             {
                 $result[] = [
@@ -96,6 +157,7 @@ class AuxiliarController extends Controller
         if($request->ajax()){
             $nombre = Input::get('term');
             $socios = \App\Models\Socios\Socio::CodigoSocioautocomplete($nombre);
+            $result=[];
             foreach ($socios as $socio) 
             {
                 $result[] = ['id' => $socio->dni, 'value' => $socio->codigo,'local'=>$socio->comite_local,'socio'=>$socio->fullname,'condicions'=>  \App\Models\Certificacion\Condicion::getcondicions($socio->codigo)];
@@ -109,6 +171,7 @@ class AuxiliarController extends Controller
         if($request->ajax()){
             $nombre = Input::get('term');
             $socios = \App\Models\Socios\Socio::DNISocioautocomplete($nombre);
+            $result=[];
             foreach ($socios as $socio) 
             {
                 $result[] = ['id' => $socio->codigo, 'value' => $socio->dni,'local'=>$socio->comite_local,'socio'=>$socio->fullname
@@ -123,6 +186,7 @@ class AuxiliarController extends Controller
         if($request->ajax()){
             $nombre = Input::get('term');
             $personas = \App\Models\Persona::dniParientesSocios($nombre);
+            $result=[];
             foreach ($personas as $persona) 
             {
                 $result[] = ['id' => $persona->paterno, 'value' => $persona->dni,'local'=>$persona->comite_local,'materno'=>$persona->materno,
@@ -138,6 +202,7 @@ class AuxiliarController extends Controller
         {
             $nombre = Input::get('term');
             $parientes = \App\Models\Persona::AutodniPersonas($nombre);
+            $result=[];
             foreach ($parientes as $pariente) 
             {
                 $result[] = ['id' => $pariente->paterno, 'value' => $pariente->dni,'local'=>$pariente->comite_local,'materno'=>$pariente->materno,
@@ -151,7 +216,8 @@ class AuxiliarController extends Controller
         if($request->ajax())
         {
             $nombre = Input::get('term');            
-            $personas = \App\Models\Persona::autoDatosPersonas($nombre);            
+            $personas = \App\Models\Persona::autoDatosPersonas($nombre);    
+            $result=[];
             foreach ($personas as $persona) 
             {
                 $result[] = ['id' => $persona->dni, 'value' => $persona->paterno. ' '.$persona->materno.' '.$persona->nombre,'fecha'=>$persona->fec_nac];
@@ -165,6 +231,7 @@ class AuxiliarController extends Controller
         {
             $nombre = Input::get('term');
             $sucursals = \App\Models\RRHH\Sucursal::autoSucursal($nombre);
+            $result=[];
             foreach ($sucursals as $sucursal) 
             {
                 $result[] = ['id' => $sucursal->sucursalId, 'value' => $sucursal->sucursal
@@ -181,6 +248,7 @@ class AuxiliarController extends Controller
         {
             $nombre = Input::get('term');
             $sucursals = \App\Models\RRHH\Sucursal::autoCodigoSucursal($nombre);
+            $result=[];
             foreach ($sucursals as $sucursal) 
             {
                 $result[] = ['id' => $sucursal->sucursal, 'value' => $sucursal->sucursalId
@@ -195,6 +263,7 @@ class AuxiliarController extends Controller
         if($request->ajax()){
             $nombre = \Illuminate\Support\Facades\Input::get('term');
             $nosocios = \App\Models\Acopio\Nosocio::where('dni','like','%'.$nombre.'%')->get();
+            $result=[];
             foreach ($nosocios as $nosocio) 
             {
                 $result[] = ['id' => $nosocio->paterno, 'value' => $nosocio->dni,'materno'=>$nosocio->materno,'nombres'=>$nosocio->nombres,'condicions'=>  \App\Models\Certificacion\Condicion::pluck('condicion','id')];

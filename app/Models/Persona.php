@@ -93,6 +93,34 @@ class Persona extends Model
                 ->select(DB::raw("concat(paterno, ' ', materno,' ',nombre) as acopiador"),'dni')
                 ->get();
     }
+    
+    public static function scopeautocompleteDNInoEmpleado($query,$dni){
+        $parientes = DB::table('personas')->join('parientes','dni','=','personas_dni')
+                ->where('personas_dni','like','%'.$dni.'%')
+                ->select('personas.dni',  DB::raw("concat(paterno,' ',materno,' ',nombre) as datos"))
+                ;
+        $socios = DB::table('personas')
+                ->join('socios','personas.dni','=','socios.dni')
+                ->where('socios.dni','like','%'.$dni.'%')
+                ->select('socios.dni',  DB::raw("concat(paterno,' ',materno,' ',nombre) as datos"))
+                ->union($parientes)
+                ->take(7)->get();
+        return $socios;
+    }
+    
+    public static function scopeautoDatosNoEmpleados($query,$dato){
+        $parientes = DB::table('personas')->join('parientes','dni','=','personas_dni')
+                ->where(DB::raw("concat(paterno,' ',materno,' ',nombre)"),'like','%'.$dato.'%')
+                ->select('personas.dni',  DB::raw("concat(paterno,' ',materno,' ',nombre) as datos"))
+                ;
+        $socios = DB::table('personas')
+                ->join('socios','personas.dni','=','socios.dni')
+                ->where(DB::raw("concat(paterno,' ',materno,' ',nombre)"),'like','%'.$dato.'%')
+                ->select('socios.dni',  DB::raw("concat(paterno,' ',materno,' ',nombre) as datos"))
+                ->union($parientes)
+                ->take(7)->get();
+        return $socios;
+    }
 
     
 

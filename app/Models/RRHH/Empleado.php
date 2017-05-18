@@ -63,19 +63,19 @@ class Empleado extends Model
                 ->get();
     }
     
-    public static function autocompleteDatos($nombre){
-        return DB::table('empleados')
-                ->join('personas','empleados.personas_dni','=','personas.dni')
-                ->where(DB::raw("CONCAT(personas.paterno,' ',personas.materno,' ',personas.nombre)"),'like','%'.$nombre.'%')
-                ->select('personas.dni',DB::raw("CONCAT(personas.paterno,' ',personas.materno,' ',personas.nombre) as empleado"),'personas.dni')
+    public static function scopeautocompleteDatos($query,$nombre){
+        return $query
+                ->join('personas','personas_dni','=','dni')
+                ->where(DB::raw("CONCAT(paterno,' ',materno,' ',nombre)"),'like','%'.$nombre.'%')
+                ->select('dni',DB::raw("CONCAT(paterno,' ',materno,' ',nombre) as datos"))
                 ->take(5)->get();
     }
     
-    public static function autocompleteDatosDni($dni){
-        return DB::table('empleados')
-                ->join('personas','empleados.personas_dni','=','personas.dni')
-                ->where('personas.dni','like','%'.$dni.'%')
-                ->select('personas.dni',DB::raw("CONCAT(personas.paterno,' ',personas.materno,' ',personas.nombre) as empleado"),'personas.dni')
+    public static function scopeautocompleteDni($query,$dni){
+        return $query
+                ->join('personas','personas_dni','=','dni')
+                ->where('personas_dni','like','%'.$dni.'%')
+                ->select('dni',DB::raw("CONCAT(paterno,' ',materno,' ',nombre) as datos"))
                 ->take(5)->get();
     }
 }

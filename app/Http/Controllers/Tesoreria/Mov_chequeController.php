@@ -59,12 +59,13 @@ class Mov_chequeController extends Controller
     {       
         if(!auth()->user()->can('ver movimientos'))
             return response ()->view ('errors.403');
+        $caja = \App\Models\Tesoreria\Caja::wheredate('fecha','=', \Carbon\Carbon::now()->format('Y-m-d'))->count();
         $movcheques = \App\Models\Tesoreria\Mov_cheque::listaMovCheques(0,0,'');
         $result[]='AÑOS';
         for ($i = 2016; $i <= \Carbon\Carbon::now()->format('Y');$i++){
             $result [$i]=$i;
         }
-        return response()->view('Tesoreria.cheques_girados',['cheques'=>$movcheques,'anios'=>$result]);
+        return response()->view('Tesoreria.cheques_girados',['cheques'=>$movcheques,'anios'=>$result,'estado'=>$caja]);
     }
 
     /**

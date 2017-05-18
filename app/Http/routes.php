@@ -32,6 +32,8 @@ Route::group(['middleware' => ['auth']], function () {
     route::resource('Auxiliar/datoSocios','Configuracion\AuxiliarController@autoDatoSocios');
     route::resource('Auxiliar/codigoSocios','Configuracion\AuxiliarController@autoCodigoSocios');
     route::resource('Auxiliar/dniSocios','Configuracion\AuxiliarController@autoDNISocios');
+    route::resource('Auxiliar/DatosNoEmpleados','Configuracion\AuxiliarController@autoDatosNoEmpleados');
+    route::resource('Auxiliar/dniNoEmpleados','Configuracion\AuxiliarController@autoDNInoEmpleado');// todos los DNI esxepto de los empleados
     route::resource('Auxiliar/dniParientesSocios','Configuracion\AuxiliarController@autoDNIParientesSocios');
     route::resource('Auxiliar/dnipersonas','Configuracion\AuxiliarController@autoDNIPersonas');
     route::resource('Auxiliar/datosPersonas','Configuracion\AuxiliarController@autoDatosPersonas');
@@ -40,6 +42,8 @@ Route::group(['middleware' => ['auth']], function () {
     route::resource('Auxiliar/nosocios','Configuracion\AuxiliarController@autoNoSocios');
     route::resource('Auxiliar/AddPersona','Configuracion\AuxiliarController@StorePersona');
     route::resource('Auxiliar/Persona','Configuracion\AuxiliarController@PersonaModal');
+    route::resource('Auxiliar/DNIEmpleados','Configuracion\AuxiliarController@AutoDNIEmpleados');
+    route::resource('Auxiliar/DatosEmpleados','Configuracion\AuxiliarController@AutoDatosEmpleados');
     route::resource('Datos','Configuracion\AuxiliarController');
     
     Route::get('sign-out', 'Auth\AuthController@getsignOut');
@@ -105,10 +109,7 @@ Route::group(['middleware' => ['auth']], function () {
     route::resource('Socios/distritos','socios\distritocontroller');
     route::resource('Socios/provincias','socios\provinciacontroller');    
     route::resource('Socios/departamentos','socios\departamentocontroller');        
-//    route::resource('socios','socios\sociocontroller@create');
-    
-    route::resource('Socios/autopersonas','socios\sociocontroller@autoSociosPersonas');    
-    route::resource('Socios/autoDniSocios','socios\sociocontroller@autoSociosDni');
+//    route::resource('socios','socios\sociocontroller@create');        
         
     //autocompletados
     route::resource('Socios/propiedadinmueble','socios\fundoscontroller@propiedadinmueble');
@@ -134,8 +135,8 @@ Route::group(['middleware' => ['auth']], function () {
     route::resource('Socios','Configuracion\AuxiliarController@Socios');        
    //  *********************************************************   RRHH  ************************************************************************
               
-    route::resource('RRHH/autoempleadoDni','RRHH\empleadocontroller@autocompleteEmpleadoDni');
-    route::resource('RRHH/autoempleado','RRHH\empleadocontroller@autocompleteEmpleado');//   autocompleteEmpleado 
+    
+    
     route::resource('RRHH/Empleados/Amonestacion','RRHH\empleadocontroller@amonestacion');
     route::resource('RRHH/modalempleado','RRHH\empleadocontroller@modalEmpleado');
     route::resource('RRHH/Empleados','RRHH\empleadocontroller');

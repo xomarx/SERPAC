@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-<body  class="hold-transition login-page" style="background-image: url('{{url('img/ERP-ACOPAGRO.png')}}'); background-repeat: no-repeat; background-size:100% 100%;">
+<body  class="hold-transition login-page" style="background-image: url('{{url('img/SIC-ACOPAGRO.jpg')}}'); background-repeat: no-repeat; background-size:100% 100%;">
     
     <div class="login-box" >        
         <div class="login-logo">            

@@ -4,7 +4,10 @@
 @stop
 @section('main-content')
 @permission('ver movimientos')
-<div class="box box-solid box-primary">
+@if($estado != 1)
+    <img src="{{url('img/cerrado.png')}}" class="img-responsive" data-toggle="tooltip" data-placement="top" title="Necesita Abrir Caja"/>    
+    @else
+<div class="box box-solid box-primary" >    
     <div class="box-header">   
         <button  class="btn btn-dropbox dropdown-toggle" type="button" data-toggle="dropdown" id="btnexportar">EXPORTAR
             <span class="caret"></span></button>
@@ -33,6 +36,7 @@
 </div>
 <!--,'style'=>'display:none'-->
 <section id="conten-modal"></section>
+@endif
 @endpermission
 @stop
 
@@ -88,8 +92,9 @@
         };
         
         var clicktipo = function(id){
-        if (id == 1) {var route = '/socios/autopersonas'; var ruta = '/socios/autoDniSocios'}
-        else {var route = '/RRHH/autoempleado'; var ruta = '/RRHH/autoempleadoDni'}
+            $("#dato").val('');$("#dni").val('');
+        if (id == 1) {var route = '/Auxiliar/DatosNoEmpleados'; var ruta = '/Auxiliar/dniNoEmpleados'}
+        else {var route = '/Auxiliar/DatosEmpleados'; var ruta = '/Auxiliar/DNIEmpleados'}
         $("#dato").autocomplete({
         minLength:1,
                 autoFocus:true,
