@@ -21,7 +21,7 @@ class CajaController extends Controller
         if($caja > 1)            
             return response ()->view ('errors.403-modal');
         else
-            return response()->view('Tesoreria.Cajamodal',['apertura'=>$titulo]);                
+            return response()->view('Tesoreria.CajaModal',['apertura'=>$titulo]);                
     }
     
     public function DatoCaja($id){ 

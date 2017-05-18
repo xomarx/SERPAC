@@ -1,4 +1,4 @@
-@extends('tesoreria.mastertesoreria')
+@extends('Tesoreria.mastertesoreria')
 @section('contentheader_title')
     CAJA
 @stop
@@ -39,8 +39,8 @@
             },
            select: function(start, end, jsEvent){
                
-                        starttime = $.fullCalendar.moment(start).format('Y-M-D'); 
-                            if($.fullCalendar.moment(start).format('D') == fecha.getDay() && $.fullCalendar.moment(start).format('M') == (fecha.getMonth()+1))
+                        starttime = $.fullCalendar.moment(start).format('Y-M-D');                         
+                            if($.fullCalendar.moment(start).format('D') == fecha.getDate() && $.fullCalendar.moment(start).format('M') == (fecha.getMonth()+1))
                             {
                                 var route = '/Tesoreria/Caja/Apertura-Cierre-Caja/'+starttime;        
                                 $.get(route,function(data){            
