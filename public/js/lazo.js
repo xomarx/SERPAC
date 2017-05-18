@@ -2041,34 +2041,35 @@ $(document).ready().on('click','#RegAlmacen',function(){
                 }
             });                  
 });
-    
-var Editsucur = function(id) {
-   
-   activarmodal(12);
-        
-        var route = "/RRHH/Sucursal/"+id+"/edit";        
+
+    var Editsucur = function (id) {
+    var route = "/RRHH/Sucursal/" + id + "/edit";
+    $.get('AlmacenModal', function (data) {
+        $("#conten-modal").empty().html(data);
+        $(".select2").select2();
         $.getJSON(route, function (data) {
-             
-        $("#RegAlmacen").text('Actualizar');
-        $("#codigoId").prop("readonly",true);
-        $("#codigoId").val(id);
-        $("#area").val(data.areas_id);
-        $("#telefono").val(data.telefono);
-        $("#direccion").val(data.direccion);
-        $("#fax").val(data.fax);   
-        document.getElementById('acopiador').value = data.personas_dni;      
-        $("#sucursal").val(data.sucursal);
-        $("#departamento").val(data.departamentos_id);
-        $("#provincia").empty();
-        $("#provincia").append("<option value='" + data.provincias_id + "'>" + data.provincia + "</option>");
-        $("#distrito").empty();
-        $("#distrito").append("<option value='" + data.distritos_id + "'>" + data.distrito + "</option>");
-        $("#comite_central").empty();
-        $("#comite_central").append("<option value='" + data.comites_centrales_id + "'>" + data.comite_central + "</option>");
-        $("#comite_local").empty();
-        $("#comite_local").append("<option value='" + data.comites_locales_id + "'>" + data.comite_local + "</option>");
+            $("#RegAlmacen").text('Actualizar');
+            $("#codigoId").prop("readonly", true);
+            $("#codigoId").val(id);
+            $("#area").val(data.areas_id);
+            $("#telefono").val(data.telefono);
+            $("#direccion").val(data.direccion);
+            $("#fax").val(data.fax);
+            document.getElementById('acopiador').value = data.personas_dni;            
+            $("#sucursal").val(data.sucursal);
+            $("#departamento").val(data.departamentos_id);
+            $("#provincia").empty();
+            $("#provincia").append("<option value='" + data.provincias_id + "'>" + data.provincia + "</option>");
+            $("#distrito").empty();
+            $("#distrito").append("<option value='" + data.distritos_id + "'>" + data.distrito + "</option>");
+            $("#comite_central").empty();
+            $("#comite_central").append("<option value='" + data.comites_centrales_id + "'>" + data.comite_central + "</option>");
+            $("#comite_local").empty();
+            $("#comite_local").append("<option value='" + data.comites_locales_id + "'>" + data.comite_local + "</option>");
+        });
+        $("#modal-form").modal();
     });
-    };
+};
                     
 var EliSucursal = function(id,name){ 
      // ALERT JQUERY     
