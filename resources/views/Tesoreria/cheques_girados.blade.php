@@ -1,4 +1,4 @@
-@extends('tesoreria.mastertesoreria')
+@extends('Tesoreria.mastertesoreria')
 @section('contentheader_title')
     CHEQUES GIRADOS
 @stop
