@@ -15,11 +15,23 @@ use Illuminate\Support\Facades\Input;
 class sucursalescontroller extends Controller
 {
     
-    public function listaacopiadores()
-    {
-        $listaAcopaidores = Sucursal::pluck('empleados_empleadoId');
-        return response()->json($listaAcopaidores);
+    public function ListAlmacen($dato=''){
+        
+        if(!auth()->user()->can('ver almacen'))
+            return response ()->view ('errors.403');
+        $sucursales = Sucursal::listaSucursales($dato);            
+        return response()->view('RRHH.sucursalList',['sucursales'=>$sucursales]);
     }
+
+        public function almacenmodal(){
+        if(!auth()->user()->can(['crear almacen','editar almacen']))
+                return response ()->view ('error.403-content',[],403);
+        $areas = Areas::pluck('area','id');
+        $acopiadores = \App\Models\Persona::ListAcopiador()->pluck('acopiador','dni');
+        $departamentos = \App\Models\Socios\Departamento::pluck('departamento','id'); 
+        return response()->view('RRHH.sucursalModal',['areas'=>$areas,'departamentos'=>$departamentos,'empleados'=>$acopiadores]);
+    }
+    
     /**
      * Display a listing of the resource.
      *
@@ -29,11 +41,9 @@ class sucursalescontroller extends Controller
     {        
         if(!auth()->user()->can('ver almacen'))
             return response ()->view ('errors.403');
-        $sucursales = Sucursal::listaSucursales();    
-        $areas = Areas::pluck('area','id');
-        $empleados = \App\Models\RRHH\Tecnico::tecnicos();       
-        $departamentos = \App\Models\Socios\Departamento::pluck('departamento','id');     
-        return view('RRHH/sucursal', array('sucursales'=>$sucursales,'areas'=>$areas,'departamentos'=>$departamentos,'empleados'=>$empleados));
+        $sucursales = Sucursal::listaSucursales('');    
+        
+        return view('RRHH/sucursal', array('sucursales'=>$sucursales));
     }
     
     
@@ -73,8 +83,7 @@ class sucursalescontroller extends Controller
                 'areas_id'=>$request->area,
                 'comites_locales_id'=>$request->comite_local,
                 'users_id'=>  \Illuminate\Support\Facades\Auth::user()->id,
-                'empleados_empleadoId'=>$request->acopiador
-                    
+                'personas_dni'=>$request->acopiador                    
             ]);
             if($sucursal)            
                 return response()->json(['success'=>true,'message'=>'Se Registro Correctamente']);            
@@ -103,7 +112,7 @@ class sucursalescontroller extends Controller
     public function edit($id)
     {
         //
-        $sucursal = Sucursal::sucursal($id);
+        $sucursal = Sucursal::getSucursal($id);
                 return response()->json($sucursal);
     }
 
@@ -128,7 +137,7 @@ class sucursalescontroller extends Controller
                           'comites_locales_id' => $request->comite_local,
                           'areas_id' => $request->area,
                           'direccion' => strtoupper($request->direccion),
-                          'empleados_empleadoId'=>$request->acopiador,
+                          'personas_dni'=>$request->acopiador,
                           'users_id'=>  \Illuminate\Support\Facades\Auth::user()->id
                           ]);                          
             if($sucursal)

@@ -27,45 +27,42 @@
 @section('script')
 <script>       
               
-    var AgreFlora = function(){
-        var tds = "<tr>";
-        var tds = '<tr>';var idcul = $("#flora").val();
-        tds += "{{--*/ @$idcultivo = str_replace(' ','&nbsp;',"idcul") /*--}}"
-        tds += '<td>'+$("#flora option:selected").text()+'</td>';
-        tds += '<td><input type="number" name="hectarea" id="hectarea" class="form-control" min="1" max="100000"><div class="text-danger"></div></td>';
-        tds += '<td><input type="text" name="rendimiento" class="form-group-sm form-control"><div class="text-danger"></div></td>';
-        tds += '<td id="tdcultivo"><a href="#" onclick="Eliminarcultivo(this.parentNode.parentNode.rowIndex,'+{{$idcultivo}}+')"><span class="glyphicon glyphicon-remove btn-danger"></span></a></td>';
-        tds += '</tr>';
+    function AgreFlora (){        
+        var tds = '<tr>'
+        tds += '<td>'+$("#flora option:selected").text()+'</td>'+
+        '<td><input type="number" name="hectarea" id="hectarea" class="form-control" min="1" max="100000"><div class="text-danger"></div></td>'+
+        '<td><input type="text" name="rendimiento" class="form-group-sm form-control"><div class="text-danger"></div></td>'
+        +'<td id="tdcultivo"><a href="#" onclick="Eliminarcultivo(this.parentNode.parentNode.rowIndex,'+$("#flora").val()+')"><span class="glyphicon glyphicon-remove btn-danger"></span></a></td>'+
+        '</tr>';
         $("#tablacultivos").append(tds);
-        $("#flora option:selected").remove();
+        $("#flora option:selected").remove();        
     };
     
-    var AgregFauna = function(){
-        var tds = "<tr>";
-        var tds = '<tr>';var idcul = $("#fauna").val();
-        tds += "{{--*/ @$idfauna = str_replace(' ','&nbsp;',"idcul") /*--}}"
-        tds += '<td>'+$("#fauna option:selected").text()+'</td>';
-        tds += '<td><input type="number" class="form-control bfh-number" min="1" max="500"><div class="text-danger"></div></td>';
-        tds += '<td><input type="text" name="rendimiento" class="form-group-sm form-control"><div class="text-danger"></div></td>';
-        tds += '<td id="tdcultivo"><a href="#" onclick="Eliminarfauna(this.parentNode.parentNode.rowIndex,'+{{$idfauna}}+')"><span class="glyphicon glyphicon-remove btn-danger"></span></a></td>';
-        tds += '</tr>';
+    function AgregFauna(){
+        
+        var tds = '<tr>';
+        tds += '<td>'+$("#fauna option:selected").text()+'</td>'+
+        '<td><input type="number" class="form-control bfh-number" min="1" max="500"><div class="text-danger"></div></td>'
+        +'<td><input type="text" name="rendimiento" class="form-group-sm form-control"><div class="text-danger"></div></td>'
+        +'<td id="tdcultivo"><a href="#" onclick="Eliminarfauna(this.parentNode.parentNode.rowIndex,'+$("#fauna").val()+')"><span class="glyphicon glyphicon-remove btn-danger"></span></a></td>'
+        + '</tr>';
         $("#tablafauna").append(tds);
         $("#fauna option:selected").remove();
     };
     
-    var AgregInmueble = function(){        
-        var tds = "<tr>";
-        var tds = '<tr>';var idcul = $("#inmueble").val();
-        tds += "{{--*/ @$idinmueble = str_replace(' ','&nbsp;',"idcul") /*--}}"
+    
+function AgregInmueble(){        
+        
+        var tds = '<tr>';       
         tds += '<td>'+$("#inmueble option:selected").text()+'</td>';
         tds += '<td>SI</td>';            
-        tds += '<td id="tdcultivo"><a href="#" onclick="Eliminarinmueble(this.parentNode.parentNode.rowIndex,'+{{$idinmueble}}+')"><span class="glyphicon glyphicon-remove btn-danger"></span></a></td>';
+        tds += '<td id="tdcultivo"><a href="#" onclick="Eliminarinmueble(this.parentNode.parentNode.rowIndex,'+$("#inmueble").val()+')"><span class="glyphicon glyphicon-remove btn-danger"></span></a></td>';
         tds += '</tr>';
         $("#tablainmueble").append(tds);
         $("#inmueble option:selected").remove();
     };
     
-    var fundosocio = function(codigo,nombre,paterno,materno){
+    function fundosocio(codigo,nombre,paterno,materno){
         var route = '/Socios/modalfundo';
         $.get(route,function(data){            
             $("#conten-modal").html(data);
@@ -79,10 +76,10 @@
         });        
     };
         
-    var ParSocio = function (codigo,nombre,paterno,materno){       
+    function ParSocio(codigo,nombre,paterno,materno){       
         var route = '/Socios/modalparientes';        
         $.get(route,function(data){            
-            $("#conten-modal").html(data);
+            $("#conten-modal").empty().html(data);
             $("#titulo").empty();
             $("#titulo").append('PARIENTES DE '+ paterno + ' ' + materno + ' '+nombre + ' ('+codigo+')');
             
@@ -106,6 +103,7 @@
     $("#buscar").keyup(function(event){
         activarForm(15);
     });
-    
+
+   
 </script>
 @endsection

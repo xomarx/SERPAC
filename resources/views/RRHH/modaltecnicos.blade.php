@@ -20,13 +20,13 @@
             {!! Form::label('tecnico','ZONAS LOCALES',['class'=>'control-label col-lg-12']) !!}
                          
                 <div class="col-lg-6">
-                    <input type="text" id="buscarinicial" class="form-control" placeholder="buscar Sector" name="buscarinicial"/>                
+                    <input type="text" id="buscarinicial" class="form-control" placeholder="buscar Sector central/Local" name="buscarinicial"/>                
                     <button id="inicial" type="button" class="btn btn-default glyphicon glyphicon-arrow-right col-lg-12"><span class="glyphicon glyphicon-arrow-right"> </span></button>
                     {!! Form::select('zona_inicial',$locales,null,['id'=>'zona_inicial','class'=>'form-control','multiple']) !!}
                 </div>
 
                 <div class="col-sm-6 form-group has-feedback">
-                    <input type="text" id="buscarfinal" class="form-control" placeholder="buscar Sector" name="buscarfinal"/>                
+                    <input type="text" id="buscarfinal" class="form-control" placeholder="buscar Sector central/Local" name="buscarfinal"/>                
                     <button id="final" type="button" class="btn btn-default glyphicon glyphicon-arrow-left col-lg-12"><span class="glyphicon glyphicon-arrow-left"> </span></button>
                     {!! Form::select('zona_final',[],null,['id'=>'zona_final','class'=>'form-control','multiple']) !!}
                 </div>

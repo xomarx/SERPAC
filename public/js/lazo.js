@@ -128,6 +128,7 @@ var activarForm = function(id){
         else if(id == 17) {var route = '/Socios/Asignacion-Delegados/ListaAsigDelegados/'+$("#buscar").val();}
         else if(id == 18) {var route = '/Socios/Asignacion-Directivos/ListaAsigDirectivos/'+$("#buscar").val();}
         else if(id == 19) {var route = '/RRHH/Empresas/ListaEmpresa';}
+        else if(id == 20) {var route = '/RRHH/Sucursal/SucursalList/'+$("#buscar").val();}
         $.ajax({
             type:'get',
             url:route,
@@ -153,6 +154,7 @@ var activarFormHead = function(head,body){
 }
 
 var activarmodal = function(id){        
+        
         if(id==1){ var route = 'RolUsuario';}
         else if(id==2){ var route = 'PermisoUser';}
         else if(id==3){ var route = 'modalcheque';}
@@ -163,10 +165,13 @@ var activarmodal = function(id){
         else if(id==7){ var route = 'modalempleado';} 
         else if(id==8){ var route = 'Mov-Dinero/Modal-Dinero';} 
         else if(id==9){ var route = '/Acopio/Adelantos-Acopio/Modal-Adelanto';} 
-        else if(id==10){ var route = 'Empleados/Amonestacion';} 
+        else if(id==10){ var route = 'Empleados/Amonestacion';}
+        else if(id==11){ var route = '/Auxiliar/Persona';}
+        else if(id==12){ var route = 'AlmacenModal';}
             
         $.get(route,function(data){            
-            $("#conten-modal").html(data);
+            $("#conten-modal").empty().html(data);
+            $(".select2").select2();
             $("#modal-form").modal();
         });
     };
@@ -214,12 +219,7 @@ $(document).ready().on('keyup','#dni',function(event){
 });
 //  ******************************************************************  CRUD SOCIOS   *******************************************************************
 $("#nuevosocio").click(function (){    
-    var route = '/Socios/Socios/modalsocio';                    
-        $.get(route,function(data){            
-            $("#conten-modal").html(data);
-            $("#modal-form").modal();
-            $(".select2").select2();            
-        });                    
+    activarmodal(6);                   
 });
 
 $(document).ready().on('click','#Regsocio',function(){
@@ -297,7 +297,7 @@ $(document).ready().on('click','#Regsocio',function(){
 
 var limpiarCondicion = function(idsocio){
     $.ajax({
-            url: '/socios/Condicions-socios/'+idsocio,
+            url: '/Socios/Socios/Condicions-socios/'+idsocio,
             headers: {'X-CSRF-TOKEN':$("input[name=_token]").val()},
             type: 'delete',
             datatype: 'json',                          
@@ -312,12 +312,13 @@ var limpiarCondicion = function(idsocio){
       
 var EditSocio = function(codigo){     
         
-    var route = "/Socios/Socios/"+codigo+"/edit";  
-    $.get('Socios/modalsocio',function(data){
-         $("#conten-modal").html(data);
-         $("#Regsocio").text('Actualizar');
-     });     
-    $.getJSON(route, function(data){        
+    var route = '/Socios/Socios/modalsocio';
+        $.get(route,function(data){            
+            $("#conten-modal").empty().html(data);
+            $(".select2").select2();
+            
+            $.getJSON("/Socios/Socios/"+codigo+"/edit", function(data){
+        $("#Regsocio").text('Actualizar');        
         $("#titulosocio").empty().append('<center>ACTUALIZAR DATO</center>');
         $("#codigo").val(data.socio.codigo);
         $("#dni").val(data.socio.dni);
@@ -357,13 +358,18 @@ var EditSocio = function(codigo){
         $("#condicion").val(valor);
         $("#modal-form").modal();
         $(".select2").select2();
-        });      
+        }); 
+            
+            
+            $("#modal-form").modal();
+        });
+         
 };
 
 var EliSocio = function(codigo,name){      
                
    $.alertable.confirm("<span style='color:#000'>¿Está seguro de eliminar el registro?</span>"+"<br><strong><span style='color:#ff0000'>"+name+"</span></strong></br>").then(function() {  
-      var route = "/socios/"+codigo+"";      
+      var route = "/Socios/Socios/"+codigo+"";      
       $.ajax({
         url: route,
         headers: {'X-CSRF-TOKEN': $("input[name=_token]").val()},
@@ -759,9 +765,7 @@ $("#nuevatrans").click(function(){
     }
 });
       
-var RegTransferencia = function (){
-           
-            var fields = $("#formtransferencia").serialize();
+var RegTransferencia = function (){                       
             var token = $("input[name=_token]").val();                       
             var route = "/Socios/transferencias";             
           $.ajax({
@@ -769,7 +773,7 @@ var RegTransferencia = function (){
             headers:{'X-CSRF-TOKEN':token},
             type:'post',
             datatype: 'json',            
-            data: fields,
+            data: $("#formtransferencia").serialize(),
             success:function(data)
             {
                 mensajeRegistro(data,'formtransferencia');
@@ -1877,7 +1881,6 @@ var EdiEmpleado = function (id) {
         $("#conten-modal").html(data);
         var route = "/RRHH/Empleados/" + id + "/edit";
         $.get(route, function (data) {
-            console.log(data);
             $("#Regempleado").text("Actualizar");
             $("#titulo-empleado").html("ACTUALIZAR DATOS EMPLEADO")
             $("#codigo").val(data.empleadoId);
@@ -1947,33 +1950,51 @@ var EliEmpleado = function(id,name){
 };
 
 // ****************************************************************************************   CRUD DE CENTROS DE ACOPIO *********************************
- $("#nuevasucursal").click(function(event){     
-     $("#RegSucursal").text('Registrar');   $("#error_codigoId").html('');$("#error_area").html('');$("#error_telefono").html('');
-                    $("#error_sucursal").html('');$("#error_fax").html('');
-                    $("#error_provincia").html(''); $("#error_departamento").html(''); $("#error_distrito").html('');
-                    $("#error_central").html('');$("#error_local").html('');$("#error_direccion").html(''); 
-                    $("#formsucursal")[0].reset();$("#codigoId").prop("readonly",false);
-                    $("#acopiador").prop('selected',function(){
-                        return this.defaultSelected;
-                    });
-                    cargarAcopiador();
- });
+$("#nuevasucursal").click(function(){
+    activarmodal(12);
+});
 
-var cargarAcopiador = function (){
-    var route = "/RRHH/Sucursal/Acopiador";     
-     $.getJSON(route,function(data){
-         $.each(data, function( index, value ){               
-                  $("#acopiador").find('option[value="'+ value +'"]').remove();
-              });
-     });
-}
+$(document).ready().on('click','#personaSalir',function(event){
+    activarmodal(12);
+});
 
-$("#RegSucursal").click(function(event) {
+$(document).ready().on('click','#RegPersona',function(){
+    $.ajax({
+        url: '/Auxiliar/AddPersona',
+                headers: {'X-CSRF-TOKEN': $("input[name=_token]").val()},
+                type: 'POST',
+                datatype: 'json',              
+                data: $("#fomrPersona").serialize(),
+                success: function (data)
+                {
+                    mensajeRegistro(data,'fomrPersona');
+                    if(data.success) activarmodal(12);
+                },
+                error: function (data)
+                { 
+                    $("#error-dni").empty();$("#error-sexo").empty();$("#error-paterno").empty();
+                        $("#error-materno").empty();$("#error-nombre").empty();$("#error-nacimiento").empty();
+                        $("#error-direccion").empty();                 
+                        var errors = $.parseJSON(data.responseText);
+                        $.each(errors, function (index, value) {
+                            if (index == 'dni')$("#error-dni").html(value);
+                            else if (index == 'sexo')$("#error-sexo").html(value);
+                            else if (index == 'paterno')$("#error-paterno").html(value);
+                            else if (index == 'materno')$("#error-materno").html(value);
+                            else if (index == 'nombre')$("#error-nombre").html(value);
+                            else if (index == 'fec_nacimiento')$("#error-fec_nacimiento").html(value);
+                            else if (index == 'direccion')$("#error-direccion").html(value);
+                        });                   
+                }
+    })
+});
+
+$(document).ready().on('click','#RegAlmacen',function(){
     var type = "POST";
     var token = $("input[name=_token]").val();
     var route = "/RRHH/Sucursal";
     var fields = $("#formsucursal").serialize();    
-    if( $("#RegSucursal").text() == 'Actualizar' ){   
+    if( $("#RegAlmacen").text() == 'Actualizar' ){   
             type="PUT";route = "/RRHH/Sucursal/"+ $("#codigoId").val();
     }                    
             $.ajax({
@@ -1985,7 +2006,7 @@ $("#RegSucursal").click(function(event) {
                 success: function (data)
                 {
                     mensajeRegistro(data,'formsucursal');
-                        document.location.reload();
+                        activarForm(20);
                    
                 },
                 error: function (data)
@@ -2013,23 +2034,24 @@ $("#RegSucursal").click(function(event) {
                         }); 
                     }
                 }
-            });
+            });                  
+});
+    
+var Editsucur = function(id) {
+   
+   activarmodal(12);
         
-                                                  
-    });
-        
-var Editsucur = function(id) {        
-        $("#RegSucursal").text('Actualizar');
-        cargarAcopiador();
-        var route = "/RRHH/Sucursal/"+id+"/edit";
+        var route = "/RRHH/Sucursal/"+id+"/edit";        
+        $.getJSON(route, function (data) {
+             
+        $("#RegAlmacen").text('Actualizar');
         $("#codigoId").prop("readonly",true);
-        $.get(route, function (data) {
         $("#codigoId").val(id);
         $("#area").val(data.areas_id);
         $("#telefono").val(data.telefono);
         $("#direccion").val(data.direccion);
-        $("#fax").val(data.fax);                
-        $("#acopiador").append("<option value='" + data.empleados_empleadoId + "'>" + data.acopiador + "</option>")         
+        $("#fax").val(data.fax);   
+        document.getElementById('acopiador').value = data.personas_dni;      
         $("#sucursal").val(data.sucursal);
         $("#departamento").val(data.departamentos_id);
         $("#provincia").empty();
@@ -2047,7 +2069,7 @@ var EliSucursal = function(id,name){
      // ALERT JQUERY     
    $.alertable.confirm("<span style='color:#000'>¿Está seguro de eliminar el registro?</span>"+"<br><strong><span style='color:#ff0000'>"+name+"</span></strong></br>").then(function() {  
       var route = "/RRHH/Sucursal/"+id+"";
-      var token = $("#token").val();
+      var token = $("input[name=_token]").val();
 
       $.ajax({
         url: route,
@@ -2056,7 +2078,7 @@ var EliSucursal = function(id,name){
         dataType: 'json',
         success: function(data){
         if (data.success)        
-            document.location.reload();
+                    activarForm(20);
         
       },
       error:function(data){
@@ -3316,12 +3338,14 @@ var ConforRecep = function(event,id,monto){
 //*********************************************************************** ASIGNAR DIRECTIVOS **********************************************
 $("#RegAsigDirectivos").click(function(event){
     var type='POST';
+    var route = 'Asignacion-Directivos';
     if(event.target.text=='Actualizar'){
         type='PUT';
+        route = 'Asignacion-Directivos/'+$("#id").val();
     }
     
     $.ajax({
-       url:'Asignacion-Directivos/'+$("#id").val(),
+       url:route,
        headers: {'X-CSRF-TOKEN': $("input[name=_token]").val()},
        dataType: 'json',
        type:type,
@@ -3419,12 +3443,14 @@ var ElimAsigDelegado = function(id,nombre){
 
 $("#RegAsigDelegado").click(function(event){    
     var type='POST';
+    var route = 'Asignacion-Delegados';
     if(event.target.text=='Actualizar'){
         type='PUT';
+        route='Asignacion-Delegados/'+$("#id").val();
     }
     
     $.ajax({
-       url:'Asignacion-Delegados/'+$("#id").val(),
+       url: route,
        headers: {'X-CSRF-TOKEN': $("input[name=_token]").val()},
        dataType: 'json',
        type:type,
@@ -3486,13 +3512,13 @@ var EditEmpresa = function(ruc){
 };
 
 $("#RegEmpresa").click(function(event){
-    var type='POST';
+    var type='POST';var route='Empresas';
     if(event.target.text=='Actualizar'){
-        type='PUT';
+        type='PUT';route='Empresas/'+$("#id").val();
     }
     
     $.ajax({
-       url:'Empresas/'+$("#id").val(),
+       url:route,
        headers: {'X-CSRF-TOKEN': $("input[name=_token]").val()},
        dataType: 'json',
        type:type,
@@ -3598,24 +3624,27 @@ $(document).ready().on('click','#btndatos',function(event){
 })
 
 // ******************************************************************************************  CERTIFICACION *****************************************
-
-$(document).ready().on('click','#RegCondicion',function(event){
+$("#RegCondicion").click(function(){
     var type = 'POST';
+    var ruta = '/Certificacion/AddCondicion';
     if(event.target.text == 'Actualizar'){
         type = 'PUT';
+        ruta = '/Certificacion/UpdateCondicion/'+$("#id").val();
     }
+    
     $.ajax({        
-        url:'/Certificacion/Condicion/'+$("#id").val(),
+        url:ruta,
         type:type,
         data:$("#formcondicion").serialize(),        
-        success:function(data){            
+        success:function(data){    
             mensajeRegistro(data,'formcondicion');
             document.location.reload();
+            
         },
         error:function(data){
             if(data.status==403) activarmodal(0);
             else{
-                $("#error-datos").html(''); 
+                 $("#error-datos").html(''); $("#error-descripcion").html('');
                    var errors =  $.parseJSON(data.responseText);      
                     $.each(errors,function(index, value) {                      
                             if(index == 'condicion')$("#error-condicion").html(value); 
@@ -3625,6 +3654,7 @@ $(document).ready().on('click','#RegCondicion',function(event){
         }
     })
 });
+
 
 function EditCondicion(id){
     $.getJSON('/Certificacion/Condicion/'+id+'/edit',function(data){
@@ -3656,3 +3686,12 @@ function ElimCondicion(id, name){
       });          
     });
 }
+
+//******************************  
+
+
+
+   
+  
+   
+  

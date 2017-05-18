@@ -38,6 +38,8 @@ Route::group(['middleware' => ['auth']], function () {
     route::resource('Auxiliar/datoSucursal','Configuracion\AuxiliarController@autoSucursal');
     route::resource('Auxiliar/codigoSucursal','Configuracion\AuxiliarController@autoCodigoSucursal');
     route::resource('Auxiliar/nosocios','Configuracion\AuxiliarController@autoNoSocios');
+    route::resource('Auxiliar/AddPersona','Configuracion\AuxiliarController@StorePersona');
+    route::resource('Auxiliar/Persona','Configuracion\AuxiliarController@PersonaModal');
     route::resource('Datos','Configuracion\AuxiliarController');
     
     Route::get('sign-out', 'Auth\AuthController@getsignOut');
@@ -131,9 +133,7 @@ Route::group(['middleware' => ['auth']], function () {
     route::get('PadronSocio/{idsocio}','socios\sociocontroller@verPadronsocio');
     route::resource('Socios','Configuracion\AuxiliarController@Socios');        
    //  *********************************************************   RRHH  ************************************************************************
-    
-   
-    
+              
     route::resource('RRHH/autoempleadoDni','RRHH\empleadocontroller@autocompleteEmpleadoDni');
     route::resource('RRHH/autoempleado','RRHH\empleadocontroller@autocompleteEmpleado');//   autocompleteEmpleado 
     route::resource('RRHH/Empleados/Amonestacion','RRHH\empleadocontroller@amonestacion');
@@ -142,9 +142,11 @@ Route::group(['middleware' => ['auth']], function () {
     
     route::resource('RRHH/Cargos','RRHH\cargoscontroller');
     route::resource('RRHH/Area','RRHH\areascontroller');    
-    
-    route::resource('RRHH/Sucursal/Acopiador','RRHH\sucursalescontroller@listaacopiadores');//listaacopiadores
+        
+    route::get('RRHH/Sucursal/SucursalList/{dato?}/{page?}','RRHH\sucursalescontroller@ListAlmacen');
+    route::resource('RRHH/AlmacenModal','RRHH\sucursalescontroller@almacenmodal');    
     route::resource('RRHH/Sucursal','RRHH\sucursalescontroller');
+    
     
     route::resource('RRHH/Tecnicos/Tecnico-Local','RRHH\tecnicoscontroller@listaSectorAsignados');//listaSectorAsignados
     route::resource('RRHH/modaltecnicos','RRHH\tecnicoscontroller@modalTecnicos');
@@ -266,7 +268,9 @@ Route::group(['middleware' => ['auth']], function () {
     route::resource('codrecibos','Configuracion\tipo_documentoController@autoCompleteCodRecibo');//
     route::resource('Informes','Configuracion\AuxiliarController@Informes');       
     //*****************************************************************     CERTIFICACION *************************************************************
-      
-    route::resource('Certificacion/Condicion','Certificacion\condicioncontroller');
+    route::get('Certificacion/Condicion/{id?}/edit','Certificacion\condicioncontroller@edit');
+    route::resource('Certificacion/UpdateCondicion','Certificacion\condicioncontroller@update');
+    route::resource('Certificacion/AddCondicion','Certificacion\condicioncontroller@store');
+    route::resource('Certificacion/Condicion','Certificacion\condicioncontroller@index');
     route::resource('Certificacion','Certificacion\condicioncontroller@certificacion');           
 });

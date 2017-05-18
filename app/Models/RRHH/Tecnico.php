@@ -25,14 +25,7 @@ class Tecnico extends Model
                 ->get();
     }
     
-    public static function tecnicos()
-    {
-//        DB::Persona("concat('paterno',' ' ,'materno ') as tecnico")->where('dni','=','');
-        return DB::table('empleados')
-                ->join('personas','empleados.personas_dni','=','personas.dni')
-                ->where('empleados.estado','=','ACTIVO')                
-                ->pluck( DB::raw("CONCAT(personas.paterno,' ',personas.materno,' ',personas.nombre)  AS fullname")   ,'empleados.empleadoId');
-    }
+    
     
     public static function getComitesTecnicos($idempleado){
             return DB::table('tecnicos')

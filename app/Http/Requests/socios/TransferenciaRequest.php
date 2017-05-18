@@ -42,13 +42,5 @@ class TransferenciaRequest extends Request
             case 'PUT':                
             default : break;
         }
-    }
-    
-    public function messages() {
-        parent::messages();
-        
-        return [
-            
-        ];
-    }
+    }        
 }

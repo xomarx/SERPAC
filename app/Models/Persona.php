@@ -86,9 +86,16 @@ class Persona extends Model
                      ,'dni')
               ->take(7)->get();
     }
-
+    
+    public static function scopeListAcopiador($query){
+        return $query
+                ->leftJoin('sucursales','dni','=','personas_dni')
+                ->select(DB::raw("concat(paterno, ' ', materno,' ',nombre) as acopiador"),'dni')
+                ->get();
+    }
 
     
+
     public static function getdatonuevosocio($dni)
     {
         return DB::table('personas')

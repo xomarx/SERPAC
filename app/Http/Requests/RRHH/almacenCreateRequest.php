@@ -30,9 +30,7 @@ class almacenCreateRequest extends Request
                 }
             case 'POST': {
                     return [
-                        'sucursal' => 'required|unique:sucursales,sucursal',
-                        'telefono' => 'required|numeric|min:9',
-                        'fax' => 'required|numeric|min:9',
+                        'sucursal' => 'required|unique:sucursales,sucursal',                                                
                         'direccion' => 'required',
                         'codigoId' => 'required|unique:sucursales,sucursalId',
                         'area' => 'required',
@@ -47,9 +45,7 @@ class almacenCreateRequest extends Request
             case 'PATCH':
             case 'PUT': {
                     return [
-                        'sucursal' => 'required|unique:sucursales,sucursal',
-                        'telefono' => 'required|numeric|min:9',
-                        'fax' => 'required|numeric|min:9',
+                        'sucursal' => 'required|unique:sucursales,sucursal',                        
                         'direccion' => 'required',
                         'area' => 'required',
                         'departamento' => 'required',
@@ -72,9 +68,7 @@ class almacenCreateRequest extends Request
             'distrito.required'=>'Seleccione un distrito',
             'comite_central.required'=>'Seleccione un comite central',
             'comite_local.required'=>'Seleccione un comite local',
-            'sucursal.unique'=>'Ya existe el nombre de la Sucursal',
-            'telefono.numeric'=>'Solo se permiten numeros',
-            'fax.numeric'=>'Solo se permiten numeros',
+            'sucursal.unique'=>'Ya existe el nombre de la Sucursal',            
             'direccion.required'=>'El campo direccion es Obligatorio',
             'codigoId.unique'=>'El Codigo ya existe',
             'area.required'=>'Seleccione una area',

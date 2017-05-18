@@ -20,7 +20,7 @@
                     @yield('main-content')
                 </section><!-- /.content -->
             </div>
-            @include('layouts.partials.controlsidebar')
+            
 
             @include('layouts.partials.footer')
         </div>

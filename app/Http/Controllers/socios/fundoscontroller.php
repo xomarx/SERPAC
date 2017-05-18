@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
+use App\Models\Socios\Fundos_has_flora;
 
 class fundoscontroller extends Controller
 {
@@ -83,7 +84,7 @@ class fundoscontroller extends Controller
         {
             $inmuebleid = \App\Models\Socios\Inmueble::where('inmueble','=', $request->inmueble)->first();
             $fundoid = \App\Models\Socios\Fundo::where('fundo','=',$request->fundo)->first();            
-            $inmueble = \App\Models\socios\Fundos_has_inmueble::create([
+            $inmueble = \App\Models\Socios\Fundos_has_inmueble::create([
                 'inmuebles_id'=>$inmuebleid->id,
                 'fundos_id'=>$fundoid->id
             ]);
@@ -97,7 +98,7 @@ class fundoscontroller extends Controller
         {
             $fundo = \App\Models\Socios\Fundo::where('fundo','=',$request->fundo)->first();            
             $fauna = \App\Models\Socios\Fauna::where('fauna','=',$request->fauna)->first();
-            $faunas = \App\Models\socios\Fundos_has_fauna::create([
+            $faunas = \App\Models\Socios\Fundos_has_fauna::create([
                 'fundos_id'=>$fundo->id,
                 'faunas_id'=>$fauna->id,
                 'cantidad'=>$request->cantidad,
@@ -110,21 +111,22 @@ class fundoscontroller extends Controller
         if($request->ajax())
         {
             $fundo = \App\Models\Socios\Fundo::where('fundo','=',$request->fundo)->first();
-            $flora = \App\Models\Socios\Flora::where('flora','=',$request->flora)->first();            
-            $floras = \App\Models\socios\Fundos_has_flora::create([
+            $flora = \App\Models\Socios\Flora::where('flora','=',$request->flora)->first();   
+            
+            $floras = Fundos_has_flora::create([
                 'fundos_id'=>$fundo->id,
                 'floras_id'=>$flora->id,
                 'hectarea'=>$request->hectarea,
                 'rendimiento'=>$request->rendimiento
-            ]);
+            ]);           
             if($floras)  return response()->json(['success'=>true]);
         }
     }
 
     public  function EliminarPropiedadesFundo($idfundo){        
-        $inmuebles = \App\Models\socios\Fundos_has_inmueble::where('fundos_id','=',$idfundo)->delete();
-        $floras = \App\Models\socios\Fundos_has_flora::where('fundos_id','=',$idfundo)->delete();
-        $faunas = \App\Models\socios\Fundos_has_fauna::where('fundos_id','=',$idfundo)->delete();
+        $inmuebles = \App\Models\Socios\Fundos_has_inmueble::where('fundos_id','=',$idfundo)->delete();
+        $floras = \App\Models\Socios\Fundos_has_flora::where('fundos_id','=',$idfundo)->delete();
+        $faunas = \App\Models\Socios\Fundos_has_fauna::where('fundos_id','=',$idfundo)->delete();
     }
     /**
      * Display the specified resource.

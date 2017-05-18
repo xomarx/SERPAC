@@ -47,7 +47,7 @@
                         <a href="#" onclick="fundosocio('{{$socio->codigo}}','{{$nombre }}','{{ $paterno }}','{{$materno }}')" data-toggle='modal' data-target='#fundomodal' class="btn-success btn-xs" ><span data-toggle="tooltip" data-placement="top" title="Fundos" class="glyphicon glyphicon-home"></span></a>
                         @endpermission
                         @permission('editar socios')
-                            <a  href="javascript:void(0)" onclick="EditSocio('{{$socio->codigo}}')"  class="btn-xs btn-primary" data-toggle="tooltip" data-placement="top" title="Editar Socio"><span  class="glyphicon glyphicon-pencil"></span></a>
+                        <a style="cursor: pointer;"  onclick="EditSocio('{{$socio->codigo}}')"  class="btn-xs btn-primary" data-toggle="tooltip" data-placement="top" title="Editar Socio"><span  class="glyphicon glyphicon-pencil"></span></a>
                         @endpermission
                         @permission ('eliminar socios')
                             <a href="javascript:void(0)" onclick="EliSocio('{{$socio->codigo}}','{{$name}}')" class="btn-xs btn-danger"><span data-toggle="tooltip" data-placement="top" title="Eliminar Socio" class="glyphicon glyphicon-remove"></span></a>

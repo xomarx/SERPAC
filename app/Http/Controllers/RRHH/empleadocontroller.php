@@ -56,7 +56,7 @@ class empleadocontroller extends Controller
         if(!auth()->user()->can('ver empleados'))
             return response ()->view ('errors.403');
         $empleados  = \App\Models\RRHH\Empleado::listaEmpleado();          
-        return view('RRHH/Empleados',  array('empleados'=>$empleados));
+        return view('RRHH.empleados',  array('empleados'=>$empleados));
     }
     
     public function modalEmpleado(){

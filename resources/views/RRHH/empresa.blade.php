@@ -57,7 +57,6 @@
     $("#subempresa").addClass('active');      
     $("#menuRRHH").addClass('active');
     activarForm(19);
- });
- 
+ }); 
 </script>
 @stop

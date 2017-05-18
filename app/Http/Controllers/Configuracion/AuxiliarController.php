@@ -12,6 +12,37 @@ use Illuminate\Support\Facades\Storage;
 class AuxiliarController extends Controller
 {
     
+    public function StorePersona(Request $request){
+        $this->validate($request, [
+            'dni'=>'required|numeric|unique:personas,dni',
+            'sexo'=>'required',
+            'paterno'=>'required',
+            'materno'=>'required',
+            'nombre'=>'required',
+            'fec_nacimiento'=>'required|date',
+            'direccion'=>'required'
+        ]);
+        if($request->ajax()){
+           $persona = \App\Models\Persona::create([
+                'dni'=>$request->dni,
+                'sexo'=>$request->sexo,
+                'paterno'=>  strtoupper($request->paterno),
+                'materno'=>  strtoupper($request->materno),
+                'nombre'=>  strtoupper($request->nombre),
+                'fec_nacimiento'=>$request->fec_nacimiento,
+                'direccion'=>  strtoupper($request->direccion)
+            ]);
+           if($persona) return response ()->json (['success'=>true,'message'=>'Se registro correctamente']);
+           else return response ()->json (['success'=>false,'message'=>'No se registro ningun dato']);
+        }
+    }
+
+    public function PersonaModal(){
+        $departamentos = \App\Models\Socios\Departamento::pluck('departamento','id');
+        return response()->view('RRHH.persona',['departamentos'=>$departamentos]);
+    }
+
+
     public function RRHH(){
         return response()->view('RRHH.masterempleados');
     }    
@@ -261,49 +292,16 @@ class AuxiliarController extends Controller
 //            return response()->json($ruta);
             \Maatwebsite\Excel\Facades\Excel::selectSheetsByIndex(0)->load($ruta,function($hoja){                 
                 $hoja->each(function($fila){
+                    $permiso = \App\Permission::where('name','=',$fila->name)->count();
+                    if($permiso==0){
+                        \App\Permission::create([
+                        'name'=>$fila->name,
+                        'display_name'=>$fila->display_name,
+                        'description'=>$fila->description
+                    ]);
+                    }
                     
-                    $comite = \App\Models\Socios\Comites_Locale::where('comite_local','=',$fila->comite_local)->first();
-                    $area = \App\Models\RRHH\Areas::where('area','=',$fila->area)->first();
-                    if(count($area) == 0){
-                        $area = new \App\Models\RRHH\Areas();
-                        $area->area = $fila->area;
-                        $area->save();
-                    }                        
-                    $cargo = \App\Models\RRHH\Cargos::where('cargo','=',$fila->cargo)->first();
-                    if(count($cargo) == 0){
-                        $cargo = new \App\Models\RRHH\Cargos();
-                        $cargo->cargo = $fila->cargo;
-                        $cargo->save();
-                    }                        
-                    $persona = \App\Models\Persona::where('dni','=',$fila->dni)->first();
-                    if(count($persona) == 0){
-                        $persona = new \App\Models\Persona();
-                        $persona->dni=$fila->dni;                       
-                           $persona->paterno=$fila->paterno;
-                           $persona->materno=$fila->materno;
-                           $persona->nombre=$fila->nombre;
-                           $persona->fec_nac=$fila->fec_nacimiento;
-                           $persona->sexo=substr($fila->sexo,1);
-                           $persona->direccion=$fila->direccion;
-                           $persona->telefono=$fila->telefono;
-                           $persona->comites_locales_id=$comite->id;
-                           $persona->save();
-                    }
-                    $empleado = \App\Models\RRHH\Empleado::where('personas_dni','=',$fila->dni)->first();
-                    if(count($empleado) == 0){
-                        \App\Models\RRHH\Empleado::create([
-                            'empleadoId'=>$fila->codigo,
-                            'estado'=>'ACTIVO',
-                            'estadocivil'=>$fila->estadocivil,
-                            'email'=>$fila->email,
-                            'profesion'=>$fila->profesion,
-                            'ruc'=>$fila->ruc,
-                            'personas_dni'=>$persona->dni,
-                            'cargos_id'=>$cargo->id,
-                            'areas_id'=>$area->id,
-                            'empresas_ruc'=>$fila->empresa_ruc,
-                        ]);   
-                    }
+                    
                 });
             });
             return response()->json(['success'=>true,'message'=>'Se cargo correctamente los Datos']);
@@ -371,6 +369,53 @@ class AuxiliarController extends Controller
                             'users_id'=>  auth()->user()->id
                         ]);
                     } 
+     
+    //////// *************************************  EMPLEADOS 
+     
+     
+                    
+                    $comite = \App\Models\Socios\Comites_Locale::where('comite_local','=',$fila->comite_local)->first();
+                    $area = \App\Models\RRHH\Areas::where('area','=',$fila->area)->first();
+                    if(count($area) == 0){
+                        $area = new \App\Models\RRHH\Areas();
+                        $area->area = $fila->area;
+                        $area->save();
+                    }                        
+                    $cargo = \App\Models\RRHH\Cargos::where('cargo','=',$fila->cargo)->first();
+                    if(count($cargo) == 0){
+                        $cargo = new \App\Models\RRHH\Cargos();
+                        $cargo->cargo = $fila->cargo;
+                        $cargo->save();
+                    }                        
+                    $persona = \App\Models\Persona::where('dni','=',$fila->dni)->first();
+                    if(count($persona) == 0){
+                        $persona = new \App\Models\Persona();
+                        $persona->dni=$fila->dni;                       
+                           $persona->paterno=$fila->paterno;
+                           $persona->materno=$fila->materno;
+                           $persona->nombre=$fila->nombre;
+                           $persona->fec_nac=$fila->fec_nacimiento;
+                           $persona->sexo=substr($fila->sexo,1);
+                           $persona->direccion=$fila->direccion;
+                           $persona->telefono=$fila->telefono;
+                           $persona->comites_locales_id=$comite->id;
+                           $persona->save();
+                    }
+                    $empleado = \App\Models\RRHH\Empleado::where('personas_dni','=',$fila->dni)->first();
+                    if(count($empleado) == 0){
+                        \App\Models\RRHH\Empleado::create([
+                            'empleadoId'=>$fila->codigo,
+                            'estado'=>'ACTIVO',
+                            'estadocivil'=>$fila->estadocivil,
+                            'email'=>$fila->email,
+                            'profesion'=>$fila->profesion,
+                            'ruc'=>$fila->ruc,
+                            'personas_dni'=>$persona->dni,
+                            'cargos_id'=>$cargo->id,
+                            'areas_id'=>$area->id,
+                            'empresas_ruc'=>$fila->empresa_ruc,
+                        ]);   
+                    }
      
      * 
      * 

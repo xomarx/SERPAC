@@ -95,8 +95,16 @@ class transferenciacontroller extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Requests\Socios\TransferenciaRequest $request)
+    public function store(Request $request)
     {
+        $this->validate($request, [
+            'codigo'=>'required',
+                        'motivo'=>'required',
+                        'dni_socio'=>'required',
+                        'dni_nuevo_socio'=>'required',
+                        'dni_beneficiario'=>'required',
+                        'socio'=>'required'
+        ]);
         if($request->ajax())
         {
             if(!auth()->user()->can('crear transferencias'))

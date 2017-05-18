@@ -35,13 +35,13 @@
                     <li id="menucertificacion"><a href="{{ url('/Certificacion') }}">Certificacion</a></li>
                     <li id="menutesoreria"><a href="{{ url('/Tesoreria') }}">Tesoreria</a></li>
                     <li id="menucontabilidad"><a href="{{ url('/Creditos') }}">Contabilidad</a></li>
-                    <li id="menuinformes" ><a href="{{ url('/Informes') }}">Informes <i class="glyphicon glyphicon-stats"></i></a></li>
+                    <li id="menuinformes" ><a href="{{ url('/Informes') }}">Informes </a></li>
                     <li id="menuconfiguracion"><a href="{{url('Configuracion') }}">Configuracion</a></li>
                 </ul>                                                                       
                 <ul class="navbar-custom-menu">
                     <ul class="nav navbar-nav">   
                         <!--mensajes de recepcion-->
-                        <li class="dropdown messages-menu">                     
+<!--                        <li class="dropdown messages-menu">                     
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 <i class="fa fa-envelope-o"></i>
                                 <span class="label label-success">4</span>
@@ -66,7 +66,7 @@
                                 </li>
                                 <li class="footer"><a href="#">c</a></li>
                             </ul>
-                        </li>
+                        </li>-->
                         <!--<li><a href="{{ url('/register') }}">{{ trans('adminlte_lang::message.register') }}</a></li>-->                            
                         <li class="dropdown user user-menu">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -94,9 +94,9 @@
                             </ul>
                         </li>
                         <!--Control Sidebar Toggle Button--> 
-                        <li>
+<!--                        <li>
                             <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
-                        </li>
+                        </li>-->
                     </ul>                    
                 </ul>
                 @endif

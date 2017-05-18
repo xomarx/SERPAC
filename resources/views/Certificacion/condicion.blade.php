@@ -14,12 +14,15 @@
             <div class="text-danger" id="error-condicion"></div>
             {!!Form::label('descripcion','Descripcion: ',['class'=>'control-label'])!!}
             {!!Form::textarea('descripcion',null,['id'=>'descripcion','class'=>'form-control','rows'=>'3','placeholder'=>'Descripcion de la condicion'])!!}
-            <div class="text-danger" id="error-description"></div>
-            <button type="reset" class="btn btn-dropbox">Nuevo</button>
-            <a class="btn btn-dropbox" id="RegCondicion">Registrar</a>
+            <div class="text-danger" id="error-descripcion"></div>            
             {!!Form::close()!!}
         </div>
+        <div class="box-footer">
+            <button type="reset" class="btn btn-dropbox">Nuevo</button>
+            <a class="btn btn-dropbox" id="RegCondicion">Registrar</a>
+        </div>
     </div>
+    
 </div>
 @endpermission
 @permission('ver condicion')
