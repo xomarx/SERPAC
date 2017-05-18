@@ -270,7 +270,8 @@ $(document).ready().on('click','#Regsocio',function(){
                 $("#error_materno").html('');$("#error_nombre").html('');$("#error_fec_nac").html('');$("#error_fec_empadron").html('');
                 $("#error_fec_asociado").html('');$("#error_grado_inst").html('');$("#error_comite_local").html('');$("#error_direccion").html('');
                 $("#error_direccion").html('');$("#error_produccion").html('');$("#error_ocupacion").html('');  $("#error_sexo").html('');
-                $("#error-condicion").html('');
+                $("#error-condicion").html('');$("#error-local").html('');$("#error-central").html('');$("#error-departamento").html('');$("#error-provincia").html('');
+                $("#error-distrito").html('');
                 var errors =  $.parseJSON(data.responseText);                
                 $.each(errors,function(index, value) {                      
                             if(index == 'codigo')$("#error_codigo").html(value);
@@ -284,7 +285,11 @@ $(document).ready().on('click','#Regsocio',function(){
                             else if(index == 'fec_empadron')$("#error_fec_empadron").html(value);
                             else if(index == 'fec_asociado')$("#error_fec_asociado").html(value);
                             else if(index == 'grado_inst')$("#error_grado_inst").html(value);
-                            else if(index == 'comite_local')$("#error_comite_local").html(value);
+                            else if(index == 'comite_local')$("#error-local").html(value);
+                            else if(index == 'comite_central')$("#error-central").html(value);
+                            else if(index == 'departamento')$("#error-departamento").html(value);
+                            else if(index == 'provincia')$("#error-provincia").html(value);
+                            else if(index == 'distrito')$("#error-distrito").html(value);
                             else if(index == 'direccion')$("#error_direccion").html(value);
                             else if(index == 'produccion')$("#error_produccion").html(value);
                             else if(index == 'ocupacion')$("#error_ocupacion").html(value);

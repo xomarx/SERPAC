@@ -46,6 +46,10 @@ class SociocreateRequest extends Request
                         'sexo' => 'required',
                         'direccion' => 'required',
                         'comite_local' => 'required',
+                        'comite_central' => 'required',
+                        'distrito' => 'required',
+                        'provincia' => 'required',
+                        'departamento' => 'required',
                         'sexo'=>'required',
                         'condicion'=>'required'
                     ];
@@ -68,7 +72,12 @@ class SociocreateRequest extends Request
                         'fec_nac' => 'required|date',
                         'sexo' => 'required',
                         'direccion' => 'required',
-//            'comites_locales_id'=>'required'
+                        'comite_local'=>'required',
+                        'comite_central' => 'required',
+                        'distrito' => 'required',
+                        'provincia' => 'required',
+                        'departamento' => 'required',
+                        'condicion'=>'required'
                     ];
                 }
             default : break;

@@ -91,30 +91,30 @@
                     <div class="col-sm-3">
                         {!! Form::label('departamento','Departamento',['class'=>'control-label']) !!}
                         {!! Form::select('departamento',$departamentos,null,['id'=>'departamento','class'=>'form-control','placeholder'=>'Seleccione','onchange'=>'department(event)']) !!}
-                        <div class="text-danger" id="error_departamento"></div>
+                        <div class="text-danger" id="error-departamento"></div>
                     </div>
                     <div class=" col-sm-3">
                         {!! Form::label('Provincia','Provincia',['class'=>'control-label']) !!}
-                        {!! Form::select ('provincia',['placeholder'=>'selecciona'],null,['id'=>'provincia','class'=>'form-control','onchange'=>'province()']) !!}
-                        <div class="text-danger" id="error_provincia"></div>
+                        {!! Form::select ('provincia',[''=>'seleccione'],null,['id'=>'provincia','class'=>'form-control','onchange'=>'province()']) !!}
+                        <div class="text-danger" id="error-provincia"></div>
                     </div>
                     <div class="col-sm-3">
                         {!! Form::label('distrito','Distrito',['class'=>'control-label']) !!}
-                        {!! Form::select ('distrito',['placeholder'=>'selecciona'],null,['id'=>'distrito','class'=>'form-control','onchange'=>'district()']) !!}
-                        <div class="text-danger" id="error_distrito"></div>
+                        {!! Form::select ('distrito',[''=>'seleccione'],null,['id'=>'distrito','class'=>'form-control','onchange'=>'district()']) !!}
+                        <div class="text-danger" id="error-distrito"></div>
                     </div>
                     <div class=" col-sm-3">      
                         {!! Form::label('Comite ','Comite Central',['class'=>'control-label']) !!}
-                        {!! Form::select ('comite_central',['placeholder'=>'selecciona'],null,['id'=>'comite_central','class'=>'form-control','onchange'=>'central_committe()']) !!}
-                        <div class="text-danger" id="error_comite_central"></div>
+                        {!! Form::select ('comite_central',[''=>'seleccione'],null,['id'=>'comite_central','class'=>'form-control','onchange'=>'central_committe()']) !!}
+                        <div class="text-danger" id="error-central"></div>
                     </div>
                 </div>
                 <div class="col-md-12 col-md-offset-0 row form-group" >
 
                     <div class="col-sm-3">
                         {!! Form::label('local','Comite Local',['class'=>'control-label']) !!}
-                        {!! Form::select ('comite_local',['placeholder'=>'selecciona'],null,['id'=>'comite_local','class'=>'form-control']) !!}
-                        <div class="text-danger" id="error_comite_local"></div>
+                        {!! Form::select ('comite_local',[''=>'seleccione'],null,['id'=>'comite_local','class'=>'form-control']) !!}
+                        <div class="text-danger" id="error-local"></div>
                     </div>
                     <div class="col-sm-3">
                         {!! Form::label('ocupacion','Ocupacion',['class'=>'form-label']) !!}
