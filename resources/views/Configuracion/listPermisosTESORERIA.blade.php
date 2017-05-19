@@ -53,7 +53,7 @@
                 @endif
                 </td>
             <td>                
-                {!!Form::checkbox('editar','editar_distribucion',null,['class'=>'checkbox-inline','disabled'=>'disabled'])!!}                
+                        
             </td>
             <td>
                  @if(in_array('ver_caja',$permisos) )
@@ -63,35 +63,7 @@
                 @endif
                 </td>
             <td>
-                 {!!Form::checkbox('eliminar','editar_distribucion',null,['class'=>'checkbox-inline','disabled'=>'disabled'])!!}
-                </td>
-        </tr>
-        <tr>
-            <td>Sub modulo de Distribucion de Acopio </td>
-            <td>
-                @if(in_array('crear_distribucion',$permisos) )
-                    {!!Form::checkbox('crear_distribucion','crear_distribucion',null,['class'=>'checkbox-inline','onclick'=>'asigpermiso("crear_distribucion")','checked'])!!}
-                @else
-                    {!!Form::checkbox('crear_distribucion','crear_distribucion',null,['class'=>'checkbox-inline','onclick'=>'asigpermiso("crear_distribucion")'])!!}
-                @endif
-                </td>
-            <td>
-                
-                {!!Form::checkbox('editar_distribucion','editar_distribucion',null,['class'=>'checkbox-inline','disabled'=>'disabled'])!!}                
-                </td>
-            <td>
-                @if(in_array('ver_distribucion',$permisos) )
-                    {!!Form::checkbox('ver_distribucion','ver_distribucion',null,['class'=>'checkbox-inline','onclick'=>'asigpermiso("ver_distribucion")','checked'])!!}
-                @else
-                    {!!Form::checkbox('ver_distribucion','ver_distribucion',null,['class'=>'checkbox-inline','onclick'=>'asigpermiso("ver_distribucion")'])!!}
-                @endif
-                </td>
-            <td>
-                @if(in_array('eliminar_distribucion',$permisos) )
-                    {!!Form::checkbox('eliminar_distribucion','eliminar_distribucion',null,['class'=>'checkbox-inline','onclick'=>'asigpermiso("eliminar_distribucion")','checked'])!!}
-                @else
-                    {!!Form::checkbox('eliminar_distribucion','eliminar_distribucion',null,['class'=>'checkbox-inline','onclick'=>'asigpermiso("eliminar_distribucion")'])!!}
-                @endif
+                 
                 </td>
         </tr>
         <tr>
@@ -125,6 +97,35 @@
                 @endif
                 </td>
         </tr>
+        <tr>
+            <td>Sub modulo de Distribucion de Acopio </td>
+            <td>
+                @if(in_array('crear_distribucion',$permisos) )
+                    {!!Form::checkbox('crear_distribucion','crear_distribucion',null,['class'=>'checkbox-inline','onclick'=>'asigpermiso("crear_distribucion")','checked'])!!}
+                @else
+                    {!!Form::checkbox('crear_distribucion','crear_distribucion',null,['class'=>'checkbox-inline','onclick'=>'asigpermiso("crear_distribucion")'])!!}
+                @endif
+                </td>
+            <td>
+                
+                             
+                </td>
+            <td>
+                @if(in_array('ver_distribucion',$permisos) )
+                    {!!Form::checkbox('ver_distribucion','ver_distribucion',null,['class'=>'checkbox-inline','onclick'=>'asigpermiso("ver_distribucion")','checked'])!!}
+                @else
+                    {!!Form::checkbox('ver_distribucion','ver_distribucion',null,['class'=>'checkbox-inline','onclick'=>'asigpermiso("ver_distribucion")'])!!}
+                @endif
+                </td>
+            <td>
+                @if(in_array('eliminar_distribucion',$permisos) )
+                    {!!Form::checkbox('eliminar_distribucion','eliminar_distribucion',null,['class'=>'checkbox-inline','onclick'=>'asigpermiso("eliminar_distribucion")','checked'])!!}
+                @else
+                    {!!Form::checkbox('eliminar_distribucion','eliminar_distribucion',null,['class'=>'checkbox-inline','onclick'=>'asigpermiso("eliminar_distribucion")'])!!}
+                @endif
+                </td>
+        </tr>
+        
         
         <tr>
             <td>Sub modulo de Movimiento de Dinero</td>

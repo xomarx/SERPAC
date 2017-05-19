@@ -7,10 +7,11 @@
 <div class="box box-primary">
     <div id='calendar'></div>    
 </div>
-@endpermission
-@permission('crear caja')
 <section id="conten-modal"></section>
 @endpermission
+
+
+
 @stop
 
 @section('script')
@@ -46,7 +47,7 @@
                                 $.get(route,function(data){            
                                     $("#conten-modal").html(data);
                                     $("#modal-form").modal();
-                                });
+                                });                                                              
                             }
                             else                                
                                 $.alertable.alert("<spam style='color:#000'>No Puede Aperturar la Caja</spam><br><spam style='color:#ff0000'>La Fecha no es Actual  <i class='glyphicon glyphicon-info-sign'></i></spam>");                            

@@ -2745,16 +2745,18 @@ var EliGasto = function(id,nombre){
    
    //***********************************************************************************************************   MOV CHEQUE ***************************
    $(document).ready().on('click','#RegMovCheque',function (){             
-       var token = $("input[name=_token]").val();
-       var type="POST";
-       var fields = $("#formmovcheque").serialize();
-       if($("#RegMovCheque").text() == "Actualizar") type = 'PUT';       
+       var route = 'Cheques-Girados';
+       var type="POST";       
+       if($("#RegMovCheque").text() == "Actualizar"){
+           type = 'PUT';
+           route = 'Cheques-Girados/'+$("#idmovcheque").val();
+       }       
       $.ajax({          
-          url:'Cheques-Girados/'+$("#idmovcheque").val(),
-          headers:{'X-CSRF-TOKEN':token},
+          url:route,
+          headers:{'X-CSRF-TOKEN':$("input[name=_token]").val()},
           type:type,
           datatype:'json',
-          data:fields,
+          data:$("#formmovcheque").serialize(),
           success:function(data){
                 mensajeRegistro(data,'formmovcheque')
                 activarForm(4);                                             

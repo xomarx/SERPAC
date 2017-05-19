@@ -18,8 +18,10 @@ class Mov_chequeController extends Controller
         $file = $request->file('filecheque');
         $nombre = \Carbon\Carbon::now()->format('d-m-Y');
         $nombre = ''.$nombre.'-'.$file->getClientOriginalName();
-        $path = Storage::disk('cheques')->put($nombre,  \File($file));        
-        if($path) return response()->json(['success'=>true,'ruta'=>"/storage/app/cheques/".$nombre]);
+        $path = Storage::disk('cheques')->put($nombre,  \File($file));                     
+        $ruta = "/storage/app/cheques/".$nombre;
+        
+        if($path) return response()->json(['success'=>true,'ruta'=>$ruta]);
         else return response()->json(['success'=>false,'ruta'=>"No se cargo ninguna imagen"]);
     }
     
